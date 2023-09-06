@@ -1,0 +1,311 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BarChart",
+          "declaration": {
+            "name": "BarChart",
+            "module": "./components/barChart"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/common/helpers/helpers.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "debounce",
+          "parameters": [
+            {
+              "name": "fn",
+              "type": {
+                "text": "Function"
+              }
+            },
+            {
+              "name": "ms",
+              "default": "100"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "stringToReactHtml",
+          "parameters": [
+            {
+              "name": "string",
+              "type": {
+                "text": "String"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "debounce",
+          "declaration": {
+            "name": "debounce",
+            "module": "src/common/helpers/helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "stringToReactHtml",
+          "declaration": {
+            "name": "stringToReactHtml",
+            "module": "src/common/helpers/helpers.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/barChart/barChart.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Bar chart.",
+          "name": "BarChart",
+          "members": [
+            {
+              "kind": "field",
+              "name": "chartTitle",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Chart title.",
+              "attribute": "chartTitle"
+            },
+            {
+              "kind": "field",
+              "name": "description",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Chart description.",
+              "attribute": "description"
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Array<string>"
+              },
+              "description": "Chart.js labels.",
+              "attribute": "labels"
+            },
+            {
+              "kind": "field",
+              "name": "datasets",
+              "type": {
+                "text": "Array<any>"
+              },
+              "description": "Chart.js datasets. Datasets are layered top to bottom.",
+              "attribute": "datasets"
+            },
+            {
+              "kind": "field",
+              "name": "horizontal",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Horizontal layout.",
+              "attribute": "horizontal"
+            },
+            {
+              "kind": "field",
+              "name": "stacked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Stacked bars/datasets. Does not work on Combo charts.",
+              "attribute": "stacked"
+            },
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}",
+              "description": "Chart.js options. Can override Shidoka defaults.",
+              "attribute": "options"
+            },
+            {
+              "kind": "field",
+              "name": "hideDescription",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the description visually.",
+              "attribute": "hideDescription"
+            },
+            {
+              "kind": "field",
+              "name": "hideCaptions",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the closed captions visually.",
+              "attribute": "hideCaptions"
+            },
+            {
+              "kind": "method",
+              "name": "initChart",
+              "privacy": "private",
+              "description": "Initializes a bar chart using the Chart.js library with provided labels, datasets,\r\nand options."
+            },
+            {
+              "kind": "method",
+              "name": "mergeOptions",
+              "privacy": "private",
+              "description": "Merges the default options with the custom options and returns the merged options.",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "chartTitle",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Chart title.",
+              "fieldName": "chartTitle"
+            },
+            {
+              "name": "description",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Chart description.",
+              "fieldName": "description"
+            },
+            {
+              "name": "labels",
+              "type": {
+                "text": "Array<string>"
+              },
+              "description": "Chart.js labels.",
+              "fieldName": "labels"
+            },
+            {
+              "name": "datasets",
+              "type": {
+                "text": "Array<any>"
+              },
+              "description": "Chart.js datasets. Datasets are layered top to bottom.",
+              "fieldName": "datasets"
+            },
+            {
+              "name": "horizontal",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Horizontal layout.",
+              "fieldName": "horizontal"
+            },
+            {
+              "name": "stacked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Stacked bars/datasets. Does not work on Combo charts.",
+              "fieldName": "stacked"
+            },
+            {
+              "name": "options",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}",
+              "description": "Chart.js options. Can override Shidoka defaults.",
+              "fieldName": "options"
+            },
+            {
+              "name": "hideDescription",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the description visually.",
+              "fieldName": "hideDescription"
+            },
+            {
+              "name": "hideCaptions",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the closed captions visually.",
+              "fieldName": "hideCaptions"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "kd-chart-bar",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BarChart",
+          "declaration": {
+            "name": "BarChart",
+            "module": "src/components/barChart/barChart.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "kd-chart-bar",
+          "declaration": {
+            "name": "BarChart",
+            "module": "src/components/barChart/barChart.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/barChart/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BarChart",
+          "declaration": {
+            "name": "BarChart",
+            "module": "./barChart"
+          }
+        }
+      ]
+    }
+  ]
+}

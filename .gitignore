@@ -1,0 +1,12 @@
+# dependencies
+node_modules
+
+# build outputs
+dist
+build
+storybook-static
+deployment/artifacts
+coverage
+
+# logs
+.eslintcache

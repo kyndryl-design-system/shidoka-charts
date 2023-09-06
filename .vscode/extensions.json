@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "runem.lit-plugin",
+    "unifiedjs.vscode-mdx",
+    "esbenp.prettier-vscode",
+    "christian-kohler.path-intellisense",
+    "eamodio.gitlens",
+    "dbaeumer.vscode-eslint"
+  ]
+}
