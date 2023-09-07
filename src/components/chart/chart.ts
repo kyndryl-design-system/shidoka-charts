@@ -125,7 +125,7 @@ export class KDChart extends LitElement {
                   </tr>
                 </thead>
                 <tbody>
-                  ${this.datasets[0].data.map((value: any, i: number) => {
+                  ${this.datasets[0].data.map((_value: any, i: number) => {
                     return html`
                       <tr>
                         ${this.labels.length
