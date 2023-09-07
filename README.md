@@ -52,7 +52,7 @@ import '@kyndryl-design-system/charts/components/barChart';
 ```
 
 ```html
-<kd-chart-bar></kd-chart-bar>
+<kd-chart></kd-chart>
 ```
 
 ### React usage

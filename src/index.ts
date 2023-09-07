@@ -1,1 +1,1 @@
-export { BarChart } from './components/barChart';
+export { KDChart } from './components/chart';

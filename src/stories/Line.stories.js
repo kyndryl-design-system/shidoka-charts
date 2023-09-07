@@ -1,10 +1,9 @@
 import { html } from 'lit';
-import './index';
-import { action } from '@storybook/addon-actions';
+import '../components/chart';
 
 export default {
-  title: 'Components/Bar Chart',
-  component: 'kd-chart-bar',
+  title: 'Line',
+  component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,
   ],
@@ -15,7 +14,7 @@ export default {
 };
 
 const args = {
-  chartTitle: 'Chart Title',
+  chartTitle: 'Line Chart',
   description: 'Chart description.',
   labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
   datasets: [
@@ -28,105 +27,133 @@ const args = {
       data: [8, 15, 7, 9, 6, 13],
     },
   ],
-  horizontal: false,
-  stacked: false,
+  options: {
+    scales: {
+      x: {
+        title: {
+          text: 'Color',
+        },
+      },
+    },
+  },
   hideDescription: false,
   hideCaptions: false,
-  options: {},
 };
 
-export const BarChart = {
+export const Line = {
   args,
   render: (args) => {
     return html`
-      <kd-chart-bar
+      <kd-chart
+        type="line"
         .chartTitle=${args.chartTitle}
         .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?horizontal=${args.horizontal}
-        ?stacked=${args.stacked}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         .options=${args.options}
-      ></kd-chart-bar>
+      ></kd-chart>
     `;
   },
 };
 
-export const FloatingBarChart = {
+export const MultiAxis = {
   args: {
     ...args,
     datasets: [
       {
         label: 'Dataset 1',
-        data: [
-          [2, 10],
-          [12, 19],
-          [3, 5],
-          [5, 9],
-          [2, 11],
-          [3, 7],
-        ],
+        data: [12, 19, 3, 5, 2, 3],
+        yAxisID: 'y',
       },
       {
         label: 'Dataset 2',
-        data: [
-          [8, 5],
-          [13, 7],
-          [3, -3],
-          [5, 7],
-          [2, 9],
-          [3, -1],
-        ],
+        data: [8, 15, 7, 9, 6, 13],
+        yAxisID: 'y1',
       },
     ],
+    options: {
+      scales: {
+        y: {
+          type: 'linear',
+          display: true,
+          position: 'left',
+        },
+        y1: {
+          type: 'linear',
+          display: true,
+          position: 'right',
+          grid: {
+            drawOnChartArea: false,
+          },
+        },
+      },
+    },
   },
   render: (args) => {
     return html`
-      <kd-chart-bar
+      <kd-chart
+        type="line"
         .chartTitle=${args.chartTitle}
         .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?horizontal=${args.horizontal}
-        ?stacked=${args.stacked}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         .options=${args.options}
-      ></kd-chart-bar>
+      ></kd-chart>
     `;
   },
 };
 
-export const ComboChart = {
+export const Area = {
   args: {
     ...args,
     datasets: [
       {
-        type: 'line',
         label: 'Dataset 1',
         data: [12, 19, 3, 5, 2, 3],
+        yAxisID: 'y',
+        fill: true,
       },
       {
         label: 'Dataset 2',
-        data: [12, 19, 3, 5, 2, 3],
+        data: [8, 15, 7, 9, 6, 13],
+        yAxisID: 'y1',
+        fill: true,
       },
     ],
+    options: {
+      scales: {
+        y: {
+          type: 'linear',
+          display: true,
+          position: 'left',
+        },
+        y1: {
+          type: 'linear',
+          display: true,
+          position: 'right',
+          grid: {
+            drawOnChartArea: false,
+          },
+        },
+      },
+    },
   },
   render: (args) => {
     return html`
-      <kd-chart-bar
+      <kd-chart
+        type="line"
         .chartTitle=${args.chartTitle}
         .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?horizontal=${args.horizontal}
-        ?stacked=${args.stacked}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         .options=${args.options}
-      ></kd-chart-bar>
+      ></kd-chart>
     `;
   },
 };

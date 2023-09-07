@@ -1,0 +1,94 @@
+@use '../../common/scss/global.scss';
+@use '../../common/scss/mixins.scss';
+@use '~@kyndryl-design-system/foundation/scss/mixins/typography.scss';
+
+:host {
+  display: block;
+}
+
+figure {
+  margin: 0;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+figcaption {
+  margin-top: 8px;
+}
+
+.hidden-visually {
+  @include mixins.visually-hidden;
+}
+
+canvas:focus,
+div:focus {
+  border-radius: 4px;
+  outline: 2px solid var(--kd-color-border-focus);
+}
+
+.table {
+  width: 100%;
+  max-height: 300px;
+  overflow: auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+
+  th {
+    text-align: left;
+    font-weight: 500;
+    padding: 8px 16px;
+    background: var(--kd-color-background-accent-subtle);
+  }
+
+  td {
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--kd-color-background-accent-tertiary);
+
+    span {
+      // display: block;
+
+      &:after {
+        content: ',';
+      }
+
+      &:last-child:after {
+        content: none;
+      }
+    }
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-weight: 500;
+}
+
+.view-toggle {
+  display: inline-block;
+  border-radius: 4px;
+  border: none;
+  background: none;
+  cursor: pointer;
+
+  &:focus {
+    outline: 2px solid var(--kd-color-border-focus);
+  }
+}
+
+kd-icon {
+  color: var(--kd-color-text-placeholder);
+
+  &.active {
+    color: inherit;
+  }
+}

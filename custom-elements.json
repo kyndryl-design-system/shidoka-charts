@@ -9,10 +9,10 @@
       "exports": [
         {
           "kind": "js",
-          "name": "BarChart",
+          "name": "KDChart",
           "declaration": {
-            "name": "BarChart",
-            "module": "./components/barChart"
+            "name": "KDChart",
+            "module": "./components/chart"
           }
         }
       ]
@@ -71,12 +71,12 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/barChart/barChart.ts",
+      "path": "src/components/chart/chart.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "Bar chart.",
-          "name": "BarChart",
+          "description": "Chart.js wrapper component.",
+          "name": "KDChart",
           "members": [
             {
               "kind": "field",
@@ -100,6 +100,16 @@
             },
             {
               "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "any"
+              },
+              "default": "''",
+              "description": "Chart.js chart type. Can be 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'bubble', 'scatter'.",
+              "attribute": "type"
+            },
+            {
+              "kind": "field",
               "name": "labels",
               "type": {
                 "text": "Array<string>"
@@ -118,29 +128,9 @@
             },
             {
               "kind": "field",
-              "name": "horizontal",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Horizontal layout.",
-              "attribute": "horizontal"
-            },
-            {
-              "kind": "field",
-              "name": "stacked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Stacked bars/datasets. Does not work on Combo charts.",
-              "attribute": "stacked"
-            },
-            {
-              "kind": "field",
               "name": "options",
               "type": {
-                "text": "object"
+                "text": "any"
               },
               "default": "{}",
               "description": "Chart.js options. Can override Shidoka defaults.",
@@ -182,6 +172,16 @@
                   "text": ""
                 }
               }
+            },
+            {
+              "kind": "method",
+              "name": "getLabel",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleViewToggle",
+              "privacy": "private"
             }
           ],
           "attributes": [
@@ -204,6 +204,15 @@
               "fieldName": "description"
             },
             {
+              "name": "type",
+              "type": {
+                "text": "any"
+              },
+              "default": "''",
+              "description": "Chart.js chart type. Can be 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'bubble', 'scatter'.",
+              "fieldName": "type"
+            },
+            {
               "name": "labels",
               "type": {
                 "text": "Array<string>"
@@ -220,27 +229,9 @@
               "fieldName": "datasets"
             },
             {
-              "name": "horizontal",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Horizontal layout.",
-              "fieldName": "horizontal"
-            },
-            {
-              "name": "stacked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Stacked bars/datasets. Does not work on Combo charts.",
-              "fieldName": "stacked"
-            },
-            {
               "name": "options",
               "type": {
-                "text": "object"
+                "text": "any"
               },
               "default": "{}",
               "description": "Chart.js options. Can override Shidoka defaults.",
@@ -269,40 +260,40 @@
             "name": "LitElement",
             "package": "lit"
           },
-          "tagName": "kd-chart-bar",
+          "tagName": "kd-chart",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "BarChart",
+          "name": "KDChart",
           "declaration": {
-            "name": "BarChart",
-            "module": "src/components/barChart/barChart.ts"
+            "name": "KDChart",
+            "module": "src/components/chart/chart.ts"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "kd-chart-bar",
+          "name": "kd-chart",
           "declaration": {
-            "name": "BarChart",
-            "module": "src/components/barChart/barChart.ts"
+            "name": "KDChart",
+            "module": "src/components/chart/chart.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/barChart/index.ts",
+      "path": "src/components/chart/index.ts",
       "declarations": [],
       "exports": [
         {
           "kind": "js",
-          "name": "BarChart",
+          "name": "KDChart",
           "declaration": {
-            "name": "BarChart",
-            "module": "./barChart"
+            "name": "KDChart",
+            "module": "./chart"
           }
         }
       ]
