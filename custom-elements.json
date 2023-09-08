@@ -182,6 +182,11 @@
               "kind": "method",
               "name": "handleViewToggle",
               "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "checkType",
+              "privacy": "private"
             }
           ],
           "attributes": [

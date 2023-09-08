@@ -2,12 +2,29 @@ import { LitElement, html } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
 import { deepmerge } from 'deepmerge-ts';
 import Chart from 'chart.js/auto';
+import {
+  ChoroplethController,
+  BubbleMapController,
+  GeoFeature,
+  ColorScale,
+  SizeScale,
+  ProjectionScale,
+} from 'chartjs-chart-geo';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import musicPlugin from 'chartjs-plugin-chart2music';
 import ChartScss from './chart.scss';
 import '@kyndryl-design-system/foundation/components/icon';
 import chartIcon from '@carbon/icons/es/chart--line/24';
 import tableIcon from '@carbon/icons/es/data-table/24';
+
+Chart.register(
+  ChoroplethController,
+  BubbleMapController,
+  GeoFeature,
+  ColorScale,
+  SizeScale,
+  ProjectionScale
+);
 
 /**
  * Chart.js wrapper component.
@@ -74,26 +91,36 @@ export class KDChart extends LitElement {
   @state()
   tableView = false;
 
+  /** Disable table view feature.
+   * @ignore
+   */
+  @state()
+  tableDisabled = false;
+
   override render() {
     return html`
       <div class="header">
         <div class="title">${this.chartTitle}</div>
 
-        <button
-          title="Toggle View Mode"
-          aria-label="Toggle View Mode"
-          class="view-toggle"
-          @click=${() => this.handleViewToggle()}
-        >
-          <kd-icon
-            .icon=${chartIcon}
-            class="${!this.tableView ? 'active' : ''}"
-          ></kd-icon>
-          <kd-icon
-            .icon=${tableIcon}
-            class="${this.tableView ? 'active' : ''}"
-          ></kd-icon>
-        </button>
+        ${!this.tableDisabled
+          ? html`
+              <button
+                title="Toggle View Mode"
+                aria-label="Toggle View Mode"
+                class="view-toggle"
+                @click=${() => this.handleViewToggle()}
+              >
+                <kd-icon
+                  .icon=${chartIcon}
+                  class="${!this.tableView ? 'active' : ''}"
+                ></kd-icon>
+                <kd-icon
+                  .icon=${tableIcon}
+                  class="${this.tableView ? 'active' : ''}"
+                ></kd-icon>
+              </button>
+            `
+          : null}
       </div>
 
       <figure class="${this.tableView ? 'hidden' : ''}">
@@ -110,7 +137,7 @@ export class KDChart extends LitElement {
         </figcaption>
       </figure>
 
-      ${this.tableView
+      ${!this.tableDisabled && this.tableView
         ? html`
             <div class="table">
               <table>
@@ -179,6 +206,7 @@ export class KDChart extends LitElement {
     if (changedProps.has('type')) {
       this.chart.destroy();
       this.initChart();
+      this.checkType();
     }
 
     // Update chart instance when data changes.
@@ -256,6 +284,12 @@ export class KDChart extends LitElement {
 
   private handleViewToggle() {
     this.tableView = !this.tableView;
+  }
+
+  private checkType() {
+    // chart types that can't have a data table view
+    const blacklist = ['choropleth', 'bubbleMap'];
+    this.tableDisabled = blacklist.includes(this.type);
   }
 }
 
