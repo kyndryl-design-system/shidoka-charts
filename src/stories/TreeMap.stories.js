@@ -1,7 +1,8 @@
 import { html } from 'lit';
 import '../components/chart';
 // import { transparentColorScale } from '../common/helpers/helpers';
-import statsByState from './sampleData/treemap.json';
+import statsByState from './sampleData/treemapStates.json';
+import nestedTree from './sampleData/treemapNested.json';
 
 export default {
   title: 'Tree Map',
@@ -63,7 +64,7 @@ export const Grouped = {
       {
         label: 'Dataset 1',
         tree: statsByState,
-        key: 'area',
+        key: 'population',
         groups: ['division'],
         labels: {
           align: 'left',
@@ -75,8 +76,10 @@ export const Grouped = {
             return [ctx.raw._data.division];
           },
           color: 'white',
+          hoverColor: 'white',
           font: { size: 12 },
           position: 'top',
+          overflow: 'hidden',
         },
       },
     ],
@@ -104,7 +107,7 @@ export const Captions = {
       {
         label: 'Dataset 1',
         tree: statsByState,
-        key: 'area',
+        key: 'population',
         groups: ['region', 'division', 'state'],
         labels: {
           align: 'left',
@@ -116,19 +119,91 @@ export const Captions = {
             return [ctx.raw._data.state];
           },
           color: 'white',
+          hoverColor: 'white',
           font: { size: 12 },
           position: 'top',
+          overflow: 'hidden',
         },
         captions: {
           align: 'center',
           display: true,
           color: 'white',
+          hoverColor: 'white',
           font: {
             size: 14,
           },
         },
       },
     ],
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="treemap"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        ?hideDescription=${args.hideDescription}
+        ?hideCaptions=${args.hideCaptions}
+        .options=${args.options}
+      ></kd-chart>
+    `;
+  },
+};
+
+export const Nested = {
+  args: {
+    ...args,
+    datasets: [
+      {
+        label: 'Dataset 1',
+        tree: nestedTree,
+        treeLeafKey: 'name',
+        key: 'value',
+        groups: [0, 1, 'name'],
+        labels: {
+          align: 'left',
+          display: true,
+          formatter(ctx) {
+            if (ctx.type !== 'data') {
+              return;
+            }
+            return [ctx.raw._data.name || ctx.raw._data.label];
+          },
+          color: 'white',
+          hoverColor: 'white',
+          font: { size: 12 },
+          position: 'top',
+          overflow: 'hidden',
+        },
+        captions: {
+          align: 'center',
+          display: true,
+          color: 'white',
+          hoverColor: 'white',
+          font: {
+            size: 14,
+          },
+        },
+      },
+    ],
+    options: {
+      plugins: {
+        legend: {
+          display: false,
+        },
+        tooltip: {
+          callbacks: {
+            title(items) {
+              const dataItem = items[0].raw;
+              const obj = dataItem._data;
+              return obj.name;
+            },
+          },
+        },
+      },
+    },
   },
   render: (args) => {
     return html`
