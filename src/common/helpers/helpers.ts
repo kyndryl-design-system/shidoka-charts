@@ -1,5 +1,3 @@
-import { color } from 'chart.js/helpers';
-
 export const debounce = (fn: Function, ms = 100) => {
   let timer: ReturnType<typeof setTimeout>;
   return function (e: Event) {
