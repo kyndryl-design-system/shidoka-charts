@@ -10,6 +10,7 @@ import {
   SizeScale,
   ProjectionScale,
 } from 'chartjs-chart-geo';
+import { TreemapController, TreemapElement } from 'chartjs-chart-treemap';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import musicPlugin from 'chartjs-plugin-chart2music';
 import ChartScss from './chart.scss';
@@ -23,7 +24,9 @@ Chart.register(
   GeoFeature,
   ColorScale,
   SizeScale,
-  ProjectionScale
+  ProjectionScale,
+  TreemapController,
+  TreemapElement
 );
 
 /**
@@ -41,7 +44,7 @@ export class KDChart extends LitElement {
   @property({ type: String })
   description = '';
 
-  /** Chart.js chart type. Can be 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'bubble', 'scatter'. */
+  /** Chart.js chart type. Can be 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'bubble', 'scatter', 'choropleth', 'bubbleMap', 'treemap'. */
   @property({ type: String })
   type: any = '';
 
@@ -288,7 +291,7 @@ export class KDChart extends LitElement {
 
   private checkType() {
     // chart types that can't have a data table view
-    const blacklist = ['choropleth', 'bubbleMap'];
+    const blacklist = ['choropleth', 'bubbleMap', 'treemap'];
     this.tableDisabled = blacklist.includes(this.type);
   }
 }

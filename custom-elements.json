@@ -48,6 +48,45 @@
               }
             }
           ]
+        },
+        {
+          "kind": "function",
+          "name": "createOptionsArray",
+          "parameters": [
+            {
+              "name": "options",
+              "default": "{}",
+              "type": {
+                "text": "*"
+              },
+              "description": " imported enums object"
+            }
+          ],
+          "description": "Convert an object to an array of only its values.\r\nUsed when importing enums in component stories for populating argType dropdowns."
+        },
+        {
+          "kind": "function",
+          "name": "transparentColorScale",
+          "parameters": [
+            {
+              "name": "ctx",
+              "type": {
+                "text": "any"
+              }
+            },
+            {
+              "name": "baseColor",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "border",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ]
         }
       ],
       "exports": [
@@ -64,6 +103,22 @@
           "name": "stringToReactHtml",
           "declaration": {
             "name": "stringToReactHtml",
+            "module": "src/common/helpers/helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "createOptionsArray",
+          "declaration": {
+            "name": "createOptionsArray",
+            "module": "src/common/helpers/helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "transparentColorScale",
+          "declaration": {
+            "name": "transparentColorScale",
             "module": "src/common/helpers/helpers.ts"
           }
         }
@@ -105,7 +160,7 @@
                 "text": "any"
               },
               "default": "''",
-              "description": "Chart.js chart type. Can be 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'bubble', 'scatter'.",
+              "description": "Chart.js chart type. Can be 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'bubble', 'scatter', 'choropleth', 'bubbleMap', 'treemap'.",
               "attribute": "type"
             },
             {
@@ -214,7 +269,7 @@
                 "text": "any"
               },
               "default": "''",
-              "description": "Chart.js chart type. Can be 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'bubble', 'scatter'.",
+              "description": "Chart.js chart type. Can be 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'bubble', 'scatter', 'choropleth', 'bubbleMap', 'treemap'.",
               "fieldName": "type"
             },
             {
