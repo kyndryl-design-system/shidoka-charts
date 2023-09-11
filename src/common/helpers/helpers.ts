@@ -27,22 +27,3 @@ export function createOptionsArray(options: any = {}) {
 
   return optionsArray;
 }
-
-export const transparentColorScale = (
-  ctx: any,
-  baseColor: string,
-  border: boolean
-) => {
-  if (ctx.type !== 'data') {
-    return 'transparent';
-  }
-
-  const value = ctx.raw.v;
-
-  let alpha = (1 + Math.log(value)) / 5;
-  if (border) {
-    alpha += 0.5;
-  }
-
-  return color(baseColor).alpha(alpha).rgbString();
-};

@@ -1,6 +1,5 @@
 import { html } from 'lit';
 import '../components/chart';
-// import { transparentColorScale } from '../common/helpers/helpers';
 import statsByState from './sampleData/treemapStates.json';
 import nestedTree from './sampleData/treemapNested.json';
 
@@ -23,9 +22,23 @@ const args = {
   datasets: [
     {
       label: 'Dataset 1',
-      tree: [15, 6, 6, 5, 4, 3, 2, 2],
-      // backgroundColor: (ctx) =>
-      //   transparentColorScale(ctx, 'blue'),
+      tree: statsByState,
+      key: 'population',
+      labels: {
+        align: 'left',
+        display: true,
+        formatter(ctx) {
+          if (ctx.type !== 'data') {
+            return;
+          }
+          return [ctx.raw._data.state];
+        },
+        color: 'white',
+        hoverColor: 'white',
+        font: { size: 12 },
+        position: 'top',
+        overflow: 'hidden',
+      },
     },
   ],
   options: {
@@ -65,50 +78,7 @@ export const Grouped = {
         label: 'Dataset 1',
         tree: statsByState,
         key: 'population',
-        groups: ['division'],
-        labels: {
-          align: 'left',
-          display: true,
-          formatter(ctx) {
-            if (ctx.type !== 'data') {
-              return;
-            }
-            return [ctx.raw._data.division];
-          },
-          color: 'white',
-          hoverColor: 'white',
-          font: { size: 12 },
-          position: 'top',
-          overflow: 'hidden',
-        },
-      },
-    ],
-  },
-  render: (args) => {
-    return html`
-      <kd-chart
-        type="treemap"
-        .chartTitle=${args.chartTitle}
-        .description=${args.description}
-        .labels=${args.labels}
-        .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        .options=${args.options}
-      ></kd-chart>
-    `;
-  },
-};
-
-export const Captions = {
-  args: {
-    ...args,
-    datasets: [
-      {
-        label: 'Dataset 1',
-        tree: statsByState,
-        key: 'population',
-        groups: ['region', 'division', 'state'],
+        groups: ['region', 'state'],
         labels: {
           align: 'left',
           display: true,
@@ -152,7 +122,7 @@ export const Captions = {
   },
 };
 
-export const Nested = {
+export const NestedData = {
   args: {
     ...args,
     datasets: [
@@ -188,22 +158,6 @@ export const Nested = {
         },
       },
     ],
-    options: {
-      plugins: {
-        legend: {
-          display: false,
-        },
-        tooltip: {
-          callbacks: {
-            title(items) {
-              const dataItem = items[0].raw;
-              const obj = dataItem._data;
-              return obj.name;
-            },
-          },
-        },
-      },
-    },
   },
   render: (args) => {
     return html`
