@@ -14,10 +14,12 @@ import { TreemapController, TreemapElement } from 'chartjs-chart-treemap';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import musicPlugin from 'chartjs-plugin-chart2music';
 import annotationPlugin from 'chartjs-plugin-annotation';
+import { convertChartDataToCSV } from '../../common/helpers/helpers';
 import ChartScss from './chart.scss';
 import '@kyndryl-design-system/foundation/components/icon';
 import chartIcon from '@carbon/icons/es/chart--line/24';
 import tableIcon from '@carbon/icons/es/data-table/24';
+import overflowIcon from '@carbon/icons/es/overflow-menu--vertical/24';
 
 Chart.register(
   annotationPlugin,
@@ -111,25 +113,49 @@ export class KDChart extends LitElement {
       <div class="header">
         <div class="title">${this.chartTitle}</div>
 
-        ${!this.tableDisabled
-          ? html`
-              <button
-                title="Toggle View Mode"
-                aria-label="Toggle View Mode"
-                class="view-toggle"
-                @click=${() => this.handleViewToggle()}
-              >
-                <kd-icon
-                  .icon=${chartIcon}
-                  class="${!this.tableView ? 'active' : ''}"
-                ></kd-icon>
-                <kd-icon
-                  .icon=${tableIcon}
-                  class="${this.tableView ? 'active' : ''}"
-                ></kd-icon>
-              </button>
-            `
-          : null}
+        <div class="controls">
+          ${!this.tableDisabled
+            ? html`
+                <button
+                  title="Toggle View Mode"
+                  aria-label="Toggle View Mode"
+                  class="view-toggle"
+                  @click=${() => this.handleViewToggle()}
+                >
+                  <kd-icon
+                    .icon=${chartIcon}
+                    class="${!this.tableView ? 'active' : ''}"
+                  ></kd-icon>
+                  <kd-icon
+                    .icon=${tableIcon}
+                    class="${this.tableView ? 'active' : ''}"
+                  ></kd-icon>
+                </button>
+              `
+            : null}
+
+          <button
+            title="Controls"
+            aria-label="Controls"
+            class="overflow-button"
+          >
+            <kd-icon .icon=${overflowIcon}></kd-icon>
+
+            <div class="overflow-menu">
+              ${!this.tableDisabled
+                ? html` <a @click=${(e: Event) => this.handleDownloadCsv(e)}>
+                    Download as CSV
+                  </a>`
+                : null}
+              <a @click=${(e: Event) => this.handleDownloadImage(e, false)}>
+                Download as PNG
+              </a>
+              <a @click=${(e: Event) => this.handleDownloadImage(e, true)}>
+                Download as JPG
+              </a>
+            </div>
+          </button>
+        </div>
       </div>
 
       <figure class="${this.tableView ? 'hidden' : ''}">
@@ -305,6 +331,48 @@ export class KDChart extends LitElement {
     // chart types that can't have a data table view
     const blacklist = ['choropleth', 'bubbleMap', 'treemap'];
     this.tableDisabled = blacklist.includes(this.type);
+  }
+
+  private handleDownloadImage(e: Event, jpeg: boolean) {
+    e.preventDefault();
+
+    const imgFormat = jpeg ? 'image/jpeg' : 'image/png';
+    const fileExt = jpeg ? 'jpg' : 'png';
+    const a = document.createElement('a');
+
+    a.href = this.chart.toBase64Image(imgFormat, 1);
+    a.download = this.chartTitle + '.' + fileExt;
+
+    // trigger the download
+    a.click();
+  }
+
+  private handleDownloadCsv(e: Event) {
+    e.preventDefault();
+    let csv = '';
+
+    for (let i = 0; i < this.chart.data.datasets.length; i++) {
+      csv += convertChartDataToCSV({
+        data: this.chart.data.datasets[i],
+        labels: this.labels,
+      });
+    }
+    if (csv == null) return;
+    console.log(csv);
+
+    const filename = this.chartTitle + '.csv';
+    if (!csv.match(/^data:text\/csv/i)) {
+      csv = 'data:text/csv;charset=utf-8,' + csv;
+    }
+
+    // not sure if anything below this comment works
+    const data = encodeURI(csv);
+    const link = document.createElement('a');
+    link.setAttribute('href', data);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link); // Required for FF
+    link.click();
+    document.body.removeChild(link);
   }
 }
 

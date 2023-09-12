@@ -25,3 +25,32 @@ export function createOptionsArray(options: any = {}) {
 
   return optionsArray;
 }
+
+export function convertChartDataToCSV(args: any) {
+  const data = args.data.data || null;
+  if (data == null || !data.length) {
+    return null;
+  }
+
+  const labels = args.labels || null;
+  if (labels == null || !labels.length) {
+    return null;
+  }
+
+  const columnDelimiter = args.columnDelimiter || ',';
+  const lineDelimiter = args.lineDelimiter || '\n';
+
+  let result = '' + columnDelimiter;
+  result += labels.join(columnDelimiter);
+  result += lineDelimiter;
+
+  result += args.data.label.toString();
+
+  for (let i = 0; i < data.length; i++) {
+    result += columnDelimiter;
+    result += data[i];
+  }
+  result += lineDelimiter;
+
+  return result;
+}
