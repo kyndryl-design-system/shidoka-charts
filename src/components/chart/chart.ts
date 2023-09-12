@@ -50,17 +50,21 @@ export class KDChart extends LitElement {
   @property({ type: String })
   type: any = '';
 
-  /** Chart.js labels. */
+  /** Chart.js data.labels. */
   @property({ type: Array })
   labels!: Array<string>;
 
-  /** Chart.js datasets. Datasets are layered top to bottom. */
+  /** Chart.js data.datasets. */
   @property({ type: Array })
   datasets!: Array<any>;
 
   /** Chart.js options. Can override Shidoka defaults. */
   @property({ type: Object })
   options: any = {};
+
+  /** Chart.js additional plugins. Must be registerable inline via Chart.plugins array, not globally via Chart.register. */
+  @property({ type: Array })
+  plugins: any = [];
 
   /** Hides the description visually. */
   @property({ type: Boolean })
@@ -226,6 +230,12 @@ export class KDChart extends LitElement {
       this.chart.options = this.mergeOptions();
       this.chart.update();
     }
+
+    // Update chart instance when plugins change.
+    if (changedProps.has('plugins')) {
+      this.chart.destroy();
+      this.initChart();
+    }
   }
 
   /**
@@ -240,7 +250,7 @@ export class KDChart extends LitElement {
         datasets: this.datasets,
       },
       options: this.mergeOptions(),
-      plugins: [a11yPlugin, musicPlugin],
+      plugins: [a11yPlugin, musicPlugin, ...this.plugins],
     });
   }
 

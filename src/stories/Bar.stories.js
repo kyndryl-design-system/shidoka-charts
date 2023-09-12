@@ -34,6 +34,11 @@ const args = {
           text: 'Color',
         },
       },
+      y: {
+        title: {
+          text: 'Votes',
+        },
+      },
     },
   },
   hideDescription: false,

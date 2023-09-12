@@ -63,30 +63,6 @@
             }
           ],
           "description": "Convert an object to an array of only its values.\r\nUsed when importing enums in component stories for populating argType dropdowns."
-        },
-        {
-          "kind": "function",
-          "name": "transparentColorScale",
-          "parameters": [
-            {
-              "name": "ctx",
-              "type": {
-                "text": "any"
-              }
-            },
-            {
-              "name": "baseColor",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "border",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ]
         }
       ],
       "exports": [
@@ -111,14 +87,6 @@
           "name": "createOptionsArray",
           "declaration": {
             "name": "createOptionsArray",
-            "module": "src/common/helpers/helpers.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "transparentColorScale",
-          "declaration": {
-            "name": "transparentColorScale",
             "module": "src/common/helpers/helpers.ts"
           }
         }
@@ -169,7 +137,7 @@
               "type": {
                 "text": "Array<string>"
               },
-              "description": "Chart.js labels.",
+              "description": "Chart.js data.labels.",
               "attribute": "labels"
             },
             {
@@ -178,7 +146,7 @@
               "type": {
                 "text": "Array<any>"
               },
-              "description": "Chart.js datasets. Datasets are layered top to bottom.",
+              "description": "Chart.js data.datasets.",
               "attribute": "datasets"
             },
             {
@@ -190,6 +158,16 @@
               "default": "{}",
               "description": "Chart.js options. Can override Shidoka defaults.",
               "attribute": "options"
+            },
+            {
+              "kind": "field",
+              "name": "plugins",
+              "type": {
+                "text": "any"
+              },
+              "default": "[]",
+              "description": "Chart.js additional plugins. Must be registerable inline via Chart.plugins array, not globally via Chart.register.",
+              "attribute": "plugins"
             },
             {
               "kind": "field",
@@ -277,7 +255,7 @@
               "type": {
                 "text": "Array<string>"
               },
-              "description": "Chart.js labels.",
+              "description": "Chart.js data.labels.",
               "fieldName": "labels"
             },
             {
@@ -285,7 +263,7 @@
               "type": {
                 "text": "Array<any>"
               },
-              "description": "Chart.js datasets. Datasets are layered top to bottom.",
+              "description": "Chart.js data.datasets.",
               "fieldName": "datasets"
             },
             {
@@ -296,6 +274,15 @@
               "default": "{}",
               "description": "Chart.js options. Can override Shidoka defaults.",
               "fieldName": "options"
+            },
+            {
+              "name": "plugins",
+              "type": {
+                "text": "any"
+              },
+              "default": "[]",
+              "description": "Chart.js additional plugins. Must be registerable inline via Chart.plugins array, not globally via Chart.register.",
+              "fieldName": "plugins"
             },
             {
               "name": "hideDescription",
