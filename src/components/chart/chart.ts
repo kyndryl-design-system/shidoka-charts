@@ -21,6 +21,7 @@ import '@kyndryl-design-system/foundation/components/icon';
 import chartIcon from '@carbon/icons/es/chart--line/24';
 import tableIcon from '@carbon/icons/es/data-table/24';
 import overflowIcon from '@carbon/icons/es/overflow-menu--vertical/24';
+import maximizeIcon from '@carbon/icons/es/maximize/24';
 
 Chart.register(
   ChartDeferred,
@@ -79,6 +80,13 @@ export class KDChart extends LitElement {
   hideCaptions = false;
 
   /**
+   * Queries the container element.
+   * @ignore
+   */
+  @query('.container')
+  container!: HTMLCanvasElement;
+
+  /**
    * Queries the canvas element.
    * @ignore
    */
@@ -112,125 +120,139 @@ export class KDChart extends LitElement {
 
   override render() {
     return html`
-      <div class="header">
-        <div class="title">${this.chartTitle}</div>
+      <div class="container">
+        <div class="header">
+          <div class="title">${this.chartTitle}</div>
 
-        <div class="controls">
-          ${!this.tableDisabled
-            ? html`
-                <button
-                  title="Toggle View Mode"
-                  aria-label="Toggle View Mode"
-                  class="view-toggle"
-                  @click=${() => this.handleViewToggle()}
-                >
-                  <kd-icon
-                    .icon=${chartIcon}
-                    class="${!this.tableView ? 'active' : ''}"
-                  ></kd-icon>
-                  <kd-icon
-                    .icon=${tableIcon}
-                    class="${this.tableView ? 'active' : ''}"
-                  ></kd-icon>
-                </button>
-              `
-            : null}
+          <div class="controls">
+            ${!this.tableDisabled
+              ? html`
+                  <button
+                    title="Toggle View Mode"
+                    aria-label="Toggle View Mode"
+                    class="view-toggle"
+                    @click=${() => this.handleViewToggle()}
+                  >
+                    <kd-icon
+                      .icon=${chartIcon}
+                      class="${!this.tableView ? 'active' : ''}"
+                    ></kd-icon>
+                    <kd-icon
+                      .icon=${tableIcon}
+                      class="${this.tableView ? 'active' : ''}"
+                    ></kd-icon>
+                  </button>
+                `
+              : null}
 
-          <button
-            title="Controls"
-            aria-label="Controls"
-            class="overflow-button"
-          >
-            <kd-icon .icon=${overflowIcon}></kd-icon>
+            <button
+              title="Toggle Fullscreen"
+              aria-label="Toggle Fullscreen"
+              @click=${() => this.handleFullscreen()}
+            >
+              <kd-icon .icon=${maximizeIcon}></kd-icon>
+            </button>
 
-            <div class="overflow-menu">
-              ${!this.tableDisabled
-                ? html` <a @click=${(e: Event) => this.handleDownloadCsv(e)}>
-                    Download as CSV
-                  </a>`
-                : null}
-              <a @click=${(e: Event) => this.handleDownloadImage(e, false)}>
-                Download as PNG
-              </a>
-              <a @click=${(e: Event) => this.handleDownloadImage(e, true)}>
-                Download as JPG
-              </a>
-            </div>
-          </button>
-        </div>
-      </div>
+            <button
+              title="Overflow Menu"
+              aria-label="Overflow Menu"
+              class="overflow-button"
+            >
+              <kd-icon .icon=${overflowIcon}></kd-icon>
 
-      <figure class="${this.tableView ? 'hidden' : ''}">
-        <canvas role="img"></canvas>
-        <figcaption>
-          <div
-            class="closed-caption ${this.hideCaptions ? 'hidden-visually' : ''}"
-          ></div>
-          <div
-            class="description ${this.hideDescription ? 'hidden-visually' : ''}"
-          >
-            ${this.description}
+              <div class="overflow-menu">
+                ${!this.tableDisabled
+                  ? html` <a @click=${(e: Event) => this.handleDownloadCsv(e)}>
+                      Download as CSV
+                    </a>`
+                  : null}
+                <a @click=${(e: Event) => this.handleDownloadImage(e, false)}>
+                  Download as PNG
+                </a>
+                <a @click=${(e: Event) => this.handleDownloadImage(e, true)}>
+                  Download as JPG
+                </a>
+              </div>
+            </button>
           </div>
-        </figcaption>
-      </figure>
+        </div>
 
-      ${!this.tableDisabled && this.tableView
-        ? html`
-            <div class="table">
-              <table>
-                <thead>
-                  <tr>
-                    ${this.labels.length
-                      ? html`<th>${this.getLabel()}</th>`
-                      : null}
-                    ${this.datasets.map((dataset) => {
-                      return html`<th>${dataset.label}</th>`;
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  ${this.datasets[0].data.map((_value: any, i: number) => {
-                    return html`
-                      <tr>
-                        ${this.labels.length
-                          ? html`<td>${this.labels[i]}</td>`
-                          : null}
-                        ${this.datasets.map((dataset) => {
-                          const dataPoint = dataset.data[i];
-
-                          if (Array.isArray(dataPoint)) {
-                            // handle data in array format
-                            return html`
-                              <td>${dataPoint[0]}, ${dataPoint[1]}</td>
-                            `;
-                          } else if (
-                            typeof dataPoint === 'object' &&
-                            !Array.isArray(dataPoint) &&
-                            dataPoint !== null
-                          ) {
-                            // handle data in object format
-                            return html`
-                              <td>
-                                ${Object.keys(dataPoint).map((key) => {
-                                  return html`
-                                    <span>${key}: ${dataPoint[key]}</span>
-                                  `;
-                                })}
-                              </td>
-                            `;
-                          } else {
-                            // handle data in number/basic format
-                            return html`<td>${dataset.data[i]}</td>`;
-                          }
-                        })}
-                      </tr>
-                    `;
-                  })}
-                </tbody>
-              </table>
+        <figure class="${this.tableView ? 'hidden' : ''}">
+          <canvas role="img"></canvas>
+          <figcaption>
+            <div
+              class="closed-caption ${this.hideCaptions
+                ? 'hidden-visually'
+                : ''}"
+            ></div>
+            <div
+              class="description ${this.hideDescription
+                ? 'hidden-visually'
+                : ''}"
+            >
+              ${this.description}
             </div>
-          `
-        : null}
+          </figcaption>
+        </figure>
+
+        ${!this.tableDisabled && this.tableView
+          ? html`
+              <div class="table">
+                <table>
+                  <thead>
+                    <tr>
+                      ${this.labels.length
+                        ? html`<th>${this.getLabel()}</th>`
+                        : null}
+                      ${this.datasets.map((dataset) => {
+                        return html`<th>${dataset.label}</th>`;
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${this.datasets[0].data.map((_value: any, i: number) => {
+                      return html`
+                        <tr>
+                          ${this.labels.length
+                            ? html`<td>${this.labels[i]}</td>`
+                            : null}
+                          ${this.datasets.map((dataset) => {
+                            const dataPoint = dataset.data[i];
+
+                            if (Array.isArray(dataPoint)) {
+                              // handle data in array format
+                              return html`
+                                <td>${dataPoint[0]}, ${dataPoint[1]}</td>
+                              `;
+                            } else if (
+                              typeof dataPoint === 'object' &&
+                              !Array.isArray(dataPoint) &&
+                              dataPoint !== null
+                            ) {
+                              // handle data in object format
+                              return html`
+                                <td>
+                                  ${Object.keys(dataPoint).map((key) => {
+                                    return html`
+                                      <span>${key}: ${dataPoint[key]}</span>
+                                    `;
+                                  })}
+                                </td>
+                              `;
+                            } else {
+                              // handle data in number/basic format
+                              return html`<td>${dataset.data[i]}</td>`;
+                            }
+                          })}
+                        </tr>
+                      `;
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            `
+          : null}
+      </div>
     `;
   }
 
@@ -375,6 +397,14 @@ export class KDChart extends LitElement {
     document.body.appendChild(link); // Required for FF
     link.click();
     document.body.removeChild(link);
+  }
+
+  private handleFullscreen() {
+    if (this.shadowRoot?.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      this.container.requestFullscreen();
+    }
   }
 }
 
