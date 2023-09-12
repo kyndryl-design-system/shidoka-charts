@@ -2,6 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
 import { deepmerge } from 'deepmerge-ts';
 import Chart from 'chart.js/auto';
+import ChartDeferred from 'chartjs-plugin-deferred';
 import {
   ChoroplethController,
   BubbleMapController,
@@ -22,6 +23,7 @@ import tableIcon from '@carbon/icons/es/data-table/24';
 import overflowIcon from '@carbon/icons/es/overflow-menu--vertical/24';
 
 Chart.register(
+  ChartDeferred,
   annotationPlugin,
   ChoroplethController,
   BubbleMapController,
