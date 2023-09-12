@@ -293,6 +293,9 @@ export class KDChart extends LitElement {
    * and options.
    */
   private initChart() {
+    // Chart.defaults.font.family =
+    //   "'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif";
+
     this.chart = new Chart(this.canvas, {
       type: this.type,
       data: {
@@ -311,6 +314,7 @@ export class KDChart extends LitElement {
   private mergeOptions() {
     // set default options
     let options: any = {
+      resizeDelay: 30, //debounce the resize
       plugins: {
         chartjs2music: {
           internal: {},
