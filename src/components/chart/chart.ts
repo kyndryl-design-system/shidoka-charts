@@ -13,12 +13,14 @@ import {
 import { TreemapController, TreemapElement } from 'chartjs-chart-treemap';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import musicPlugin from 'chartjs-plugin-chart2music';
+import annotationPlugin from 'chartjs-plugin-annotation';
 import ChartScss from './chart.scss';
 import '@kyndryl-design-system/foundation/components/icon';
 import chartIcon from '@carbon/icons/es/chart--line/24';
 import tableIcon from '@carbon/icons/es/data-table/24';
 
 Chart.register(
+  annotationPlugin,
   ChoroplethController,
   BubbleMapController,
   GeoFeature,
