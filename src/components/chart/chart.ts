@@ -17,6 +17,7 @@ import musicPlugin from 'chartjs-plugin-chart2music';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { convertChartDataToCSV } from '../../common/helpers/helpers';
 import ChartScss from './chart.scss';
+import globalOptions from '../../common/config/globalOptions';
 import '@kyndryl-design-system/foundation/components/icon';
 import chartIcon from '@carbon/icons/es/chart--line/24';
 import tableIcon from '@carbon/icons/es/data-table/24';
@@ -38,11 +39,6 @@ Chart.register(
 
 /**
  * Chart.js wrapper component.
- * @fires on-chart-click - Captures and emits the Chart.js onClick hook.
- * @fires on-chart-hover - Captures and emits the Chart.js onHover hook.
- * @fires on-legend-click - Captures and emits the Chart.js legend onClick hook.
- * @fires on-legend-hover - Captures and emits the Chart.js legend onHover hook.
- * @fires on-legend-leave - Captures and emits the Chart.js legend onLeave hook.
  */
 @customElement('kd-chart')
 export class KDChart extends LitElement {
@@ -317,55 +313,7 @@ export class KDChart extends LitElement {
    * @returns the merged options object.
    */
   private mergeOptions() {
-    // set default options
-    let options: any = {
-      resizeDelay: 30, //debounce the resize
-      plugins: {
-        chartjs2music: {
-          internal: {},
-          cc: this.ccDiv,
-        },
-        legend: {
-          onClick: (e: Event, legendItem: any, legend: any) => {
-            const event = new CustomEvent('on-legend-click', {
-              detail: { origEvent: e, legendItem: legendItem, legend: legend },
-            });
-            this.dispatchEvent(event);
-          },
-          onHover: (e: Event, legendItem: any, legend: any) => {
-            const event = new CustomEvent('on-legend-hover', {
-              detail: { origEvent: e, legendItem: legendItem, legend: legend },
-            });
-            this.dispatchEvent(event);
-          },
-          onLeave: (e: Event, legendItem: any, legend: any) => {
-            const event = new CustomEvent('on-legend-leave', {
-              detail: { origEvent: e, legendItem: legendItem, legend: legend },
-            });
-            this.dispatchEvent(event);
-          },
-        },
-      },
-      onClick: (e: Event) => {
-        const event = new CustomEvent('on-chart-click', {
-          detail: { origEvent: e },
-        });
-        this.dispatchEvent(event);
-      },
-      onHover: (e: Event) => {
-        const event = new CustomEvent('on-chart-hover', {
-          detail: { origEvent: e },
-        });
-        this.dispatchEvent(event);
-      },
-    };
-
-    // merge custom options
-    if (this.options) {
-      options = deepmerge(options, this.options);
-    }
-
-    return options;
+    return deepmerge(globalOptions(this), this.options);
   }
 
   private getLabel() {

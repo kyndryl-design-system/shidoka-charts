@@ -19,6 +19,31 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/common/config/globalOptions.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "defaultConfig",
+          "parameters": [
+            {
+              "name": "ctx"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "defaultConfig",
+            "module": "src/common/config/globalOptions.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/common/helpers/helpers.ts",
       "declarations": [
         {
@@ -277,28 +302,6 @@
               "kind": "method",
               "name": "handleFullscreen",
               "privacy": "private"
-            }
-          ],
-          "events": [
-            {
-              "description": "Captures and emits the Chart.js onClick hook.",
-              "name": "on-chart-click"
-            },
-            {
-              "description": "Captures and emits the Chart.js onHover hook.",
-              "name": "on-chart-hover"
-            },
-            {
-              "description": "Captures and emits the Chart.js legend onClick hook.",
-              "name": "on-legend-click"
-            },
-            {
-              "description": "Captures and emits the Chart.js legend onHover hook.",
-              "name": "on-legend-hover"
-            },
-            {
-              "description": "Captures and emits the Chart.js legend onLeave hook.",
-              "name": "on-legend-leave"
             }
           ],
           "attributes": [
