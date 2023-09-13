@@ -63,6 +63,18 @@
             }
           ],
           "description": "Convert an object to an array of only its values.\r\nUsed when importing enums in component stories for populating argType dropdowns."
+        },
+        {
+          "kind": "function",
+          "name": "convertChartDataToCSV",
+          "parameters": [
+            {
+              "name": "args",
+              "type": {
+                "text": "any"
+              }
+            }
+          ]
         }
       ],
       "exports": [
@@ -87,6 +99,14 @@
           "name": "createOptionsArray",
           "declaration": {
             "name": "createOptionsArray",
+            "module": "src/common/helpers/helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "convertChartDataToCSV",
+          "declaration": {
+            "name": "convertChartDataToCSV",
             "module": "src/common/helpers/helpers.ts"
           }
         }
@@ -220,6 +240,65 @@
               "kind": "method",
               "name": "checkType",
               "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleDownloadImage",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                },
+                {
+                  "name": "jpeg",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleDownloadCsv",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleFullscreen",
+              "privacy": "private"
+            }
+          ],
+          "events": [
+            {
+              "description": "Captures and emits the Chart.js onClick hook.",
+              "name": "on-chart-click"
+            },
+            {
+              "description": "Captures and emits the Chart.js onHover hook.",
+              "name": "on-chart-hover"
+            },
+            {
+              "description": "Captures and emits the Chart.js legend onClick hook.",
+              "name": "on-legend-click"
+            },
+            {
+              "description": "Captures and emits the Chart.js legend onHover hook.",
+              "name": "on-legend-hover"
+            },
+            {
+              "description": "Captures and emits the Chart.js legend onLeave hook.",
+              "name": "on-legend-leave"
             }
           ],
           "attributes": [

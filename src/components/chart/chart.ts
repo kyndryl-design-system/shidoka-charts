@@ -38,6 +38,11 @@ Chart.register(
 
 /**
  * Chart.js wrapper component.
+ * @fires on-chart-click - Captures and emits the Chart.js onClick hook.
+ * @fires on-chart-hover - Captures and emits the Chart.js onHover hook.
+ * @fires on-legend-click - Captures and emits the Chart.js legend onClick hook.
+ * @fires on-legend-hover - Captures and emits the Chart.js legend onHover hook.
+ * @fires on-legend-leave - Captures and emits the Chart.js legend onLeave hook.
  */
 @customElement('kd-chart')
 export class KDChart extends LitElement {
@@ -320,6 +325,38 @@ export class KDChart extends LitElement {
           internal: {},
           cc: this.ccDiv,
         },
+        legend: {
+          onClick: (e: Event, legendItem: any, legend: any) => {
+            const event = new CustomEvent('on-legend-click', {
+              detail: { origEvent: e, legendItem: legendItem, legend: legend },
+            });
+            this.dispatchEvent(event);
+          },
+          onHover: (e: Event, legendItem: any, legend: any) => {
+            const event = new CustomEvent('on-legend-hover', {
+              detail: { origEvent: e, legendItem: legendItem, legend: legend },
+            });
+            this.dispatchEvent(event);
+          },
+          onLeave: (e: Event, legendItem: any, legend: any) => {
+            const event = new CustomEvent('on-legend-leave', {
+              detail: { origEvent: e, legendItem: legendItem, legend: legend },
+            });
+            this.dispatchEvent(event);
+          },
+        },
+      },
+      onClick: (e: Event) => {
+        const event = new CustomEvent('on-chart-click', {
+          detail: { origEvent: e },
+        });
+        this.dispatchEvent(event);
+      },
+      onHover: (e: Event) => {
+        const event = new CustomEvent('on-chart-hover', {
+          detail: { origEvent: e },
+        });
+        this.dispatchEvent(event);
       },
     };
 
