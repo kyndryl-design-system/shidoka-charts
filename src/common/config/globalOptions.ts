@@ -1,4 +1,4 @@
-const defaultConfig = (ctx) => {
+const defaultConfig = (ctx: any) => {
   return {
     resizeDelay: 30, //debounce the resize
     plugins: {
