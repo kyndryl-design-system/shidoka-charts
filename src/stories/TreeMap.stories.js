@@ -18,36 +18,21 @@ export default {
 const args = {
   chartTitle: 'Tree Map',
   description: 'Chart description.',
-  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
   datasets: [
     {
       label: 'Dataset 1',
       tree: statsByState,
       key: 'population',
       labels: {
-        align: 'left',
-        display: true,
         formatter(ctx) {
           if (ctx.type !== 'data') {
             return;
           }
           return [ctx.raw._data.state];
         },
-        color: 'white',
-        hoverColor: 'white',
-        font: { size: 12 },
-        position: 'top',
-        overflow: 'hidden',
       },
     },
   ],
-  options: {
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
-  },
   hideDescription: false,
   hideCaptions: false,
 };
@@ -80,27 +65,11 @@ export const Grouped = {
         key: 'population',
         groups: ['region', 'state'],
         labels: {
-          align: 'left',
-          display: true,
           formatter(ctx) {
             if (ctx.type !== 'data') {
               return;
             }
             return [ctx.raw._data.state];
-          },
-          color: 'white',
-          hoverColor: 'white',
-          font: { size: 12 },
-          position: 'top',
-          overflow: 'hidden',
-        },
-        captions: {
-          align: 'center',
-          display: true,
-          color: 'white',
-          hoverColor: 'white',
-          font: {
-            size: 14,
           },
         },
       },
@@ -133,27 +102,11 @@ export const NestedData = {
         key: 'value',
         groups: [0, 1, 'name'],
         labels: {
-          align: 'left',
-          display: true,
           formatter(ctx) {
             if (ctx.type !== 'data') {
               return;
             }
             return [ctx.raw._data.name || ctx.raw._data.label];
-          },
-          color: 'white',
-          hoverColor: 'white',
-          font: { size: 12 },
-          position: 'top',
-          overflow: 'hidden',
-        },
-        captions: {
-          align: 'center',
-          display: true,
-          color: 'white',
-          hoverColor: 'white',
-          font: {
-            size: 14,
           },
         },
       },

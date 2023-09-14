@@ -119,6 +119,18 @@ export class KDChart extends LitElement {
   @state()
   tableDisabled = false;
 
+  /** Merged options.
+   * @ignore
+   */
+  @state()
+  mergedOptions: any = {};
+
+  /** Merged datasets.
+   * @ignore
+   */
+  @state()
+  mergedDatasets: any = {};
+
   override render() {
     return html`
       <div class="container">
@@ -203,7 +215,7 @@ export class KDChart extends LitElement {
                   <thead>
                     <tr>
                       ${this.labels.length
-                        ? html`<th>${this.getLabel()}</th>`
+                        ? html`<th>${this.getTableAxisLabel()}</th>`
                         : null}
                       ${this.datasets.map((dataset) => {
                         return html`<th>${dataset.label}</th>`;
@@ -257,35 +269,34 @@ export class KDChart extends LitElement {
     `;
   }
 
-  override firstUpdated() {
-    this.initChart();
-  }
-
   override updated(changedProps: any) {
-    // Update chart instance when type changes.
-    if (changedProps.has('type')) {
-      this.chart.destroy();
-      this.initChart();
-      this.checkType();
-    }
-
     // Update chart instance when data changes.
-    if (changedProps.has('labels') || changedProps.has('datasets')) {
-      this.chart.data.labels = this.labels;
-      this.chart.data.datasets = this.datasets;
-      this.chart.update();
+    if (
+      this.chart &&
+      (changedProps.has('labels') || changedProps.has('datasets'))
+    ) {
+      this.mergeOptions().then(() => {
+        this.chart.data.labels = this.labels;
+        this.chart.data.datasets = this.mergedDatasets;
+        this.chart.update();
+      });
     }
 
     // Update chart instance when options change.
-    if (changedProps.has('options')) {
-      this.chart.options = this.mergeOptions();
+    if (this.chart && changedProps.has('options')) {
+      this.chart.options = this.mergedOptions;
       this.chart.update();
     }
 
-    // Update chart instance when plugins change.
-    if (changedProps.has('plugins')) {
-      this.chart.destroy();
-      this.initChart();
+    // Update chart instance when type or plugins change.
+    if (changedProps.has('type') || changedProps.has('plugins')) {
+      if (this.chart) {
+        this.chart.destroy();
+      }
+      this.mergeOptions().then(() => {
+        this.initChart();
+      });
+      this.checkType();
     }
   }
 
@@ -301,22 +312,31 @@ export class KDChart extends LitElement {
       type: this.type,
       data: {
         labels: this.labels,
-        datasets: this.datasets,
+        datasets: this.mergedDatasets,
       },
-      options: this.mergeOptions(),
+      options: this.mergedOptions,
       plugins: [a11yPlugin, musicPlugin, ...this.plugins],
     });
   }
 
   /**
-   * Merges the default options with the custom options and returns the merged options.
-   * @returns the merged options object.
+   * Merges options and dataset options into a single object.
    */
-  private mergeOptions() {
-    return deepmerge(globalOptions(this), this.options);
+  private async mergeOptions() {
+    const { options, datasetOptions } = await import(
+      `../../common/config/${this.type}.js`
+    );
+
+    let mergedOptions = deepmerge(globalOptions(this), options(this));
+    if (this.options) {
+      mergedOptions = deepmerge(mergedOptions, this.options);
+    }
+
+    this.mergedOptions = mergedOptions;
+    this.mergedDatasets = deepmerge(datasetOptions(this), this.datasets);
   }
 
-  private getLabel() {
+  private getTableAxisLabel() {
     let label = '';
 
     if (this.options?.indexAxis === 'y') {

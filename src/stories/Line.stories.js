@@ -153,33 +153,14 @@ export const Area = {
       {
         label: 'Dataset 1',
         data: [12, 19, 3, 5, 2, 3],
-        yAxisID: 'y',
         fill: true,
       },
       {
         label: 'Dataset 2',
         data: [8, 15, 7, 9, 6, 13],
-        yAxisID: 'y1',
         fill: true,
       },
     ],
-    options: {
-      scales: {
-        y: {
-          type: 'linear',
-          display: true,
-          position: 'left',
-        },
-        y1: {
-          type: 'linear',
-          display: true,
-          position: 'right',
-          grid: {
-            drawOnChartArea: false,
-          },
-        },
-      },
-    },
   },
   render: (args) => {
     return html`

@@ -27,6 +27,7 @@ export default {
       targets: [
         { src: 'package.json', dest: 'dist' },
         { src: 'README.md', dest: 'dist' },
+        { src: 'src/common/config', dest: 'dist' },
       ],
     }),
     InlineSvg(),
