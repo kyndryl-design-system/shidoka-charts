@@ -18,7 +18,7 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 import { convertChartDataToCSV } from '../../common/helpers/helpers';
 import ChartScss from './chart.scss';
 import globalOptions from '../../common/config/globalOptions';
-import colorPalettes from '../../common/config/colorPalettes.json';
+import colorPalettes from '../../common/config/colorPalettes';
 import '@kyndryl-design-system/foundation/components/icon';
 import chartIcon from '@carbon/icons/es/chart--line/24';
 import tableIcon from '@carbon/icons/es/data-table/24';
@@ -348,12 +348,12 @@ export class KDChart extends LitElement {
         if (!dataset.backgroundColor) {
           if (singleDatasetTypes.includes(this.type)) {
             // single dataset colors
-            dataset.backgroundColor = colorPalettes.default;
-            // dataset.borderColor = colorPalettes.default;
+            dataset.backgroundColor = colorPalettes;
+            // dataset.borderColor = colorPalettes;
           } else {
             // multi dataset colors
-            dataset.backgroundColor = colorPalettes.default[index];
-            dataset.borderColor = colorPalettes.default[index];
+            dataset.backgroundColor = colorPalettes[index];
+            dataset.borderColor = colorPalettes[index];
           }
         }
       });
