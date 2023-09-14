@@ -18,6 +18,7 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 import { convertChartDataToCSV } from '../../common/helpers/helpers';
 import ChartScss from './chart.scss';
 import globalOptions from '../../common/config/globalOptions';
+import colorPalettes from '../../common/config/colorPalettes.json';
 import '@kyndryl-design-system/foundation/components/icon';
 import chartIcon from '@carbon/icons/es/chart--line/24';
 import tableIcon from '@carbon/icons/es/data-table/24';
@@ -323,17 +324,41 @@ export class KDChart extends LitElement {
    * Merges options and dataset options into a single object.
    */
   private async mergeOptions() {
+    // get default global options and chart type options
     const { options, datasetOptions } = await import(
-      `../../common/config/${this.type}.js`
+      `../../common/config/chartTypes/${this.type}.js`
     );
 
+    // merge default global options and chart type options
     let mergedOptions = deepmerge(globalOptions(this), options(this));
     if (this.options) {
+      // merge any consumer supplied options with defaults
       mergedOptions = deepmerge(mergedOptions, this.options);
     }
-
     this.mergedOptions = mergedOptions;
-    this.mergedDatasets = deepmerge(datasetOptions(this), this.datasets);
+
+    // merge default chart type dataset options with consumer supplied datasets
+    const mergedDatasets = deepmerge(datasetOptions(this), this.datasets);
+
+    // inject color palette
+    const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
+    const singleDatasetTypes = ['pie', 'dougnut', 'polarArea'];
+    if (!ignoredTypes.includes(this.type)) {
+      mergedDatasets.forEach((dataset, index) => {
+        if (!dataset.backgroundColor) {
+          if (singleDatasetTypes.includes(this.type)) {
+            // single dataset colors
+            dataset.backgroundColor = colorPalettes.default;
+            // dataset.borderColor = colorPalettes.default;
+          } else {
+            // multi dataset colors
+            dataset.backgroundColor = colorPalettes.default[index];
+            dataset.borderColor = colorPalettes.default[index];
+          }
+        }
+      });
+    }
+    this.mergedDatasets = mergedDatasets;
   }
 
   private getTableAxisLabel() {

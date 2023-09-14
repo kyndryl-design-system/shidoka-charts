@@ -133,7 +133,6 @@ export const BubbleMap = {
       {
         outline: states,
         showOutline: true,
-        backgroundColor: 'steelblue',
         data: capitals.map((d) =>
           Object.assign(d, { value: Math.round(Math.random() * 10) })
         ),
