@@ -1,6 +1,6 @@
 const defaultConfig = (ctx) => {
   return {
-    resizeDelay: 30, //debounce the resize
+    resizeDelay: 50, //debounce the resize
     plugins: {
       chartjs2music: {
         internal: {},

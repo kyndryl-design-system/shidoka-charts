@@ -1,6 +1,6 @@
 import { LitElement, html } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
-import { deepmerge } from 'deepmerge-ts';
+import { deepmerge, deepmergeCustom } from 'deepmerge-ts';
 import Chart from 'chart.js/auto';
 import ChartDeferred from 'chartjs-plugin-deferred';
 import {
@@ -321,16 +321,42 @@ export class KDChart extends LitElement {
   }
 
   /**
-   * Merges options and dataset options into a single object.
+   * Merges various chart type options and dataset options to create a
+   * final set of options for a chart.
    */
   private async mergeOptions() {
-    // get default global options and chart type options
-    const { options, datasetOptions } = await import(
-      `../../common/config/chartTypes/${this.type}.js`
-    );
+    // get chart types from datasets so we can import additional configs
+    const additionalTypeImports: any = [];
+    this.datasets.forEach((dataset) => {
+      if (dataset.type) {
+        additionalTypeImports.push(
+          import(`../../common/config/chartTypes/${dataset.type}.js`)
+        );
+      }
+    });
 
-    // merge default global options and chart type options
-    let mergedOptions = deepmerge(globalOptions(this), options(this));
+    // import main and combo chart type configs
+    const chartTypeConfigs = await Promise.all([
+      import(`../../common/config/chartTypes/${this.type}.js`),
+      ...additionalTypeImports,
+    ]);
+
+    let mergedOptions: any = globalOptions(this);
+    const mergedDatasets: any = JSON.parse(JSON.stringify(this.datasets));
+
+    chartTypeConfigs.forEach((chartType: any) => {
+      // merge all of the imported chart type options with the global options
+      mergedOptions = deepmerge(mergedOptions, chartType.options(this));
+
+      // merge all of the imported chart type dataset options
+      mergedDatasets.forEach((dataset: object, index: number) => {
+        mergedDatasets[index] = deepmerge(
+          dataset,
+          chartType.datasetOptions(this)
+        );
+      });
+    });
+
     if (this.options) {
       // merge any consumer supplied options with defaults
       mergedOptions = deepmerge(mergedOptions, this.options);
@@ -338,26 +364,32 @@ export class KDChart extends LitElement {
     this.mergedOptions = mergedOptions;
 
     // merge default chart type dataset options with consumer supplied datasets
-    const mergedDatasets = deepmerge(datasetOptions(this), this.datasets);
+    mergedDatasets.forEach((dataset: object, index: number) => {
+      const customDeepmerge = deepmergeCustom({
+        mergeArrays: false,
+      });
+      mergedDatasets[index] = customDeepmerge(dataset, this.datasets[index]);
+    });
 
     // inject color palette
     const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
     const singleDatasetTypes = ['pie', 'dougnut', 'polarArea'];
     if (!ignoredTypes.includes(this.type)) {
-      mergedDatasets.forEach((dataset, index) => {
+      mergedDatasets.forEach((dataset: any, index: number) => {
         if (!dataset.backgroundColor) {
           if (singleDatasetTypes.includes(this.type)) {
             // single dataset colors
-            dataset.backgroundColor = colorPalettes;
+            mergedDatasets[index].backgroundColor = colorPalettes;
             // dataset.borderColor = colorPalettes;
           } else {
             // multi dataset colors
-            dataset.backgroundColor = colorPalettes[index];
-            dataset.borderColor = colorPalettes[index];
+            mergedDatasets[index].backgroundColor = colorPalettes[index];
+            mergedDatasets[index].borderColor = colorPalettes[index];
           }
         }
       });
     }
+
     this.mergedDatasets = mergedDatasets;
   }
 
