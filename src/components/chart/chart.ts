@@ -19,7 +19,7 @@ import { convertChartDataToCSV } from '../../common/helpers/helpers';
 import ChartScss from './chart.scss';
 import globalOptions from '../../common/config/globalOptions';
 import colorPalettes from '../../common/config/colorPalettes';
-import '@kyndryl-design-system/foundation/components/icon';
+import '@kyndryl-design-system/shidoka-foundation/components/icon';
 import chartIcon from '@carbon/icons/es/chart--line/24';
 import tableIcon from '@carbon/icons/es/data-table/24';
 import overflowIcon from '@carbon/icons/es/overflow-menu--vertical/24';

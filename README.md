@@ -1,10 +1,10 @@
 # Shidoka Web Components for Applications
 
-[![charts](https://github.com/kyndryl-design-system/charts/actions/workflows/actions.yml/badge.svg)](https://github.com/kyndryl-design-system/charts/actions/workflows/actions.yml)
+[![shidoka-charts](https://github.com/kyndryl-design-system/shidoka-charts/actions/workflows/actions.yml/badge.svg)](https://github.com/kyndryl-design-system/shidoka-charts/actions/workflows/actions.yml)
 
 # Contributing to this project
 
-Read the [Contributing Guide](https://github.com/kyndryl-design-system/charts/blob/beta/CONTRIBUTING.md) here.
+Read the [Contributing Guide](https://github.com/kyndryl-design-system/shidoka-charts/blob/beta/CONTRIBUTING.md) here.
 
 # Using this library in another project
 
@@ -12,10 +12,10 @@ Read the [Contributing Guide](https://github.com/kyndryl-design-system/charts/bl
 
 ```bash
 # stable/main
-npm install @kyndryl-design-system/charts -S
+npm install @kyndryl-design-system/shidoka-charts -S
 
 # beta (use until first stable release)
-npm install @kyndryl-design-system/charts@beta -S
+npm install @kyndryl-design-system/shidoka-charts@beta -S
 # when using beta, lock the version, as breaking changes can happen at any time
 ```
 
@@ -26,29 +26,29 @@ The method used (SCSS @use, CSS @import, JS import, or &lt;style&gt; tag) will v
 ### SCSS
 
 ```css
-@use '~@kyndryl-design-system/foundation/scss/root.scss';
+@use '~@kyndryl-design-system/shidoka-foundation/scss/root.scss';
 ```
 
 ### CSS
 
 ```css
-@import '@kyndryl-design-system/foundation/css/root.css';
+@import '@kyndryl-design-system/shidoka-foundation/css/root.css';
 ```
 
 ### JS
 
 ```js
-import '@kyndryl-design-system/foundation/css/root.css';
+import '@kyndryl-design-system/shidoka-foundation/css/root.css';
 ```
 
 ## Start using components
 
-See [Storybook](https://kyndryl-design-system.github.io/charts/) for the full components documentation.
+See [Storybook](https://kyndryl-design-system.github.io/shidoka-charts/) for the full components documentation.
 
 ### Example
 
 ```js
-import '@kyndryl-design-system/charts/components/barChart';
+import '@kyndryl-design-system/shidoka-charts/components/chart';
 ```
 
 ```html
