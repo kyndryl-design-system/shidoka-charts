@@ -104,9 +104,52 @@ export const Stacked = {
     options: {
       scales: {
         x: {
+          title: {
+            text: 'Color',
+          },
           stacked: true,
         },
         y: {
+          title: {
+            text: 'Votes',
+          },
+          stacked: true,
+        },
+      },
+    },
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="bar"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        ?hideDescription=${args.hideDescription}
+        ?hideCaptions=${args.hideCaptions}
+        .options=${args.options}
+      ></kd-chart>
+    `;
+  },
+};
+
+export const HorizontalStacked = {
+  args: {
+    ...args,
+    options: {
+      indexAxis: 'y',
+      scales: {
+        x: {
+          title: {
+            text: 'Votes',
+          },
+          stacked: true,
+        },
+        y: {
+          title: {
+            text: 'Color',
+          },
           stacked: true,
         },
       },
