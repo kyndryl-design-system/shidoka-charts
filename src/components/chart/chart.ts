@@ -18,10 +18,12 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 import { convertChartDataToCSV } from '../../common/helpers/helpers';
 import ChartScss from './chart.scss';
 import globalOptions from '../../common/config/globalOptions';
+import globalOptionsNonRadial from '../../common/config/globalOptionsNonRadial';
+import globalOptionsRadial from '../../common/config/globalOptionsRadial';
 import colorPalettes from '../../common/config/colorPalettes';
 import '@kyndryl-design-system/shidoka-foundation/components/icon';
 import chartIcon from '@carbon/icons/es/chart--line/24';
-import tableIcon from '@carbon/icons/es/data-table/24';
+import tableIcon from '@carbon/icons/es/table-of-contents/24';
 import overflowIcon from '@carbon/icons/es/overflow-menu--vertical/24';
 import maximizeIcon from '@carbon/icons/es/maximize/24';
 
@@ -136,7 +138,16 @@ export class KDChart extends LitElement {
     return html`
       <div class="container">
         <div class="header">
-          <div class="title">${this.chartTitle}</div>
+          <div>
+            <div class="title">${this.chartTitle}</div>
+            <div
+              class="description ${this.hideDescription
+                ? 'hidden-visually'
+                : ''}"
+            >
+              ${this.description}
+            </div>
+          </div>
 
           <div class="controls">
             ${!this.tableDisabled
@@ -199,13 +210,6 @@ export class KDChart extends LitElement {
                 ? 'hidden-visually'
                 : ''}"
             ></div>
-            <div
-              class="description ${this.hideDescription
-                ? 'hidden-visually'
-                : ''}"
-            >
-              ${this.description}
-            </div>
           </figcaption>
         </figure>
 
@@ -306,8 +310,12 @@ export class KDChart extends LitElement {
    * and options.
    */
   private initChart() {
-    // Chart.defaults.font.family =
-    //   "'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif";
+    // Chart.defaults.font.family = getComputedStyle(
+    //   document.documentElement
+    // ).getPropertyValue('--kd-font-family-secondary');
+    Chart.defaults.color = getComputedStyle(
+      document.documentElement
+    ).getPropertyValue('--kd-color-text-primary');
 
     this.chart = new Chart(this.canvas, {
       type: this.type,
@@ -325,6 +333,10 @@ export class KDChart extends LitElement {
    * final set of options for a chart.
    */
   private async mergeOptions() {
+    const radialTypes = ['pie', 'doughnut', 'radar', 'polarArea'];
+    const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
+    const singleDatasetTypes = ['pie', 'doughnut', 'polarArea'];
+
     // get chart types from datasets so we can import additional configs
     const additionalTypeImports: any = [];
     this.datasets.forEach((dataset) => {
@@ -341,7 +353,16 @@ export class KDChart extends LitElement {
       ...additionalTypeImports,
     ]);
 
+    // start with global options
     let mergedOptions: any = globalOptions(this);
+
+    // merge global type options
+    if (radialTypes.includes(this.type)) {
+      mergedOptions = deepmerge(mergedOptions, globalOptionsRadial(this));
+    } else if (!ignoredTypes.includes(this.type)) {
+      mergedOptions = deepmerge(mergedOptions, globalOptionsNonRadial(this));
+    }
+
     const mergedDatasets: any = JSON.parse(JSON.stringify(this.datasets));
 
     chartTypeConfigs.forEach((chartType: any) => {
@@ -372,18 +393,23 @@ export class KDChart extends LitElement {
     });
 
     // inject color palette
-    const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
-    const singleDatasetTypes = ['pie', 'dougnut', 'polarArea'];
     if (!ignoredTypes.includes(this.type)) {
       mergedDatasets.forEach((dataset: any, index: number) => {
         if (!dataset.backgroundColor) {
           if (singleDatasetTypes.includes(this.type)) {
             // single dataset colors
             mergedDatasets[index].backgroundColor = colorPalettes;
-            // dataset.borderColor = colorPalettes;
           } else {
             // multi dataset colors
             mergedDatasets[index].backgroundColor = colorPalettes[index];
+          }
+        }
+        if (!dataset.borderColor) {
+          if (singleDatasetTypes.includes(this.type)) {
+            // single dataset colors
+            // dataset.borderColor = colorPalettes;
+          } else {
+            // multi dataset colors
             mergedDatasets[index].borderColor = colorPalettes[index];
           }
         }

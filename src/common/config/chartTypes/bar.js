@@ -1,5 +1,8 @@
 export const options = (ctx) => {
-  return {};
+  return {
+    borderRadius: 1,
+    borderSkipped: false,
+  };
 };
 
 export const datasetOptions = (ctx) => {

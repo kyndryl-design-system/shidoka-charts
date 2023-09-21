@@ -37,6 +37,11 @@ const args = {
           text: 'Color',
         },
       },
+      y: {
+        title: {
+          text: 'Votes',
+        },
+      },
     },
   },
   hideDescription: false,
@@ -79,7 +84,15 @@ export const ComboStacked = {
     ],
     options: {
       scales: {
+        x: {
+          title: {
+            text: 'Color',
+          },
+        },
         y: {
+          title: {
+            text: 'Votes',
+          },
           stacked: true,
         },
       },

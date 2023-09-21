@@ -34,6 +34,11 @@ const args = {
           text: 'Color',
         },
       },
+      y: {
+        title: {
+          text: 'Votes',
+        },
+      },
     },
   },
   hideDescription: false,
@@ -79,6 +84,18 @@ export const Annotated = {
           },
         },
       },
+      scales: {
+        x: {
+          title: {
+            text: 'Color',
+          },
+        },
+        y: {
+          title: {
+            text: 'Votes',
+          },
+        },
+      },
     },
   },
   render: (args) => {
@@ -114,17 +131,33 @@ export const MultiAxis = {
     ],
     options: {
       scales: {
+        x: {
+          title: {
+            text: 'Color',
+          },
+        },
         y: {
+          title: {
+            text: 'Votes',
+          },
           type: 'linear',
           display: true,
           position: 'left',
         },
         y1: {
+          title: {
+            display: true,
+            text: 'Likes',
+          },
           type: 'linear',
           display: true,
           position: 'right',
           grid: {
             drawOnChartArea: false,
+            drawTicks: false,
+          },
+          ticks: {
+            padding: 8,
           },
         },
       },

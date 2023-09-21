@@ -59,7 +59,20 @@ const args = {
       ],
     },
   ],
-  options: {},
+  options: {
+    scales: {
+      x: {
+        title: {
+          text: 'X Axis',
+        },
+      },
+      y: {
+        title: {
+          text: 'Y Axis',
+        },
+      },
+    },
+  },
   hideDescription: false,
   hideCaptions: false,
 };
