@@ -74,6 +74,14 @@ export class KDChart extends LitElement {
   @property({ type: Array })
   plugins: any = [];
 
+  /** Chart.js canvas height (px). Disables maintainAspectRatio option. */
+  @property({ type: Object })
+  height: any = null;
+
+  /** Chart.js canvas width (px). Disables maintainAspectRatio option. */
+  @property({ type: Object })
+  width: any = null;
+
   /** Hides the description visually. */
   @property({ type: Boolean })
   hideDescription = false;
@@ -202,7 +210,12 @@ export class KDChart extends LitElement {
         </div>
 
         <figure class="${this.tableView ? 'hidden' : ''}">
-          <canvas role="img"></canvas>
+          <div
+            class="canvas-container"
+            style="width: ${this.width}px; height: ${this.height}px;"
+          >
+            <canvas role="img"></canvas>
+          </div>
           <figcaption>
             <div
               class="closed-caption ${this.hideCaptions
@@ -314,8 +327,13 @@ export class KDChart extends LitElement {
       this.chart.update();
     }
 
-    // Update chart instance when type or plugins change.
-    if (changedProps.has('type') || changedProps.has('plugins')) {
+    // Re-init chart instance when type, plugins, width, or height change.
+    if (
+      changedProps.has('type') ||
+      changedProps.has('plugins') ||
+      changedProps.has('width') ||
+      changedProps.has('height')
+    ) {
       if (this.chart) {
         this.chart.destroy();
       }

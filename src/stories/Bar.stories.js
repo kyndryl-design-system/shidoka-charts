@@ -43,6 +43,8 @@ const args = {
   },
   hideDescription: false,
   hideCaptions: false,
+  width: null,
+  height: null,
 };
 
 export const Vertical = {
@@ -58,6 +60,8 @@ export const Vertical = {
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         .options=${args.options}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },

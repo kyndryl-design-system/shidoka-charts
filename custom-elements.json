@@ -19,31 +19,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/common/config/globalOptions.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "defaultConfig",
-          "parameters": [
-            {
-              "name": "ctx"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "defaultConfig",
-            "module": "src/common/config/globalOptions.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/common/helpers/helpers.ts",
       "declarations": [
         {
@@ -216,6 +191,26 @@
             },
             {
               "kind": "field",
+              "name": "height",
+              "type": {
+                "text": "any"
+              },
+              "default": "null",
+              "description": "Chart.js canvas height (px). Disables maintainAspectRatio option.",
+              "attribute": "height"
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "any"
+              },
+              "default": "null",
+              "description": "Chart.js canvas width (px). Disables maintainAspectRatio option.",
+              "attribute": "width"
+            },
+            {
+              "kind": "field",
               "name": "hideDescription",
               "type": {
                 "text": "boolean"
@@ -244,16 +239,11 @@
               "kind": "method",
               "name": "mergeOptions",
               "privacy": "private",
-              "description": "Merges the default options with the custom options and returns the merged options.",
-              "return": {
-                "type": {
-                  "text": ""
-                }
-              }
+              "description": "Merges various chart type options and dataset options to create a\r\nfinal set of options for a chart."
             },
             {
               "kind": "method",
-              "name": "getLabel",
+              "name": "getTableAxisLabel",
               "privacy": "private"
             },
             {
@@ -365,6 +355,24 @@
               "default": "[]",
               "description": "Chart.js additional plugins. Must be registerable inline via Chart.plugins array, not globally via Chart.register.",
               "fieldName": "plugins"
+            },
+            {
+              "name": "height",
+              "type": {
+                "text": "any"
+              },
+              "default": "null",
+              "description": "Chart.js canvas height (px). Disables maintainAspectRatio option.",
+              "fieldName": "height"
+            },
+            {
+              "name": "width",
+              "type": {
+                "text": "any"
+              },
+              "default": "null",
+              "description": "Chart.js canvas width (px). Disables maintainAspectRatio option.",
+              "fieldName": "width"
             },
             {
               "name": "hideDescription",
