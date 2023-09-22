@@ -284,6 +284,17 @@ export class KDChart extends LitElement {
     );
   }
 
+  override disconnectedCallback() {
+    window?.removeEventListener(
+      'resize',
+      debounce(() => {
+        this.chart.resize();
+      }, 50)
+    );
+
+    super.disconnectedCallback();
+  }
+
   override updated(changedProps: any) {
     // Update chart instance when data changes.
     if (
