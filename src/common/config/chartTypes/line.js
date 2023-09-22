@@ -1,5 +1,20 @@
 export const options = (ctx) => {
-  return {};
+  const Horizontal = ctx.options.indexAxis === 'y';
+
+  return {
+    scales: {
+      x: {
+        grid: {
+          display: Horizontal,
+        },
+      },
+      y: {
+        grid: {
+          display: !Horizontal,
+        },
+      },
+    },
+  };
 };
 
 export const datasetOptions = (ctx) => {

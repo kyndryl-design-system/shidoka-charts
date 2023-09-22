@@ -1,6 +1,8 @@
-const defaultConfig = (ctx) => {
-  const IndexY = ctx.options.indexAxis === 'y';
+const GridLinesColor = getComputedStyle(
+  document.documentElement
+).getPropertyValue('--kd-color-border-light');
 
+const defaultConfig = (ctx) => {
   return {
     plugins: {
       legend: {
@@ -14,8 +16,8 @@ const defaultConfig = (ctx) => {
           padding: 16,
         },
         grid: {
-          display: IndexY,
           drawTicks: false,
+          color: GridLinesColor,
         },
         ticks: {
           padding: 8,
@@ -30,8 +32,8 @@ const defaultConfig = (ctx) => {
           padding: 16,
         },
         grid: {
-          display: !IndexY,
           drawTicks: false,
+          color: GridLinesColor,
         },
         ticks: {
           padding: 8,
