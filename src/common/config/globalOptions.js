@@ -1,6 +1,5 @@
 const defaultConfig = (ctx) => {
   const ExplicitSize = ctx.height !== null || ctx.width !== null;
-  console.log(ExplicitSize);
 
   return {
     resizeDelay: 50, //debounce the resize

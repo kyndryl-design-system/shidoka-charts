@@ -488,7 +488,6 @@ export class KDChart extends LitElement {
       });
     }
     if (csv == null) return;
-    console.log(csv);
 
     const filename = this.chartTitle + '.csv';
     if (!csv.match(/^data:text\/csv/i)) {
