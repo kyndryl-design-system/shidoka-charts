@@ -1,3 +1,5 @@
+import colorPalettes from '../colorPalettes';
+
 export const options = (ctx) => {
   const Horizontal = ctx.options.indexAxis === 'y';
   const FloatingBars = Array.isArray(ctx.datasets[0].data[0]);
@@ -20,6 +22,8 @@ export const options = (ctx) => {
   };
 };
 
-export const datasetOptions = (ctx) => {
-  return {};
+export const datasetOptions = (ctx, index) => {
+  return {
+    backgroundColor: colorPalettes[index],
+  };
 };

@@ -335,7 +335,6 @@ export class KDChart extends LitElement {
   private async mergeOptions() {
     const radialTypes = ['pie', 'doughnut', 'radar', 'polarArea'];
     const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
-    const singleDatasetTypes = ['pie', 'doughnut', 'polarArea'];
 
     // get chart types from datasets so we can import additional configs
     const additionalTypeImports: any = [];
@@ -373,7 +372,7 @@ export class KDChart extends LitElement {
       mergedDatasets.forEach((dataset: object, index: number) => {
         mergedDatasets[index] = deepmerge(
           dataset,
-          chartType.datasetOptions(this)
+          chartType.datasetOptions(this, index)
         );
       });
     });
@@ -391,30 +390,6 @@ export class KDChart extends LitElement {
       });
       mergedDatasets[index] = customDeepmerge(dataset, this.datasets[index]);
     });
-
-    // inject color palette
-    if (!ignoredTypes.includes(this.type)) {
-      mergedDatasets.forEach((dataset: any, index: number) => {
-        if (!dataset.backgroundColor) {
-          if (singleDatasetTypes.includes(this.type)) {
-            // single dataset colors
-            mergedDatasets[index].backgroundColor = colorPalettes;
-          } else {
-            // multi dataset colors
-            mergedDatasets[index].backgroundColor = colorPalettes[index];
-          }
-        }
-        if (!dataset.borderColor) {
-          if (singleDatasetTypes.includes(this.type)) {
-            // single dataset colors
-            // dataset.borderColor = colorPalettes;
-          } else {
-            // multi dataset colors
-            mergedDatasets[index].borderColor = colorPalettes[index];
-          }
-        }
-      });
-    }
 
     this.mergedDatasets = mergedDatasets;
   }
