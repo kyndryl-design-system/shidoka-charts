@@ -15,7 +15,7 @@ import { TreemapController, TreemapElement } from 'chartjs-chart-treemap';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import musicPlugin from 'chartjs-plugin-chart2music';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import { convertChartDataToCSV } from '../../common/helpers/helpers';
+import { convertChartDataToCSV, debounce } from '../../common/helpers/helpers';
 import ChartScss from './chart.scss';
 import globalOptions from '../../common/config/globalOptions';
 import globalOptionsNonRadial from '../../common/config/globalOptionsNonRadial';
@@ -271,6 +271,17 @@ export class KDChart extends LitElement {
           : null}
       </div>
     `;
+  }
+
+  override connectedCallback() {
+    super.connectedCallback();
+
+    window?.addEventListener(
+      'resize',
+      debounce(() => {
+        this.chart.resize();
+      }, 50)
+    );
   }
 
   override updated(changedProps: any) {
