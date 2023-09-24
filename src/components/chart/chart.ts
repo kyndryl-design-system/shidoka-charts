@@ -385,7 +385,7 @@ export class KDChart extends LitElement {
       }
     });
 
-    // import main and combo chart type configs
+    // import main and additional chart type configs
     const chartTypeConfigs = await Promise.all([
       import(`../../common/config/chartTypes/${this.type}.js`),
       ...additionalTypeImports,
@@ -403,16 +403,21 @@ export class KDChart extends LitElement {
 
     const mergedDatasets: any = JSON.parse(JSON.stringify(this.datasets));
 
-    chartTypeConfigs.forEach((chartType: any) => {
+    chartTypeConfigs.forEach((chartTypeConfig: any) => {
       // merge all of the imported chart type options with the global options
-      mergedOptions = deepmerge(mergedOptions, chartType.options(this));
+      mergedOptions = deepmerge(mergedOptions, chartTypeConfig.options(this));
 
       // merge all of the imported chart type dataset options
-      mergedDatasets.forEach((dataset: object, index: number) => {
-        mergedDatasets[index] = deepmerge(
-          dataset,
-          chartType.datasetOptions(this, index)
-        );
+      mergedDatasets.forEach((dataset: any, index: number) => {
+        if (
+          (!dataset.type && chartTypeConfig.type === this.type) ||
+          dataset.type === chartTypeConfig.type
+        ) {
+          mergedDatasets[index] = deepmerge(
+            dataset,
+            chartTypeConfig.datasetOptions(this, index)
+          );
+        }
       });
     });
 

@@ -1,3 +1,5 @@
+export const type = 'treemap';
+
 export const options = (ctx) => {
   return {
     plugins: {

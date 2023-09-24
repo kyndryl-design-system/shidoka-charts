@@ -1,3 +1,5 @@
+export const type = 'choropleth';
+
 export const options = (ctx) => {
   return {};
 };

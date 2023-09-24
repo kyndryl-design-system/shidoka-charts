@@ -1,5 +1,7 @@
 import colorPalettes from '../colorPalettes';
 
+export const type = 'polarArea';
+
 export const options = (ctx) => {
   return {};
 };

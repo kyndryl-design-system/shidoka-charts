@@ -1,5 +1,7 @@
 import colorPalettes from '../colorPalettes';
 
+export const type = 'radar';
+
 export const options = (ctx) => {
   return {};
 };

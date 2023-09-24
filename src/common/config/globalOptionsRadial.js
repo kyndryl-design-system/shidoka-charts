@@ -1,11 +1,5 @@
 const defaultConfig = (ctx) => {
-  return {
-    plugins: {
-      legend: {
-        align: 'center',
-      },
-    },
-  };
+  return {};
 };
 
 export default defaultConfig;

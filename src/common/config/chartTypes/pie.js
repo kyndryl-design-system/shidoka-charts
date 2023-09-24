@@ -1,5 +1,7 @@
 import colorPalettes from '../colorPalettes';
 
+export const type = 'pie';
+
 export const options = (ctx) => {
   return {};
 };

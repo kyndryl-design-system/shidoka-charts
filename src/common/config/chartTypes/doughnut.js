@@ -1,5 +1,7 @@
 import colorPalettes from '../colorPalettes';
 
+export const type = 'doughnut';
+
 export const options = (ctx) => {
   return {};
 };
