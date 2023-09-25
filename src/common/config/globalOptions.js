@@ -27,20 +27,30 @@ const defaultConfig = (ctx) => {
       },
       tooltip: {
         backgroundColor: TooltipBgColor,
+        multiKeyBackground: 'transparent',
         titleFont: {
           weight: '400',
         },
-        bodySpacing: 6,
+        bodySpacing: 4,
         footerFont: {
           weight: '400',
         },
         titleMarginBottom: 8,
-        footerMarginTop: 8,
+        footerMarginTop: 10,
         cornerRadius: 2,
         boxWidth: 16,
         boxHeight: 16,
         boxPadding: 8,
-        useBorderRadius: true,
+        callbacks: {
+          labelColor: function (context) {
+            console.log(context);
+            return {
+              borderColor: context.dataset.borderColor,
+              backgroundColor: context.dataset.backgroundColor,
+              borderRadius: 2,
+            };
+          },
+        },
       },
       chartjs2music: {
         internal: {},

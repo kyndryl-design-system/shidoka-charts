@@ -16,11 +16,10 @@ export const options = (ctx) => {
 
   return {
     interaction: {
-      mode: Combo || MultiAxis ? 'nearest' : 'index',
+      mode: FloatingBars || Combo || MultiAxis ? 'nearest' : 'index',
     },
     borderRadius: 2,
     borderSkipped: FloatingBars ? false : 'start',
-    borderColor: BackgroundColor,
     scales: {
       x: {
         grid: {
@@ -54,7 +53,7 @@ export const options = (ctx) => {
               sum += Horizontal ? tooltipItem.parsed.x : tooltipItem.parsed.y;
             });
 
-            return MultiAxis ? null : 'Total: ' + sum;
+            return FloatingBars || Combo || MultiAxis ? null : 'Total: ' + sum;
           },
         },
       },
@@ -73,6 +72,8 @@ export const datasetOptions = (ctx, index) => {
     borderWidth: {
       top: !Horizontal && Stacked && index < BarDatasets.length - 1 ? 2 : 0, // stacked bars 2px gap
       right: Horizontal && Stacked && index < BarDatasets.length - 1 ? 2 : 0, // stacked bars 2px gap
+      bottom: 0,
+      left: 0,
     },
   };
 };

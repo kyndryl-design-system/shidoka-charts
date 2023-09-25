@@ -12,7 +12,7 @@ export const options = (ctx) => {
 
   return {
     interaction: {
-      mode: Combo || MultiAxis ? 'nearest' : 'index',
+      mode: FloatingBars || Combo || MultiAxis ? 'nearest' : 'index',
     },
     scales: {
       x: {
@@ -36,7 +36,7 @@ export const options = (ctx) => {
               : ctx.options.scales.x.title.text;
             const Label = tootltipItems[0].label;
 
-            return AxisLabel + ' ' + Label;
+            return AxisLabel + ': ' + Label;
           },
           footer: (tooltipItems) => {
             // add total row
@@ -46,7 +46,7 @@ export const options = (ctx) => {
               sum += Horizontal ? tooltipItem.parsed.x : tooltipItem.parsed.y;
             });
 
-            return Combo || MultiAxis ? null : 'Total: ' + sum;
+            return FloatingBars || Combo || MultiAxis ? null : 'Total: ' + sum;
           },
         },
       },
