@@ -31,16 +31,16 @@ const defaultConfig = (ctx) => {
         titleFont: {
           weight: '400',
         },
-        bodySpacing: 4,
         footerFont: {
           weight: '400',
         },
         titleMarginBottom: 8,
+        bodySpacing: 4,
         footerMarginTop: 10,
         cornerRadius: 2,
         boxWidth: 16,
         boxHeight: 16,
-        boxPadding: 8,
+        boxPadding: 4,
       },
       chartjs2music: {
         internal: {},
