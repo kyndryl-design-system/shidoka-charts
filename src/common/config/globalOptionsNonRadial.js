@@ -35,19 +35,6 @@ const defaultConfig = (ctx) => {
         ...CommonAxisOptions,
       },
     },
-    plugins: {
-      tooltip: {
-        callbacks: {
-          labelColor: function (context) {
-            return {
-              borderColor: context.dataset.borderColor,
-              backgroundColor: context.dataset.backgroundColor,
-              borderRadius: 2,
-            };
-          },
-        },
-      },
-    },
   };
 
   if (MultiAxis) {

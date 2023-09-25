@@ -41,6 +41,22 @@ const defaultConfig = (ctx) => {
         boxWidth: 16,
         boxHeight: 16,
         boxPadding: 4,
+
+        callbacks: {
+          labelColor: function (context) {
+            const PerDatapointColors = Array.isArray(
+              context.dataset.backgroundColor
+            );
+
+            return {
+              borderColor: context.dataset.borderColor,
+              backgroundColor: PerDatapointColors
+                ? context.dataset.backgroundColor[context.dataIndex]
+                : context.dataset.backgroundColor,
+              borderRadius: 2,
+            };
+          },
+        },
       },
       chartjs2music: {
         internal: {},
