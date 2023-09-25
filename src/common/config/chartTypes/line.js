@@ -6,6 +6,9 @@ export const options = (ctx) => {
   const Horizontal = ctx.options.indexAxis === 'y';
 
   return {
+    interaction: {
+      mode: 'index',
+    },
     scales: {
       x: {
         grid: {
@@ -15,6 +18,27 @@ export const options = (ctx) => {
       y: {
         grid: {
           display: !Horizontal,
+        },
+      },
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          title: (tootltipItems) => {
+            const AxisLabel = ctx.options.scales.x.title.text;
+            const Label = tootltipItems[0].label;
+
+            return AxisLabel + ' ' + Label;
+          },
+          footer: (tooltipItems) => {
+            let sum = 0;
+
+            tooltipItems.forEach(function (tooltipItem) {
+              sum += tooltipItem.parsed.y;
+            });
+
+            return 'Total: ' + sum;
+          },
         },
       },
     },

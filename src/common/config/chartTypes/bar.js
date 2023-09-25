@@ -11,6 +11,9 @@ export const options = (ctx) => {
   const FloatingBars = Array.isArray(ctx.datasets[0].data[0]);
 
   return {
+    interaction: {
+      mode: 'index',
+    },
     borderRadius: 2,
     borderSkipped: FloatingBars ? false : 'start',
     borderColor: BackgroundColor,
@@ -24,6 +27,29 @@ export const options = (ctx) => {
       y: {
         grid: {
           display: !Horizontal,
+        },
+      },
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          title: (tootltipItems) => {
+            const AxisLabel = Horizontal
+              ? ctx.options.scales.y.title.text
+              : ctx.options.scales.x.title.text;
+            const Label = tootltipItems[0].label;
+
+            return AxisLabel + ': ' + Label;
+          },
+          footer: (tooltipItems) => {
+            let sum = 0;
+
+            tooltipItems.forEach(function (tooltipItem) {
+              sum += tooltipItem.parsed.y;
+            });
+
+            return 'Total: ' + sum;
+          },
         },
       },
     },

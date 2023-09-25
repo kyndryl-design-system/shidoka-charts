@@ -8,6 +8,7 @@
 
 .container {
   background: var(--kd-color-background-ui-default);
+  padding: 24px;
 }
 
 figure {
@@ -18,7 +19,7 @@ figure {
   }
 }
 
-figcaption {
+.closed-caption:not(:empty) {
   margin-top: 8px;
 }
 
