@@ -66,6 +66,69 @@ export const Combo = {
   },
 };
 
+export const MultiAxis = {
+  args: {
+    ...args,
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: [12, 19, 3, 5, 2, 3],
+        yAxisID: 'y',
+        order: 2,
+      },
+      {
+        type: 'line',
+        label: 'Dataset 2',
+        data: [8, 11, 7, 9, 6, 13],
+        yAxisID: 'y1',
+        order: 1,
+      },
+    ],
+    options: {
+      scales: {
+        x: {
+          title: {
+            text: 'Color',
+          },
+        },
+        y: {
+          title: {
+            text: 'Votes (Bars)',
+          },
+          position: 'left',
+        },
+        y1: {
+          title: {
+            text: 'Likes (Lines)',
+          },
+          position: 'right',
+          grid: {
+            drawOnChartArea: false,
+            drawTicks: false,
+          },
+          ticks: {
+            padding: 8,
+          },
+        },
+      },
+    },
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="bar"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        ?hideDescription=${args.hideDescription}
+        ?hideCaptions=${args.hideCaptions}
+        .options=${args.options}
+      ></kd-chart>
+    `;
+  },
+};
+
 export const ComboStacked = {
   args: {
     ...args,

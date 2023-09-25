@@ -38,7 +38,9 @@ const defaultConfig = (ctx) => {
   };
 
   if (MultiAxis) {
-    const ThirdAxisId = Object.keys(ctx.options.scales)[2];
+    const ThirdAxisId = Object.keys(ctx.options.scales).find(
+      (scaleId) => scaleId !== 'x' && scaleId !== 'y'
+    );
 
     options.scales[ThirdAxisId] = {
       title: {

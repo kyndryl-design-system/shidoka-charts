@@ -11,10 +11,12 @@ export const options = (ctx) => {
   const FloatingBars = ctx.datasets.find((dataset) =>
     Array.isArray(dataset.data[0])
   );
+  const MultiAxis = Object.keys(ctx.options.scales).length > 2;
+  const Combo = ctx.datasets.filter((dataset) => dataset.type).length > 0;
 
   return {
     interaction: {
-      mode: 'index',
+      mode: Combo || MultiAxis ? 'nearest' : 'index',
     },
     borderRadius: 2,
     borderSkipped: FloatingBars ? false : 'start',
@@ -52,7 +54,7 @@ export const options = (ctx) => {
               sum += Horizontal ? tooltipItem.parsed.x : tooltipItem.parsed.y;
             });
 
-            return 'Total: ' + sum;
+            return MultiAxis ? null : 'Total: ' + sum;
           },
         },
       },
