@@ -4,7 +4,7 @@ import { topojson } from 'chartjs-chart-geo';
 import capitals from './sampleData/us-capitals.json';
 
 export default {
-  title: 'Geo',
+  title: 'Proof of Concept/Geo',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,

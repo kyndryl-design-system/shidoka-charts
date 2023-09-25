@@ -4,7 +4,7 @@ import statsByState from './sampleData/treemapStates.json';
 import nestedTree from './sampleData/treemapNested.json';
 
 export default {
-  title: 'Tree Map',
+  title: 'Proof of Concept/Tree Map',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,

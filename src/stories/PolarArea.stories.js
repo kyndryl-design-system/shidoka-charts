@@ -2,7 +2,7 @@ import { html } from 'lit';
 import '../components/chart';
 
 export default {
-  title: 'Polar Area',
+  title: 'Future/Polar Area',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 600px;">${story()}</div> `,

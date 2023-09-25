@@ -43,7 +43,6 @@ const defaultConfig = (ctx) => {
         boxPadding: 8,
         callbacks: {
           labelColor: function (context) {
-            console.log(context);
             return {
               borderColor: context.dataset.borderColor,
               backgroundColor: context.dataset.backgroundColor,
