@@ -1,3 +1,6 @@
+const BgColor = getComputedStyle(document.documentElement).getPropertyValue(
+  '--kd-color-background-ui-default'
+);
 const TooltipBgColor = getComputedStyle(
   document.documentElement
 ).getPropertyValue('--kd-color-background-ui-strong');
@@ -9,6 +12,9 @@ const defaultConfig = (ctx) => {
     resizeDelay: 50, //debounce the resize
     maintainAspectRatio: !ExplicitSize,
     plugins: {
+      canvasBackground: {
+        color: BgColor,
+      },
       legend: {
         position: 'bottom',
         labels: {

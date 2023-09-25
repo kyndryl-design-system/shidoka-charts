@@ -12,6 +12,7 @@ import {
   ProjectionScale,
 } from 'chartjs-chart-geo';
 import { TreemapController, TreemapElement } from 'chartjs-chart-treemap';
+import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import musicPlugin from 'chartjs-plugin-chart2music';
 import annotationPlugin from 'chartjs-plugin-annotation';
@@ -363,7 +364,12 @@ export class KDChart extends LitElement {
         datasets: this.mergedDatasets,
       },
       options: this.mergedOptions,
-      plugins: [a11yPlugin, musicPlugin, ...this.plugins],
+      plugins: [
+        canvasBackgroundPlugin,
+        a11yPlugin,
+        musicPlugin,
+        ...this.plugins,
+      ],
     });
   }
 
