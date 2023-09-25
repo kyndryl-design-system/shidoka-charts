@@ -113,3 +113,57 @@ export const ComboStacked = {
     `;
   },
 };
+
+export const ComboFloating = {
+  args: {
+    ...args,
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: [
+          [2, 10],
+          [12, 19],
+          [3, 5],
+          [5, 9],
+          [2, 11],
+          [3, 7],
+        ],
+        order: 2,
+      },
+      {
+        type: 'line',
+        label: 'Dataset 2',
+        data: [8, 15, 7, 9, 6, 13],
+        order: 1,
+      },
+    ],
+    options: {
+      scales: {
+        x: {
+          title: {
+            text: 'Color',
+          },
+        },
+        y: {
+          title: {
+            text: 'Votes',
+          },
+        },
+      },
+    },
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="bar"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        ?hideDescription=${args.hideDescription}
+        ?hideCaptions=${args.hideCaptions}
+        .options=${args.options}
+      ></kd-chart>
+    `;
+  },
+};

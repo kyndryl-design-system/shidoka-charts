@@ -8,7 +8,9 @@ export const type = 'bar';
 
 export const options = (ctx) => {
   const Horizontal = ctx.options.indexAxis === 'y';
-  const FloatingBars = Array.isArray(ctx.datasets[0].data[0]);
+  const FloatingBars = ctx.datasets.find((dataset) =>
+    Array.isArray(dataset.data[0])
+  );
 
   return {
     interaction: {

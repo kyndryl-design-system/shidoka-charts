@@ -4,6 +4,9 @@ export const type = 'line';
 
 export const options = (ctx) => {
   const Horizontal = ctx.options.indexAxis === 'y';
+  const FloatingBars = ctx.datasets.find((dataset) =>
+    Array.isArray(dataset.data[0])
+  );
 
   return {
     interaction: {
@@ -12,7 +15,7 @@ export const options = (ctx) => {
     scales: {
       x: {
         grid: {
-          display: Horizontal,
+          display: FloatingBars || Horizontal,
         },
       },
       y: {
