@@ -41,15 +41,6 @@ const defaultConfig = (ctx) => {
         boxWidth: 16,
         boxHeight: 16,
         boxPadding: 8,
-        callbacks: {
-          labelColor: function (context) {
-            return {
-              borderColor: context.dataset.borderColor,
-              backgroundColor: context.dataset.backgroundColor,
-              borderRadius: 2,
-            };
-          },
-        },
       },
       chartjs2music: {
         internal: {},
