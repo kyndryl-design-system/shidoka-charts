@@ -7,12 +7,13 @@ export const options = (ctx) => {
   const FloatingBars = ctx.datasets.find((dataset) =>
     Array.isArray(dataset.data[0])
   );
-  const MultiAxis = Object.keys(ctx.options.scales).length > 2;
-  const Combo = ctx.datasets.filter((dataset) => dataset.type).length > 0;
+  const Stacked = ctx.options.scales.y.stacked;
+  // const MultiAxis = Object.keys(ctx.options.scales).length > 2;
+  // const Combo = ctx.datasets.filter((dataset) => dataset.type).length > 0;
 
   return {
     interaction: {
-      mode: FloatingBars || Combo || MultiAxis ? 'nearest' : 'index',
+      mode: Stacked ? 'index' : 'nearest',
     },
     scales: {
       x: {
@@ -46,7 +47,7 @@ export const options = (ctx) => {
               sum += Horizontal ? tooltipItem.parsed.x : tooltipItem.parsed.y;
             });
 
-            return FloatingBars || Combo || MultiAxis ? null : 'Total: ' + sum;
+            return Stacked ? 'Total: ' + sum : null;
           },
         },
       },
