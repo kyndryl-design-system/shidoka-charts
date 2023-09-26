@@ -66,7 +66,15 @@ const defaultConfig = (ctx) => {
         display: true,
         padding: { bottom: 8, top: 0 },
       },
-      ...CommonAxisOptions,
+      position: 'right',
+      grid: {
+        drawOnChartArea: false,
+        drawTicks: false,
+        color: GridLinesColor,
+      },
+      border: {
+        display: false,
+      },
     };
   }
 

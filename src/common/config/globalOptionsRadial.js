@@ -1,5 +1,17 @@
 const defaultConfig = (ctx) => {
   return {
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { display: false },
+        border: { display: false },
+      },
+      y: {
+        grid: { display: false },
+        ticks: { display: false },
+        border: { display: false },
+      },
+    },
     plugins: {
       tooltip: {
         callbacks: {

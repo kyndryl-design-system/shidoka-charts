@@ -23,6 +23,20 @@ const args = {
       data: [12, 19, 3, 5, 2, 3],
     },
   ],
+  options: {
+    scales: {
+      x: {
+        title: {
+          text: 'Color',
+        },
+      },
+      y: {
+        title: {
+          text: 'Votes',
+        },
+      },
+    },
+  },
   hideDescription: false,
   hideCaptions: false,
 };
@@ -53,6 +67,18 @@ export const Doughnut = {
       doughnut: {
         center: {
           label: 'Votes',
+        },
+      },
+      scales: {
+        x: {
+          title: {
+            text: 'Color',
+          },
+        },
+        y: {
+          title: {
+            text: 'Votes',
+          },
         },
       },
     },

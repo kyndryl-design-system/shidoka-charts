@@ -95,19 +95,10 @@ export const MultiAxis = {
           title: {
             text: 'Votes (Bars)',
           },
-          position: 'left',
         },
         y1: {
           title: {
             text: 'Likes (Lines)',
-          },
-          position: 'right',
-          grid: {
-            drawOnChartArea: false,
-            drawTicks: false,
-          },
-          ticks: {
-            padding: 8,
           },
         },
       },

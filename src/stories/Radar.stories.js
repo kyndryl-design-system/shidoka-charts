@@ -27,6 +27,20 @@ const args = {
       data: [8, 15, 7, 9, 6, 13],
     },
   ],
+  options: {
+    scales: {
+      x: {
+        title: {
+          text: 'Color',
+        },
+      },
+      y: {
+        title: {
+          text: 'Votes',
+        },
+      },
+    },
+  },
   hideDescription: false,
   hideCaptions: false,
 };
