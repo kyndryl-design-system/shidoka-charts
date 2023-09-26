@@ -28,7 +28,9 @@ figure {
 }
 
 .canvas-container {
-  max-height: calc(100vh - 144px);
+  .fullscreen & {
+    max-height: calc(100vh - 144px);
+  }
 }
 
 canvas:focus,
