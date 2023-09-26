@@ -25,7 +25,8 @@ import '@kyndryl-design-system/shidoka-foundation/components/icon';
 import chartIcon from '@carbon/icons/es/chart--line/24';
 import tableIcon from '@carbon/icons/es/table-of-contents/24';
 import overflowIcon from '@carbon/icons/es/overflow-menu--vertical/24';
-import maximizeIcon from '@carbon/icons/es/maximize/24';
+import maximizeIcon from '@carbon/icons/es/maximize/20';
+import minimizeIcon from '@carbon/icons/es/minimize/20';
 
 Chart.register(
   ChartDeferred,
@@ -91,6 +92,12 @@ export class KDChart extends LitElement {
   @property({ type: Boolean })
   hideCaptions = false;
 
+  /** Fullscreen state.
+   * @ignore
+   */
+  @state()
+  fullscreen = false;
+
   /**
    * Queries the container element.
    * @ignore
@@ -144,7 +151,10 @@ export class KDChart extends LitElement {
 
   override render() {
     return html`
-      <div class="container">
+      <div
+        class="container"
+        @fullscreenchange=${(e: Event) => this.handleFullscreenChange(e)}
+      >
         <div class="header">
           <div>
             <div class="title">${this.chartTitle}</div>
@@ -183,7 +193,9 @@ export class KDChart extends LitElement {
               aria-label="Toggle Fullscreen"
               @click=${() => this.handleFullscreen()}
             >
-              <kd-icon .icon=${maximizeIcon}></kd-icon>
+              <kd-icon
+                .icon=${this.fullscreen ? minimizeIcon : maximizeIcon}
+              ></kd-icon>
             </button>
 
             <button
@@ -521,6 +533,10 @@ export class KDChart extends LitElement {
     } else {
       this.container.requestFullscreen();
     }
+  }
+
+  private handleFullscreenChange() {
+    this.fullscreen = this.shadowRoot?.fullscreenElement !== null;
   }
 }
 
