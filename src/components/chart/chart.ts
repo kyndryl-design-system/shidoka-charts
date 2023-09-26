@@ -156,7 +156,7 @@ export class KDChart extends LitElement {
     return html`
       <div
         class="container"
-        @fullscreenchange=${(e: Event) => this.handleFullscreenChange(e)}
+        @fullscreenchange=${() => this.handleFullscreenChange()}
       >
         <div class="header">
           <div>
