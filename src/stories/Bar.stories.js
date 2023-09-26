@@ -218,3 +218,67 @@ export const Floating = {
     `;
   },
 };
+
+export const SingleLabel = {
+  args: {
+    ...args,
+    labels: ['Color'],
+    datasets: [
+      {
+        label: 'Red',
+        data: [12],
+      },
+      {
+        label: 'Blue',
+        data: [8],
+      },
+      {
+        label: 'Yellow',
+        data: [15],
+      },
+      {
+        label: 'Green',
+        data: [7],
+      },
+      {
+        label: 'Purple',
+        data: [9],
+      },
+      {
+        label: 'Orange',
+        data: [13],
+      },
+    ],
+    options: {
+      scales: {
+        x: {
+          title: {
+            display: false,
+            text: 'Color',
+          },
+        },
+        y: {
+          title: {
+            text: 'Votes',
+          },
+        },
+      },
+    },
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="bar"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        ?hideDescription=${args.hideDescription}
+        ?hideCaptions=${args.hideCaptions}
+        .options=${args.options}
+        .width=${args.width}
+        .height=${args.height}
+      ></kd-chart>
+    `;
+  },
+};
