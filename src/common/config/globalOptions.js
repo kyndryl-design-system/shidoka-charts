@@ -42,6 +42,9 @@ const defaultConfig = (ctx) => {
         boxHeight: 16,
         boxPadding: 4,
       },
+      datalabels: {
+        display: false,
+      },
       chartjs2music: {
         internal: {},
         cc: ctx.ccDiv,

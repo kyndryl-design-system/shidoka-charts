@@ -46,7 +46,17 @@ export const Pie = {
 };
 
 export const Doughnut = {
-  args: { ...args, chartTitle: 'Doughnut Chart' },
+  args: {
+    ...args,
+    chartTitle: 'Doughnut Chart',
+    options: {
+      doughnut: {
+        center: {
+          label: 'Votes',
+        },
+      },
+    },
+  },
   render: (args) => {
     return html`
       <kd-chart

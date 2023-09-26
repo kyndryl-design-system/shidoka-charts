@@ -13,8 +13,10 @@ import {
 } from 'chartjs-chart-geo';
 import { TreemapController, TreemapElement } from 'chartjs-chart-treemap';
 import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
+import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import musicPlugin from 'chartjs-plugin-chart2music';
+import datalabelsPlugin from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { convertChartDataToCSV, debounce } from '../../common/helpers/helpers';
 import ChartScss from './chart.scss';
@@ -30,6 +32,7 @@ import minimizeIcon from '@carbon/icons/es/minimize/20';
 
 Chart.register(
   ChartDeferred,
+  datalabelsPlugin,
   annotationPlugin,
   ChoroplethController,
   BubbleMapController,
@@ -378,6 +381,7 @@ export class KDChart extends LitElement {
       options: this.mergedOptions,
       plugins: [
         canvasBackgroundPlugin,
+        doughnutLabelPlugin,
         a11yPlugin,
         musicPlugin,
         ...this.plugins,
