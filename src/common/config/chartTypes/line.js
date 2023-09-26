@@ -15,6 +15,10 @@ export const options = (ctx) => {
     interaction: {
       mode: Stacked ? 'index' : 'nearest',
     },
+    pointRadius: 8,
+    pointHoverRadius: 9,
+    pointBorderWidth: 0,
+    pointBorderColor: 'transparent',
     scales: {
       x: {
         grid: {
@@ -59,5 +63,6 @@ export const datasetOptions = (ctx, index) => {
   return {
     backgroundColor: colorPalettes[index],
     borderColor: colorPalettes[index],
+    borderWidth: 2,
   };
 };

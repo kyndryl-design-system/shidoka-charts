@@ -2,7 +2,7 @@ import { html } from 'lit';
 import '../components/chart';
 
 export default {
-  title: 'Work in Progress/Combo',
+  title: 'Combo',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,
