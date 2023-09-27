@@ -2,7 +2,6 @@ import { html } from 'lit';
 import '../components/chart';
 import { topojson } from 'chartjs-chart-geo';
 import capitals from './sampleData/us-capitals.json';
-import { sequential } from '../common/config/colorPalettes';
 
 export default {
   title: 'Proof of Concept/Geo',

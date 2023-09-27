@@ -1,4 +1,4 @@
-import { sequential } from '../colorPalettes';
+import colorPalettes from '../colorPalettes';
 
 export const type = 'choropleth';
 
@@ -16,11 +16,10 @@ export const options = (ctx) => {
       },
       color: {
         axis: 'x',
-        // interpolate: 'purples',
         interpolate: (value) => {
           const ColorCount = 12;
           let index = Math.round(value * (ColorCount - 1));
-          return sequential['rainforest'][index];
+          return colorPalettes['energizing'][index];
         },
         // legend: {
         //   position: 'bottom-right',

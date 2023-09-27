@@ -1,16 +1,15 @@
-export default [
-  '#FF462D',
-  '#29707A',
-  '#E4F4F1',
-  '#187E3F',
-  '#9E9287',
-  '#F2F1EE',
-  '#3D3C3C',
-  '#8D8888',
-  '#667076',
-];
-
-export const sequential = {
+export default {
+  categorical: [
+    '#FF462D',
+    '#29707A',
+    '#E4F4F1',
+    '#187E3F',
+    '#9E9287',
+    '#F2F1EE',
+    '#3D3C3C',
+    '#8D8888',
+    '#667076',
+  ],
   rainforest: [
     '#4CDD84',
     '#4AD787',
@@ -24,5 +23,19 @@ export const sequential = {
     '#3BA49E',
     '#3AA0A1',
     '#3797A4',
+  ],
+  energizing: [
+    '#57EBFF',
+    '#66DFF0',
+    '#76D4E0',
+    '#85C8D1',
+    '#94BCC2',
+    '#A3B1B3',
+    '#B3A5A3',
+    '#C29A94',
+    '#D18E85',
+    '#E08276',
+    '#F07766',
+    '#FF6B57',
   ],
 };
