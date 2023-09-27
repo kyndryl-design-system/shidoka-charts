@@ -2,7 +2,7 @@ import { html } from 'lit';
 import '../components/chart';
 
 export default {
-  title: 'Patterns/Grid',
+  title: 'Guidelines/Grid',
 };
 
 export const Full = {
