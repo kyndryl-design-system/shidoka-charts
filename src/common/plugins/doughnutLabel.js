@@ -5,15 +5,13 @@ const TextColor = getComputedStyle(document.documentElement).getPropertyValue(
 export default {
   id: 'doughnutLabel',
   beforeDraw: (chart, args, options) => {
-    if (chart.config.options.doughnut?.center) {
+    if (chart.config.type === 'doughnut') {
       const { ctx } = chart;
 
       // get sum of all visible data points
       const total = chart.config.data.datasets[0].data
         .filter((dataPoint, index) => !chart.legend.legendItems[index].hidden)
         .reduce((a, b) => a + b, 0);
-
-      const centerConfig = chart.config.options.doughnut.center;
 
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -24,7 +22,11 @@ export default {
 
       //Draw text in center
       ctx.fillText(total, centerX, centerY);
-      ctx.fillText(centerConfig.label, centerX, centerY + 20);
+      ctx.fillText(
+        chart.config.options.scales.y.title.text,
+        centerX,
+        centerY + 20
+      );
     }
   },
 };

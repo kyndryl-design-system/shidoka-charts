@@ -64,11 +64,6 @@ export const Doughnut = {
     ...args,
     chartTitle: 'Doughnut Chart',
     options: {
-      doughnut: {
-        center: {
-          label: 'Votes',
-        },
-      },
       scales: {
         x: {
           title: {

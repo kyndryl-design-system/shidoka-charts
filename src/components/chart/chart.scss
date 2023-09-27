@@ -19,8 +19,13 @@ figure {
   }
 }
 
-.closed-caption:not(:empty) {
-  margin-top: 8px;
+.closed-caption {
+  @include typography.type-ui-03;
+  color: var(--kd-color-text-secondary);
+
+  &:not(:empty) {
+    margin-top: 8px;
+  }
 }
 
 .hidden-visually {
@@ -29,7 +34,7 @@ figure {
 
 .canvas-container {
   .fullscreen & {
-    max-height: calc(100vh - 144px);
+    max-height: calc(100vh - 136px);
   }
 }
 
