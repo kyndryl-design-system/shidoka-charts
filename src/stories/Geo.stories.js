@@ -2,13 +2,11 @@ import { html } from 'lit';
 import '../components/chart';
 import { topojson } from 'chartjs-chart-geo';
 import capitals from './sampleData/us-capitals.json';
+import { sequential } from '../common/config/colorPalettes';
 
 export default {
   title: 'Proof of Concept/Geo',
   component: 'kd-chart',
-  decorators: [
-    (story) => html` <div style="max-width: 800px;">${story()}</div> `,
-  ],
   design: {
     type: 'figma',
     url: '',
@@ -41,23 +39,10 @@ const args = {
     },
   ],
   options: {
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
     scales: {
       projection: {
         axis: 'x',
         projection: 'albersUsa',
-      },
-      color: {
-        axis: 'x',
-        quantize: 5,
-        legend: {
-          position: 'bottom-right',
-          align: 'bottom',
-        },
       },
     },
   },
@@ -90,17 +75,12 @@ export const WorldChoropleth = {
     datasets: [
       {
         label: 'Countries',
-        data: countries.map((d) => ({ feature: d, value: Math.random() })),
+        data: countries.map((d) => ({ feature: d, value: Math.random() * 10 })),
       },
     ],
     options: {
       showOutline: true,
       showGraticule: true,
-      plugins: {
-        legend: {
-          display: false,
-        },
-      },
       scales: {
         projection: {
           axis: 'x',
@@ -132,32 +112,16 @@ export const BubbleMap = {
     datasets: [
       {
         outline: states,
-        showOutline: true,
         data: capitals.map((d) =>
-          Object.assign(d, { value: Math.round(Math.random() * 10) })
+          Object.assign(d, { value: Math.round(Math.random() * 100) })
         ),
       },
     ],
     options: {
-      plugins: {
-        legend: {
-          display: false,
-        },
-        datalabels: {
-          align: 'top',
-          formatter: (v) => {
-            return v.description;
-          },
-        },
-      },
       scales: {
         projection: {
           axis: 'x',
           projection: 'albersUsa',
-        },
-        size: {
-          axis: 'x',
-          size: [1, 20],
         },
       },
     },
