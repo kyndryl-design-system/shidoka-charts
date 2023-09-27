@@ -18,9 +18,8 @@ export const options = (ctx) => {
         axis: 'x',
         // interpolate: 'purples',
         interpolate: (value) => {
-          const ColorCount = 11; // 12, zero based
-          let index = Math.round(value * 11);
-          index = index > ColorCount ? ColorCount : index;
+          const ColorCount = 12;
+          let index = Math.round(value * (ColorCount - 1));
           return sequential['rainforest'][index];
         },
         // legend: {
