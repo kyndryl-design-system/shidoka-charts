@@ -24,6 +24,7 @@ const defaultConfig = (ctx) => {
       x: {
         title: {
           display: true,
+          text: 'X Axis ',
           padding: 8,
         },
         ...CommonAxisOptions,
@@ -31,6 +32,7 @@ const defaultConfig = (ctx) => {
       y: {
         title: {
           display: true,
+          text: 'Y Axis ',
           padding: { bottom: 8, top: 0 },
         },
         ...CommonAxisOptions,

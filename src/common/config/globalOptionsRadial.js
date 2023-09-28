@@ -2,11 +2,13 @@ const defaultConfig = (ctx) => {
   return {
     scales: {
       x: {
+        title: { text: 'X Axis ' },
         grid: { display: false },
         ticks: { display: false },
         border: { display: false },
       },
       y: {
+        title: { text: 'Y Axis ' },
         grid: { display: false },
         ticks: { display: false },
         border: { display: false },
