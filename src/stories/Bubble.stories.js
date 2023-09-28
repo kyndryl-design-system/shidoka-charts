@@ -89,6 +89,7 @@ export const Bubble = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
         .options=${args.options}
       ></kd-chart>
     `;

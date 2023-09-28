@@ -8,7 +8,7 @@ export const type = 'pie';
 
 export const options = (ctx) => {
   return {
-    radius: '85%',
+    radius: '80%',
     plugins: {
       datalabels: {
         color: LabelColor,

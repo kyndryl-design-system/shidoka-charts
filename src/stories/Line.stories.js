@@ -57,6 +57,7 @@ export const Line = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
         .options=${args.options}
       ></kd-chart>
     `;
@@ -108,6 +109,7 @@ export const Annotated = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
         .options=${args.options}
       ></kd-chart>
     `;
@@ -140,6 +142,7 @@ export const Area = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
         .options=${args.options}
       ></kd-chart>
     `;

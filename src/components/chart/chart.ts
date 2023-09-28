@@ -59,7 +59,7 @@ export class KDChart extends LitElement {
   @property({ type: String })
   description = '';
 
-  /** Chart.js chart type. Can be 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'bubble', 'scatter', 'choropleth', 'bubbleMap', 'treemap'. */
+  /** Chart.js chart type. */
   @property({ type: String })
   type: any = '';
 
@@ -80,11 +80,11 @@ export class KDChart extends LitElement {
   plugins: any = [];
 
   /** Chart.js canvas height (px). Disables maintainAspectRatio option. */
-  @property({ type: Object })
+  @property({ type: Number })
   height: any = null;
 
   /** Chart.js canvas width (px). Disables maintainAspectRatio option. */
-  @property({ type: Object })
+  @property({ type: Number })
   width: any = null;
 
   /** Hides the description visually. */
@@ -94,6 +94,10 @@ export class KDChart extends LitElement {
   /** Hides the closed captions visually. */
   @property({ type: Boolean })
   hideCaptions = false;
+
+  /** Removes the outer border and padding. */
+  @property({ type: Boolean })
+  noBorder = false;
 
   /** Fullscreen state.
    * @ignore
@@ -155,7 +159,8 @@ export class KDChart extends LitElement {
   override render() {
     return html`
       <div
-        class="container ${this.fullscreen ? 'fullscreen' : ''}"
+        class="container ${this.fullscreen ? 'fullscreen' : ''}
+          ${this.noBorder ? 'no-border' : ''}"
         @fullscreenchange=${() => this.handleFullscreenChange()}
       >
         <div class="header">
@@ -228,7 +233,8 @@ export class KDChart extends LitElement {
         <figure class="${this.tableView ? 'hidden' : ''}">
           <div
             class="canvas-container"
-            style="width: ${this.width}px; height: ${this.height}px;"
+            style="${this.width ? `width: ${this.width}px;` : ''}
+              ${this.height ? `height: ${this.height}px;` : ''}"
           >
             <canvas role="img"></canvas>
           </div>
@@ -357,6 +363,10 @@ export class KDChart extends LitElement {
         this.initChart();
       });
       this.checkType();
+    }
+
+    if (this.chart && changedProps.has('noBorder')) {
+      this.chart.resize();
     }
   }
 

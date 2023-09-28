@@ -43,6 +43,7 @@ const args = {
   },
   hideDescription: false,
   hideCaptions: false,
+  noBorder: false,
   width: null,
   height: null,
 };
@@ -59,6 +60,7 @@ export const Vertical = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
         .options=${args.options}
         .width=${args.width}
         .height=${args.height}
@@ -96,6 +98,7 @@ export const Horizontal = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
         .options=${args.options}
       ></kd-chart>
     `;
@@ -132,6 +135,7 @@ export const Stacked = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
         .options=${args.options}
       ></kd-chart>
     `;
@@ -169,6 +173,7 @@ export const HorizontalStacked = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
         .options=${args.options}
       ></kd-chart>
     `;
@@ -213,6 +218,7 @@ export const Floating = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
         .options=${args.options}
       ></kd-chart>
     `;
@@ -275,6 +281,7 @@ export const SingleLabel = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
         .options=${args.options}
         .width=${args.width}
         .height=${args.height}

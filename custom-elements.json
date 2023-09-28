@@ -148,7 +148,7 @@
                 "text": "any"
               },
               "default": "''",
-              "description": "Chart.js chart type. Can be 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'bubble', 'scatter', 'choropleth', 'bubbleMap', 'treemap'.",
+              "description": "Chart.js chart type.",
               "attribute": "type"
             },
             {
@@ -230,6 +230,16 @@
               "attribute": "hideCaptions"
             },
             {
+              "kind": "field",
+              "name": "noBorder",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Removes the outer border and padding.",
+              "attribute": "noBorder"
+            },
+            {
               "kind": "method",
               "name": "initChart",
               "privacy": "private",
@@ -292,6 +302,11 @@
               "kind": "method",
               "name": "handleFullscreen",
               "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleFullscreenChange",
+              "privacy": "private"
             }
           ],
           "attributes": [
@@ -319,7 +334,7 @@
                 "text": "any"
               },
               "default": "''",
-              "description": "Chart.js chart type. Can be 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'bubble', 'scatter', 'choropleth', 'bubbleMap', 'treemap'.",
+              "description": "Chart.js chart type.",
               "fieldName": "type"
             },
             {
@@ -391,6 +406,15 @@
               "default": "false",
               "description": "Hides the closed captions visually.",
               "fieldName": "hideCaptions"
+            },
+            {
+              "name": "noBorder",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Removes the outer border and padding.",
+              "fieldName": "noBorder"
             }
           ],
           "superclass": {

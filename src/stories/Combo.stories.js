@@ -60,6 +60,7 @@ export const Combo = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
         .options=${args.options}
       ></kd-chart>
     `;
@@ -114,6 +115,7 @@ export const MultiAxis = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
         .options=${args.options}
       ></kd-chart>
     `;
@@ -162,6 +164,7 @@ export const ComboStacked = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
         .options=${args.options}
       ></kd-chart>
     `;
@@ -216,6 +219,7 @@ export const ComboFloating = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
         .options=${args.options}
       ></kd-chart>
     `;

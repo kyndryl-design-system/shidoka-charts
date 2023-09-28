@@ -49,6 +49,7 @@ export const TreeMap = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
         .options=${args.options}
       ></kd-chart>
     `;
@@ -85,6 +86,7 @@ export const Grouped = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
         .options=${args.options}
       ></kd-chart>
     `;
@@ -122,6 +124,7 @@ export const NestedData = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
         .options=${args.options}
       ></kd-chart>
     `;
