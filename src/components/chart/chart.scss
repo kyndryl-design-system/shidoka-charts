@@ -12,8 +12,11 @@
   border: 1px solid var(--kd-color-border-light);
 
   &.no-border {
-    padding: 0;
     border: none;
+
+    &:not(.fullscreen) {
+      padding: 0;
+    }
   }
 }
 

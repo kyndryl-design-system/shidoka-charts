@@ -18,12 +18,19 @@ export default {
     control: { type: 'select' },
   },
   type: {
-    control: { type: 'text' },
+    table: {
+      disable: true,
+    },
   },
   width: {
     control: { type: 'number' },
   },
   height: {
     control: { type: 'number' },
+  },
+  plugins: {
+    table: {
+      disable: true,
+    },
   },
 };

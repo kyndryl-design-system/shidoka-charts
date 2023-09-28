@@ -54,3 +54,16 @@ export function convertChartDataToCSV(args: any) {
 
   return result;
 }
+
+export function getRandomData(arrayLength = 6, min = -100, max = 100) {
+  const data = [];
+
+  for (let i = 0; i < arrayLength; i++) {
+    data.push(
+      Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1)) +
+        Math.ceil(min)
+    );
+  }
+
+  return data;
+}

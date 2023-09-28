@@ -50,6 +50,9 @@ const args = {
   hideDescription: false,
   hideCaptions: false,
   colorPalette: 'rainforest',
+  noBorder: false,
+  width: null,
+  height: null,
 };
 
 export const USChoropleth = {
@@ -66,6 +69,8 @@ export const USChoropleth = {
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -104,6 +109,8 @@ export const WorldChoropleth = {
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -143,6 +150,8 @@ export const BubbleMap = {
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },

@@ -49,6 +49,9 @@ const args = {
   hideDescription: false,
   hideCaptions: false,
   colorPalette: 'default',
+  noBorder: false,
+  width: null,
+  height: null,
 };
 
 export const Combo = {
@@ -65,6 +68,8 @@ export const Combo = {
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -120,6 +125,8 @@ export const MultiAxis = {
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -169,6 +176,8 @@ export const ComboStacked = {
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -224,6 +233,8 @@ export const ComboFloating = {
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },

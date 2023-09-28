@@ -11,6 +11,14 @@ const defaultConfig = (ctx) => {
   return {
     resizeDelay: 50, //debounce the resize
     maintainAspectRatio: !ExplicitSize,
+    scales: {
+      x: {
+        title: { text: 'X Axis ' },
+      },
+      y: {
+        title: { text: 'Y Axis ' },
+      },
+    },
     plugins: {
       canvasBackground: {
         color: BgColor,

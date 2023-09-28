@@ -46,6 +46,9 @@ const args = {
   hideDescription: false,
   hideCaptions: false,
   colorPalette: 'default',
+  noBorder: false,
+  width: null,
+  height: null,
 };
 
 export const Line = {
@@ -62,6 +65,46 @@ export const Line = {
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
+      ></kd-chart>
+    `;
+  },
+};
+
+export const Curved = {
+  args: {
+    ...args,
+    options: {
+      cubicInterpolationMode: 'monotone',
+      scales: {
+        x: {
+          title: {
+            text: 'Color',
+          },
+        },
+        y: {
+          title: {
+            text: 'Votes',
+          },
+        },
+      },
+    },
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="line"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        ?hideDescription=${args.hideDescription}
+        ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -147,6 +190,8 @@ export const Area = {
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },

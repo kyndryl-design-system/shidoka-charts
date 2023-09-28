@@ -1,6 +1,7 @@
 import { html } from 'lit';
 import '../components/chart';
 import argTypes from '../common/config/chartArgTypes';
+import { getRandomData } from '../common/helpers/helpers';
 
 export default {
   title: 'Charts/Bar',
@@ -103,6 +104,8 @@ export const Horizontal = {
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -140,6 +143,8 @@ export const Stacked = {
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -178,6 +183,8 @@ export const HorizontalStacked = {
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -223,6 +230,8 @@ export const Floating = {
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },

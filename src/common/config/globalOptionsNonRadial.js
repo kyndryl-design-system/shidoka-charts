@@ -3,7 +3,8 @@ const GridLinesColor = getComputedStyle(
 ).getPropertyValue('--kd-color-border-light');
 
 const defaultConfig = (ctx) => {
-  const MultiAxis = Object.keys(ctx.options.scales).length > 2;
+  const MultiAxis =
+    ctx.options.scales && Object.keys(ctx.options.scales).length > 2;
 
   const CommonAxisOptions = {
     grid: {

@@ -72,6 +72,9 @@ const args = {
   hideDescription: false,
   hideCaptions: false,
   colorPalette: 'default',
+  noBorder: false,
+  width: null,
+  height: null,
 };
 
 export const Scatter = {
@@ -88,6 +91,8 @@ export const Scatter = {
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },

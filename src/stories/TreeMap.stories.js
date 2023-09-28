@@ -38,6 +38,9 @@ const args = {
   hideDescription: false,
   hideCaptions: false,
   colorPalette: 'default',
+  noBorder: false,
+  width: null,
+  height: null,
 };
 
 export const TreeMap = {
@@ -54,6 +57,8 @@ export const TreeMap = {
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -91,6 +96,8 @@ export const Grouped = {
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -129,6 +136,8 @@ export const NestedData = {
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
