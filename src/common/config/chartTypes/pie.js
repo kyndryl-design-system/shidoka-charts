@@ -37,6 +37,6 @@ export const options = (ctx) => {
 
 export const datasetOptions = (ctx, index) => {
   return {
-    backgroundColor: colorPalettes['categorical'],
+    backgroundColor: colorPalettes['default'],
   };
 };

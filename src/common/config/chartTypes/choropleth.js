@@ -19,7 +19,7 @@ export const options = (ctx) => {
         interpolate: (value) => {
           const ColorCount = 12;
           let index = Math.round(value * (ColorCount - 1));
-          return colorPalettes['energizing'][index];
+          return colorPalettes['rainforest'][index];
         },
         // legend: {
         //   position: 'bottom-right',

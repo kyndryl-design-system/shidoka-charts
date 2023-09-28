@@ -6,9 +6,6 @@ export default {
   argTypes: {
     height: {
       control: { type: 'number' },
-      table: {
-        defaultValue: { summary: null },
-      },
     },
   },
 };

@@ -8,7 +8,7 @@ export const options = (ctx) => {
 
 export const datasetOptions = (ctx, index) => {
   return {
-    backgroundColor: colorPalettes['categorical'][index],
-    borderColor: colorPalettes['categorical'][index],
+    backgroundColor: colorPalettes['default'][index],
+    borderColor: colorPalettes['default'][index],
   };
 };

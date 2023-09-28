@@ -68,7 +68,7 @@ export const datasetOptions = (ctx, index) => {
   const BarDatasets = Datasets.filter((dataset) => dataset.type !== 'line');
 
   return {
-    backgroundColor: colorPalettes['categorical'][index],
+    backgroundColor: colorPalettes['default'][index],
     borderWidth: {
       top: !Horizontal && Stacked && index < BarDatasets.length - 1 ? 2 : 0, // stacked bars 2px gap
       right: Horizontal && Stacked && index < BarDatasets.length - 1 ? 2 : 0, // stacked bars 2px gap
