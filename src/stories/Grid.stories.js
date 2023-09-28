@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
+import argTypes from '../common/config/chartArgTypes';
 
 export default {
   title: 'Guidelines/Grid',

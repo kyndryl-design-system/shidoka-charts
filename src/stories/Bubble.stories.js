@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
+import argTypes from '../common/config/chartArgTypes';
 
 export default {
   title: 'Future/Bubble',
@@ -11,6 +12,7 @@ export default {
     type: 'figma',
     url: '',
   },
+  argTypes: argTypes,
 };
 
 const args = {
@@ -75,6 +77,7 @@ const args = {
   },
   hideDescription: false,
   hideCaptions: false,
+  colorPalette: 'default',
 };
 
 export const Bubble = {
@@ -90,7 +93,7 @@ export const Bubble = {
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
-        .options=${args.options}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },

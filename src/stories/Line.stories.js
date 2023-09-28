@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
+import argTypes from '../common/config/chartArgTypes';
 
 export default {
   title: 'Charts/Line',
@@ -11,6 +12,7 @@ export default {
     type: 'figma',
     url: '',
   },
+  argTypes: argTypes,
 };
 
 const args = {
@@ -43,6 +45,7 @@ const args = {
   },
   hideDescription: false,
   hideCaptions: false,
+  colorPalette: 'default',
 };
 
 export const Line = {
@@ -58,7 +61,7 @@ export const Line = {
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
-        .options=${args.options}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },
@@ -110,7 +113,7 @@ export const Line = {
 //         ?hideDescription=${args.hideDescription}
 //         ?hideCaptions=${args.hideCaptions}
 //         ?noBorder=${args.noBorder}
-//         .options=${args.options}
+//         .options=${{ colorPalette: args.colorPalette, ...args.options }}
 //       ></kd-chart>
 //     `;
 //   },
@@ -143,7 +146,7 @@ export const Area = {
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
-        .options=${args.options}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },

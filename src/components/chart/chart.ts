@@ -345,11 +345,14 @@ export class KDChart extends LitElement {
 
     // Update chart instance when options change.
     if (this.chart && changedProps.has('options')) {
-      this.chart.options = this.mergedOptions;
-      this.chart.update();
+      this.mergeOptions().then(() => {
+        this.chart.options = this.mergedOptions;
+        this.chart.data.datasets = this.mergedDatasets;
+        this.chart.update();
+      });
     }
 
-    // Re-init chart instance when type, plugins, width, or height change.
+    // Re-init chart instance when type, plugins, colorPalette, width, or height change.
     if (
       changedProps.has('type') ||
       changedProps.has('plugins') ||

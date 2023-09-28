@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
+import argTypes from '../common/config/chartArgTypes';
 
 export default {
   title: 'Charts/Bar',
@@ -11,6 +12,7 @@ export default {
     type: 'figma',
     url: '',
   },
+  argTypes: argTypes,
 };
 
 const args = {
@@ -43,6 +45,7 @@ const args = {
   },
   hideDescription: false,
   hideCaptions: false,
+  colorPalette: 'default',
   noBorder: false,
   width: null,
   height: null,
@@ -61,7 +64,7 @@ export const Vertical = {
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
-        .options=${args.options}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
       ></kd-chart>
@@ -99,7 +102,7 @@ export const Horizontal = {
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
-        .options=${args.options}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },
@@ -136,7 +139,7 @@ export const Stacked = {
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
-        .options=${args.options}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },
@@ -174,7 +177,7 @@ export const HorizontalStacked = {
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
-        .options=${args.options}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },
@@ -219,7 +222,7 @@ export const Floating = {
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
-        .options=${args.options}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },
@@ -282,7 +285,7 @@ export const SingleLabel = {
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
-        .options=${args.options}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
       ></kd-chart>

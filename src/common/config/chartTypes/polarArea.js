@@ -8,6 +8,6 @@ export const options = (ctx) => {
 
 export const datasetOptions = (ctx, index) => {
   return {
-    backgroundColor: colorPalettes['default'],
+    backgroundColor: colorPalettes[ctx.options.colorPalette || 'default'],
   };
 };

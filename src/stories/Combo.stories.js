@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
+import argTypes from '../common/config/chartArgTypes';
 
 export default {
   title: 'Charts/Combo',
@@ -11,6 +12,7 @@ export default {
     type: 'figma',
     url: '',
   },
+  argTypes: argTypes,
 };
 
 const args = {
@@ -46,6 +48,7 @@ const args = {
   },
   hideDescription: false,
   hideCaptions: false,
+  colorPalette: 'default',
 };
 
 export const Combo = {
@@ -61,7 +64,7 @@ export const Combo = {
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
-        .options=${args.options}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },
@@ -116,7 +119,7 @@ export const MultiAxis = {
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
-        .options=${args.options}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },
@@ -165,7 +168,7 @@ export const ComboStacked = {
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
-        .options=${args.options}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },
@@ -220,7 +223,7 @@ export const ComboFloating = {
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
-        .options=${args.options}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },

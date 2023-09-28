@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
+import argTypes from '../common/config/chartArgTypes';
 import { topojson } from 'chartjs-chart-geo';
 import capitals from './sampleData/us-capitals.json';
 
@@ -10,6 +11,7 @@ export default {
     type: 'figma',
     url: '',
   },
+  argTypes: argTypes,
 };
 
 const usData = await fetch(
@@ -47,6 +49,7 @@ const args = {
   },
   hideDescription: false,
   hideCaptions: false,
+  colorPalette: 'rainforest',
 };
 
 export const USChoropleth = {
@@ -62,7 +65,7 @@ export const USChoropleth = {
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
-        .options=${args.options}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },
@@ -100,7 +103,7 @@ export const WorldChoropleth = {
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
-        .options=${args.options}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },
@@ -138,7 +141,7 @@ export const BubbleMap = {
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?noBorder=${args.noBorder}
-        .options=${args.options}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },
