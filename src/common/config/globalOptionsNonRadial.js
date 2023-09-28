@@ -44,7 +44,7 @@ const defaultConfig = (ctx) => {
             );
 
             return {
-              // borderColor: context.dataset.borderColor,
+              borderColor: context.dataset.borderColor,
               backgroundColor: PerDatapointColors
                 ? context.dataset.backgroundColor[context.dataIndex]
                 : context.dataset.backgroundColor,
