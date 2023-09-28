@@ -25,6 +25,7 @@ export const options = (ctx) => {
         },
       },
       y: {
+        beginAtZero: true,
         grid: {
           display: !Horizontal,
         },
