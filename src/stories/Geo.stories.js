@@ -129,6 +129,7 @@ export const BubbleMap = {
         },
       },
     },
+    colorPalette: 'default',
   },
   render: (args) => {
     return html`

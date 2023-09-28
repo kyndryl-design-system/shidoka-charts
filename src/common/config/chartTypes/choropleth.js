@@ -17,9 +17,10 @@ export const options = (ctx) => {
       color: {
         axis: 'x',
         interpolate: (value) => {
-          const ColorCount = 12;
-          let index = Math.round(value * (ColorCount - 1));
-          return colorPalettes[ctx.options.colorPalette || 'rainforest'][index];
+          const Colors =
+            colorPalettes[ctx.options.colorPalette || 'rainforest'];
+          const Index = Math.round(value * (Colors.length - 1));
+          return Colors[Index];
         },
         // legend: {
         //   position: 'bottom-right',

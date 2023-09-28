@@ -66,10 +66,15 @@ export const datasetOptions = (ctx, index) => {
   const Stacked = ctx.options.scales.y.stacked;
   const Datasets = ctx.datasets;
   const BarDatasets = Datasets.filter((dataset) => dataset.type !== 'line');
+  const Colors = colorPalettes[ctx.options.colorPalette || 'default'];
+  const ColorCycles = Math.floor(index / (Colors.length - 1));
+  const Index =
+    index > Colors.length - 1
+      ? index - (Colors.length - 1) * ColorCycles
+      : index;
 
   return {
-    backgroundColor:
-      colorPalettes[ctx.options.colorPalette || 'default'][index],
+    backgroundColor: Colors[Index],
     borderWidth: {
       top: !Horizontal && Stacked && index < BarDatasets.length - 1 ? 2 : 0, // stacked bars 2px gap
       right: Horizontal && Stacked && index < BarDatasets.length - 1 ? 2 : 0, // stacked bars 2px gap
