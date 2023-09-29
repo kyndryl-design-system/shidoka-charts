@@ -8,8 +8,6 @@ export const options = (ctx) => {
     Array.isArray(dataset.data[0])
   );
   const Stacked = ctx.options.scales?.y?.stacked;
-  // const MultiAxis = Object.keys(ctx.options.scales).length > 2;
-  // const Combo = ctx.datasets.filter((dataset) => dataset.type).length > 0;
 
   return {
     interaction: {
@@ -70,14 +68,14 @@ export const datasetOptions = (ctx, index) => {
   return {
     // pointBorderColor:
     //   colorPalettes[ctx.options.colorPalette || 'default'][index],
-    // backgroundColor: Colors[Index] + '80',
-    pointBackgroundColor: Colors[Index] + '80',
+    pointBackgroundColor: Colors[Index] + '80', // 50% opacity
     borderColor: Colors[index],
+    // backgroundColor: Colors[Index] + '80',
     backgroundColor: (context) => {
       const ctx = context.chart.ctx;
       const gradient = ctx.createLinearGradient(0, 0, 0, 200);
-      gradient.addColorStop(0, Colors[Index] + '99');
-      gradient.addColorStop(1, Colors[Index] + '4D');
+      gradient.addColorStop(0, Colors[Index] + '99'); // 60% opacity
+      gradient.addColorStop(1, Colors[Index] + '4D'); // 30% opacity
       return gradient;
     },
     borderWidth: 2,

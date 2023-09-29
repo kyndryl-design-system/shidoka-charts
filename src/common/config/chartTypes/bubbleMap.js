@@ -6,7 +6,7 @@ export const options = (ctx) => {
   const Colors = colorPalettes[ctx.options.colorPalette || 'default'];
 
   return {
-    backgroundColor: Colors[0] + '80',
+    backgroundColor: Colors[0] + '80', // 50% opacity
     borderColor: Colors[0],
     plugins: {
       legend: {

@@ -24,8 +24,8 @@ const defaultConfig = (ctx) => {
           useBorderRadius: true,
           padding: 8,
         },
-        // onHover: handleLegendHover,
-        // onLeave: handleLegendLeave,
+        onHover: handleLegendHover,
+        onLeave: handleLegendLeave,
       },
       tooltip: {
         backgroundColor: TooltipBgColor,
@@ -72,11 +72,15 @@ const handleLegendHover = (e, item, legend) => {
   const DatasetIndex = item.datasetIndex || 0;
   const Datasets = legend.chart.data.datasets;
   const Dataset = Datasets[DatasetIndex];
+  const AlphaHexLength = 9; // includes #
+  const Alpha = '4D'; // 30% opacity
 
   if (Array.isArray(Dataset.backgroundColor)) {
     Dataset.backgroundColor.forEach((color, index, colors) => {
       colors[index] =
-        index === item.index || color.length === 9 ? color : color + '4D';
+        index === item.index || color.length === AlphaHexLength
+          ? color
+          : color + Alpha;
     });
   } else {
     Datasets.forEach((dataset, index) => {
@@ -85,16 +89,16 @@ const handleLegendHover = (e, item, legend) => {
 
       if (backgroundColor) {
         dataset.backgroundColor =
-          index === DatasetIndex || backgroundColor.length === 9
+          index === DatasetIndex || backgroundColor.length === AlphaHexLength
             ? backgroundColor
-            : backgroundColor + '4D';
+            : backgroundColor + Alpha;
       }
 
       if (borderColor) {
         dataset.borderColor =
-          index === DatasetIndex || borderColor.length === 9
+          index === DatasetIndex || borderColor.length === AlphaHexLength
             ? borderColor
-            : borderColor + '4D';
+            : borderColor + Alpha;
       }
     });
   }
@@ -115,26 +119,30 @@ const handleLegendLeave = (e, item, legend) => {
   const DatasetIndex = item.datasetIndex || 0;
   const Datasets = legend.chart.data.datasets;
   const Dataset = Datasets[DatasetIndex];
+  const AlphaHexLength = 9;
 
   if (Array.isArray(Dataset.backgroundColor)) {
     Dataset.backgroundColor.forEach((color, index, colors) => {
-      colors[index] = color.length === 9 ? color.slice(0, -2) : color;
+      colors[index] =
+        color.length === AlphaHexLength ? color.slice(0, -2) : color;
     });
   } else {
-    Datasets.forEach((dataset, index) => {
+    Datasets.forEach((dataset) => {
       const backgroundColor = dataset.backgroundColor;
       const borderColor = dataset.borderColor;
 
       if (backgroundColor) {
         dataset.backgroundColor =
-          backgroundColor.length === 9
+          backgroundColor.length === AlphaHexLength
             ? backgroundColor.slice(0, -2)
             : backgroundColor;
       }
 
       if (borderColor) {
         dataset.borderColor =
-          borderColor.length === 9 ? borderColor.slice(0, -2) : borderColor;
+          borderColor.length === AlphaHexLength
+            ? borderColor.slice(0, -2)
+            : borderColor;
       }
     });
   }

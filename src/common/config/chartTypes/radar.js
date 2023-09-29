@@ -20,7 +20,7 @@ export const datasetOptions = (ctx, index) => {
       : index;
 
   return {
-    backgroundColor: Colors[Index] + '80',
+    backgroundColor: Colors[Index] + '80', // 50% opacity
     borderColor: Colors[Index],
   };
 };

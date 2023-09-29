@@ -1,9 +1,5 @@
 import colorPalettes from '../colorPalettes';
 
-const BackgroundColor = getComputedStyle(
-  document.documentElement
-).getPropertyValue('--kd-color-background-ui-default');
-
 export const type = 'bar';
 
 export const options = (ctx) => {
@@ -12,8 +8,6 @@ export const options = (ctx) => {
     Array.isArray(dataset.data[0])
   );
   const Stacked = ctx.options.scales?.y?.stacked;
-  // const MultiAxis = Object.keys(ctx.options.scales).length > 2;
-  // const Combo = ctx.datasets.filter((dataset) => dataset.type).length > 0;
 
   return {
     interaction: {
