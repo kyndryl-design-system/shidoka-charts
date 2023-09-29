@@ -72,6 +72,44 @@ export const Line = {
   },
 };
 
+export const WithoutPoints = {
+  args: {
+    ...args,
+    options: {
+      pointStyle: false,
+      scales: {
+        x: {
+          title: {
+            text: 'Color',
+          },
+        },
+        y: {
+          title: {
+            text: 'Votes',
+          },
+        },
+      },
+    },
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="line"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        ?hideDescription=${args.hideDescription}
+        ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
+      ></kd-chart>
+    `;
+  },
+};
+
 export const Curved = {
   args: {
     ...args,
