@@ -68,12 +68,18 @@ export const datasetOptions = (ctx, index) => {
       : index;
 
   return {
-    // pointBackgroundColor:
-    //   colorPalettes[ctx.options.colorPalette || 'default'][index] + '80',
     // pointBorderColor:
     //   colorPalettes[ctx.options.colorPalette || 'default'][index],
-    backgroundColor: Colors[Index] + '80',
+    // backgroundColor: Colors[Index] + '80',
+    pointBackgroundColor: Colors[Index] + '80',
     borderColor: Colors[index],
+    backgroundColor: (context) => {
+      const ctx = context.chart.ctx;
+      const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+      gradient.addColorStop(0, Colors[Index] + '99');
+      gradient.addColorStop(1, Colors[Index] + '4D');
+      return gradient;
+    },
     borderWidth: 2,
   };
 };

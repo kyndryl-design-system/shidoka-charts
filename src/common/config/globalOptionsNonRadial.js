@@ -45,12 +45,17 @@ const defaultConfig = (ctx) => {
             const PerDatapointColors = Array.isArray(
               context.dataset.backgroundColor
             );
+            const IsFunction =
+              typeof context.dataset.backgroundColor == 'function';
+            const BgColor = IsFunction
+              ? context.dataset.borderColor + '80'
+              : context.dataset.backgroundColor;
 
             return {
               borderColor: context.dataset.borderColor,
               backgroundColor: PerDatapointColors
-                ? context.dataset.backgroundColor[context.dataIndex]
-                : context.dataset.backgroundColor,
+                ? BgColor[context.dataIndex]
+                : BgColor,
               borderRadius: 2,
             };
           },
