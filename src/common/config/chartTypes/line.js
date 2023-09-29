@@ -13,8 +13,8 @@ export const options = (ctx) => {
     interaction: {
       mode: Stacked ? 'index' : 'nearest',
     },
-    pointRadius: 4,
-    pointHoverRadius: 5,
+    pointRadius: 6,
+    pointHoverRadius: 7,
     pointBorderWidth: 1,
     scales: {
       x: {

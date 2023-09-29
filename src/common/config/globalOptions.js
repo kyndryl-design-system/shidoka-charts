@@ -24,8 +24,8 @@ const defaultConfig = (ctx) => {
           useBorderRadius: true,
           padding: 8,
         },
-        onHover: handleLegendHover,
-        onLeave: handleLegendLeave,
+        // onHover: handleLegendHover, // doesn't work with transparent or gradient bgs
+        // onLeave: handleLegendLeave,
       },
       tooltip: {
         backgroundColor: TooltipBgColor,
