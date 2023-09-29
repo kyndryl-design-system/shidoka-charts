@@ -12,21 +12,27 @@ import {
   ProjectionScale,
 } from 'chartjs-chart-geo';
 import { TreemapController, TreemapElement } from 'chartjs-chart-treemap';
+import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
+import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import musicPlugin from 'chartjs-plugin-chart2music';
+import datalabelsPlugin from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import { convertChartDataToCSV } from '../../common/helpers/helpers';
+import { convertChartDataToCSV, debounce } from '../../common/helpers/helpers';
 import ChartScss from './chart.scss';
 import globalOptions from '../../common/config/globalOptions';
-import colorPalettes from '../../common/config/colorPalettes';
+import globalOptionsNonRadial from '../../common/config/globalOptionsNonRadial';
+import globalOptionsRadial from '../../common/config/globalOptionsRadial';
 import '@kyndryl-design-system/shidoka-foundation/components/icon';
 import chartIcon from '@carbon/icons/es/chart--line/24';
-import tableIcon from '@carbon/icons/es/data-table/24';
+import tableIcon from '@carbon/icons/es/table-of-contents/24';
 import overflowIcon from '@carbon/icons/es/overflow-menu--vertical/24';
-import maximizeIcon from '@carbon/icons/es/maximize/24';
+import maximizeIcon from '@carbon/icons/es/maximize/20';
+import minimizeIcon from '@carbon/icons/es/minimize/20';
 
 Chart.register(
   ChartDeferred,
+  datalabelsPlugin,
   annotationPlugin,
   ChoroplethController,
   BubbleMapController,
@@ -53,7 +59,7 @@ export class KDChart extends LitElement {
   @property({ type: String })
   description = '';
 
-  /** Chart.js chart type. Can be 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'bubble', 'scatter', 'choropleth', 'bubbleMap', 'treemap'. */
+  /** Chart.js chart type. */
   @property({ type: String })
   type: any = '';
 
@@ -73,6 +79,14 @@ export class KDChart extends LitElement {
   @property({ type: Array })
   plugins: any = [];
 
+  /** Chart.js canvas height (px). Disables maintainAspectRatio option. */
+  @property({ type: Number })
+  height: any = null;
+
+  /** Chart.js canvas width (px). Disables maintainAspectRatio option. */
+  @property({ type: Number })
+  width: any = null;
+
   /** Hides the description visually. */
   @property({ type: Boolean })
   hideDescription = false;
@@ -80,6 +94,27 @@ export class KDChart extends LitElement {
   /** Hides the closed captions visually. */
   @property({ type: Boolean })
   hideCaptions = false;
+
+  /** Removes the outer border and padding. */
+  @property({ type: Boolean })
+  noBorder = false;
+
+  /** Customizable text labels. */
+  @property({ type: Object })
+  customLabels = {
+    toggleView: 'Toggle View Mode',
+    toggleFullscreen: 'Toggle Fullscreen',
+    overflowMenu: 'Overflow Menu',
+    downloadCsv: 'Download as CSV',
+    downloadPng: 'Download as PNG',
+    downloadJpg: 'Download as JPG',
+  };
+
+  /** Fullscreen state.
+   * @ignore
+   */
+  @state()
+  fullscreen = false;
 
   /**
    * Queries the container element.
@@ -134,9 +169,22 @@ export class KDChart extends LitElement {
 
   override render() {
     return html`
-      <div class="container">
+      <div
+        class="container ${this.fullscreen ? 'fullscreen' : ''}
+          ${this.noBorder ? 'no-border' : ''}"
+        @fullscreenchange=${() => this.handleFullscreenChange()}
+      >
         <div class="header">
-          <div class="title">${this.chartTitle}</div>
+          <div>
+            <div class="title">${this.chartTitle}</div>
+            <div
+              class="description ${this.hideDescription
+                ? 'hidden-visually'
+                : ''}"
+            >
+              ${this.description}
+            </div>
+          </div>
 
           <div class="controls">
             ${!this.tableDisabled
@@ -160,31 +208,35 @@ export class KDChart extends LitElement {
               : null}
 
             <button
-              title="Toggle Fullscreen"
-              aria-label="Toggle Fullscreen"
+              title=${this.customLabels.toggleFullscreen}
+              aria-label=${this.customLabels.toggleFullscreen}
               @click=${() => this.handleFullscreen()}
             >
-              <kd-icon .icon=${maximizeIcon}></kd-icon>
+              <kd-icon
+                .icon=${this.fullscreen ? minimizeIcon : maximizeIcon}
+              ></kd-icon>
             </button>
 
             <button
-              title="Overflow Menu"
-              aria-label="Overflow Menu"
+              title=${this.customLabels.overflowMenu}
+              aria-label=${this.customLabels.overflowMenu}
               class="overflow-button"
             >
               <kd-icon .icon=${overflowIcon}></kd-icon>
 
               <div class="overflow-menu">
                 ${!this.tableDisabled
-                  ? html` <a @click=${(e: Event) => this.handleDownloadCsv(e)}>
-                      Download as CSV
-                    </a>`
+                  ? html`
+                      <a @click=${(e: Event) => this.handleDownloadCsv(e)}>
+                        ${this.customLabels.downloadCsv}
+                      </a>
+                    `
                   : null}
                 <a @click=${(e: Event) => this.handleDownloadImage(e, false)}>
-                  Download as PNG
+                  ${this.customLabels.downloadPng}
                 </a>
                 <a @click=${(e: Event) => this.handleDownloadImage(e, true)}>
-                  Download as JPG
+                  ${this.customLabels.downloadJpg}
                 </a>
               </div>
             </button>
@@ -192,20 +244,19 @@ export class KDChart extends LitElement {
         </div>
 
         <figure class="${this.tableView ? 'hidden' : ''}">
-          <canvas role="img"></canvas>
+          <div
+            class="canvas-container"
+            style="${this.width ? `width: ${this.width}px;` : ''}
+              ${this.height ? `height: ${this.height}px;` : ''}"
+          >
+            <canvas role="img"></canvas>
+          </div>
           <figcaption>
             <div
               class="closed-caption ${this.hideCaptions
                 ? 'hidden-visually'
                 : ''}"
             ></div>
-            <div
-              class="description ${this.hideDescription
-                ? 'hidden-visually'
-                : ''}"
-            >
-              ${this.description}
-            </div>
           </figcaption>
         </figure>
 
@@ -270,6 +321,28 @@ export class KDChart extends LitElement {
     `;
   }
 
+  override connectedCallback() {
+    super.connectedCallback();
+
+    window?.addEventListener(
+      'resize',
+      debounce(() => {
+        this.chart.resize();
+      }, 50)
+    );
+  }
+
+  override disconnectedCallback() {
+    window?.removeEventListener(
+      'resize',
+      debounce(() => {
+        this.chart.resize();
+      }, 50)
+    );
+
+    super.disconnectedCallback();
+  }
+
   override updated(changedProps: any) {
     // Update chart instance when data changes.
     if (
@@ -285,12 +358,20 @@ export class KDChart extends LitElement {
 
     // Update chart instance when options change.
     if (this.chart && changedProps.has('options')) {
-      this.chart.options = this.mergedOptions;
-      this.chart.update();
+      this.mergeOptions().then(() => {
+        this.chart.options = this.mergedOptions;
+        this.chart.data.datasets = this.mergedDatasets;
+        this.chart.update();
+      });
     }
 
-    // Update chart instance when type or plugins change.
-    if (changedProps.has('type') || changedProps.has('plugins')) {
+    // Re-init chart instance when type, plugins, colorPalette, width, or height change.
+    if (
+      changedProps.has('type') ||
+      changedProps.has('plugins') ||
+      changedProps.has('width') ||
+      changedProps.has('height')
+    ) {
       if (this.chart) {
         this.chart.destroy();
       }
@@ -299,6 +380,10 @@ export class KDChart extends LitElement {
       });
       this.checkType();
     }
+
+    if (this.chart && changedProps.has('noBorder')) {
+      this.chart.resize();
+    }
   }
 
   /**
@@ -306,8 +391,12 @@ export class KDChart extends LitElement {
    * and options.
    */
   private initChart() {
-    // Chart.defaults.font.family =
-    //   "'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif";
+    // Chart.defaults.font.family = getComputedStyle(
+    //   document.documentElement
+    // ).getPropertyValue('--kd-font-family-secondary');
+    Chart.defaults.color = getComputedStyle(
+      document.documentElement
+    ).getPropertyValue('--kd-color-text-primary');
 
     this.chart = new Chart(this.canvas, {
       type: this.type,
@@ -316,7 +405,13 @@ export class KDChart extends LitElement {
         datasets: this.mergedDatasets,
       },
       options: this.mergedOptions,
-      plugins: [a11yPlugin, musicPlugin, ...this.plugins],
+      plugins: [
+        canvasBackgroundPlugin,
+        doughnutLabelPlugin,
+        a11yPlugin,
+        musicPlugin,
+        ...this.plugins,
+      ],
     });
   }
 
@@ -325,6 +420,9 @@ export class KDChart extends LitElement {
    * final set of options for a chart.
    */
   private async mergeOptions() {
+    const radialTypes = ['pie', 'doughnut', 'radar', 'polarArea'];
+    const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
+
     // get chart types from datasets so we can import additional configs
     const additionalTypeImports: any = [];
     this.datasets.forEach((dataset) => {
@@ -335,25 +433,39 @@ export class KDChart extends LitElement {
       }
     });
 
-    // import main and combo chart type configs
+    // import main and additional chart type configs
     const chartTypeConfigs = await Promise.all([
       import(`../../common/config/chartTypes/${this.type}.js`),
       ...additionalTypeImports,
     ]);
 
+    // start with global options
     let mergedOptions: any = globalOptions(this);
+
+    // merge global type options
+    if (radialTypes.includes(this.type)) {
+      mergedOptions = deepmerge(mergedOptions, globalOptionsRadial(this));
+    } else if (!ignoredTypes.includes(this.type)) {
+      mergedOptions = deepmerge(mergedOptions, globalOptionsNonRadial(this));
+    }
+
     const mergedDatasets: any = JSON.parse(JSON.stringify(this.datasets));
 
-    chartTypeConfigs.forEach((chartType: any) => {
+    chartTypeConfigs.forEach((chartTypeConfig: any) => {
       // merge all of the imported chart type options with the global options
-      mergedOptions = deepmerge(mergedOptions, chartType.options(this));
+      mergedOptions = deepmerge(mergedOptions, chartTypeConfig.options(this));
 
       // merge all of the imported chart type dataset options
-      mergedDatasets.forEach((dataset: object, index: number) => {
-        mergedDatasets[index] = deepmerge(
-          dataset,
-          chartType.datasetOptions(this)
-        );
+      mergedDatasets.forEach((dataset: any, index: number) => {
+        if (
+          (!dataset.type && chartTypeConfig.type === this.type) ||
+          dataset.type === chartTypeConfig.type
+        ) {
+          mergedDatasets[index] = deepmerge(
+            dataset,
+            chartTypeConfig.datasetOptions(this, index)
+          );
+        }
       });
     });
 
@@ -370,25 +482,6 @@ export class KDChart extends LitElement {
       });
       mergedDatasets[index] = customDeepmerge(dataset, this.datasets[index]);
     });
-
-    // inject color palette
-    const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
-    const singleDatasetTypes = ['pie', 'dougnut', 'polarArea'];
-    if (!ignoredTypes.includes(this.type)) {
-      mergedDatasets.forEach((dataset: any, index: number) => {
-        if (!dataset.backgroundColor) {
-          if (singleDatasetTypes.includes(this.type)) {
-            // single dataset colors
-            mergedDatasets[index].backgroundColor = colorPalettes;
-            // dataset.borderColor = colorPalettes;
-          } else {
-            // multi dataset colors
-            mergedDatasets[index].backgroundColor = colorPalettes[index];
-            mergedDatasets[index].borderColor = colorPalettes[index];
-          }
-        }
-      });
-    }
 
     this.mergedDatasets = mergedDatasets;
   }
@@ -448,7 +541,6 @@ export class KDChart extends LitElement {
       });
     }
     if (csv == null) return;
-    console.log(csv);
 
     const filename = this.chartTitle + '.csv';
     if (!csv.match(/^data:text\/csv/i)) {
@@ -471,6 +563,10 @@ export class KDChart extends LitElement {
     } else {
       this.container.requestFullscreen();
     }
+  }
+
+  private handleFullscreenChange() {
+    this.fullscreen = this.shadowRoot?.fullscreenElement !== null;
   }
 }
 

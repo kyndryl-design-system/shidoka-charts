@@ -1,0 +1,22 @@
+import { Meta, Story, Canvas, Controls, Stories } from '@storybook/blocks';
+import * as ColorStories from './Color.stories.js';
+
+<Meta title="Grid" of={ColorStories} />
+
+# Color Palettes
+
+All chart types have a default Shidoka color palette. You can choose an alternative by passing one of the below codes to an attribute `colorPalette` in the chart component `options` prop.
+
+<style>
+  {`
+    .colors {
+      display: flex;
+    }
+
+    .colors span {
+      height: 50px;
+    }
+  `}
+</style>
+
+<Stories />

@@ -1,10 +1,11 @@
 import { html } from 'lit';
 import '../components/chart';
+import argTypes from '../common/config/chartArgTypes';
 import statsByState from './sampleData/treemapStates.json';
 import nestedTree from './sampleData/treemapNested.json';
 
 export default {
-  title: 'Tree Map',
+  title: 'Proof of Concept/Tree Map',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,
@@ -13,6 +14,7 @@ export default {
     type: 'figma',
     url: '',
   },
+  argTypes: argTypes,
 };
 
 const args = {
@@ -35,6 +37,10 @@ const args = {
   ],
   hideDescription: false,
   hideCaptions: false,
+  colorPalette: 'default',
+  noBorder: false,
+  width: null,
+  height: null,
 };
 
 export const TreeMap = {
@@ -49,7 +55,10 @@ export const TreeMap = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
-        .options=${args.options}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -85,7 +94,10 @@ export const Grouped = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
-        .options=${args.options}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -122,7 +134,10 @@ export const NestedData = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
-        .options=${args.options}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },

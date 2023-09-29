@@ -19,31 +19,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/common/config/globalOptions.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "defaultConfig",
-          "parameters": [
-            {
-              "name": "ctx"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "defaultConfig",
-            "module": "src/common/config/globalOptions.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/common/helpers/helpers.ts",
       "declarations": [
         {
@@ -100,6 +75,24 @@
               }
             }
           ]
+        },
+        {
+          "kind": "function",
+          "name": "getRandomData",
+          "parameters": [
+            {
+              "name": "arrayLength",
+              "default": "6"
+            },
+            {
+              "name": "min",
+              "default": "-100"
+            },
+            {
+              "name": "max",
+              "default": "100"
+            }
+          ]
         }
       ],
       "exports": [
@@ -132,6 +125,14 @@
           "name": "convertChartDataToCSV",
           "declaration": {
             "name": "convertChartDataToCSV",
+            "module": "src/common/helpers/helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "getRandomData",
+          "declaration": {
+            "name": "getRandomData",
             "module": "src/common/helpers/helpers.ts"
           }
         }
@@ -173,7 +174,7 @@
                 "text": "any"
               },
               "default": "''",
-              "description": "Chart.js chart type. Can be 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'bubble', 'scatter', 'choropleth', 'bubbleMap', 'treemap'.",
+              "description": "Chart.js chart type.",
               "attribute": "type"
             },
             {
@@ -216,6 +217,26 @@
             },
             {
               "kind": "field",
+              "name": "height",
+              "type": {
+                "text": "any"
+              },
+              "default": "null",
+              "description": "Chart.js canvas height (px). Disables maintainAspectRatio option.",
+              "attribute": "height"
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "any"
+              },
+              "default": "null",
+              "description": "Chart.js canvas width (px). Disables maintainAspectRatio option.",
+              "attribute": "width"
+            },
+            {
+              "kind": "field",
               "name": "hideDescription",
               "type": {
                 "text": "boolean"
@@ -235,6 +256,26 @@
               "attribute": "hideCaptions"
             },
             {
+              "kind": "field",
+              "name": "noBorder",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Removes the outer border and padding.",
+              "attribute": "noBorder"
+            },
+            {
+              "kind": "field",
+              "name": "customLabels",
+              "type": {
+                "text": "object"
+              },
+              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
+              "description": "Customizable text labels.",
+              "attribute": "customLabels"
+            },
+            {
               "kind": "method",
               "name": "initChart",
               "privacy": "private",
@@ -244,16 +285,11 @@
               "kind": "method",
               "name": "mergeOptions",
               "privacy": "private",
-              "description": "Merges the default options with the custom options and returns the merged options.",
-              "return": {
-                "type": {
-                  "text": ""
-                }
-              }
+              "description": "Merges various chart type options and dataset options to create a\r\nfinal set of options for a chart."
             },
             {
               "kind": "method",
-              "name": "getLabel",
+              "name": "getTableAxisLabel",
               "privacy": "private"
             },
             {
@@ -302,6 +338,11 @@
               "kind": "method",
               "name": "handleFullscreen",
               "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleFullscreenChange",
+              "privacy": "private"
             }
           ],
           "attributes": [
@@ -329,7 +370,7 @@
                 "text": "any"
               },
               "default": "''",
-              "description": "Chart.js chart type. Can be 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'bubble', 'scatter', 'choropleth', 'bubbleMap', 'treemap'.",
+              "description": "Chart.js chart type.",
               "fieldName": "type"
             },
             {
@@ -367,6 +408,24 @@
               "fieldName": "plugins"
             },
             {
+              "name": "height",
+              "type": {
+                "text": "any"
+              },
+              "default": "null",
+              "description": "Chart.js canvas height (px). Disables maintainAspectRatio option.",
+              "fieldName": "height"
+            },
+            {
+              "name": "width",
+              "type": {
+                "text": "any"
+              },
+              "default": "null",
+              "description": "Chart.js canvas width (px). Disables maintainAspectRatio option.",
+              "fieldName": "width"
+            },
+            {
               "name": "hideDescription",
               "type": {
                 "text": "boolean"
@@ -383,6 +442,24 @@
               "default": "false",
               "description": "Hides the closed captions visually.",
               "fieldName": "hideCaptions"
+            },
+            {
+              "name": "noBorder",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Removes the outer border and padding.",
+              "fieldName": "noBorder"
+            },
+            {
+              "name": "customLabels",
+              "type": {
+                "text": "object"
+              },
+              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
+              "description": "Customizable text labels.",
+              "fieldName": "customLabels"
             }
           ],
           "superclass": {

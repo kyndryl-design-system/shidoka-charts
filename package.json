@@ -7,6 +7,10 @@
   "publishConfig": {
     "access": "public"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kyndryl-design-system/shidoka-charts.git"
+  },
   "scripts": {
     "dev": "npm run storybook",
     "storybook": "storybook dev -p 6006",
@@ -25,13 +29,14 @@
   "dependencies": {
     "@carbon/icon-helpers": "^10.37.0",
     "@carbon/icons": "^11.14.0",
-    "@kyndryl-design-system/shidoka-foundation": "^1.0.0-beta.26",
+    "@kyndryl-design-system/shidoka-foundation": "^1.0.0-beta.27",
     "chart.js": "^4.4.0",
     "chartjs-chart-geo": "^4.2.4",
     "chartjs-chart-treemap": "^2.3.0",
     "chartjs-plugin-a11y-legend": "^0.1.0",
     "chartjs-plugin-annotation": "^3.0.1",
     "chartjs-plugin-chart2music": "^0.1.1",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "chartjs-plugin-deferred": "^2.0.0",
     "deepmerge-ts": "^5.1.0",
     "lit": "^2.7.6",

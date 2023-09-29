@@ -1,8 +1,9 @@
 import { html } from 'lit';
 import '../components/chart';
+import argTypes from '../common/config/chartArgTypes';
 
 export default {
-  title: 'Line',
+  title: 'Charts/Line',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,
@@ -11,6 +12,7 @@ export default {
     type: 'figma',
     url: '',
   },
+  argTypes: argTypes,
 };
 
 const args = {
@@ -34,10 +36,19 @@ const args = {
           text: 'Color',
         },
       },
+      y: {
+        title: {
+          text: 'Votes',
+        },
+      },
     },
   },
   hideDescription: false,
   hideCaptions: false,
+  colorPalette: 'default',
+  noBorder: false,
+  width: null,
+  height: null,
 };
 
 export const Line = {
@@ -52,79 +63,29 @@ export const Line = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
-        .options=${args.options}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
 };
 
-export const Annotated = {
+export const WithoutPoints = {
   args: {
     ...args,
     options: {
-      plugins: {
-        annotation: {
-          annotations: {
-            threshold: {
-              type: 'line',
-              label: {
-                display: true,
-                content: 'Threshold',
-              },
-              yMin: 13,
-              yMax: 13,
-              borderColor: 'purple',
-              borderWidth: 2,
-            },
-          },
-        },
-      },
-    },
-  },
-  render: (args) => {
-    return html`
-      <kd-chart
-        type="line"
-        .chartTitle=${args.chartTitle}
-        .description=${args.description}
-        .labels=${args.labels}
-        .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        .options=${args.options}
-      ></kd-chart>
-    `;
-  },
-};
-
-export const MultiAxis = {
-  args: {
-    ...args,
-    datasets: [
-      {
-        label: 'Dataset 1',
-        data: [12, 19, 3, 5, 2, 3],
-        yAxisID: 'y',
-      },
-      {
-        label: 'Dataset 2',
-        data: [8, 15, 7, 9, 6, 13],
-        yAxisID: 'y1',
-      },
-    ],
-    options: {
+      pointStyle: false,
       scales: {
-        y: {
-          type: 'linear',
-          display: true,
-          position: 'left',
+        x: {
+          title: {
+            text: 'Color',
+          },
         },
-        y1: {
-          type: 'linear',
-          display: true,
-          position: 'right',
-          grid: {
-            drawOnChartArea: false,
+        y: {
+          title: {
+            text: 'Votes',
           },
         },
       },
@@ -140,11 +101,104 @@ export const MultiAxis = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
-        .options=${args.options}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
 };
+
+export const Curved = {
+  args: {
+    ...args,
+    options: {
+      cubicInterpolationMode: 'monotone',
+      scales: {
+        x: {
+          title: {
+            text: 'Color',
+          },
+        },
+        y: {
+          title: {
+            text: 'Votes',
+          },
+        },
+      },
+    },
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="line"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        ?hideDescription=${args.hideDescription}
+        ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
+      ></kd-chart>
+    `;
+  },
+};
+
+// export const Annotated = {
+//   args: {
+//     ...args,
+//     options: {
+//       plugins: {
+//         annotation: {
+//           annotations: {
+//             threshold: {
+//               type: 'line',
+//               label: {
+//                 display: true,
+//                 content: 'Threshold',
+//               },
+//               yMin: 13,
+//               yMax: 13,
+//               borderColor: 'purple',
+//               borderWidth: 2,
+//             },
+//           },
+//         },
+//       },
+//       scales: {
+//         x: {
+//           title: {
+//             text: 'Color',
+//           },
+//         },
+//         y: {
+//           title: {
+//             text: 'Votes',
+//           },
+//         },
+//       },
+//     },
+//   },
+//   render: (args) => {
+//     return html`
+//       <kd-chart
+//         type="line"
+//         .chartTitle=${args.chartTitle}
+//         .description=${args.description}
+//         .labels=${args.labels}
+//         .datasets=${args.datasets}
+//         ?hideDescription=${args.hideDescription}
+//         ?hideCaptions=${args.hideCaptions}
+//         ?noBorder=${args.noBorder}
+//         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+//       ></kd-chart>
+//     `;
+//   },
+// };
 
 export const Area = {
   args: {
@@ -172,7 +226,10 @@ export const Area = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
-        .options=${args.options}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },

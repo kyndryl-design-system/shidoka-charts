@@ -16,6 +16,11 @@ export default {
     docs: {
       page: DocumentationTemplate,
     },
+    options: {
+      storySort: {
+        method: 'alphabetical',
+      },
+    },
     backgrounds: { disable: true },
     // themes: {
     //   default: 'light',

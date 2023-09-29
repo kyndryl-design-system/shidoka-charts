@@ -1,8 +1,9 @@
 import { html } from 'lit';
 import '../components/chart';
+import argTypes from '../common/config/chartArgTypes';
 
 export default {
-  title: 'Polar Area',
+  title: 'Future/Polar Area',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 600px;">${story()}</div> `,
@@ -11,6 +12,7 @@ export default {
     type: 'figma',
     url: '',
   },
+  argTypes: argTypes,
 };
 
 const args = {
@@ -23,8 +25,26 @@ const args = {
       data: [12, 19, 3, 5, 2, 3],
     },
   ],
+  options: {
+    scales: {
+      x: {
+        title: {
+          text: 'Color',
+        },
+      },
+      y: {
+        title: {
+          text: 'Votes',
+        },
+      },
+    },
+  },
   hideDescription: false,
   hideCaptions: false,
+  colorPalette: 'default',
+  noBorder: false,
+  width: null,
+  height: null,
 };
 
 export const PolarArea = {
@@ -39,7 +59,10 @@ export const PolarArea = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
-        .options=${args.options}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },

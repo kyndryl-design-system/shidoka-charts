@@ -1,10 +1,21 @@
+import colorPalettes from '../colorPalettes';
+
+export const type = 'bubbleMap';
+
 export const options = (ctx) => {
+  const Colors = colorPalettes[ctx.options.colorPalette || 'default'];
+
   return {
-    backgroundColor: '#29707A',
-    borderColor: '#29707A',
+    backgroundColor: Colors[0] + '80', // 50% opacity
+    borderColor: Colors[0],
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
   };
 };
 
-export const datasetOptions = (ctx) => {
+export const datasetOptions = (ctx, index) => {
   return {};
 };

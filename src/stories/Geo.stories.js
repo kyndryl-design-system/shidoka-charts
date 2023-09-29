@@ -1,18 +1,17 @@
 import { html } from 'lit';
 import '../components/chart';
+import argTypes from '../common/config/chartArgTypes';
 import { topojson } from 'chartjs-chart-geo';
 import capitals from './sampleData/us-capitals.json';
 
 export default {
-  title: 'Geo',
+  title: 'Proof of Concept/Geo',
   component: 'kd-chart',
-  decorators: [
-    (story) => html` <div style="max-width: 800px;">${story()}</div> `,
-  ],
   design: {
     type: 'figma',
     url: '',
   },
+  argTypes: argTypes,
 };
 
 const usData = await fetch(
@@ -41,28 +40,19 @@ const args = {
     },
   ],
   options: {
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
     scales: {
       projection: {
         axis: 'x',
         projection: 'albersUsa',
       },
-      color: {
-        axis: 'x',
-        quantize: 5,
-        legend: {
-          position: 'bottom-right',
-          align: 'bottom',
-        },
-      },
     },
   },
   hideDescription: false,
   hideCaptions: false,
+  colorPalette: 'rainforest',
+  noBorder: false,
+  width: null,
+  height: null,
 };
 
 export const USChoropleth = {
@@ -77,7 +67,10 @@ export const USChoropleth = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
-        .options=${args.options}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -90,17 +83,12 @@ export const WorldChoropleth = {
     datasets: [
       {
         label: 'Countries',
-        data: countries.map((d) => ({ feature: d, value: Math.random() })),
+        data: countries.map((d) => ({ feature: d, value: Math.random() * 10 })),
       },
     ],
     options: {
       showOutline: true,
       showGraticule: true,
-      plugins: {
-        legend: {
-          display: false,
-        },
-      },
       scales: {
         projection: {
           axis: 'x',
@@ -119,7 +107,10 @@ export const WorldChoropleth = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
-        .options=${args.options}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -132,35 +123,20 @@ export const BubbleMap = {
     datasets: [
       {
         outline: states,
-        showOutline: true,
         data: capitals.map((d) =>
-          Object.assign(d, { value: Math.round(Math.random() * 10) })
+          Object.assign(d, { value: Math.round(Math.random() * 100) })
         ),
       },
     ],
     options: {
-      plugins: {
-        legend: {
-          display: false,
-        },
-        datalabels: {
-          align: 'top',
-          formatter: (v) => {
-            return v.description;
-          },
-        },
-      },
       scales: {
         projection: {
           axis: 'x',
           projection: 'albersUsa',
         },
-        size: {
-          axis: 'x',
-          size: [1, 20],
-        },
       },
     },
+    colorPalette: 'default',
   },
   render: (args) => {
     return html`
@@ -172,7 +148,10 @@ export const BubbleMap = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
-        .options=${args.options}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },

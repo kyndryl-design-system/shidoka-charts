@@ -1,8 +1,9 @@
 import { html } from 'lit';
 import '../components/chart';
+import argTypes from '../common/config/chartArgTypes';
 
 export default {
-  title: 'Bubble',
+  title: 'Future/Bubble',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,
@@ -11,6 +12,7 @@ export default {
     type: 'figma',
     url: '',
   },
+  argTypes: argTypes,
 };
 
 const args = {
@@ -59,9 +61,26 @@ const args = {
       ],
     },
   ],
-  options: {},
+  options: {
+    scales: {
+      x: {
+        title: {
+          text: 'X Axis',
+        },
+      },
+      y: {
+        title: {
+          text: 'Y Axis',
+        },
+      },
+    },
+  },
   hideDescription: false,
   hideCaptions: false,
+  colorPalette: 'default',
+  noBorder: false,
+  width: null,
+  height: null,
 };
 
 export const Bubble = {
@@ -76,7 +95,10 @@ export const Bubble = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
-        .options=${args.options}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
       ></kd-chart>
     `;
   },
