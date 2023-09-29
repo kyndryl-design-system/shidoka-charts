@@ -75,6 +75,24 @@
               }
             }
           ]
+        },
+        {
+          "kind": "function",
+          "name": "getRandomData",
+          "parameters": [
+            {
+              "name": "arrayLength",
+              "default": "6"
+            },
+            {
+              "name": "min",
+              "default": "-100"
+            },
+            {
+              "name": "max",
+              "default": "100"
+            }
+          ]
         }
       ],
       "exports": [
@@ -107,6 +125,14 @@
           "name": "convertChartDataToCSV",
           "declaration": {
             "name": "convertChartDataToCSV",
+            "module": "src/common/helpers/helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "getRandomData",
+          "declaration": {
+            "name": "getRandomData",
             "module": "src/common/helpers/helpers.ts"
           }
         }
@@ -238,6 +264,16 @@
               "default": "false",
               "description": "Removes the outer border and padding.",
               "attribute": "noBorder"
+            },
+            {
+              "kind": "field",
+              "name": "customLabels",
+              "type": {
+                "text": "object"
+              },
+              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
+              "description": "Customizable text labels.",
+              "attribute": "customLabels"
             },
             {
               "kind": "method",
@@ -415,6 +451,15 @@
               "default": "false",
               "description": "Removes the outer border and padding.",
               "fieldName": "noBorder"
+            },
+            {
+              "name": "customLabels",
+              "type": {
+                "text": "object"
+              },
+              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
+              "description": "Customizable text labels.",
+              "fieldName": "customLabels"
             }
           ],
           "superclass": {

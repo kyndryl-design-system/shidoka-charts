@@ -99,6 +99,17 @@ export class KDChart extends LitElement {
   @property({ type: Boolean })
   noBorder = false;
 
+  /** Customizable text labels. */
+  @property({ type: Object })
+  customLabels = {
+    toggleView: 'Toggle View Mode',
+    toggleFullscreen: 'Toggle Fullscreen',
+    overflowMenu: 'Overflow Menu',
+    downloadCsv: 'Download as CSV',
+    downloadPng: 'Download as PNG',
+    downloadJpg: 'Download as JPG',
+  };
+
   /** Fullscreen state.
    * @ignore
    */
@@ -197,8 +208,8 @@ export class KDChart extends LitElement {
               : null}
 
             <button
-              title="Toggle Fullscreen"
-              aria-label="Toggle Fullscreen"
+              title=${this.customLabels.toggleFullscreen}
+              aria-label=${this.customLabels.toggleFullscreen}
               @click=${() => this.handleFullscreen()}
             >
               <kd-icon
@@ -207,23 +218,25 @@ export class KDChart extends LitElement {
             </button>
 
             <button
-              title="Overflow Menu"
-              aria-label="Overflow Menu"
+              title=${this.customLabels.overflowMenu}
+              aria-label=${this.customLabels.overflowMenu}
               class="overflow-button"
             >
               <kd-icon .icon=${overflowIcon}></kd-icon>
 
               <div class="overflow-menu">
                 ${!this.tableDisabled
-                  ? html` <a @click=${(e: Event) => this.handleDownloadCsv(e)}>
-                      Download as CSV
-                    </a>`
+                  ? html`
+                      <a @click=${(e: Event) => this.handleDownloadCsv(e)}>
+                        ${this.customLabels.downloadCsv}
+                      </a>
+                    `
                   : null}
                 <a @click=${(e: Event) => this.handleDownloadImage(e, false)}>
-                  Download as PNG
+                  ${this.customLabels.downloadPng}
                 </a>
                 <a @click=${(e: Event) => this.handleDownloadImage(e, true)}>
-                  Download as JPG
+                  ${this.customLabels.downloadJpg}
                 </a>
               </div>
             </button>
