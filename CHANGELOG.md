@@ -1,3 +1,10 @@
+# [1.0.0-beta.3](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2023-10-04)
+
+
+### Bug Fixes
+
+* **color:** update crystalcavern palette ([5c53eb6](https://github.com/kyndryl-design-system/shidoka-charts/commit/5c53eb68095b273504b72a8be4799b8777cc8750))
+
 # [1.0.0-beta.2](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2023-09-29)
 
 
