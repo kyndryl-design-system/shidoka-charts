@@ -76,9 +76,9 @@ export default {
     '#92EFD1',
     '#93EED9',
     '#94EEE0',
-    '#95EEE8',
-    '#96EEF7',
-    '#96EEF7',
+    '#95EFE7',
+    '#96EFEE',
+    '#96EFF5',
     '#97EEFF',
   ],
   magenta: [
