@@ -3,7 +3,11 @@ import colorPalettes from '../colorPalettes';
 export const type = 'scatter';
 
 export const options = (ctx) => {
-  return {};
+  return {
+    pointRadius: 6,
+    pointHoverRadius: 7,
+    pointBorderWidth: 1,
+  };
 };
 
 export const datasetOptions = (ctx, index) => {
