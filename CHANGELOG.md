@@ -1,3 +1,10 @@
+# [1.0.0-beta.4](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2023-10-12)
+
+
+### Bug Fixes
+
+* **scatter:** match point size with line charts ([ae0a000](https://github.com/kyndryl-design-system/shidoka-charts/commit/ae0a0002f9e9a124354e0969076b69e44bcc984e))
+
 # [1.0.0-beta.3](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2023-10-04)
 
 
