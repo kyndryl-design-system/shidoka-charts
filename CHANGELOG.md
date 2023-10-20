@@ -1,3 +1,10 @@
+# [1.0.0-beta.5](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2023-10-20)
+
+
+### Bug Fixes
+
+* update foundation ([5f0d65b](https://github.com/kyndryl-design-system/shidoka-charts/commit/5f0d65b9080c92b3abb1af8312b8bed6a96a08aa))
+
 # [1.0.0-beta.4](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2023-10-12)
 
 
