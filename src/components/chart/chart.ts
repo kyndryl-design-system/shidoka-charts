@@ -391,12 +391,25 @@ export class KDChart extends LitElement {
    * and options.
    */
   private initChart() {
+    const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
+
     // Chart.defaults.font.family = getComputedStyle(
     //   document.documentElement
     // ).getPropertyValue('--kd-font-family-secondary');
     Chart.defaults.color = getComputedStyle(
       document.documentElement
     ).getPropertyValue('--kd-color-text-primary');
+
+    let plugins = [
+      canvasBackgroundPlugin,
+      doughnutLabelPlugin,
+      ...this.plugins,
+    ];
+
+    // only add a11y and music plugins for standard chart types
+    if (!ignoredTypes.includes(this.type)) {
+      plugins = [...this.plugins, a11yPlugin, musicPlugin];
+    }
 
     this.chart = new Chart(this.canvas, {
       type: this.type,
@@ -405,13 +418,7 @@ export class KDChart extends LitElement {
         datasets: this.mergedDatasets,
       },
       options: this.mergedOptions,
-      plugins: [
-        canvasBackgroundPlugin,
-        doughnutLabelPlugin,
-        a11yPlugin,
-        musicPlugin,
-        ...this.plugins,
-      ],
+      plugins: plugins,
     });
   }
 
