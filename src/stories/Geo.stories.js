@@ -56,7 +56,26 @@ const args = {
 };
 
 export const USChoropleth = {
-  args,
+  args: {
+    ...args,
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 14,
+            weight: 'bold',
+          },
+          display: 'auto',
+          align: 'end',
+          anchor: 'end',
+          formatter: function (value, context) {
+            const label = context.dataset.data[context.dataIndex];
+            return label.value.toFixed(3);
+          },
+        },
+      },
+    },
+  },
   render: (args) => {
     return html`
       <kd-chart
@@ -87,6 +106,21 @@ export const WorldChoropleth = {
       },
     ],
     options: {
+      // plugins: {
+      //   datalabels: {
+      //     font: {
+      //       size: 12,
+      //       weight: 'bold',
+      //     },
+      //     display: 'auto',
+      //     align: 'end',
+      //     anchor: 'end',
+      //     formatter: function (value, context) {
+      //       const label = context.dataset.data[context.dataIndex];
+      //       return label.value.toFixed(3);
+      //     },
+      //   },
+      // },
       showOutline: true,
       showGraticule: true,
       scales: {
@@ -123,12 +157,34 @@ export const BubbleMap = {
     datasets: [
       {
         outline: states,
+
         data: capitals.map((d) =>
           Object.assign(d, { value: Math.round(Math.random() * 100) })
         ),
       },
     ],
     options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 14,
+            weight: 'bold',
+          },
+          display: 'auto',
+          anchor: function (context) {
+            const item = context.dataset.data[context.dataIndex];
+            return item.value < 50 ? 'end' : 'center';
+          },
+          align: function (context) {
+            const item = context.dataset.data[context.dataIndex];
+            return item.value < 50 ? 'end' : 'center';
+          },
+          formatter: function (value, context) {
+            const label = context.dataset.data[context.dataIndex];
+            return label.value;
+          },
+        },
+      },
       scales: {
         projection: {
           axis: 'x',
