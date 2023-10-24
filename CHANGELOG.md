@@ -1,3 +1,10 @@
+# [1.0.0-beta.7](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.6...v1.0.0-beta.7) (2023-10-24)
+
+
+### Bug Fixes
+
+* check for datasets before merging options ([cb9e838](https://github.com/kyndryl-design-system/shidoka-charts/commit/cb9e838d73d9e2f6781d853263a38ff48e5a4cf0))
+
 # [1.0.0-beta.6](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2023-10-24)
 
 
