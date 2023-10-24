@@ -1,3 +1,10 @@
+# [1.0.0-beta.10](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.9...v1.0.0-beta.10) (2023-10-24)
+
+
+### Bug Fixes
+
+* init chart on async load ([5638df1](https://github.com/kyndryl-design-system/shidoka-charts/commit/5638df152a3eea86bfcca1c134f9d357e2d54677))
+
 # [1.0.0-beta.9](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.8...v1.0.0-beta.9) (2023-10-24)
 
 
