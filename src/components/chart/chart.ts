@@ -437,70 +437,72 @@ export class KDChart extends LitElement {
    * final set of options for a chart.
    */
   private async mergeOptions() {
-    const radialTypes = ['pie', 'doughnut', 'radar', 'polarArea'];
-    const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
+    if (this.datasets.length) {
+      const radialTypes = ['pie', 'doughnut', 'radar', 'polarArea'];
+      const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
 
-    // get chart types from datasets so we can import additional configs
-    const additionalTypeImports: any = [];
-    this.datasets.forEach((dataset) => {
-      if (dataset.type) {
-        additionalTypeImports.push(
-          import(`../../common/config/chartTypes/${dataset.type}.js`)
-        );
-      }
-    });
-
-    // import main and additional chart type configs
-    const chartTypeConfigs = await Promise.all([
-      import(`../../common/config/chartTypes/${this.type}.js`),
-      ...additionalTypeImports,
-    ]);
-
-    // start with global options
-    let mergedOptions: any = globalOptions(this);
-
-    // merge global type options
-    if (radialTypes.includes(this.type)) {
-      mergedOptions = deepmerge(mergedOptions, globalOptionsRadial(this));
-    } else if (!ignoredTypes.includes(this.type)) {
-      mergedOptions = deepmerge(mergedOptions, globalOptionsNonRadial(this));
-    }
-
-    const mergedDatasets: any = JSON.parse(JSON.stringify(this.datasets));
-
-    chartTypeConfigs.forEach((chartTypeConfig: any) => {
-      // merge all of the imported chart type options with the global options
-      mergedOptions = deepmerge(mergedOptions, chartTypeConfig.options(this));
-
-      // merge all of the imported chart type dataset options
-      mergedDatasets.forEach((dataset: any, index: number) => {
-        if (
-          (!dataset.type && chartTypeConfig.type === this.type) ||
-          dataset.type === chartTypeConfig.type
-        ) {
-          mergedDatasets[index] = deepmerge(
-            dataset,
-            chartTypeConfig.datasetOptions(this, index)
+      // get chart types from datasets so we can import additional configs
+      const additionalTypeImports: any = [];
+      this.datasets.forEach((dataset) => {
+        if (dataset.type) {
+          additionalTypeImports.push(
+            import(`../../common/config/chartTypes/${dataset.type}.js`)
           );
         }
       });
-    });
 
-    if (this.options) {
-      // merge any consumer supplied options with defaults
-      mergedOptions = deepmerge(mergedOptions, this.options);
-    }
-    this.mergedOptions = mergedOptions;
+      // import main and additional chart type configs
+      const chartTypeConfigs = await Promise.all([
+        import(`../../common/config/chartTypes/${this.type}.js`),
+        ...additionalTypeImports,
+      ]);
 
-    // merge default chart type dataset options with consumer supplied datasets
-    mergedDatasets.forEach((dataset: object, index: number) => {
-      const customDeepmerge = deepmergeCustom({
-        mergeArrays: false,
+      // start with global options
+      let mergedOptions: any = globalOptions(this);
+
+      // merge global type options
+      if (radialTypes.includes(this.type)) {
+        mergedOptions = deepmerge(mergedOptions, globalOptionsRadial(this));
+      } else if (!ignoredTypes.includes(this.type)) {
+        mergedOptions = deepmerge(mergedOptions, globalOptionsNonRadial(this));
+      }
+
+      const mergedDatasets: any = JSON.parse(JSON.stringify(this.datasets));
+
+      chartTypeConfigs.forEach((chartTypeConfig: any) => {
+        // merge all of the imported chart type options with the global options
+        mergedOptions = deepmerge(mergedOptions, chartTypeConfig.options(this));
+
+        // merge all of the imported chart type dataset options
+        mergedDatasets.forEach((dataset: any, index: number) => {
+          if (
+            (!dataset.type && chartTypeConfig.type === this.type) ||
+            dataset.type === chartTypeConfig.type
+          ) {
+            mergedDatasets[index] = deepmerge(
+              dataset,
+              chartTypeConfig.datasetOptions(this, index)
+            );
+          }
+        });
       });
-      mergedDatasets[index] = customDeepmerge(dataset, this.datasets[index]);
-    });
 
-    this.mergedDatasets = mergedDatasets;
+      if (this.options) {
+        // merge any consumer supplied options with defaults
+        mergedOptions = deepmerge(mergedOptions, this.options);
+      }
+      this.mergedOptions = mergedOptions;
+
+      // merge default chart type dataset options with consumer supplied datasets
+      mergedDatasets.forEach((dataset: object, index: number) => {
+        const customDeepmerge = deepmergeCustom({
+          mergeArrays: false,
+        });
+        mergedDatasets[index] = customDeepmerge(dataset, this.datasets[index]);
+      });
+
+      this.mergedDatasets = mergedDatasets;
+    }
   }
 
   private getTableAxisLabel() {
