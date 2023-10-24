@@ -1,3 +1,10 @@
+# [1.0.0-beta.9](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.8...v1.0.0-beta.9) (2023-10-24)
+
+
+### Bug Fixes
+
+* null datasets ([15433a6](https://github.com/kyndryl-design-system/shidoka-charts/commit/15433a658b87a9d920e0a2a707cf0ebf9a6724fb))
+
 # [1.0.0-beta.8](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.7...v1.0.0-beta.8) (2023-10-24)
 
 
