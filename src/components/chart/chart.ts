@@ -324,23 +324,31 @@ export class KDChart extends LitElement {
   override connectedCallback() {
     super.connectedCallback();
 
+    const Parent = this;
     window?.addEventListener(
       'resize',
       debounce(() => {
-        this.chart.resize();
+        Parent._resizeChart();
       }, 50)
     );
   }
 
   override disconnectedCallback() {
+    const Parent = this;
     window?.removeEventListener(
       'resize',
       debounce(() => {
-        this.chart.resize();
+        Parent._resizeChart();
       }, 50)
     );
 
     super.disconnectedCallback();
+  }
+
+  private _resizeChart() {
+    if (this.chart) {
+      this.chart.resize();
+    }
   }
 
   override updated(changedProps: any) {
@@ -391,28 +399,37 @@ export class KDChart extends LitElement {
    * and options.
    */
   private initChart() {
-    // Chart.defaults.font.family = getComputedStyle(
-    //   document.documentElement
-    // ).getPropertyValue('--kd-font-family-secondary');
-    Chart.defaults.color = getComputedStyle(
-      document.documentElement
-    ).getPropertyValue('--kd-color-text-primary');
+    if (this.datasets.length) {
+      const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
 
-    this.chart = new Chart(this.canvas, {
-      type: this.type,
-      data: {
-        labels: this.labels,
-        datasets: this.mergedDatasets,
-      },
-      options: this.mergedOptions,
-      plugins: [
+      // Chart.defaults.font.family = getComputedStyle(
+      //   document.documentElement
+      // ).getPropertyValue('--kd-font-family-secondary');
+      Chart.defaults.color = getComputedStyle(
+        document.documentElement
+      ).getPropertyValue('--kd-color-text-primary');
+
+      let plugins = [
         canvasBackgroundPlugin,
         doughnutLabelPlugin,
-        a11yPlugin,
-        musicPlugin,
         ...this.plugins,
-      ],
-    });
+      ];
+
+      // only add a11y and music plugins for standard chart types
+      if (!ignoredTypes.includes(this.type)) {
+        plugins = [...this.plugins, a11yPlugin, musicPlugin];
+      }
+
+      this.chart = new Chart(this.canvas, {
+        type: this.type,
+        data: {
+          labels: this.labels,
+          datasets: this.mergedDatasets,
+        },
+        options: this.mergedOptions,
+        plugins: plugins,
+      });
+    }
   }
 
   /**
