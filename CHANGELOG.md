@@ -1,3 +1,10 @@
+# [1.0.0-beta.6](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2023-10-24)
+
+
+### Bug Fixes
+
+* init and resize errors ([d4d4141](https://github.com/kyndryl-design-system/shidoka-charts/commit/d4d41419329caa51926b34333a520a049c3b34fb))
+
 # [1.0.0-beta.5](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2023-10-20)
 
 
