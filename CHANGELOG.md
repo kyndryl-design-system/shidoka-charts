@@ -1,3 +1,10 @@
+# [1.0.0-beta.8](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.7...v1.0.0-beta.8) (2023-10-24)
+
+
+### Bug Fixes
+
+* mergeoptions error ([5b5e5c1](https://github.com/kyndryl-design-system/shidoka-charts/commit/5b5e5c13dd1686ee0eb8f595dce8d5a953e69e36))
+
 # [1.0.0-beta.7](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.6...v1.0.0-beta.7) (2023-10-24)
 
 
