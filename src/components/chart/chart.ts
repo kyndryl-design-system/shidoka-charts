@@ -399,7 +399,7 @@ export class KDChart extends LitElement {
    * and options.
    */
   private initChart() {
-    if (this.datasets.length) {
+    if (this.datasets && this.datasets.length) {
       const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
 
       // Chart.defaults.font.family = getComputedStyle(
