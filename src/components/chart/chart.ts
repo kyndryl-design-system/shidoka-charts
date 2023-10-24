@@ -375,6 +375,8 @@ export class KDChart extends LitElement {
 
     // Re-init chart instance when type, plugins, colorPalette, width, or height change.
     if (
+      (!this.chart &&
+        (changedProps.has('datasets') || changedProps.has('options'))) ||
       changedProps.has('type') ||
       changedProps.has('plugins') ||
       changedProps.has('width') ||
