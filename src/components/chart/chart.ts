@@ -437,7 +437,7 @@ export class KDChart extends LitElement {
    * final set of options for a chart.
    */
   private async mergeOptions() {
-    if (this.datasets.length) {
+    if (this.datasets && this.datasets.length) {
       const radialTypes = ['pie', 'doughnut', 'radar', 'polarArea'];
       const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
 
