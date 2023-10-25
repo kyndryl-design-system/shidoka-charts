@@ -12,10 +12,10 @@ Read the [Contributing Guide](https://github.com/kyndryl-design-system/shidoka-c
 
 ```bash
 # stable/main
-npm install @kyndryl-design-system/shidoka-charts -S
+npm install @kyndryl-design-system/shidoka-charts @kyndryl-design-system/shidoka-foundation -S
 
 # beta (use until first stable release)
-npm install @kyndryl-design-system/shidoka-charts@beta -S
+npm install @kyndryl-design-system/shidoka-charts@beta @kyndryl-design-system/shidoka-foundation@beta -S
 # when using beta, lock the version, as breaking changes can happen at any time
 ```
 
