@@ -1,3 +1,10 @@
+# [1.0.0-beta.11](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.10...v1.0.0-beta.11) (2023-10-25)
+
+
+### Bug Fixes
+
+* move foundation to peerdeps ([2943a6a](https://github.com/kyndryl-design-system/shidoka-charts/commit/2943a6ad4ea1e70e9f18f6ea4bdeba6385f9410e))
+
 # [1.0.0-beta.10](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.9...v1.0.0-beta.10) (2023-10-24)
 
 
