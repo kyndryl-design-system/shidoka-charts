@@ -1,3 +1,10 @@
+# [1.0.0-beta.12](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.11...v1.0.0-beta.12) (2023-10-26)
+
+
+### Bug Fixes
+
+* plugin merging ([18d6c22](https://github.com/kyndryl-design-system/shidoka-charts/commit/18d6c227b32ea2749ddac426881b079e5fa66b99))
+
 # [1.0.0-beta.11](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.10...v1.0.0-beta.11) (2023-10-25)
 
 
