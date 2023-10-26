@@ -1,3 +1,10 @@
+# [1.0.0-beta.14](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.13...v1.0.0-beta.14) (2023-10-26)
+
+
+### Bug Fixes
+
+* move destroy ([4dd5f01](https://github.com/kyndryl-design-system/shidoka-charts/commit/4dd5f01b0fc9c22375beb0bb53fae4c77ec7c612))
+
 # [1.0.0-beta.13](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.12...v1.0.0-beta.13) (2023-10-26)
 
 
