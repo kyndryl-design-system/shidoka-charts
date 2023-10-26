@@ -1,8 +1,9 @@
 import colorPalettes from '../colorPalettes';
 
-const LabelColor = getComputedStyle(document.documentElement).getPropertyValue(
-  '--kd-color-text-secondary'
-);
+const LabelColor =
+  getComputedStyle(document.documentElement).getPropertyValue(
+    '--kd-color-text-secondary'
+  ) || '#6d6d6d';
 
 export const type = 'doughnut';
 

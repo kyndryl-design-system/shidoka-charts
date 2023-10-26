@@ -1,9 +1,11 @@
-const BgColor = getComputedStyle(document.documentElement).getPropertyValue(
-  '--kd-color-background-ui-default'
-);
-const TooltipBgColor = getComputedStyle(
-  document.documentElement
-).getPropertyValue('--kd-color-background-ui-strong');
+const BgColor =
+  getComputedStyle(document.documentElement).getPropertyValue(
+    '--kd-color-background-ui-default'
+  ) || '#ffffff';
+const TooltipBgColor =
+  getComputedStyle(document.documentElement).getPropertyValue(
+    '--kd-color-background-ui-strong'
+  ) || '#3d3c3c';
 
 const defaultConfig = (ctx) => {
   const ExplicitSize = ctx.height !== null || ctx.width !== null;
