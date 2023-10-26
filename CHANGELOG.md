@@ -1,3 +1,10 @@
+# [1.0.0-beta.13](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.12...v1.0.0-beta.13) (2023-10-26)
+
+
+### Bug Fixes
+
+* fallback colors ([81171e5](https://github.com/kyndryl-design-system/shidoka-charts/commit/81171e56754f87400d6c9d88394d9fe226f45d54))
+
 # [1.0.0-beta.12](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.11...v1.0.0-beta.12) (2023-10-26)
 
 
