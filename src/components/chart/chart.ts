@@ -376,10 +376,6 @@ export class KDChart extends LitElement {
         changedProps.has('width') ||
         changedProps.has('height'))
     ) {
-      if (this.chart) {
-        this.chart.destroy();
-      }
-
       this.mergeOptions().then(() => {
         this.initChart();
       });
@@ -416,6 +412,10 @@ export class KDChart extends LitElement {
     // only add a11y and music plugins for standard chart types
     if (!ignoredTypes.includes(this.type)) {
       plugins = [...plugins, a11yPlugin, musicPlugin];
+    }
+
+    if (this.chart) {
+      this.chart.destroy();
     }
 
     this.chart = new Chart(this.canvas, {
