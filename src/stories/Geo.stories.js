@@ -61,23 +61,23 @@ const args = {
 export const USChoropleth = {
   args: {
     ...args,
-    options: {
-      plugins: {
-        datalabels: {
-          font: {
-            size: 12,
-            weight: 'bold',
-          },
-          display: 'auto',
-          align: 'end',
-          anchor: 'end',
-          formatter: function (value, context) {
-            const label = context.dataset.data[context.dataIndex];
-            return label.value.toFixed(3);
-          },
-        },
-      },
-    },
+    // options: {
+    //   plugins: {
+    //     datalabels: {
+    //       font: {
+    //         size: 12,
+    //         weight: 'bold',
+    //       },
+    //       display: 'auto',
+    //       align: 'end',
+    //       anchor: 'end',
+    //       formatter: function (value, context) {
+    //         const label = context.dataset.data[context.dataIndex];
+    //         return label.value.toFixed(3);
+    //       },
+    //     },
+    //   },
+    // },
   },
   render: (args) => {
     return html`
@@ -110,29 +110,13 @@ export const WorldChoropleth = {
       },
     ],
     options: {
-      // plugins: {
-      //   datalabels: {
-      //     font: {
-      //       size: 9,
-      //       weight: 'bold',
-      //     },
-      //     display: 'auto',
-      //     align: 'end',
-      //     anchor: 'end',
-      //     formatter: function (value, context) {
-      //       const label = context.dataset.data[context.dataIndex];
-      //       return label.feature.properties.name;
-      //       //return label.value.toFixed(3);
-      //     },
-      //   },
-      // },
-      showOutline: true,
+      showOutline: false,
       showGraticule: false,
       scales: {
         projection: {
           axis: 'x',
           // projection: 'equalEarth',
-          projection: 'equirectangular', // To flattern world choropleth
+          projection: 'naturalEarth1', // To flatten world choropleth chart
         },
       },
     },
@@ -174,21 +158,24 @@ export const BubbleMap = {
       plugins: {
         datalabels: {
           font: {
-            size: 12,
+            size: 10,
             weight: 'bold',
           },
           display: 'auto',
-          anchor: function (context) {
-            const item = context.dataset.data[context.dataIndex];
-            return item.value < 20 ? 'end' : 'center';
-          },
-          align: function (context) {
-            const item = context.dataset.data[context.dataIndex];
-            return item.value < 20 ? 'end' : 'center';
-          },
+          align: 'end',
+          anchor: 'end',
+          clamp: true,
+          // anchor: function (context) {
+          //   const item = context.dataset.data[context.dataIndex];
+          //   return item.value < 20 ? 'end' : 'center';
+          // },
+          // align: function (context) {
+          //   const item = context.dataset.data[context.dataIndex];
+          //   return item.value < 20 ? 'end' : 'center';
+          // },
           formatter: function (value, context) {
             const label = context.dataset.data[context.dataIndex];
-            return label.value;
+            return label.description;
           },
         },
       },
