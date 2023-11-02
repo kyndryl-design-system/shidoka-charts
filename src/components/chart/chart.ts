@@ -324,41 +324,43 @@ export class KDChart extends LitElement {
   override connectedCallback() {
     super.connectedCallback();
 
+    const Parent = this;
     window?.addEventListener(
       'resize',
       debounce(() => {
-        this.chart.resize();
+        Parent._resizeChart();
       }, 50)
     );
   }
 
   override disconnectedCallback() {
+    const Parent = this;
     window?.removeEventListener(
       'resize',
       debounce(() => {
-        this.chart.resize();
+        Parent._resizeChart();
       }, 50)
     );
 
     super.disconnectedCallback();
   }
 
+  private _resizeChart() {
+    if (this.chart) {
+      this.chart.resize();
+    }
+  }
+
   override updated(changedProps: any) {
     // Update chart instance when data changes.
     if (
       this.chart &&
-      (changedProps.has('labels') || changedProps.has('datasets'))
+      (changedProps.has('labels') ||
+        changedProps.has('datasets') ||
+        changedProps.has('options'))
     ) {
       this.mergeOptions().then(() => {
         this.chart.data.labels = this.labels;
-        this.chart.data.datasets = this.mergedDatasets;
-        this.chart.update();
-      });
-    }
-
-    // Update chart instance when options change.
-    if (this.chart && changedProps.has('options')) {
-      this.mergeOptions().then(() => {
         this.chart.options = this.mergedOptions;
         this.chart.data.datasets = this.mergedDatasets;
         this.chart.update();
@@ -367,17 +369,17 @@ export class KDChart extends LitElement {
 
     // Re-init chart instance when type, plugins, colorPalette, width, or height change.
     if (
-      changedProps.has('type') ||
-      changedProps.has('plugins') ||
-      changedProps.has('width') ||
-      changedProps.has('height')
+      this.datasets &&
+      this.datasets.length &&
+      (changedProps.has('type') ||
+        changedProps.has('plugins') ||
+        changedProps.has('width') ||
+        changedProps.has('height'))
     ) {
-      if (this.chart) {
-        this.chart.destroy();
-      }
       this.mergeOptions().then(() => {
         this.initChart();
       });
+
       this.checkType();
     }
 
@@ -396,9 +398,25 @@ export class KDChart extends LitElement {
     // Chart.defaults.font.family = getComputedStyle(
     //   document.documentElement
     // ).getPropertyValue('--kd-font-family-secondary');
-    Chart.defaults.color = getComputedStyle(
-      document.documentElement
-    ).getPropertyValue('--kd-color-text-primary');
+    Chart.defaults.color =
+      getComputedStyle(document.documentElement).getPropertyValue(
+        '--kd-color-text-primary'
+      ) || '#3d3c3c';
+
+    let plugins = [
+      canvasBackgroundPlugin,
+      doughnutLabelPlugin,
+      ...this.plugins,
+    ];
+
+    // only add a11y and music plugins for standard chart types
+    if (!ignoredTypes.includes(this.type)) {
+      plugins = [...plugins, a11yPlugin, musicPlugin];
+    }
+
+    if (this.chart) {
+      this.chart.destroy();
+    }
 
     let plugins = [
       canvasBackgroundPlugin,

@@ -1,6 +1,7 @@
-const GridLinesColor = getComputedStyle(
-  document.documentElement
-).getPropertyValue('--kd-color-border-light');
+const GridLinesColor =
+  getComputedStyle(document.documentElement).getPropertyValue(
+    '--kd-color-border-light'
+  ) || '#dcdad8';
 
 const defaultConfig = (ctx) => {
   const MultiAxis =

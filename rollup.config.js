@@ -19,6 +19,7 @@ export default {
     preserveModules: true,
     preserveModulesRoot: 'src',
   },
+  external: [/shidoka-foundation\/components/],
   plugins: [
     del({ targets: 'dist/*' }),
     multiInput.default(),

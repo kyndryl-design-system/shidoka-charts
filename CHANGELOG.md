@@ -1,3 +1,73 @@
+# [1.0.0-beta.14](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.13...v1.0.0-beta.14) (2023-10-26)
+
+
+### Bug Fixes
+
+* move destroy ([4dd5f01](https://github.com/kyndryl-design-system/shidoka-charts/commit/4dd5f01b0fc9c22375beb0bb53fae4c77ec7c612))
+
+# [1.0.0-beta.13](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.12...v1.0.0-beta.13) (2023-10-26)
+
+
+### Bug Fixes
+
+* fallback colors ([81171e5](https://github.com/kyndryl-design-system/shidoka-charts/commit/81171e56754f87400d6c9d88394d9fe226f45d54))
+
+# [1.0.0-beta.12](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.11...v1.0.0-beta.12) (2023-10-26)
+
+
+### Bug Fixes
+
+* plugin merging ([18d6c22](https://github.com/kyndryl-design-system/shidoka-charts/commit/18d6c227b32ea2749ddac426881b079e5fa66b99))
+
+# [1.0.0-beta.11](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.10...v1.0.0-beta.11) (2023-10-25)
+
+
+### Bug Fixes
+
+* move foundation to peerdeps ([2943a6a](https://github.com/kyndryl-design-system/shidoka-charts/commit/2943a6ad4ea1e70e9f18f6ea4bdeba6385f9410e))
+
+# [1.0.0-beta.10](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.9...v1.0.0-beta.10) (2023-10-24)
+
+
+### Bug Fixes
+
+* init chart on async load ([5638df1](https://github.com/kyndryl-design-system/shidoka-charts/commit/5638df152a3eea86bfcca1c134f9d357e2d54677))
+
+# [1.0.0-beta.9](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.8...v1.0.0-beta.9) (2023-10-24)
+
+
+### Bug Fixes
+
+* null datasets ([15433a6](https://github.com/kyndryl-design-system/shidoka-charts/commit/15433a658b87a9d920e0a2a707cf0ebf9a6724fb))
+
+# [1.0.0-beta.8](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.7...v1.0.0-beta.8) (2023-10-24)
+
+
+### Bug Fixes
+
+* mergeoptions error ([5b5e5c1](https://github.com/kyndryl-design-system/shidoka-charts/commit/5b5e5c13dd1686ee0eb8f595dce8d5a953e69e36))
+
+# [1.0.0-beta.7](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.6...v1.0.0-beta.7) (2023-10-24)
+
+
+### Bug Fixes
+
+* check for datasets before merging options ([cb9e838](https://github.com/kyndryl-design-system/shidoka-charts/commit/cb9e838d73d9e2f6781d853263a38ff48e5a4cf0))
+
+# [1.0.0-beta.6](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2023-10-24)
+
+
+### Bug Fixes
+
+* init and resize errors ([d4d4141](https://github.com/kyndryl-design-system/shidoka-charts/commit/d4d41419329caa51926b34333a520a049c3b34fb))
+
+# [1.0.0-beta.5](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2023-10-20)
+
+
+### Bug Fixes
+
+* update foundation ([5f0d65b](https://github.com/kyndryl-design-system/shidoka-charts/commit/5f0d65b9080c92b3abb1af8312b8bed6a96a08aa))
+
 # [1.0.0-beta.4](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2023-10-12)
 
 

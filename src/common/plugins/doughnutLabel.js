@@ -1,6 +1,7 @@
-const TextColor = getComputedStyle(document.documentElement).getPropertyValue(
-  '--kd-color-text-primary'
-);
+const TextColor =
+  getComputedStyle(document.documentElement).getPropertyValue(
+    '--kd-color-text-primary'
+  ) || '#3d3c3c';
 
 export default {
   id: 'doughnutLabel',
