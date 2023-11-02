@@ -418,18 +418,7 @@ export class KDChart extends LitElement {
       this.chart.destroy();
     }
 
-    let plugins = [
-      canvasBackgroundPlugin,
-      doughnutLabelPlugin,
-      ...this.plugins,
-    ];
-
-    // only add a11y and music plugins for standard chart types
-    if (!ignoredTypes.includes(this.type)) {
-      plugins = [...this.plugins, a11yPlugin, musicPlugin];
-    }
-
-    this.chart = new Chart(this.canvas, {
+   this.chart = new Chart(this.canvas, {
       type: this.type,
       data: {
         labels: this.labels,
