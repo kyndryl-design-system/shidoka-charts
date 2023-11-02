@@ -37,6 +37,9 @@ const args = {
       label: 'States',
       outline: nation,
       data: states.map((d) => ({ feature: d, value: Math.random() * 10 })),
+      hoverBorderWidth: 3,
+      // hoverBackgroundColor: 'red',
+      // hoverBorderColor: '#000000',
     },
   ],
   options: {
@@ -62,7 +65,7 @@ export const USChoropleth = {
       plugins: {
         datalabels: {
           font: {
-            size: 14,
+            size: 12,
             weight: 'bold',
           },
           display: 'auto',
@@ -103,13 +106,14 @@ export const WorldChoropleth = {
       {
         label: 'Countries',
         data: countries.map((d) => ({ feature: d, value: Math.random() * 10 })),
+        hoverBorderWidth: 3,
       },
     ],
     options: {
       // plugins: {
       //   datalabels: {
       //     font: {
-      //       size: 12,
+      //       size: 9,
       //       weight: 'bold',
       //     },
       //     display: 'auto',
@@ -117,16 +121,18 @@ export const WorldChoropleth = {
       //     anchor: 'end',
       //     formatter: function (value, context) {
       //       const label = context.dataset.data[context.dataIndex];
-      //       return label.value.toFixed(3);
+      //       return label.feature.properties.name;
+      //       //return label.value.toFixed(3);
       //     },
       //   },
       // },
       showOutline: true,
-      showGraticule: true,
+      showGraticule: false,
       scales: {
         projection: {
           axis: 'x',
-          projection: 'equalEarth',
+          // projection: 'equalEarth',
+          projection: 'equirectangular', // To flattern world choropleth
         },
       },
     },
@@ -161,23 +167,24 @@ export const BubbleMap = {
         data: capitals.map((d) =>
           Object.assign(d, { value: Math.round(Math.random() * 100) })
         ),
+        hoverBorderWidth: 3,
       },
     ],
     options: {
       plugins: {
         datalabels: {
           font: {
-            size: 14,
+            size: 12,
             weight: 'bold',
           },
           display: 'auto',
           anchor: function (context) {
             const item = context.dataset.data[context.dataIndex];
-            return item.value < 50 ? 'end' : 'center';
+            return item.value < 20 ? 'end' : 'center';
           },
           align: function (context) {
             const item = context.dataset.data[context.dataIndex];
-            return item.value < 50 ? 'end' : 'center';
+            return item.value < 20 ? 'end' : 'center';
           },
           formatter: function (value, context) {
             const label = context.dataset.data[context.dataIndex];
