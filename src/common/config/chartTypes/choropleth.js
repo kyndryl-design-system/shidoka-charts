@@ -10,6 +10,20 @@ export const options = (ctx) => {
         display: false,
       },
     },
+    // -- if required in future --- //
+    //     datalabels: {
+    //       font: {
+    //         size: 12,
+    //         weight: 'bold',
+    //       },
+    //       display: 'auto',
+    //       align: 'end',
+    //       anchor: 'end',
+    //       formatter: function (value, context) {
+    //         const label = context.dataset.data[context.dataIndex];
+    //         return label.value.toFixed(3);
+    //       },
+    //     },
     scales: {
       projection: {
         axis: 'x',

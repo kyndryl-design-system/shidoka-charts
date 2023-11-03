@@ -103,23 +103,6 @@ export const WorldChoropleth = {
 export const USChoropleth = {
   args: {
     ...args,
-    // options: {
-    //   plugins: {
-    //     datalabels: {
-    //       font: {
-    //         size: 12,
-    //         weight: 'bold',
-    //       },
-    //       display: 'auto',
-    //       align: 'end',
-    //       anchor: 'end',
-    //       formatter: function (value, context) {
-    //         const label = context.dataset.data[context.dataIndex];
-    //         return label.value.toFixed(3);
-    //       },
-    //     },
-    //   },
-    // },
   },
   render: (args) => {
     return html`
