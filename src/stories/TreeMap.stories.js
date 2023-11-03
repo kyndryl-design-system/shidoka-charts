@@ -5,7 +5,7 @@ import statsByState from './sampleData/treemapStates.json';
 import nestedTree from './sampleData/treemapNested.json';
 
 export default {
-  title: 'Proof of Concept/Tree Map',
+  title: 'Third Party Charts/Tree Map',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,
@@ -35,6 +35,20 @@ const args = {
       },
     },
   ],
+  // options: {
+  //   plugins: {
+  //     zoom: {
+  //       zoom: {
+  //         wheel: {
+  //           enabled: true,
+  //         },
+  //       },
+  //       pan: {
+  //         enabled: true,
+  //       },
+  //     },
+  //   },
+  // },
   hideDescription: false,
   hideCaptions: false,
   colorPalette: 'default',

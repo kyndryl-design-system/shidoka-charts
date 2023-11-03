@@ -5,7 +5,7 @@ import { topojson } from 'chartjs-chart-geo';
 import capitals from './sampleData/us-capitals.json';
 
 export default {
-  title: 'Proof of Concept/Geo',
+  title: 'Third Party Charts/Geo',
   component: 'kd-chart',
   design: {
     type: 'figma',
