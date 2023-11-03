@@ -8,6 +8,7 @@ export const options = (ctx) => {
   return {
     backgroundColor: Colors[0] + '80', // 50% opacity
     borderColor: Colors[0],
+    hoverBorderWidth: 3,
     plugins: {
       legend: {
         display: false,

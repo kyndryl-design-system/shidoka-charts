@@ -37,7 +37,7 @@ const args = {
       label: 'States',
       outline: nation,
       data: states.map((d) => ({ feature: d, value: Math.random() * 10 })),
-      hoverBorderWidth: 3,
+      //hoverBorderWidth: 3,
       // hoverBackgroundColor: 'red',
       // hoverBorderColor: '#000000',
     },
@@ -66,7 +66,7 @@ export const WorldChoropleth = {
       {
         label: 'Countries',
         data: countries.map((d) => ({ feature: d, value: Math.random() * 10 })),
-        hoverBorderWidth: 3,
+        //hoverBorderWidth: 3,
       },
     ],
     options: {
@@ -151,7 +151,7 @@ export const BubbleMap = {
         data: capitals.map((d) =>
           Object.assign(d, { value: Math.round(Math.random() * 100) })
         ),
-        hoverBorderWidth: 3,
+        //hoverBorderWidth: 3,
       },
     ],
     options: {

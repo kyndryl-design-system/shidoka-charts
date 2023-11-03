@@ -4,6 +4,7 @@ export const type = 'choropleth';
 
 export const options = (ctx) => {
   return {
+    hoverBorderWidth: 3,
     plugins: {
       legend: {
         display: false,
