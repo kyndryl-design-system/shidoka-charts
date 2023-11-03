@@ -58,46 +58,6 @@ const args = {
   height: null,
 };
 
-export const USChoropleth = {
-  args: {
-    ...args,
-    // options: {
-    //   plugins: {
-    //     datalabels: {
-    //       font: {
-    //         size: 12,
-    //         weight: 'bold',
-    //       },
-    //       display: 'auto',
-    //       align: 'end',
-    //       anchor: 'end',
-    //       formatter: function (value, context) {
-    //         const label = context.dataset.data[context.dataIndex];
-    //         return label.value.toFixed(3);
-    //       },
-    //     },
-    //   },
-    // },
-  },
-  render: (args) => {
-    return html`
-      <kd-chart
-        type="choropleth"
-        .chartTitle=${args.chartTitle}
-        .description=${args.description}
-        .labels=${args.labels}
-        .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?noBorder=${args.noBorder}
-        .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
-      ></kd-chart>
-    `;
-  },
-};
-
 export const WorldChoropleth = {
   args: {
     ...args,
@@ -140,6 +100,46 @@ export const WorldChoropleth = {
   },
 };
 
+export const USChoropleth = {
+  args: {
+    ...args,
+    // options: {
+    //   plugins: {
+    //     datalabels: {
+    //       font: {
+    //         size: 12,
+    //         weight: 'bold',
+    //       },
+    //       display: 'auto',
+    //       align: 'end',
+    //       anchor: 'end',
+    //       formatter: function (value, context) {
+    //         const label = context.dataset.data[context.dataIndex];
+    //         return label.value.toFixed(3);
+    //       },
+    //     },
+    //   },
+    // },
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="choropleth"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        ?hideDescription=${args.hideDescription}
+        ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
+      ></kd-chart>
+    `;
+  },
+};
+
 export const BubbleMap = {
   args: {
     ...args,
@@ -155,30 +155,6 @@ export const BubbleMap = {
       },
     ],
     options: {
-      plugins: {
-        datalabels: {
-          font: {
-            size: 10,
-            weight: 'bold',
-          },
-          display: 'auto',
-          align: 'end',
-          anchor: 'end',
-          clamp: true,
-          // anchor: function (context) {
-          //   const item = context.dataset.data[context.dataIndex];
-          //   return item.value < 20 ? 'end' : 'center';
-          // },
-          // align: function (context) {
-          //   const item = context.dataset.data[context.dataIndex];
-          //   return item.value < 20 ? 'end' : 'center';
-          // },
-          formatter: function (value, context) {
-            const label = context.dataset.data[context.dataIndex];
-            return label.description;
-          },
-        },
-      },
       scales: {
         projection: {
           axis: 'x',

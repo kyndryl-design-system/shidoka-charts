@@ -12,6 +12,20 @@ export const options = (ctx) => {
       legend: {
         display: false,
       },
+      datalabels: {
+        font: {
+          size: 12,
+          weight: 'bold',
+        },
+        display: 'auto',
+        align: 'end',
+        anchor: 'end',
+        clamp: true,
+        formatter: function (value, context) {
+          const label = context.dataset.data[context.dataIndex];
+          return label.description;
+        },
+      },
     },
   };
 };
