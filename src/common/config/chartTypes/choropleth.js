@@ -29,7 +29,7 @@ export const options = (ctx) => {
     scales: {
       projection: {
         axis: 'x',
-        projection: 'albersUsa',
+        projection: 'naturalEarth1',
       },
       color: {
         axis: 'x',

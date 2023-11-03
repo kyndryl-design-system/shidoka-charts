@@ -37,16 +37,13 @@ const args = {
       label: 'States',
       outline: nation,
       data: states.map((d) => ({ feature: d, value: Math.random() * 10 })),
-      //hoverBorderWidth: 3,
-      // hoverBackgroundColor: 'red',
-      // hoverBorderColor: '#000000',
     },
   ],
   options: {
     scales: {
       projection: {
         axis: 'x',
-        projection: 'albersUsa',
+        projection: 'naturalEarth1',
       },
     },
   },
@@ -66,20 +63,8 @@ export const WorldChoropleth = {
       {
         label: 'Countries',
         data: countries.map((d) => ({ feature: d, value: Math.random() * 10 })),
-        //hoverBorderWidth: 3,
       },
     ],
-    options: {
-      showOutline: false,
-      showGraticule: false,
-      scales: {
-        projection: {
-          axis: 'x',
-          // projection: 'equalEarth',
-          projection: 'naturalEarth1', // To flatten world choropleth chart
-        },
-      },
-    },
   },
   render: (args) => {
     return html`
@@ -103,6 +88,14 @@ export const WorldChoropleth = {
 export const USChoropleth = {
   args: {
     ...args,
+    options: {
+      scales: {
+        projection: {
+          axis: 'x',
+          projection: 'albersUsa',
+        },
+      },
+    },
   },
   render: (args) => {
     return html`
@@ -134,7 +127,6 @@ export const BubbleMap = {
         data: capitals.map((d) =>
           Object.assign(d, { value: Math.round(Math.random() * 100) })
         ),
-        //hoverBorderWidth: 3,
       },
     ],
     options: {
