@@ -1,3 +1,27 @@
+# [1.0.0-beta.15](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.14...v1.0.0-beta.15) (2023-11-06)
+
+
+### Bug Fixes
+
+* added datalables to bubble map default configs ([aebff61](https://github.com/kyndryl-design-system/shidoka-charts/commit/aebff614881ab2e260a9a581de50bed9c7094526))
+* category name for geo and treemap charts ([ab15cfb](https://github.com/kyndryl-design-system/shidoka-charts/commit/ab15cfbd3fc9e03c8b42a0b851955fad233340fe))
+* conflicts ([296c89a](https://github.com/kyndryl-design-system/shidoka-charts/commit/296c89a7ef1460acb6c0b31d2698f34dc6c2aeef))
+* datalable and world choropleth changes according to review ([8760eb7](https://github.com/kyndryl-design-system/shidoka-charts/commit/8760eb7acd8e6e47306aba7f98003c1795b8371a))
+* disable music plugin for non--standard charts ([c1b843c](https://github.com/kyndryl-design-system/shidoka-charts/commit/c1b843cbb3052abc94c1b87ce07c93fab13a7029))
+* modified package-lock.json ([5ea351f](https://github.com/kyndryl-design-system/shidoka-charts/commit/5ea351ff828b1dd0031713e5343f9fd93541f6f2))
+* Remove default options from world charts ([a11c72a](https://github.com/kyndryl-design-system/shidoka-charts/commit/a11c72a08e82152bab61115a884b59944b6891f1))
+* removed commented code from stories and add relevant options into choropleth.js ([e8b305e](https://github.com/kyndryl-design-system/shidoka-charts/commit/e8b305e41ebfecfa7e2eaa258c0465f9b49e18ff))
+* Removed zoom plugin ([7826f36](https://github.com/kyndryl-design-system/shidoka-charts/commit/7826f3613fc124c9886d447c79c5faecd0eeba5f))
+
+
+### Features
+
+* added dataLabel to geo charts as pe UX suggestions ([e156c75](https://github.com/kyndryl-design-system/shidoka-charts/commit/e156c75078d8e3cad1a9398128e1939a686cb424))
+* Added hoverborderWidth to geo related config files ([09ffca2](https://github.com/kyndryl-design-system/shidoka-charts/commit/09ffca2c62bd7da4093381cce5da62157df23738))
+* added outline related options to choropleth.js ([d347075](https://github.com/kyndryl-design-system/shidoka-charts/commit/d34707540d87377b25de6d75ae337b161d9fc405))
+* Added suggested UX changes like border width, world choropleth etc. ([8bb4f19](https://github.com/kyndryl-design-system/shidoka-charts/commit/8bb4f192b389e653b60903b7132d2b0a3cdd3731))
+* added zoom plugin for future use ([5c09056](https://github.com/kyndryl-design-system/shidoka-charts/commit/5c090569efccc555aa01e2e1548e594e93a0fd1e))
+
 # [1.0.0-beta.14](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0-beta.13...v1.0.0-beta.14) (2023-10-26)
 
 
