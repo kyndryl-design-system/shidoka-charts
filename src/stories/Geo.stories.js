@@ -5,7 +5,7 @@ import { topojson } from 'chartjs-chart-geo';
 import capitals from './sampleData/us-capitals.json';
 
 export default {
-  title: 'Proof of Concept/Geo',
+  title: 'Third Party Charts/Geo',
   component: 'kd-chart',
   design: {
     type: 'figma',
@@ -43,7 +43,7 @@ const args = {
     scales: {
       projection: {
         axis: 'x',
-        projection: 'albersUsa',
+        projection: 'naturalEarth1',
       },
     },
   },
@@ -55,8 +55,17 @@ const args = {
   height: null,
 };
 
-export const USChoropleth = {
-  args,
+export const WorldChoropleth = {
+  args: {
+    ...args,
+    labels: countries.map((d) => d.properties.name),
+    datasets: [
+      {
+        label: 'Countries',
+        data: countries.map((d) => ({ feature: d, value: Math.random() * 10 })),
+      },
+    ],
+  },
   render: (args) => {
     return html`
       <kd-chart
@@ -76,23 +85,14 @@ export const USChoropleth = {
   },
 };
 
-export const WorldChoropleth = {
+export const USChoropleth = {
   args: {
     ...args,
-    labels: countries.map((d) => d.properties.name),
-    datasets: [
-      {
-        label: 'Countries',
-        data: countries.map((d) => ({ feature: d, value: Math.random() * 10 })),
-      },
-    ],
     options: {
-      showOutline: true,
-      showGraticule: true,
       scales: {
         projection: {
           axis: 'x',
-          projection: 'equalEarth',
+          projection: 'albersUsa',
         },
       },
     },
@@ -123,6 +123,7 @@ export const BubbleMap = {
     datasets: [
       {
         outline: states,
+
         data: capitals.map((d) =>
           Object.assign(d, { value: Math.round(Math.random() * 100) })
         ),

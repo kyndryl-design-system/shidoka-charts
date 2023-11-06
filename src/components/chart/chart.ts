@@ -418,7 +418,7 @@ export class KDChart extends LitElement {
       this.chart.destroy();
     }
 
-    this.chart = new Chart(this.canvas, {
+   this.chart = new Chart(this.canvas, {
       type: this.type,
       data: {
         labels: this.labels,

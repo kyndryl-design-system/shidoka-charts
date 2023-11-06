@@ -8,9 +8,24 @@ export const options = (ctx) => {
   return {
     backgroundColor: Colors[0] + '80', // 50% opacity
     borderColor: Colors[0],
+    hoverBorderWidth: 3,
     plugins: {
       legend: {
         display: false,
+      },
+      datalabels: {
+        font: {
+          size: 12,
+          weight: 'bold',
+        },
+        display: 'auto',
+        align: 'end',
+        anchor: 'end',
+        clamp: true,
+        formatter: function (value, context) {
+          const label = context.dataset.data[context.dataIndex];
+          return label.description;
+        },
       },
     },
   };
