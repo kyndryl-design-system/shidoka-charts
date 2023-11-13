@@ -9,10 +9,10 @@
       "exports": [
         {
           "kind": "js",
-          "name": "BarChart",
+          "name": "KDChart",
           "declaration": {
-            "name": "BarChart",
-            "module": "./components/barChart"
+            "name": "KDChart",
+            "module": "./components/chart"
           }
         }
       ]
@@ -48,6 +48,51 @@
               }
             }
           ]
+        },
+        {
+          "kind": "function",
+          "name": "createOptionsArray",
+          "parameters": [
+            {
+              "name": "options",
+              "default": "{}",
+              "type": {
+                "text": "*"
+              },
+              "description": " imported enums object"
+            }
+          ],
+          "description": "Convert an object to an array of only its values.\r\nUsed when importing enums in component stories for populating argType dropdowns."
+        },
+        {
+          "kind": "function",
+          "name": "convertChartDataToCSV",
+          "parameters": [
+            {
+              "name": "args",
+              "type": {
+                "text": "any"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "getRandomData",
+          "parameters": [
+            {
+              "name": "arrayLength",
+              "default": "6"
+            },
+            {
+              "name": "min",
+              "default": "-100"
+            },
+            {
+              "name": "max",
+              "default": "100"
+            }
+          ]
         }
       ],
       "exports": [
@@ -66,17 +111,41 @@
             "name": "stringToReactHtml",
             "module": "src/common/helpers/helpers.ts"
           }
+        },
+        {
+          "kind": "js",
+          "name": "createOptionsArray",
+          "declaration": {
+            "name": "createOptionsArray",
+            "module": "src/common/helpers/helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "convertChartDataToCSV",
+          "declaration": {
+            "name": "convertChartDataToCSV",
+            "module": "src/common/helpers/helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "getRandomData",
+          "declaration": {
+            "name": "getRandomData",
+            "module": "src/common/helpers/helpers.ts"
+          }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/barChart/barChart.ts",
+      "path": "src/components/chart/chart.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "Bar chart.",
-          "name": "BarChart",
+          "description": "Chart.js wrapper component.",
+          "name": "KDChart",
           "members": [
             {
               "kind": "field",
@@ -100,11 +169,21 @@
             },
             {
               "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "any"
+              },
+              "default": "''",
+              "description": "Chart.js chart type.",
+              "attribute": "type"
+            },
+            {
+              "kind": "field",
               "name": "labels",
               "type": {
                 "text": "Array<string>"
               },
-              "description": "Chart.js labels.",
+              "description": "Chart.js data.labels.",
               "attribute": "labels"
             },
             {
@@ -113,38 +192,48 @@
               "type": {
                 "text": "Array<any>"
               },
-              "description": "Chart.js datasets. Datasets are layered top to bottom.",
+              "description": "Chart.js data.datasets.",
               "attribute": "datasets"
-            },
-            {
-              "kind": "field",
-              "name": "horizontal",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Horizontal layout.",
-              "attribute": "horizontal"
-            },
-            {
-              "kind": "field",
-              "name": "stacked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Stacked bars/datasets. Does not work on Combo charts.",
-              "attribute": "stacked"
             },
             {
               "kind": "field",
               "name": "options",
               "type": {
-                "text": "object"
+                "text": "any"
               },
               "default": "{}",
               "description": "Chart.js options. Can override Shidoka defaults.",
               "attribute": "options"
+            },
+            {
+              "kind": "field",
+              "name": "plugins",
+              "type": {
+                "text": "any"
+              },
+              "default": "[]",
+              "description": "Chart.js additional plugins. Must be registerable inline via Chart.plugins array, not globally via Chart.register.",
+              "attribute": "plugins"
+            },
+            {
+              "kind": "field",
+              "name": "height",
+              "type": {
+                "text": "any"
+              },
+              "default": "null",
+              "description": "Chart.js canvas height (px). Disables maintainAspectRatio option.",
+              "attribute": "height"
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "any"
+              },
+              "default": "null",
+              "description": "Chart.js canvas width (px). Disables maintainAspectRatio option.",
+              "attribute": "width"
             },
             {
               "kind": "field",
@@ -167,6 +256,26 @@
               "attribute": "hideCaptions"
             },
             {
+              "kind": "field",
+              "name": "noBorder",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Removes the outer border and padding.",
+              "attribute": "noBorder"
+            },
+            {
+              "kind": "field",
+              "name": "customLabels",
+              "type": {
+                "text": "object"
+              },
+              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
+              "description": "Customizable text labels.",
+              "attribute": "customLabels"
+            },
+            {
               "kind": "method",
               "name": "initChart",
               "privacy": "private",
@@ -176,12 +285,64 @@
               "kind": "method",
               "name": "mergeOptions",
               "privacy": "private",
-              "description": "Merges the default options with the custom options and returns the merged options.",
-              "return": {
-                "type": {
-                  "text": ""
+              "description": "Merges various chart type options and dataset options to create a\r\nfinal set of options for a chart."
+            },
+            {
+              "kind": "method",
+              "name": "getTableAxisLabel",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleViewToggle",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "checkType",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleDownloadImage",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                },
+                {
+                  "name": "jpeg",
+                  "type": {
+                    "text": "boolean"
+                  }
                 }
-              }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleDownloadCsv",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleFullscreen",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleFullscreenChange",
+              "privacy": "private"
             }
           ],
           "attributes": [
@@ -204,11 +365,20 @@
               "fieldName": "description"
             },
             {
+              "name": "type",
+              "type": {
+                "text": "any"
+              },
+              "default": "''",
+              "description": "Chart.js chart type.",
+              "fieldName": "type"
+            },
+            {
               "name": "labels",
               "type": {
                 "text": "Array<string>"
               },
-              "description": "Chart.js labels.",
+              "description": "Chart.js data.labels.",
               "fieldName": "labels"
             },
             {
@@ -216,35 +386,44 @@
               "type": {
                 "text": "Array<any>"
               },
-              "description": "Chart.js datasets. Datasets are layered top to bottom.",
+              "description": "Chart.js data.datasets.",
               "fieldName": "datasets"
-            },
-            {
-              "name": "horizontal",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Horizontal layout.",
-              "fieldName": "horizontal"
-            },
-            {
-              "name": "stacked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Stacked bars/datasets. Does not work on Combo charts.",
-              "fieldName": "stacked"
             },
             {
               "name": "options",
               "type": {
-                "text": "object"
+                "text": "any"
               },
               "default": "{}",
               "description": "Chart.js options. Can override Shidoka defaults.",
               "fieldName": "options"
+            },
+            {
+              "name": "plugins",
+              "type": {
+                "text": "any"
+              },
+              "default": "[]",
+              "description": "Chart.js additional plugins. Must be registerable inline via Chart.plugins array, not globally via Chart.register.",
+              "fieldName": "plugins"
+            },
+            {
+              "name": "height",
+              "type": {
+                "text": "any"
+              },
+              "default": "null",
+              "description": "Chart.js canvas height (px). Disables maintainAspectRatio option.",
+              "fieldName": "height"
+            },
+            {
+              "name": "width",
+              "type": {
+                "text": "any"
+              },
+              "default": "null",
+              "description": "Chart.js canvas width (px). Disables maintainAspectRatio option.",
+              "fieldName": "width"
             },
             {
               "name": "hideDescription",
@@ -263,46 +442,64 @@
               "default": "false",
               "description": "Hides the closed captions visually.",
               "fieldName": "hideCaptions"
+            },
+            {
+              "name": "noBorder",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Removes the outer border and padding.",
+              "fieldName": "noBorder"
+            },
+            {
+              "name": "customLabels",
+              "type": {
+                "text": "object"
+              },
+              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
+              "description": "Customizable text labels.",
+              "fieldName": "customLabels"
             }
           ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
           },
-          "tagName": "kd-chart-bar",
+          "tagName": "kd-chart",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "BarChart",
+          "name": "KDChart",
           "declaration": {
-            "name": "BarChart",
-            "module": "src/components/barChart/barChart.ts"
+            "name": "KDChart",
+            "module": "src/components/chart/chart.ts"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "kd-chart-bar",
+          "name": "kd-chart",
           "declaration": {
-            "name": "BarChart",
-            "module": "src/components/barChart/barChart.ts"
+            "name": "KDChart",
+            "module": "src/components/chart/chart.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/barChart/index.ts",
+      "path": "src/components/chart/index.ts",
       "declarations": [],
       "exports": [
         {
           "kind": "js",
-          "name": "BarChart",
+          "name": "KDChart",
           "declaration": {
-            "name": "BarChart",
-            "module": "./barChart"
+            "name": "KDChart",
+            "module": "./chart"
           }
         }
       ]

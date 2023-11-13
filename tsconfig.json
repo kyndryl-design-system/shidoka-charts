@@ -18,6 +18,7 @@
     "noImplicitThis": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
+    "allowJs": true,
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
     "forceConsistentCasingInFileNames": true,

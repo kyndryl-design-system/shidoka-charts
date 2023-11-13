@@ -1,0 +1,160 @@
+@use '../../common/scss/global.scss';
+@use '../../common/scss/mixins.scss';
+@use '~@kyndryl-design-system/shidoka-foundation/scss/mixins/typography.scss';
+
+:host {
+  display: block;
+}
+
+.container {
+  background: var(--kd-color-background-ui-default);
+  padding: 24px;
+  border: 1px solid var(--kd-color-border-light);
+
+  &.no-border {
+    border: none;
+
+    &:not(.fullscreen) {
+      padding: 0;
+    }
+  }
+}
+
+figure {
+  margin: 0;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.closed-caption {
+  @include typography.type-ui-03;
+  color: var(--kd-color-text-secondary);
+
+  &:not(:empty) {
+    margin-top: 8px;
+  }
+}
+
+.hidden-visually {
+  @include mixins.visually-hidden;
+}
+
+.canvas-container {
+  .fullscreen & {
+    max-height: calc(100vh - 136px);
+  }
+}
+
+canvas:focus,
+div:focus {
+  border-radius: 4px;
+  outline: 2px solid var(--kd-color-border-focus);
+}
+
+.table {
+  width: 100%;
+  max-height: 300px;
+  overflow: auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+
+  th {
+    text-align: left;
+    font-weight: 500;
+    padding: 8px 16px;
+    background: var(--kd-color-background-accent-subtle);
+  }
+
+  td {
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--kd-color-background-accent-tertiary);
+
+    span {
+      // display: block;
+
+      &:after {
+        content: ',';
+      }
+
+      &:last-child:after {
+        content: none;
+      }
+    }
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-weight: 500;
+}
+
+.description {
+  @include typography.type-ui-03;
+  color: var(--kd-color-text-secondary);
+}
+
+.controls {
+  display: flex;
+
+  button {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    border: none;
+    background: none;
+    cursor: pointer;
+
+    &:focus {
+      outline: 2px solid var(--kd-color-border-focus);
+    }
+  }
+
+  .view-toggle {
+    kd-icon {
+      display: block;
+
+      &.active {
+        display: none;
+      }
+    }
+  }
+
+  .overflow-button {
+    position: relative;
+
+    &:focus-within .overflow-menu {
+      display: block;
+    }
+  }
+
+  .overflow-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: var(--kd-color-background-ui-default);
+    display: none;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 2px 0px,
+      rgba(0, 0, 0, 0.08) 0px 4px 12px 0px;
+    text-align: left;
+
+    & > * {
+      display: block;
+      padding: 8px;
+      white-space: nowrap;
+
+      &:hover {
+        background-color: var(--kd-color-background-ui-subtle);
+      }
+    }
+  }
+}
