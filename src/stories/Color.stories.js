@@ -41,13 +41,13 @@ export const Categorical = {
   },
 };
 
-export const SingleSea = {
+export const Single = {
   args,
   render: (args) => {
     return html`
-      singlesea
+      single
       <div class="colors">
-        ${colorPalettes.singlesea.map((color) => {
+        ${colorPalettes.single.map((color) => {
           return html`<span style="background-color: ${color}"></span>`;
         })}
       </div>
@@ -55,13 +55,13 @@ export const SingleSea = {
   },
 };
 
-export const SeaGray = {
+export const Highlight = {
   args,
   render: (args) => {
     return html`
-      seagray
+      highlight
       <div class="colors">
-        ${colorPalettes.seagray.map((color) => {
+        ${colorPalettes.highlight.map((color) => {
           return html`<span style="background-color: ${color}"></span>`;
         })}
       </div>

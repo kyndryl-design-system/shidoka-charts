@@ -2,8 +2,8 @@ export default {
   colorPalette: {
     options: [
       'categorical',
-      'singlesea',
-      'seagray',
+      'single',
+      'highlight',
       'sequential01',
       'sequential02',
       'sequential03',
