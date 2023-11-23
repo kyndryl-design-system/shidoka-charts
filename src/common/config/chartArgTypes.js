@@ -1,6 +1,16 @@
 export default {
   colorPalette: {
     options: [
+      'categorical',
+      'singlesea',
+      'seagray',
+      'sequential01',
+      'sequential02',
+      'sequential03',
+      'sequential04',
+      'sequential05',
+      'divergent01',
+      'divergent02',
       'default',
       'rainforest',
       'gentletouch',
