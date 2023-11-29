@@ -60,7 +60,7 @@ export const datasetOptions = (ctx, index) => {
   const Stacked = ctx.options.scales?.y?.stacked;
   const Datasets = ctx.datasets;
   const BarDatasets = Datasets.filter((dataset) => dataset.type !== 'line');
-  const Colors = colorPalettes[ctx.options.colorPalette || 'default'];
+  const Colors = colorPalettes[ctx.options.colorPalette || 'categorical'];
   const ColorCycles = Math.floor(index / (Colors.length - 1));
   const Index =
     index > Colors.length - 1

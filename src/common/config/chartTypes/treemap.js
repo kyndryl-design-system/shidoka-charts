@@ -45,16 +45,16 @@ export const datasetOptions = (ctx, index) => {
 
   return {
     backgroundColor:
-      colorPalettes[ctx.options.colorPalette || 'default'][0] + '80',
-    borderColor: colorPalettes[ctx.options.colorPalette || 'default'][0],
+      colorPalettes[ctx.options.colorPalette || 'divergent01'][0] + '80',
+    borderColor: colorPalettes[ctx.options.colorPalette || 'divergent01'][0],
     // borderColor: function (context) {
-    //   return colorPalettes[ctx.options.colorPalette || 'default'][
+    //   return colorPalettes[ctx.options.colorPalette || 'divergent01'][
     //     getGroupColorIndex(context)
     //   ];
     // },
     // backgroundColor: function (context) {
     //   return (
-    //     colorPalettes[ctx.options.colorPalette || 'default'][
+    //     colorPalettes[ctx.options.colorPalette || 'divergent01'][
     //       getGroupColorIndex(context)
     //     ] + '80'
     //   );

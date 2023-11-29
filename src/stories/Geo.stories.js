@@ -49,7 +49,7 @@ const args = {
   },
   hideDescription: false,
   hideCaptions: false,
-  colorPalette: 'rainforest',
+  colorPalette: 'divergent01',
   noBorder: false,
   width: null,
   height: null,
@@ -137,7 +137,7 @@ export const BubbleMap = {
         },
       },
     },
-    colorPalette: 'default',
+    colorPalette: 'categorical',
   },
   render: (args) => {
     return html`
