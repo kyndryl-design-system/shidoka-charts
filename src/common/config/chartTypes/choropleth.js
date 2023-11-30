@@ -35,7 +35,7 @@ export const options = (ctx) => {
         axis: 'x',
         interpolate: (value) => {
           const Colors =
-            colorPalettes[ctx.options.colorPalette || 'divergent01'];
+            colorPalettes[ctx.options.colorPalette || 'categorical'];
           const Index = Math.round(value * (Colors.length - 1));
           return Colors[Index];
         },
