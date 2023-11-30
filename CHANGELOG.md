@@ -1,3 +1,21 @@
+# [1.1.0](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0...v1.1.0) (2023-11-30)
+
+
+### Bug Fixes
+
+* added categorical as default palettes for treemap and choropleth as well as discussed with UX ([e91eb11](https://github.com/kyndryl-design-system/shidoka-charts/commit/e91eb11b170801ccbef671b44c93454d7421a034))
+* change sequential01 for geo maps and divergent01 for treemap after discussed with Robert ([821a0fb](https://github.com/kyndryl-design-system/shidoka-charts/commit/821a0fbc6e5591570fffe30ff2d45e13dbba91a1))
+* Remove old palettes from chartArgTypes ([bf1735f](https://github.com/kyndryl-design-system/shidoka-charts/commit/bf1735f7695c6fb69b94b67ce2b2cd49849ec01e))
+* update color palette names ([3a640e4](https://github.com/kyndryl-design-system/shidoka-charts/commit/3a640e4a17c9a2654a86bbaad6701573f359220d))
+
+
+### Features
+
+*  Added palette and non palette colors for light theme only ([1083c8d](https://github.com/kyndryl-design-system/shidoka-charts/commit/1083c8d21d0f422adaa639eb92652f3fbc21c8cf))
+* add neutral color for divergent palette ([6b7790f](https://github.com/kyndryl-design-system/shidoka-charts/commit/6b7790f9899d48f1fe3f67e42d4aeb9cf2daddaa))
+* Added new color palettes for data viz ([24d943c](https://github.com/kyndryl-design-system/shidoka-charts/commit/24d943c15f13b3a4053aef1d8f05f449f926c259))
+* change default color palette for each charts ([fb748f4](https://github.com/kyndryl-design-system/shidoka-charts/commit/fb748f4757a526a9e01b3795b8de1c9b835b08d5))
+
 # 1.0.0 (2023-11-13)
 
 
