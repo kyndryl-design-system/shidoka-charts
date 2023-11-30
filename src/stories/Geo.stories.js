@@ -49,7 +49,7 @@ const args = {
   },
   hideDescription: false,
   hideCaptions: false,
-  colorPalette: 'categorical',
+  colorPalette: 'sequential01',
   noBorder: false,
   width: null,
   height: null,

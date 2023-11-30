@@ -2,7 +2,7 @@ import colorPalettes from '../colorPalettes';
 
 const LabelColor =
   getComputedStyle(document.documentElement).getPropertyValue(
-    '--kd-color-text-primary'
+    '--kd-color-neutral-white'
   ) || '#3d3c3c';
 
 export const type = 'treemap';
@@ -45,16 +45,16 @@ export const datasetOptions = (ctx, index) => {
 
   return {
     backgroundColor:
-      colorPalettes[ctx.options.colorPalette || 'categorical'][0] + '80',
-    borderColor: colorPalettes[ctx.options.colorPalette || 'categorical'][0],
+      colorPalettes[ctx.options.colorPalette || 'divergent01'][0] + '90',
+    borderColor: colorPalettes[ctx.options.colorPalette || 'divergent01'][0],
     // borderColor: function (context) {
-    //   return colorPalettes[ctx.options.colorPalette || 'categorical'][
+    //   return colorPalettes[ctx.options.colorPalette || 'divergent01'][
     //     getGroupColorIndex(context)
     //   ];
     // },
     // backgroundColor: function (context) {
     //   return (
-    //     colorPalettes[ctx.options.colorPalette || 'categorical'][
+    //     colorPalettes[ctx.options.colorPalette || 'divergent01'][
     //       getGroupColorIndex(context)
     //     ] + '80'
     //   );
