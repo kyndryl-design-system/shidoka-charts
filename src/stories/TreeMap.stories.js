@@ -51,7 +51,7 @@ const args = {
   // },
   hideDescription: false,
   hideCaptions: false,
-  colorPalette: 'default',
+  colorPalette: 'divergent01',
   noBorder: false,
   width: null,
   height: null,

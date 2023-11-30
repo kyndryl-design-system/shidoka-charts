@@ -48,7 +48,7 @@ const args = {
   },
   hideDescription: false,
   hideCaptions: false,
-  colorPalette: 'default',
+  colorPalette: 'categorical',
   noBorder: false,
   width: null,
   height: null,

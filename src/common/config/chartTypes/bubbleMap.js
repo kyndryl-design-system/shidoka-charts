@@ -3,7 +3,7 @@ import colorPalettes from '../colorPalettes';
 export const type = 'bubbleMap';
 
 export const options = (ctx) => {
-  const Colors = colorPalettes[ctx.options.colorPalette || 'default'];
+  const Colors = colorPalettes[ctx.options.colorPalette || 'categorical'];
 
   return {
     backgroundColor: Colors[0] + '80', // 50% opacity
