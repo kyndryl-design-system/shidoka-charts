@@ -30,6 +30,7 @@
     "@carbon/icon-helpers": "^10.37.0",
     "@carbon/icons": "^11.14.0",
     "chart.js": "^4.4.0",
+    "chartjs-adapter-date-fns": "^3.0.0",
     "chartjs-chart-geo": "^4.2.4",
     "chartjs-chart-treemap": "^2.3.0",
     "chartjs-plugin-a11y-legend": "^0.1.0",
@@ -37,6 +38,7 @@
     "chartjs-plugin-chart2music": "^0.1.2",
     "chartjs-plugin-datalabels": "^2.2.0",
     "chartjs-plugin-deferred": "^2.0.0",
+    "date-fns": "^2.30.0",
     "deepmerge-ts": "^5.1.0",
     "lit": "^2.7.6",
     "query-selector-shadow-dom": "^1.0.1"

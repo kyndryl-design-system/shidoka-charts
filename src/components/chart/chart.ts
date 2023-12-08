@@ -2,6 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
 import { deepmerge, deepmergeCustom } from 'deepmerge-ts';
 import Chart from 'chart.js/auto';
+import 'chartjs-adapter-date-fns';
 import ChartDeferred from 'chartjs-plugin-deferred';
 import {
   ChoroplethController,
@@ -418,7 +419,7 @@ export class KDChart extends LitElement {
       this.chart.destroy();
     }
 
-   this.chart = new Chart(this.canvas, {
+    this.chart = new Chart(this.canvas, {
       type: this.type,
       data: {
         labels: this.labels,

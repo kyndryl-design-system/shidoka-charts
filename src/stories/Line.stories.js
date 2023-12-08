@@ -242,3 +242,68 @@ export const Area = {
     },
   },
 };
+
+export const TimeScale = {
+  args: {
+    ...args,
+    labels: [],
+    options: {
+      scales: {
+        x: {
+          type: 'time',
+          title: {
+            text: 'Date',
+          },
+        },
+        y: {
+          title: {
+            text: 'Count',
+          },
+        },
+      },
+    },
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: [
+          { x: '2016-12-25', y: 3 },
+          { x: '2016-12-28', y: 10 },
+          { x: '2016-12-29', y: 5 },
+          { x: '2016-12-30', y: 2 },
+          { x: '2017-01-03', y: 20 },
+          { x: '2017-01-05', y: 30 },
+          { x: '2017-01-08', y: 45 },
+        ],
+      },
+      {
+        label: 'Dataset 2',
+        data: [
+          { x: '2016-12-25', y: 20 },
+          { x: '2016-12-26', y: 15 },
+          { x: '2016-12-27', y: 62 },
+          { x: '2016-12-31', y: 172 },
+          { x: '2017-01-01', y: 30 },
+          { x: '2017-01-05', y: 50 },
+          { x: '2017-01-06', y: 25 },
+        ],
+      },
+    ],
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="line"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        ?hideDescription=${args.hideDescription}
+        ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
+      ></kd-chart>
+    `;
+  },
+};
