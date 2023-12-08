@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.0...v1.1.1) (2023-12-08)
+
+
+### Bug Fixes
+
+* add a default date adapter so time scales work ([78bea45](https://github.com/kyndryl-design-system/shidoka-charts/commit/78bea45b4c9d24319b8543c69a58ae624b758127))
+
 # [1.1.0](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.0.0...v1.1.0) (2023-11-30)
 
 
