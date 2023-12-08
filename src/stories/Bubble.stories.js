@@ -8,9 +8,11 @@ export default {
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,
   ],
-  design: {
-    type: 'figma',
-    url: '',
+  parameters: {
+    design: {
+      type: 'figma',
+      url: '',
+    },
   },
   argTypes: argTypes,
 };

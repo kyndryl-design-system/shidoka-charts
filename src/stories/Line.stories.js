@@ -8,9 +8,11 @@ export default {
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,
   ],
-  design: {
-    type: 'figma',
-    url: '',
+  parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/file/9NrpK3rmbOk0lhlFkEPSaO/Data-Viz-Component-Library?node-id=62%3A2752&mode=dev',
+    },
   },
   argTypes: argTypes,
 };
@@ -232,5 +234,11 @@ export const Area = {
         .height=${args.height}
       ></kd-chart>
     `;
+  },
+  parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/file/9NrpK3rmbOk0lhlFkEPSaO/Data-Viz-Component-Library?node-id=64%3A3867&mode=dev',
+    },
   },
 };

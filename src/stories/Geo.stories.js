@@ -7,9 +7,11 @@ import capitals from './sampleData/us-capitals.json';
 export default {
   title: 'Third Party Charts/Geo',
   component: 'kd-chart',
-  design: {
-    type: 'figma',
-    url: '',
+  parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/file/9NrpK3rmbOk0lhlFkEPSaO/Data-Viz-Component-Library?node-id=1652%3A2709&mode=dev',
+    },
   },
   argTypes: argTypes,
 };
