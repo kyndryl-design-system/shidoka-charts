@@ -41,34 +41,6 @@ export const Categorical = {
   },
 };
 
-export const Single = {
-  args,
-  render: (args) => {
-    return html`
-      single
-      <div class="colors">
-        ${colorPalettes.single.map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
-        })}
-      </div>
-    `;
-  },
-};
-
-export const Highlight = {
-  args,
-  render: (args) => {
-    return html`
-      highlight
-      <div class="colors">
-        ${colorPalettes.highlight.map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
-        })}
-      </div>
-    `;
-  },
-};
-
 export const Sequential01 = {
   args,
   render: (args) => {
@@ -167,184 +139,184 @@ export const Divergent02 = {
   },
 };
 
-export const Default = {
-  args,
-  render: (args) => {
-    return html`
-      default
-      <div class="colors">
-        ${colorPalettes.default.map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
-        })}
-      </div>
-    `;
-  },
-};
+// export const Default = {
+//   args,
+//   render: (args) => {
+//     return html`
+//       default
+//       <div class="colors">
+//         ${colorPalettes.default.map((color) => {
+//           return html`<span style="background-color: ${color}"></span>`;
+//         })}
+//       </div>
+//     `;
+//   },
+// };
 
-export const RainForest = {
-  args,
-  render: (args) => {
-    return html`
-      rainforest
-      <div class="colors">
-        ${colorPalettes.rainforest.map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
-        })}
-      </div>
-    `;
-  },
-};
+// export const RainForest = {
+//   args,
+//   render: (args) => {
+//     return html`
+//       rainforest
+//       <div class="colors">
+//         ${colorPalettes.rainforest.map((color) => {
+//           return html`<span style="background-color: ${color}"></span>`;
+//         })}
+//       </div>
+//     `;
+//   },
+// };
 
-export const GentleTouch = {
-  args,
-  render: (args) => {
-    return html`
-      gentletouch
-      <div class="colors">
-        ${colorPalettes.gentletouch.map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
-        })}
-      </div>
-    `;
-  },
-};
+// export const GentleTouch = {
+//   args,
+//   render: (args) => {
+//     return html`
+//       gentletouch
+//       <div class="colors">
+//         ${colorPalettes.gentletouch.map((color) => {
+//           return html`<span style="background-color: ${color}"></span>`;
+//         })}
+//       </div>
+//     `;
+//   },
+// };
 
-export const SavannahSunrise = {
-  args,
-  render: (args) => {
-    return html`
-      savannahsunrise
-      <div class="colors">
-        ${colorPalettes.savannahsunrise.map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
-        })}
-      </div>
-    `;
-  },
-};
+// export const SavannahSunrise = {
+//   args,
+//   render: (args) => {
+//     return html`
+//       savannahsunrise
+//       <div class="colors">
+//         ${colorPalettes.savannahsunrise.map((color) => {
+//           return html`<span style="background-color: ${color}"></span>`;
+//         })}
+//       </div>
+//     `;
+//   },
+// };
 
-export const CrystalCavern = {
-  args,
-  render: (args) => {
-    return html`
-      crystalcavern
-      <div class="colors">
-        ${colorPalettes.crystalcavern.map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
-        })}
-      </div>
-    `;
-  },
-};
+// export const CrystalCavern = {
+//   args,
+//   render: (args) => {
+//     return html`
+//       crystalcavern
+//       <div class="colors">
+//         ${colorPalettes.crystalcavern.map((color) => {
+//           return html`<span style="background-color: ${color}"></span>`;
+//         })}
+//       </div>
+//     `;
+//   },
+// };
 
-export const Magenta = {
-  args,
-  render: (args) => {
-    return html`
-      magenta
-      <div class="colors">
-        ${colorPalettes.magenta.map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
-        })}
-      </div>
-    `;
-  },
-};
+// export const Magenta = {
+//   args,
+//   render: (args) => {
+//     return html`
+//       magenta
+//       <div class="colors">
+//         ${colorPalettes.magenta.map((color) => {
+//           return html`<span style="background-color: ${color}"></span>`;
+//         })}
+//       </div>
+//     `;
+//   },
+// };
 
-export const MagentaNight = {
-  args,
-  render: (args) => {
-    return html`
-      magentanight
-      <div class="colors">
-        ${colorPalettes.magentanight.map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
-        })}
-      </div>
-    `;
-  },
-};
+// export const MagentaNight = {
+//   args,
+//   render: (args) => {
+//     return html`
+//       magentanight
+//       <div class="colors">
+//         ${colorPalettes.magentanight.map((color) => {
+//           return html`<span style="background-color: ${color}"></span>`;
+//         })}
+//       </div>
+//     `;
+//   },
+// };
 
-export const BrazilianSunrise = {
-  args,
-  render: (args) => {
-    return html`
-      braziliansunrise
-      <div class="colors">
-        ${colorPalettes.braziliansunrise.map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
-        })}
-      </div>
-    `;
-  },
-};
+// export const BrazilianSunrise = {
+//   args,
+//   render: (args) => {
+//     return html`
+//       braziliansunrise
+//       <div class="colors">
+//         ${colorPalettes.braziliansunrise.map((color) => {
+//           return html`<span style="background-color: ${color}"></span>`;
+//         })}
+//       </div>
+//     `;
+//   },
+// };
 
-export const TequilaSunrise = {
-  args,
-  render: (args) => {
-    return html`
-      tequilasunrise
-      <div class="colors">
-        ${colorPalettes.tequilasunrise.map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
-        })}
-      </div>
-    `;
-  },
-};
+// export const TequilaSunrise = {
+//   args,
+//   render: (args) => {
+//     return html`
+//       tequilasunrise
+//       <div class="colors">
+//         ${colorPalettes.tequilasunrise.map((color) => {
+//           return html`<span style="background-color: ${color}"></span>`;
+//         })}
+//       </div>
+//     `;
+//   },
+// };
 
-export const EveningHorizon = {
-  args,
-  render: (args) => {
-    return html`
-      eveninghorizon
-      <div class="colors">
-        ${colorPalettes.eveninghorizon.map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
-        })}
-      </div>
-    `;
-  },
-};
+// export const EveningHorizon = {
+//   args,
+//   render: (args) => {
+//     return html`
+//       eveninghorizon
+//       <div class="colors">
+//         ${colorPalettes.eveninghorizon.map((color) => {
+//           return html`<span style="background-color: ${color}"></span>`;
+//         })}
+//       </div>
+//     `;
+//   },
+// };
 
-export const Energizing = {
-  args,
-  render: (args) => {
-    return html`
-      energizing
-      <div class="colors">
-        ${colorPalettes.energizing.map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
-        })}
-      </div>
-    `;
-  },
-};
+// export const Energizing = {
+//   args,
+//   render: (args) => {
+//     return html`
+//       energizing
+//       <div class="colors">
+//         ${colorPalettes.energizing.map((color) => {
+//           return html`<span style="background-color: ${color}"></span>`;
+//         })}
+//       </div>
+//     `;
+//   },
+// };
 
-export const CherryBlossom = {
-  args,
-  render: (args) => {
-    return html`
-      cherryblossom
-      <div class="colors">
-        ${colorPalettes.cherryblossom.map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
-        })}
-      </div>
-    `;
-  },
-};
+// export const CherryBlossom = {
+//   args,
+//   render: (args) => {
+//     return html`
+//       cherryblossom
+//       <div class="colors">
+//         ${colorPalettes.cherryblossom.map((color) => {
+//           return html`<span style="background-color: ${color}"></span>`;
+//         })}
+//       </div>
+//     `;
+//   },
+// };
 
-export const SpringGreen = {
-  args,
-  render: (args) => {
-    return html`
-      springgreen
-      <div class="colors">
-        ${colorPalettes.springgreen.map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
-        })}
-      </div>
-    `;
-  },
-};
+// export const SpringGreen = {
+//   args,
+//   render: (args) => {
+//     return html`
+//       springgreen
+//       <div class="colors">
+//         ${colorPalettes.springgreen.map((color) => {
+//           return html`<span style="background-color: ${color}"></span>`;
+//         })}
+//       </div>
+//     `;
+//   },
+// };

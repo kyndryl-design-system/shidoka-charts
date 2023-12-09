@@ -3,11 +3,6 @@ import { getTextColor } from '../../helpers/helpers';
 
 const BorderColor =
   getComputedStyle(document.documentElement).getPropertyValue(
-    '--kd-color-border-primary'
-  ) || '#3d3c3c';
-
-const InverseBorderColor =
-  getComputedStyle(document.documentElement).getPropertyValue(
     '--kd-color-border-inverse'
   ) || '#ffffff';
 
@@ -20,17 +15,23 @@ export const options = (ctx) => {
         display: false,
       },
     },
-    spacing: 1,
+    spacing: function (context) {
+      const Dataset = context.dataset;
+      const Grouped = Dataset.groups !== undefined;
+
+      return Grouped ? 0 : 1;
+    },
     borderWidth: function (context) {
       const Dataset = context.dataset;
       return Dataset.groups ? 1 : 0;
     },
+    borderColor: BorderColor,
     labels: {
       align: 'left',
       display: true,
-      // color: LabelColor,
-      // color: 'white',
-      // hoverColor: 'white',
+      color: function (context) {
+        return getTextColor(context.element.options.backgroundColor);
+      },
       font: {
         size: 12,
         weight: 500,
@@ -41,46 +42,24 @@ export const options = (ctx) => {
     captions: {
       align: 'center',
       display: true,
-      // color: LabelColor,
-      // color: 'white',
-      // hoverColor: 'white',
-      font: {
-        size: 14,
-        weight: 500,
+      color: function (context) {
+        return getTextColor(context.element.options.backgroundColor);
       },
-      padding: 0,
+      font: {
+        size: 12,
+        weight: 700,
+      },
+      padding: 2,
     },
   };
 };
 
 export const datasetOptions = (ctx, index) => {
-  // console.log(Groups);
-
   return {
-    // backgroundColor:
-    //   colorPalettes[ctx.options.colorPalette || 'categorical'][0] + '90',
-    // borderColor: colorPalettes[ctx.options.colorPalette || 'categorical'][0],
-    borderColor: function (context) {
-      // return colorPalettes[ctx.options.colorPalette || 'categorical'][
-      //   getGroupColorIndex(context)
-      // ];
-      return InverseBorderColor;
-    },
     backgroundColor: function (context) {
       return colorPalettes[ctx.options.colorPalette || 'categorical'][
         getGroupColorIndex(context)
       ]; // + '80'
-    },
-    labels: {
-      color: function (context) {
-        console.log(context.element.options);
-        return getTextColor(context.element.options.backgroundColor);
-      },
-    },
-    captions: {
-      color: function (context) {
-        return getTextColor(context.element.options.backgroundColor);
-      },
     },
   };
 };
@@ -95,22 +74,37 @@ export const datasetOptions = (ctx, index) => {
  */
 const getGroupColorIndex = (context) => {
   const Dataset = context.dataset;
-  const DataIndex = context.dataIndex;
-  const GroupKey = Dataset.groups ? Dataset.groups[0] : null;
-  const Groups = [];
-
-  if (GroupKey && !Dataset.treeLeafKey) {
-    Dataset.tree.forEach((leaf) => {
-      if (!Groups.includes(leaf[GroupKey])) {
-        Groups.push(leaf[GroupKey]);
-      }
-    });
-  }
-
-  const Leaf = Dataset.data[DataIndex];
   let index = 0;
-  if (Leaf) {
-    index = Groups.indexOf(Leaf._data[GroupKey]);
+
+  if (Dataset.groups !== undefined) {
+    const DataIndex = context.dataIndex;
+    const GroupKey = Dataset.groups ? Dataset.groups[0] : null;
+    const Nested =
+      typeof Dataset.tree === 'object' && !Array.isArray(Dataset.tree);
+    let Groups = [];
+
+    if (Nested) {
+      Groups = Object.keys(Dataset.tree);
+
+      if (context.raw) {
+        const Path = context.raw._data.path;
+        const Parent = Path.split('.')[0];
+
+        index = Groups.indexOf(Parent);
+      }
+    } else {
+      Dataset.tree.forEach((leaf) => {
+        if (!Groups.includes(leaf[GroupKey])) {
+          Groups.push(leaf[GroupKey]);
+        }
+      });
+
+      const Leaf = Dataset.data[DataIndex];
+
+      if (Leaf) {
+        index = Groups.indexOf(Leaf._data[GroupKey]);
+      }
+    }
   }
 
   return index < 0 ? 0 : index;
