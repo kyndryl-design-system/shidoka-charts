@@ -1,31 +1,21 @@
 import colorPalettes from '../colorPalettes';
 
+const BorderColor =
+  getComputedStyle(document.documentElement).getPropertyValue(
+    '--kd-color-background-ui-default'
+  ) || '#ffffff';
+
 export const type = 'choropleth';
 
 export const options = (ctx) => {
   return {
-    hoverBorderWidth: 3,
-    showOutline: false,
-    showGraticule: false,
+    borderWidth: 0.5,
+    borderColor: BorderColor,
     plugins: {
       legend: {
         display: false,
       },
     },
-    // -- if required in future --- //
-    //     datalabels: {
-    //       font: {
-    //         size: 12,
-    //         weight: 'bold',
-    //       },
-    //       display: 'auto',
-    //       align: 'end',
-    //       anchor: 'end',
-    //       formatter: function (value, context) {
-    //         const label = context.dataset.data[context.dataIndex];
-    //         return label.value.toFixed(3);
-    //       },
-    //     },
     scales: {
       projection: {
         axis: 'x',
@@ -40,7 +30,7 @@ export const options = (ctx) => {
           return Colors[Index];
         },
         // legend: {
-        //   position: 'bottom-right',
+        //   position: 'bottom-left',
         //   align: 'bottom',
         // },
       },

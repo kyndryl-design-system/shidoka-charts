@@ -3,6 +3,7 @@ import '../components/chart';
 import argTypes from '../common/config/chartArgTypes';
 import { topojson } from 'chartjs-chart-geo';
 import capitals from './sampleData/us-capitals.json';
+import nationCapitals from './sampleData/nation-capitals.json';
 
 export default {
   title: 'Third Party Charts/Geo',
@@ -33,22 +34,6 @@ const states = topojson.feature(usData, usData.objects.states).features;
 const args = {
   chartTitle: 'Geo Chart',
   description: 'Chart description.',
-  labels: states.map((d) => d.properties.name),
-  datasets: [
-    {
-      label: 'States',
-      outline: nation,
-      data: states.map((d) => ({ feature: d, value: Math.random() * 10 })),
-    },
-  ],
-  options: {
-    scales: {
-      projection: {
-        axis: 'x',
-        projection: 'naturalEarth1',
-      },
-    },
-  },
   hideDescription: false,
   hideCaptions: false,
   colorPalette: 'sequential01',
@@ -87,9 +72,17 @@ export const WorldChoropleth = {
   },
 };
 
-export const USChoropleth = {
+export const CountryChoropleth = {
   args: {
     ...args,
+    labels: states.map((d) => d.properties.name),
+    datasets: [
+      {
+        label: 'States',
+        outline: nation,
+        data: states.map((d) => ({ feature: d, value: Math.random() * 10 })),
+      },
+    ],
     options: {
       scales: {
         projection: {
@@ -118,14 +111,47 @@ export const USChoropleth = {
   },
 };
 
-export const BubbleMap = {
+export const WorldBubbleMap = {
+  args: {
+    ...args,
+    labels: nationCapitals.map((d) => d.description),
+    datasets: [
+      {
+        outline: countries,
+        label: 'Countries',
+        data: nationCapitals.map((d) =>
+          Object.assign(d, { value: Math.round(Math.random() * 100) })
+        ),
+      },
+    ],
+    colorPalette: 'categorical',
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="bubbleMap"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        ?hideDescription=${args.hideDescription}
+        ?hideCaptions=${args.hideCaptions}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
+      ></kd-chart>
+    `;
+  },
+};
+
+export const CountryBubbleMap = {
   args: {
     ...args,
     labels: capitals.map((d) => d.description),
     datasets: [
       {
         outline: states,
-
         data: capitals.map((d) =>
           Object.assign(d, { value: Math.round(Math.random() * 100) })
         ),
