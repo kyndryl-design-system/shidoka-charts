@@ -2,8 +2,6 @@ export default {
   colorPalette: {
     options: [
       'categorical',
-      'single',
-      'highlight',
       'sequential01',
       'sequential02',
       'sequential03',

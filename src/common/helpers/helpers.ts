@@ -67,3 +67,31 @@ export function getRandomData(arrayLength = 6, min = -100, max = 100) {
 
   return data;
 }
+
+/**
+ * Takes a background hex color as input and returns the appropriate text
+ * color (either primary or inversed) based on the brightness of the background color.
+ * @param {string} bgHexColor - The `bgHexColor` parameter is a string representing a hexadecimal color
+ * code for the background color.
+ * @returns the color value for the text based on the background color provided. If the calculated YIQ
+ * value is greater than or equal to 128, it returns the primary text color (TextColor), otherwise it
+ * returns the inversed text color (InverseTextColor).
+ */
+export function getTextColor(bgHexColor: string) {
+  const TextColor =
+    getComputedStyle(document.documentElement).getPropertyValue(
+      '--kd-color-text-primary'
+    ) || '#3d3c3c';
+
+  const InverseTextColor =
+    getComputedStyle(document.documentElement).getPropertyValue(
+      '--kd-color-text-inversed'
+    ) || '#ffffff';
+
+  const r = parseInt(bgHexColor.substring(1, 3), 16);
+  const g = parseInt(bgHexColor.substring(3, 5), 16);
+  const b = parseInt(bgHexColor.substring(5, 7), 16);
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+
+  return yiq >= 128 ? TextColor : InverseTextColor;
+}

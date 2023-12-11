@@ -11,8 +11,6 @@ export default {
     '#F378B1',
     '#D5B5F6',
   ],
-  single: ['#64B5E1'],
-  highlight: ['#64B5E1', '#C1BEBE'],
   sequential01: [
     '#ACE1F8',
     '#95D3F0',
