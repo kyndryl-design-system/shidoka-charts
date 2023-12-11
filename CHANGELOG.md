@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.1...v1.1.2) (2023-12-11)
+
+
+### Bug Fixes
+
+* geo and treemap adjustments ([#8](https://github.com/kyndryl-design-system/shidoka-charts/issues/8)) ([d859ebe](https://github.com/kyndryl-design-system/shidoka-charts/commit/d859ebe5fa6699623db05b22f46a992696785cd8))
+
 ## [1.1.1](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.0...v1.1.1) (2023-12-08)
 
 
