@@ -19,20 +19,26 @@ export const options = (ctx) => {
       legend: {
         display: false,
       },
-      // datalabels: {
-      //   font: {
-      //     size: 12,
-      //     weight: 'bold',
-      //   },
-      //   color: 'white',
-      //   display: 'auto',
-      //   align: 'center',
-      //   anchor: 'center',
-      //   clamp: true,
-      //   formatter: function (entry) {
-      //     return entry.value;
-      //   },
-      // },
+      datalabels: {
+        font: {
+          size: 12,
+          weight: 'bold',
+        },
+        color: 'white',
+        // display: 'auto',
+        display: function (context, value) {
+          const Value = context.dataset.data[context.dataIndex].value;
+          const Range = context.chart.scales.size._range;
+          const Avg = (Range.min + Range.max) / 2;
+
+          return Value > Avg ? 'auto' : false;
+        },
+        align: 'center',
+        anchor: 'center',
+        formatter: function (entry) {
+          return entry.value;
+        },
+      },
     },
     scales: {
       projection: {
