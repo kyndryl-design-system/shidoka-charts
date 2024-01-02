@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.2...v1.1.3) (2024-01-02)
+
+
+### Bug Fixes
+
+* don't bundle peer deps ([ff7bea2](https://github.com/kyndryl-design-system/shidoka-charts/commit/ff7bea2c2602ca71e20d7fa78320915e897c580e))
+
 ## [1.1.2](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.1...v1.1.2) (2023-12-11)
 
 
