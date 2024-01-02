@@ -1,3 +1,10 @@
+## [1.1.4](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.3...v1.1.4) (2024-01-02)
+
+
+### Reverts
+
+* Revert "fix: don't bundle peer deps" ([2fb05b8](https://github.com/kyndryl-design-system/shidoka-charts/commit/2fb05b83d83f86cb11814d85a5a1a4c16d9e9c3f))
+
 ## [1.1.3](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.2...v1.1.3) (2024-01-02)
 
 
