@@ -9,7 +9,6 @@ import postcss from 'rollup-plugin-postcss';
 import litcss from 'rollup-plugin-postcss-lit';
 import InlineSvg from 'rollup-plugin-inline-svg';
 import copy from 'rollup-plugin-copy';
-import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 
 export default {
   input: ['./src/**/index.ts'],
@@ -20,13 +19,12 @@ export default {
     preserveModules: true,
     preserveModulesRoot: 'src',
   },
-  // external: [/shidoka-foundation\/components/],
+  external: [/shidoka-foundation\/components/],
   plugins: [
     del({ targets: 'dist/*' }),
     multiInput.default(),
     resolve(),
     renameNodeModules(),
-    peerDepsExternal(),
     copy({
       targets: [
         { src: 'package.json', dest: 'dist' },
