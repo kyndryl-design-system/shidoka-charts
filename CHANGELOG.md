@@ -1,3 +1,10 @@
+## [1.1.5](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.4...v1.1.5) (2024-02-01)
+
+
+### Bug Fixes
+
+* update table styles, resolves [#10](https://github.com/kyndryl-design-system/shidoka-charts/issues/10) ([4912bdc](https://github.com/kyndryl-design-system/shidoka-charts/commit/4912bdceb19416d5eb17cb85a6d55da0f1612212))
+
 ## [1.1.4](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.3...v1.1.4) (2024-01-02)
 
 
