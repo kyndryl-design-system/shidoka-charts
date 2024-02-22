@@ -1,3 +1,10 @@
+## [1.1.6](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.5...v1.1.6) (2024-02-22)
+
+
+### Bug Fixes
+
+* **chart:** resolve issue where chart may not initialize ([8badc43](https://github.com/kyndryl-design-system/shidoka-charts/commit/8badc43f0e2fdddfb5d2e12689876d5fa78a1466))
+
 ## [1.1.5](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.4...v1.1.5) (2024-02-01)
 
 
