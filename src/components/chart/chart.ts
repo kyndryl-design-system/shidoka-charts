@@ -368,6 +368,15 @@ export class KDChart extends LitElement {
       });
     }
 
+    // init chart
+    if (!this.chart && this.datasets && this.datasets.length && this.type) {
+      this.mergeOptions().then(() => {
+        this.initChart();
+      });
+
+      this.checkType();
+    }
+
     // Re-init chart instance when type, plugins, colorPalette, width, or height change.
     if (
       this.datasets &&
