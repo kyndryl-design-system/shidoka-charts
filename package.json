@@ -37,7 +37,6 @@
     "chartjs-plugin-annotation": "^3.0.1",
     "chartjs-plugin-chart2music": "^0.1.2",
     "chartjs-plugin-datalabels": "^2.2.0",
-    "chartjs-plugin-deferred": "^2.0.0",
     "date-fns": "^2.30.0",
     "deepmerge-ts": "^5.1.0",
     "lit": "^2.7.6",

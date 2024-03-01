@@ -3,7 +3,6 @@ import { customElement, property, state, query } from 'lit/decorators.js';
 import { deepmerge, deepmergeCustom } from 'deepmerge-ts';
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
-import ChartDeferred from 'chartjs-plugin-deferred';
 import {
   ChoroplethController,
   BubbleMapController,
@@ -32,7 +31,6 @@ import maximizeIcon from '@carbon/icons/es/maximize/20';
 import minimizeIcon from '@carbon/icons/es/minimize/20';
 
 Chart.register(
-  ChartDeferred,
   datalabelsPlugin,
   annotationPlugin,
   ChoroplethController,
