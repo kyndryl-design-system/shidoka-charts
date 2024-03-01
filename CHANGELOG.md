@@ -1,3 +1,10 @@
+## [1.1.7](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.6...v1.1.7) (2024-03-01)
+
+
+### Bug Fixes
+
+* **chart:** remove deferred plugin ([1704f2b](https://github.com/kyndryl-design-system/shidoka-charts/commit/1704f2b269c235c4f5645d325c2c62cbad04efaa))
+
 ## [1.1.6](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.5...v1.1.6) (2024-02-22)
 
 
