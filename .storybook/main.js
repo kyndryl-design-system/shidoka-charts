@@ -82,6 +82,7 @@ export default {
   core: {
     disableTelemetry: true,
   },
+  staticDirs: ['./static'],
   docs: {
     autodocs: true,
   },
