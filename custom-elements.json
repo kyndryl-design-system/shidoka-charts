@@ -93,6 +93,25 @@
               "default": "100"
             }
           ]
+        },
+        {
+          "kind": "function",
+          "name": "getTextColor",
+          "parameters": [
+            {
+              "name": "bgHexColor",
+              "type": {
+                "text": "string"
+              },
+              "description": "The `bgHexColor` parameter is a string representing a hexadecimal color\r\ncode for the background color."
+            }
+          ],
+          "description": "Takes a background hex color as input and returns the appropriate text\r\ncolor (either primary or inversed) based on the brightness of the background color.",
+          "return": {
+            "type": {
+              "text": ""
+            }
+          }
         }
       ],
       "exports": [
@@ -133,6 +152,14 @@
           "name": "getRandomData",
           "declaration": {
             "name": "getRandomData",
+            "module": "src/common/helpers/helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "getTextColor",
+          "declaration": {
+            "name": "getTextColor",
             "module": "src/common/helpers/helpers.ts"
           }
         }
@@ -271,9 +298,14 @@
               "type": {
                 "text": "object"
               },
-              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
+              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    overflowMenu: 'Overflow Menu',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
               "description": "Customizable text labels.",
               "attribute": "customLabels"
+            },
+            {
+              "kind": "method",
+              "name": "_resizeChart",
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -457,7 +489,7 @@
               "type": {
                 "text": "object"
               },
-              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
+              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    overflowMenu: 'Overflow Menu',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
               "description": "Customizable text labels.",
               "fieldName": "customLabels"
             }
