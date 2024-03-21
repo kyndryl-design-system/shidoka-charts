@@ -173,7 +173,7 @@ export class KDChart extends LitElement {
           ${this.noBorder ? 'no-border' : ''}"
         @fullscreenchange=${() => this.handleFullscreenChange()}
       >
-        <div class="header">
+        <div part="header" class="header">
           <div>
             <div class="title">${this.chartTitle}</div>
             <div
