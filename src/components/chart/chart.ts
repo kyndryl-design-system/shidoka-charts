@@ -52,55 +52,55 @@ export class KDChart extends LitElement {
 
   /** Chart title. */
   @property({ type: String })
-  accessor chartTitle = '';
+  chartTitle = '';
 
   /** Chart description. */
   @property({ type: String })
-  accessor description = '';
+  description = '';
 
   /** Chart.js chart type. */
   @property({ type: String })
-  accessor type: any = '';
+  type: any = '';
 
   /** Chart.js data.labels. */
   @property({ type: Array })
-  accessor labels!: Array<string>;
+  labels!: Array<string>;
 
   /** Chart.js data.datasets. */
   @property({ type: Array })
-  accessor datasets!: Array<any>;
+  datasets!: Array<any>;
 
   /** Chart.js options. Can override Shidoka defaults. */
   @property({ type: Object })
-  accessor options: any = {};
+  options: any = {};
 
   /** Chart.js additional plugins. Must be registerable inline via Chart.plugins array, not globally via Chart.register. */
   @property({ type: Array })
-  accessor plugins: any = [];
+  plugins: any = [];
 
   /** Chart.js canvas height (px). Disables maintainAspectRatio option. */
   @property({ type: Number })
-  accessor height: any = null;
+  height: any = null;
 
   /** Chart.js canvas width (px). Disables maintainAspectRatio option. */
   @property({ type: Number })
-  accessor width: any = null;
+  width: any = null;
 
   /** Hides the description visually. */
   @property({ type: Boolean })
-  accessor hideDescription = false;
+  hideDescription = false;
 
   /** Hides the closed captions visually. */
   @property({ type: Boolean })
-  accessor hideCaptions = false;
+  hideCaptions = false;
 
   /** Removes the outer border and padding. */
   @property({ type: Boolean })
-  accessor noBorder = false;
+  noBorder = false;
 
   /** Customizable text labels. */
   @property({ type: Object })
-  accessor customLabels = {
+  customLabels = {
     toggleView: 'Toggle View Mode',
     toggleFullscreen: 'Toggle Fullscreen',
     overflowMenu: 'Overflow Menu',
@@ -113,58 +113,58 @@ export class KDChart extends LitElement {
    * @ignore
    */
   @state()
-  accessor fullscreen = false;
+  fullscreen = false;
 
   /**
    * Queries the container element.
    * @ignore
    */
   @query('.container')
-  accessor container!: HTMLCanvasElement;
+  container!: HTMLCanvasElement;
 
   /**
    * Queries the canvas element.
    * @ignore
    */
   @query('canvas')
-  accessor canvas!: HTMLCanvasElement;
+  canvas!: HTMLCanvasElement;
 
   /**
    * Queries the closed caption div.
    * @ignore
    */
   @query('.closed-caption')
-  accessor ccDiv!: HTMLDivElement;
+  ccDiv!: HTMLDivElement;
 
   /** The chart instance.
    * @ignore
    */
   @state()
-  accessor chart: any = null;
+  chart: any = null;
 
   /** Table view mode.
    * @ignore
    */
   @state()
-  accessor tableView = false;
+  tableView = false;
 
   /** Disable table view feature.
    * @ignore
    */
   @state()
-  accessor tableDisabled = false;
+  tableDisabled = false;
 
   /** Merged options.
    * @ignore
    */
   @state()
-  accessor mergedOptions: any = {};
+  mergedOptions: any = {};
 
   /** Merged datasets.
    * @ignore
    */
   @state()
-  accessor mergedDatasets: any = {};
+  mergedDatasets: any = {};
 
   override render() {
     return html`
