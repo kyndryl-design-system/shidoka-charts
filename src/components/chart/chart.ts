@@ -361,7 +361,31 @@ export class KDChart extends LitElement {
       this.mergeOptions().then(() => {
         this.chart.data.labels = this.labels;
         this.chart.options = this.mergedOptions;
-        this.chart.data.datasets = this.mergedDatasets;
+
+        // update datasets, add new ones
+        this.mergedDatasets.forEach((dataset: any) => {
+          const OldDataset = this.chart.data.datasets.find(
+            (oldDataset: any) => oldDataset.label === dataset.label
+          );
+
+          if (!OldDataset) {
+            this.chart.data.datasets.push(dataset);
+          } else {
+            OldDataset.data = dataset.data;
+          }
+        });
+
+        // remove datasets not in mergedDatasets
+        this.chart.data.datasets.forEach((dataset: any, index: number) => {
+          const NewDataset = this.mergedDatasets.find(
+            (newDataset: any) => newDataset.label === dataset.label
+          );
+
+          if (!NewDataset) {
+            this.chart.data.datasets.splice(index, 1);
+          }
+        });
+
         this.chart.update();
       });
     }
