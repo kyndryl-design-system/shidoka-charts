@@ -48,6 +48,8 @@ const args = {
   },
   hideDescription: false,
   hideCaptions: false,
+  hideHeader: false,
+  hideControls: false,
   colorPalette: 'categorical',
   noBorder: false,
   width: null,
@@ -66,6 +68,8 @@ export const Vertical = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
@@ -104,6 +108,8 @@ export const Horizontal = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
@@ -143,6 +149,8 @@ export const Stacked = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
@@ -183,6 +191,8 @@ export const HorizontalStacked = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
@@ -230,6 +240,8 @@ export const Floating = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
@@ -295,6 +307,8 @@ export const SingleLabel = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}

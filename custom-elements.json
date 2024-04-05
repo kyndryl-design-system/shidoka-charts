@@ -173,6 +173,16 @@
           "kind": "class",
           "description": "Chart.js wrapper component.",
           "name": "KDChart",
+          "slots": [
+            {
+              "description": "Slot for custom content between header and chart.",
+              "name": "unnamed"
+            },
+            {
+              "description": "Slot for custom controls such as an overflow menu.",
+              "name": "controls"
+            }
+          ],
           "members": [
             {
               "kind": "field",
@@ -284,6 +294,26 @@
             },
             {
               "kind": "field",
+              "name": "hideHeader",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the header.",
+              "attribute": "hideHeader"
+            },
+            {
+              "kind": "field",
+              "name": "hideControls",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the controls.",
+              "attribute": "hideControls"
+            },
+            {
+              "kind": "field",
               "name": "noBorder",
               "type": {
                 "text": "boolean"
@@ -298,7 +328,7 @@
               "type": {
                 "text": "object"
               },
-              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    overflowMenu: 'Overflow Menu',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
+              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadMenu: 'Download Menu',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
               "description": "Customizable text labels.",
               "attribute": "customLabels"
             },
@@ -476,6 +506,24 @@
               "fieldName": "hideCaptions"
             },
             {
+              "name": "hideHeader",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the header.",
+              "fieldName": "hideHeader"
+            },
+            {
+              "name": "hideControls",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the controls.",
+              "fieldName": "hideControls"
+            },
+            {
               "name": "noBorder",
               "type": {
                 "text": "boolean"
@@ -489,7 +537,7 @@
               "type": {
                 "text": "object"
               },
-              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    overflowMenu: 'Overflow Menu',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
+              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadMenu: 'Download Menu',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
               "description": "Customizable text labels.",
               "fieldName": "customLabels"
             }

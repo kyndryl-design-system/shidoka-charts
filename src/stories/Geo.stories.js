@@ -36,6 +36,8 @@ const args = {
   description: 'Chart description.',
   hideDescription: false,
   hideCaptions: false,
+  hideHeader: false,
+  hideControls: false,
   colorPalette: 'sequential01',
   noBorder: false,
   width: null,
@@ -63,6 +65,8 @@ export const WorldChoropleth = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
@@ -102,6 +106,8 @@ export const CountryChoropleth = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
@@ -136,6 +142,8 @@ export const WorldBubbleMap = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
@@ -177,6 +185,8 @@ export const CountryBubbleMap = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}

@@ -53,6 +53,8 @@ const args = {
   // },
   hideDescription: false,
   hideCaptions: false,
+  hideHeader: false,
+  hideControls: false,
   colorPalette: 'categorical',
   noBorder: false,
   width: null,
@@ -71,6 +73,8 @@ export const TreeMap = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
@@ -110,6 +114,8 @@ export const Grouped = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
@@ -150,6 +156,8 @@ export const NestedData = {
         .datasets=${args.datasets}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
