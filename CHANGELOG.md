@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.8...v1.2.0) (2024-04-05)
+
+
+### Features
+
+* **chart:** add slots, hideHeader, & hideControls, resolves [#11](https://github.com/kyndryl-design-system/shidoka-charts/issues/11) ([0957d33](https://github.com/kyndryl-design-system/shidoka-charts/commit/0957d332d878441572331a46d6f8af12d686f632))
+
 ## [1.1.8](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.7...v1.1.8) (2024-04-02)
 
 
