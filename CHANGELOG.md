@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.2.0...v1.2.1) (2024-04-08)
+
+
+### Bug Fixes
+
+* **chart:** dataset updating ([aced05d](https://github.com/kyndryl-design-system/shidoka-charts/commit/aced05d368f391e1219bc58485a12fc67548bbbd))
+
 # [1.2.0](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.8...v1.2.0) (2024-04-05)
 
 
