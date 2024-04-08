@@ -401,19 +401,6 @@ export class KDChart extends LitElement {
         this.chart.data.labels = this.labels;
         this.chart.options = this.mergedOptions;
 
-        // update datasets, add new ones
-        this.mergedDatasets.forEach((dataset: any) => {
-          const OldDataset = this.chart.data.datasets.find(
-            (oldDataset: any) => oldDataset.label === dataset.label
-          );
-
-          if (!OldDataset) {
-            this.chart.data.datasets.push(dataset);
-          } else {
-            OldDataset.data = dataset.data;
-          }
-        });
-
         // remove datasets not in mergedDatasets
         this.chart.data.datasets.forEach((dataset: any, index: number) => {
           const NewDataset = this.mergedDatasets.find(
@@ -421,7 +408,25 @@ export class KDChart extends LitElement {
           );
 
           if (!NewDataset) {
+            // remove
             this.chart.data.datasets.splice(index, 1);
+          }
+        });
+
+        // update datasets, add new ones
+        this.mergedDatasets.forEach((dataset: any) => {
+          const OldDataset = this.chart.data.datasets.find(
+            (oldDataset: any) => oldDataset.label === dataset.label
+          );
+
+          if (!OldDataset) {
+            // add new dataset
+            this.chart.data.datasets.push(dataset);
+          } else {
+            // update each key/entry in the dataset object
+            Object.keys(dataset).forEach((key) => {
+              OldDataset[key] = dataset[key];
+            });
           }
         });
 
