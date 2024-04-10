@@ -6,7 +6,6 @@ const TextColor =
 export default {
   id: 'meterGaugeNeedle',
   afterDatasetsDraw: (chart, args, plugins) => {
-    debugger;
     // if (chart.config.type === 'meter') {
     const { ctx, data } = chart;
     ctx.save();
