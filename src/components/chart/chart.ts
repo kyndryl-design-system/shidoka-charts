@@ -14,6 +14,7 @@ import {
 import { TreemapController, TreemapElement } from 'chartjs-chart-treemap';
 import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
+import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import musicPlugin from 'chartjs-plugin-chart2music';
 import datalabelsPlugin from 'chartjs-plugin-datalabels';
@@ -479,9 +480,20 @@ export class KDChart extends LitElement {
         '--kd-color-text-primary'
       ) || '#3d3c3c';
 
+    // let plugins = [
+    //   canvasBackgroundPlugin,
+    //   doughnutLabelPlugin,
+    //   meterGaugePlugin,
+    //   ...this.plugins,
+    // ];
+
+    // Select plugin when type='meter'. Otherwise both plugins (meterGaugePlugin & doughnutLabelPlugin) are called
+    const pluginSelectForDoghnutMeter =
+      this.type === 'meter' ? meterGaugePlugin : doughnutLabelPlugin;
+
     let plugins = [
       canvasBackgroundPlugin,
-      doughnutLabelPlugin,
+      pluginSelectForDoghnutMeter,
       ...this.plugins,
     ];
 
@@ -495,7 +507,8 @@ export class KDChart extends LitElement {
     }
 
     this.chart = new Chart(this.canvas, {
-      type: this.type,
+      //type: this.type,
+      type: this.type === 'meter' ? 'doughnut' : this.type,
       data: {
         labels: this.labels,
         datasets: this.mergedDatasets,
@@ -510,7 +523,7 @@ export class KDChart extends LitElement {
    * final set of options for a chart.
    */
   private async mergeOptions() {
-    const radialTypes = ['pie', 'doughnut', 'radar', 'polarArea'];
+    const radialTypes = ['pie', 'doughnut', 'radar', 'polarArea', 'meter'];
     const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
 
     // get chart types from datasets so we can import additional configs
