@@ -7,7 +7,7 @@ const LabelColor =
 
 export const type = 'meter';
 
-export const options = (ctx) => {
+export const options = () => {
   return {
     radius: '80%',
     plugins: {},
