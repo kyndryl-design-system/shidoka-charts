@@ -24,11 +24,11 @@ const args = {
   datasets: [
     {
       data: [18, 12, 6, 9, 12, 3, 9],
-      borderWidth: 0,
+      borderWidth: 2,
       circumference: 180,
       rotation: 270,
       cutout: '80%',
-      needleValue: 12,
+      needleValue: 30,
       //   cutoutPercentage: 50,
     },
   ],
