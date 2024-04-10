@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.2.1...v1.2.2) (2024-04-10)
+
+
+### Bug Fixes
+
+* **chart:** prevent re-render on init, remove certain plugins for third party chart types ([81d9400](https://github.com/kyndryl-design-system/shidoka-charts/commit/81d94001788a79e80cd0d2c28ff5d4170eeaad6d))
+
 ## [1.2.1](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.2.0...v1.2.1) (2024-04-08)
 
 
