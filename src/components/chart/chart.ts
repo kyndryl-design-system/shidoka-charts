@@ -186,7 +186,7 @@ export class KDChart extends LitElement {
               <div class="header">
                 ${!this.hideHeader
                   ? html`
-                      <div>
+                      <div id="titleDesc">
                         <div class="title">${this.chartTitle}</div>
                         <div
                           class="description ${this.hideDescription
@@ -285,7 +285,7 @@ export class KDChart extends LitElement {
             style="${this.width ? `width: ${this.width}px;` : ''}
               ${this.height ? `height: ${this.height}px;` : ''}"
           >
-            <canvas role="img"></canvas>
+            <canvas role="img" aria-labelledby="titleDesc"></canvas>
           </div>
           <figcaption>
             <div
