@@ -24,7 +24,7 @@ const args = {
   datasets: [
     {
       label: 'Dataset 1',
-      data: [12, 19, 3, 5, 2, 3],
+      data: [120, 190, 300, 500, 200, 300],
     },
   ],
   options: {
@@ -78,6 +78,60 @@ export const Doughnut = {
   args: {
     ...args,
     chartTitle: 'Doughnut Chart',
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="doughnut"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        ?hideDescription=${args.hideDescription}
+        ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
+      ></kd-chart>
+    `;
+  },
+  parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/file/9NrpK3rmbOk0lhlFkEPSaO/Data-Viz-Component-Library?node-id=64%3A4703&mode=dev',
+    },
+  },
+};
+
+export const DoughnutCustomCenterLabel = {
+  args: {
+    ...args,
+    chartTitle: 'Doughnut Chart',
+    description: 'With custom center labels.',
+    options: {
+      doughnutLabel: {
+        line1text: function (defaultValue, context) {
+          // example: add commas to total number
+          return defaultValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        },
+        line2text: 'Test',
+      },
+      scales: {
+        x: {
+          title: {
+            text: 'Color',
+          },
+        },
+        y: {
+          title: {
+            text: 'Votes',
+          },
+        },
+      },
+    },
   },
   render: (args) => {
     return html`

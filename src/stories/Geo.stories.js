@@ -51,7 +51,10 @@ export const WorldChoropleth = {
     datasets: [
       {
         label: 'Countries',
-        data: countries.map((d) => ({ feature: d, value: Math.random() * 10 })),
+        data: countries.map((d) => ({
+          feature: d,
+          value: d.properties.name.length * 10,
+        })),
       },
     ],
   },
@@ -84,7 +87,10 @@ export const CountryChoropleth = {
       {
         label: 'States',
         outline: nation,
-        data: states.map((d) => ({ feature: d, value: Math.random() * 10 })),
+        data: states.map((d) => ({
+          feature: d,
+          value: d.properties.name.length * 10,
+        })),
       },
     ],
     options: {
@@ -126,7 +132,7 @@ export const WorldBubbleMap = {
         outline: countries,
         label: 'Countries',
         data: nationCapitals.map((d) =>
-          Object.assign(d, { value: Math.round(Math.random() * 100) })
+          Object.assign(d, { value: d.description.length * 100 })
         ),
       },
     ],
@@ -161,7 +167,7 @@ export const CountryBubbleMap = {
       {
         outline: states,
         data: capitals.map((d) =>
-          Object.assign(d, { value: Math.round(Math.random() * 100) })
+          Object.assign(d, { value: d.description.length * 100 })
         ),
       },
     ],
