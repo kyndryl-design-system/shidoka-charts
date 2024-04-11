@@ -150,13 +150,6 @@ export const DoughnutCustomCenterLabel = {
         .width=${args.width}
         .height=${args.height}
       ></kd-chart>
-      <br /><br />
-      Doughnut center labels can be customized by passing in
-      "options.doughnutLabel.line1text" and/or
-      "options.doughnutLabel.line2text". These options will accept a string,
-      number, or a function that returns a string/number. If passing a function,
-      the first parameter will give you the default value, and the second
-      parameter the context/chart.
     `;
   },
   parameters: {
