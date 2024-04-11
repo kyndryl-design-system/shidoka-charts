@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.2.2...v1.3.0) (2024-04-11)
+
+
+### Features
+
+* **doughnut:** make doughnut center labels customizable ([#19](https://github.com/kyndryl-design-system/shidoka-charts/issues/19)) ([8ec3b4c](https://github.com/kyndryl-design-system/shidoka-charts/commit/8ec3b4c853dfb1b6d437f76420b02656d852a03e))
+
 ## [1.2.2](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.2.1...v1.2.2) (2024-04-10)
 
 
