@@ -6,7 +6,10 @@ const TextColor =
 export default {
   id: 'doughnutLabel',
   beforeDraw: (chart, args, options) => {
-    if (chart.config.type === 'doughnut') {
+    if (
+      chart.config.type === 'doughnut' &&
+      !chart.config.options.doughnutLabel?.disabled
+    ) {
       const { ctx } = chart;
 
       // get sum of all visible data points
