@@ -25,9 +25,12 @@ export default {
       // get custom options for center text
       const Line1textOption = chart.config.options.doughnutLabel?.line1text;
       const Line2textOption = chart.config.options.doughnutLabel?.line2text;
+
+      // set default values
       let Line1text = total;
       let Line2text = chart.config.options.scales.y.title.text;
 
+      // determine if line1text option is given, is a function or not, and update text
       if (Line1textOption || Line1textOption === '') {
         Line1text =
           typeof Line1textOption === 'function'
@@ -35,17 +38,13 @@ export default {
             : Line1textOption;
       }
 
+      // determine if line2text option is given, is a function or not, and update text
       if (Line2textOption || Line2textOption === '') {
         Line2text =
           typeof Line2textOption === 'function'
             ? Line2textOption(Line2text, ctx)
             : Line2textOption;
       }
-      // const Line1text =
-      //   chart.config.options.doughnutLabel?.line1text(ctx) || total;
-      // const Line2text =
-      //   chart.config.options.doughnutLabel?.line2text ||
-      //   chart.config.options.scales.y.title.text;
 
       ctx.fillText(Line1text, centerX, centerY);
       ctx.fillText(Line2text, centerX, centerY + 20);
