@@ -32,8 +32,6 @@ import maximizeIcon from '@carbon/icons/es/maximize/20';
 import minimizeIcon from '@carbon/icons/es/minimize/20';
 
 Chart.register(
-  datalabelsPlugin,
-  annotationPlugin,
   ChoroplethController,
   BubbleMapController,
   GeoFeature,
@@ -189,7 +187,7 @@ export class KDChart extends LitElement {
               <div class="header">
                 ${!this.hideHeader
                   ? html`
-                      <div>
+                      <div id="titleDesc">
                         <div class="title">${this.chartTitle}</div>
                         <div
                           class="description ${this.hideDescription
@@ -288,7 +286,7 @@ export class KDChart extends LitElement {
             style="${this.width ? `width: ${this.width}px;` : ''}
               ${this.height ? `height: ${this.height}px;` : ''}"
           >
-            <canvas role="img"></canvas>
+            <canvas role="img" aria-labelledby="titleDesc"></canvas>
           </div>
           <figcaption>
             <div
@@ -436,7 +434,15 @@ export class KDChart extends LitElement {
     }
 
     // init chart
-    if (!this.chart && this.datasets && this.datasets.length && this.type) {
+    // check to make sure initial datasets + data have been provided
+    let hasData = false;
+    if (this.datasets && this.datasets.length) {
+      this.datasets.forEach((dataset) => {
+        hasData = dataset.data.length > 0;
+      });
+    }
+
+    if (!this.chart && this.type && changedProps.has('datasets') && hasData) {
       this.mergeOptions().then(() => {
         this.initChart();
       });
@@ -446,8 +452,7 @@ export class KDChart extends LitElement {
 
     // Re-init chart instance when type, plugins, colorPalette, width, or height change.
     if (
-      this.datasets &&
-      this.datasets.length &&
+      this.chart &&
       (changedProps.has('type') ||
         changedProps.has('plugins') ||
         changedProps.has('width') ||
@@ -497,9 +502,15 @@ export class KDChart extends LitElement {
       ...this.plugins,
     ];
 
-    // only add a11y and music plugins for standard chart types
+    // only add certain plugins for standard chart types
     if (!ignoredTypes.includes(this.type)) {
-      plugins = [...plugins, a11yPlugin, musicPlugin];
+      plugins = [
+        ...plugins,
+        a11yPlugin,
+        musicPlugin,
+        annotationPlugin,
+        datalabelsPlugin,
+      ];
     }
 
     if (this.chart) {

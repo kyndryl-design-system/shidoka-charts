@@ -23,6 +23,21 @@ export default {
       },
     },
     backgrounds: { disable: true },
+    a11y: {
+      // disable violations flagged in chartjs-plugin-a11y-legend
+      config: {
+        rules: [
+          {
+            id: 'aria-toggle-field-name',
+            enabled: false,
+          },
+          {
+            id: 'aria-required-parent',
+            enabled: false,
+          },
+        ],
+      },
+    },
   },
 };
 
