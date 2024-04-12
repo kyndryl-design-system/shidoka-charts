@@ -25,9 +25,9 @@ const args = {
     {
       data: [30, 30, 30],
       borderWidth: 2,
-      circumference: 180,
-      rotation: 270,
+
       cutout: '80%',
+      // Required needleValue to show needle
       needleValue: 40,
       //   cutoutPercentage: 50,
     },
