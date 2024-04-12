@@ -10,7 +10,7 @@ export default {
       'divergent01',
       'divergent02',
       'rag03',
-      'rag06',
+      'rag08',
     ],
     control: { type: 'select' },
   },

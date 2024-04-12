@@ -153,13 +153,13 @@ export const RAG03 = {
   },
 };
 
-export const RAG06 = {
+export const RAG08 = {
   args,
   render: (args) => {
     return html`
-      Red-Amber-Green-06
+      Red-Amber-Green-08
       <div class="colors">
-        ${colorPalettes.rag06.map((color) => {
+        ${colorPalettes.rag08.map((color) => {
           return html`<span style="background-color: ${color}"></span>`;
         })}
       </div>

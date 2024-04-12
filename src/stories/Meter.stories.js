@@ -84,7 +84,7 @@ const args = {
   hideCaptions: false,
   hideHeader: false,
   hideControls: false,
-  colorPalette: 'categorical',
+  colorPalette: 'rag03',
   noBorder: false,
   width: null,
   height: null,
