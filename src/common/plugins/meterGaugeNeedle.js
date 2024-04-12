@@ -1,12 +1,11 @@
-const TextColor =
+const NeedleColor =
   getComputedStyle(document.documentElement).getPropertyValue(
-    '--kd-color-text-primary'
-  ) || '#3d3c3c';
+    '--kd-color-background-ui'
+  ) || '#898888';
 
 export default {
   id: 'meterGaugeNeedle',
   afterDatasetsDraw: (chart, args, plugins) => {
-    // if (chart.config.type === 'meter') {
     const { ctx, data } = chart;
     ctx.save();
     // fetch x and y for needle position
@@ -24,6 +23,8 @@ export default {
 
     const dataTotal = data.datasets[0].data.reduce((a, b) => a + b, 0);
 
+    // const angle = Math.PI + (1 / dataTotal) * needleValue * Math.PI;
+
     const circumference =
       (chart.getDatasetMeta(0).data[0].circumference /
         Math.PI /
@@ -37,8 +38,8 @@ export default {
 
     ctx.beginPath();
 
-    ctx.strokeStyle = '#898888';
-    ctx.fillStyle = '#898888';
+    ctx.strokeStyle = NeedleColor;
+    ctx.fillStyle = NeedleColor;
     ctx.lineWidth = 1;
 
     ctx.moveTo(0 - radius, 0);
@@ -56,6 +57,5 @@ export default {
     ctx.fill();
 
     ctx.restore();
-    // }
   },
 };

@@ -20,24 +20,24 @@ export default {
 const args = {
   chartTitle: 'Meter Chart',
   description: 'Chart description.',
-  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+  labels: ['LOW', 'MED', 'HIGH'],
   datasets: [
     {
-      data: [18, 12, 6, 9, 12, 3, 9],
+      data: [30, 30, 30],
       borderWidth: 2,
       circumference: 180,
       rotation: 270,
       cutout: '80%',
-      needleValue: 30,
+      needleValue: 40,
       //   cutoutPercentage: 50,
     },
   ],
   options: {
     plugins: {
       aspectRatio: 1.7,
-      //   legend: {
-      //     display: false,
-      //   },
+      legend: {
+        display: false,
+      },
       //   tooltip: { enabled: false },
     },
   },
