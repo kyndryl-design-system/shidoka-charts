@@ -9,6 +9,8 @@ export default {
       'sequential05',
       'divergent01',
       'divergent02',
+      'rag03',
+      'rag06',
     ],
     control: { type: 'select' },
   },

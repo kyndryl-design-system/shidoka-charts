@@ -139,6 +139,34 @@ export const Divergent02 = {
   },
 };
 
+export const RAG03 = {
+  args,
+  render: (args) => {
+    return html`
+      Red-Amber-Green-03
+      <div class="colors">
+        ${colorPalettes.rag03.map((color) => {
+          return html`<span style="background-color: ${color}"></span>`;
+        })}
+      </div>
+    `;
+  },
+};
+
+export const RAG06 = {
+  args,
+  render: (args) => {
+    return html`
+      Red-Amber-Green-06
+      <div class="colors">
+        ${colorPalettes.rag06.map((color) => {
+          return html`<span style="background-color: ${color}"></span>`;
+        })}
+      </div>
+    `;
+  },
+};
+
 // export const Default = {
 //   args,
 //   render: (args) => {
