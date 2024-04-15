@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
 import { deepmerge, deepmergeCustom } from 'deepmerge-ts';
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
@@ -29,6 +30,7 @@ import tableIcon from '@carbon/icons/es/table-of-contents/24';
 import downloadIcon from '@carbon/icons/es/download/20';
 import maximizeIcon from '@carbon/icons/es/maximize/20';
 import minimizeIcon from '@carbon/icons/es/minimize/20';
+import dragIcon from '@carbon/icons/es/draggable/16';
 
 Chart.register(
   ChoroplethController,
@@ -174,11 +176,29 @@ export class KDChart extends LitElement {
   @state()
   mergedDatasets: any = {};
 
+  /** Is Widget. Inherited from kyn-widget.
+   * @internal
+   */
+  @state()
+  _widget = false;
+
+  /** Widget has drag handle. Inherited from kyn-widget.
+   * @internal
+   */
+  @state()
+  _dragHandle = false;
+
   override render() {
+    const Classes = {
+      container: true,
+      fullscreen: this.fullscreen,
+      'no-border': this.noBorder || this._widget,
+      widget: this._widget,
+    };
+
     return html`
       <div
-        class="container ${this.fullscreen ? 'fullscreen' : ''}
-          ${this.noBorder ? 'no-border' : ''}"
+        class=${classMap(Classes)}
         @fullscreenchange=${() => this.handleFullscreenChange()}
       >
         ${!this.hideHeader || !this.hideControls
@@ -186,6 +206,18 @@ export class KDChart extends LitElement {
               <div class="header">
                 ${!this.hideHeader
                   ? html`
+                      ${this._dragHandle
+                        ? html`
+                            <span
+                              class="drag-handle"
+                              @pointerdown=${this._handleDragGrabbed}
+                              @pointerup=${this._handleDragReleased}
+                            >
+                              <kd-icon .icon=${dragIcon}></kd-icon>
+                            </span>
+                          `
+                        : null}
+
                       <div id="titleDesc">
                         <div class="title">${this.chartTitle}</div>
                         <div
@@ -668,6 +700,16 @@ export class KDChart extends LitElement {
 
   private handleFullscreenChange() {
     this.fullscreen = this.shadowRoot?.fullscreenElement !== null;
+  }
+
+  private _handleDragGrabbed() {
+    const Widget: any = this.parentElement;
+    Widget._dragActive = true;
+  }
+
+  private _handleDragReleased() {
+    const Widget: any = this.parentElement;
+    Widget._dragActive = false;
   }
 }
 
