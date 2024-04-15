@@ -1,3 +1,59 @@
+# [1.3.0](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.2.2...v1.3.0) (2024-04-11)
+
+
+### Features
+
+* **doughnut:** make doughnut center labels customizable ([#19](https://github.com/kyndryl-design-system/shidoka-charts/issues/19)) ([8ec3b4c](https://github.com/kyndryl-design-system/shidoka-charts/commit/8ec3b4c853dfb1b6d437f76420b02656d852a03e))
+
+## [1.2.2](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.2.1...v1.2.2) (2024-04-10)
+
+
+### Bug Fixes
+
+* **chart:** prevent re-render on init, remove certain plugins for third party chart types ([81d9400](https://github.com/kyndryl-design-system/shidoka-charts/commit/81d94001788a79e80cd0d2c28ff5d4170eeaad6d))
+
+## [1.2.1](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.2.0...v1.2.1) (2024-04-08)
+
+
+### Bug Fixes
+
+* **chart:** dataset updating ([aced05d](https://github.com/kyndryl-design-system/shidoka-charts/commit/aced05d368f391e1219bc58485a12fc67548bbbd))
+
+# [1.2.0](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.8...v1.2.0) (2024-04-05)
+
+
+### Features
+
+* **chart:** add slots, hideHeader, & hideControls, resolves [#11](https://github.com/kyndryl-design-system/shidoka-charts/issues/11) ([0957d33](https://github.com/kyndryl-design-system/shidoka-charts/commit/0957d332d878441572331a46d6f8af12d686f632))
+
+## [1.1.8](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.7...v1.1.8) (2024-04-02)
+
+
+### Bug Fixes
+
+* **chart:** more graceful dataset updating ([90bbff2](https://github.com/kyndryl-design-system/shidoka-charts/commit/90bbff2b4cc87bb7d249fe7085c388477e330c20))
+
+## [1.1.7](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.6...v1.1.7) (2024-03-01)
+
+
+### Bug Fixes
+
+* **chart:** remove deferred plugin ([1704f2b](https://github.com/kyndryl-design-system/shidoka-charts/commit/1704f2b269c235c4f5645d325c2c62cbad04efaa))
+
+## [1.1.6](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.5...v1.1.6) (2024-02-22)
+
+
+### Bug Fixes
+
+* **chart:** resolve issue where chart may not initialize ([8badc43](https://github.com/kyndryl-design-system/shidoka-charts/commit/8badc43f0e2fdddfb5d2e12689876d5fa78a1466))
+
+## [1.1.5](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.4...v1.1.5) (2024-02-01)
+
+
+### Bug Fixes
+
+* update table styles, resolves [#10](https://github.com/kyndryl-design-system/shidoka-charts/issues/10) ([4912bdc](https://github.com/kyndryl-design-system/shidoka-charts/commit/4912bdceb19416d5eb17cb85a6d55da0f1612212))
+
 ## [1.1.4](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.1.3...v1.1.4) (2024-01-02)
 
 

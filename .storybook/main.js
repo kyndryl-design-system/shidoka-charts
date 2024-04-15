@@ -1,11 +1,8 @@
 import remarkGfm from 'remark-gfm';
+const Sass = require('sass');
 
 export default {
-  stories: [
-    '../src/stories/welcome.mdx', //force default page
-    '../src/**/*.mdx',
-    '../src/**/*.stories.@(js|jsx|ts|tsx)',
-  ],
+  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
@@ -46,16 +43,10 @@ export default {
             {
               use: [
                 {
-                  loader: 'lit-scss-loader',
+                  loader: 'lit-css-loader',
                   options: {
-                    minify: true,
-                  },
-                },
-                'extract-loader',
-                {
-                  loader: 'css-loader',
-                  options: {
-                    url: false,
+                    transform: (data, { filePath }) =>
+                      Sass.renderSync({ data, file: filePath }).css.toString(),
                   },
                 },
                 'sass-loader',
@@ -73,6 +64,9 @@ export default {
         },
       },
     },
+    '@storybook/addon-webpack5-compiler-babel',
+    '@storybook/addon-a11y',
+    '@storybook/addon-interactions',
   ],
   framework: {
     name: '@storybook/web-components-webpack5',
@@ -81,6 +75,7 @@ export default {
   core: {
     disableTelemetry: true,
   },
+  staticDirs: ['./static'],
   docs: {
     autodocs: true,
   },

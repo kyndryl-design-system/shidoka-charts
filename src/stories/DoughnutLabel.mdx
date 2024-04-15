@@ -1,0 +1,55 @@
+import { Meta, Story, Canvas, Controls, Stories } from '@storybook/blocks';
+import * as PieDoughnutStories from './PieDoughnut.stories.js';
+
+<Meta title="Charts/Pie & Doughnut/Doughnut Label" />
+
+# Doughnut Labels Plugin
+
+Customize or disable the labels in the center of the doughnut chart.
+
+## Configuration
+
+Pass `doughtnutLabel` configuration to the chart `options`.
+
+### Defaults
+
+```js
+{
+  doughnutLabel: {
+    disabled: false, // boolean
+    line1text: total, // string or function
+    line2text: options.scales.y.title.text, // string or function
+  }
+}
+```
+
+### Custom Strings
+
+```js
+{
+  doughnutLabel: {
+    line1text: 'Line 1';
+  }
+}
+```
+
+### Scriptable Functions
+
+A custom function that returns a string. The first prop is the default value. The second prop is the chart instance/context.
+
+```js
+{
+  doughnutLabel: {
+    line1text: function (defaultValue, context) {
+      // example: add commas to total
+      return defaultValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+  }
+}
+```
+
+## Example
+
+<Canvas of={PieDoughnutStories.DoughnutCustomCenterLabel}>
+  <Story of={PieDoughnutStories.DoughnutCustomCenterLabel} />
+</Canvas>

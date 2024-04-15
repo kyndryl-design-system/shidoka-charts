@@ -3,7 +3,6 @@ import { customElement, property, state, query } from 'lit/decorators.js';
 import { deepmerge, deepmergeCustom } from 'deepmerge-ts';
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
-import ChartDeferred from 'chartjs-plugin-deferred';
 import {
   ChoroplethController,
   BubbleMapController,
@@ -27,14 +26,11 @@ import globalOptionsRadial from '../../common/config/globalOptionsRadial';
 import '@kyndryl-design-system/shidoka-foundation/components/icon';
 import chartIcon from '@carbon/icons/es/chart--line/24';
 import tableIcon from '@carbon/icons/es/table-of-contents/24';
-import overflowIcon from '@carbon/icons/es/overflow-menu--vertical/24';
+import downloadIcon from '@carbon/icons/es/download/20';
 import maximizeIcon from '@carbon/icons/es/maximize/20';
 import minimizeIcon from '@carbon/icons/es/minimize/20';
 
 Chart.register(
-  ChartDeferred,
-  datalabelsPlugin,
-  annotationPlugin,
   ChoroplethController,
   BubbleMapController,
   GeoFeature,
@@ -47,6 +43,8 @@ Chart.register(
 
 /**
  * Chart.js wrapper component.
+ * @slot unnamed - Slot for custom content between header and chart.
+ * @slot controls - Slot for custom controls such as an overflow menu.
  */
 @customElement('kd-chart')
 export class KDChart extends LitElement {
@@ -96,6 +94,14 @@ export class KDChart extends LitElement {
   @property({ type: Boolean })
   hideCaptions = false;
 
+  /** Hides the title & description. */
+  @property({ type: Boolean })
+  hideHeader = false;
+
+  /** Hides the controls. */
+  @property({ type: Boolean })
+  hideControls = false;
+
   /** Removes the outer border and padding. */
   @property({ type: Boolean })
   noBorder = false;
@@ -105,7 +111,7 @@ export class KDChart extends LitElement {
   customLabels = {
     toggleView: 'Toggle View Mode',
     toggleFullscreen: 'Toggle Fullscreen',
-    overflowMenu: 'Overflow Menu',
+    downloadMenu: 'Download Menu',
     downloadCsv: 'Download as CSV',
     downloadPng: 'Download as PNG',
     downloadJpg: 'Download as JPG',
@@ -175,74 +181,103 @@ export class KDChart extends LitElement {
           ${this.noBorder ? 'no-border' : ''}"
         @fullscreenchange=${() => this.handleFullscreenChange()}
       >
-        <div class="header">
-          <div>
-            <div class="title">${this.chartTitle}</div>
-            <div
-              class="description ${this.hideDescription
-                ? 'hidden-visually'
-                : ''}"
-            >
-              ${this.description}
-            </div>
-          </div>
-
-          <div class="controls">
-            ${!this.tableDisabled
-              ? html`
-                  <button
-                    title="Toggle View Mode"
-                    aria-label="Toggle View Mode"
-                    class="view-toggle"
-                    @click=${() => this.handleViewToggle()}
-                  >
-                    <kd-icon
-                      .icon=${chartIcon}
-                      class="${!this.tableView ? 'active' : ''}"
-                    ></kd-icon>
-                    <kd-icon
-                      .icon=${tableIcon}
-                      class="${this.tableView ? 'active' : ''}"
-                    ></kd-icon>
-                  </button>
-                `
-              : null}
-
-            <button
-              title=${this.customLabels.toggleFullscreen}
-              aria-label=${this.customLabels.toggleFullscreen}
-              @click=${() => this.handleFullscreen()}
-            >
-              <kd-icon
-                .icon=${this.fullscreen ? minimizeIcon : maximizeIcon}
-              ></kd-icon>
-            </button>
-
-            <button
-              title=${this.customLabels.overflowMenu}
-              aria-label=${this.customLabels.overflowMenu}
-              class="overflow-button"
-            >
-              <kd-icon .icon=${overflowIcon}></kd-icon>
-
-              <div class="overflow-menu">
-                ${!this.tableDisabled
+        ${!this.hideHeader || !this.hideControls
+          ? html`
+              <div class="header">
+                ${!this.hideHeader
                   ? html`
-                      <a @click=${(e: Event) => this.handleDownloadCsv(e)}>
-                        ${this.customLabels.downloadCsv}
-                      </a>
+                      <div id="titleDesc">
+                        <div class="title">${this.chartTitle}</div>
+                        <div
+                          class="description ${this.hideDescription
+                            ? 'hidden-visually'
+                            : ''}"
+                        >
+                          ${this.description}
+                        </div>
+                      </div>
                     `
                   : null}
-                <a @click=${(e: Event) => this.handleDownloadImage(e, false)}>
-                  ${this.customLabels.downloadPng}
-                </a>
-                <a @click=${(e: Event) => this.handleDownloadImage(e, true)}>
-                  ${this.customLabels.downloadJpg}
-                </a>
+                ${!this.hideControls
+                  ? html`
+                      <div class="controls">
+                        ${!this.tableDisabled
+                          ? html`
+                              <button
+                                title="Toggle View Mode"
+                                aria-label="Toggle View Mode"
+                                class="view-toggle control-button"
+                                @click=${() => this.handleViewToggle()}
+                              >
+                                <kd-icon
+                                  .icon=${chartIcon}
+                                  class="${!this.tableView ? 'active' : ''}"
+                                ></kd-icon>
+                                <kd-icon
+                                  .icon=${tableIcon}
+                                  class="${this.tableView ? 'active' : ''}"
+                                ></kd-icon>
+                              </button>
+                            `
+                          : null}
+
+                        <button
+                          title=${this.customLabels.toggleFullscreen}
+                          aria-label=${this.customLabels.toggleFullscreen}
+                          class="control-button"
+                          @click=${() => this.handleFullscreen()}
+                        >
+                          <kd-icon
+                            .icon=${this.fullscreen
+                              ? minimizeIcon
+                              : maximizeIcon}
+                          ></kd-icon>
+                        </button>
+
+                        <div class="download">
+                          <button
+                            title=${this.customLabels.downloadMenu}
+                            aria-label=${this.customLabels.downloadMenu}
+                            class="control-button download-button"
+                          >
+                            <kd-icon .icon=${downloadIcon}></kd-icon>
+                          </button>
+
+                          <div class="download-menu">
+                            ${!this.tableDisabled
+                              ? html`
+                                  <button
+                                    @click=${(e: Event) =>
+                                      this.handleDownloadCsv(e)}
+                                  >
+                                    ${this.customLabels.downloadCsv}
+                                  </button>
+                                `
+                              : null}
+                            <button
+                              @click=${(e: Event) =>
+                                this.handleDownloadImage(e, false)}
+                            >
+                              ${this.customLabels.downloadPng}
+                            </button>
+                            <button
+                              @click=${(e: Event) =>
+                                this.handleDownloadImage(e, true)}
+                            >
+                              ${this.customLabels.downloadJpg}
+                            </button>
+                          </div>
+                        </div>
+
+                        <slot name="controls"></slot>
+                      </div>
+                    `
+                  : null}
               </div>
-            </button>
-          </div>
-        </div>
+            `
+          : null}
+
+        <slot></slot>
 
         <figure class="${this.tableView ? 'hidden' : ''}">
           <div
@@ -250,7 +285,7 @@ export class KDChart extends LitElement {
             style="${this.width ? `width: ${this.width}px;` : ''}
               ${this.height ? `height: ${this.height}px;` : ''}"
           >
-            <canvas role="img"></canvas>
+            <canvas role="img" aria-labelledby="titleDesc"></canvas>
           </div>
           <figcaption>
             <div
@@ -363,15 +398,60 @@ export class KDChart extends LitElement {
       this.mergeOptions().then(() => {
         this.chart.data.labels = this.labels;
         this.chart.options = this.mergedOptions;
-        this.chart.data.datasets = this.mergedDatasets;
+
+        // remove datasets not in mergedDatasets
+        this.chart.data.datasets.forEach((dataset: any, index: number) => {
+          const NewDataset = this.mergedDatasets.find(
+            (newDataset: any) => newDataset.label === dataset.label
+          );
+
+          if (!NewDataset) {
+            // remove
+            this.chart.data.datasets.splice(index, 1);
+          }
+        });
+
+        // update datasets, add new ones
+        this.mergedDatasets.forEach((dataset: any) => {
+          const OldDataset = this.chart.data.datasets.find(
+            (oldDataset: any) => oldDataset.label === dataset.label
+          );
+
+          if (!OldDataset) {
+            // add new dataset
+            this.chart.data.datasets.push(dataset);
+          } else {
+            // update each key/entry in the dataset object
+            Object.keys(dataset).forEach((key) => {
+              OldDataset[key] = dataset[key];
+            });
+          }
+        });
+
         this.chart.update();
       });
     }
 
+    // init chart
+    // check to make sure initial datasets + data have been provided
+    let hasData = false;
+    if (this.datasets && this.datasets.length) {
+      this.datasets.forEach((dataset) => {
+        hasData = dataset.data.length > 0;
+      });
+    }
+
+    if (!this.chart && this.type && changedProps.has('datasets') && hasData) {
+      this.mergeOptions().then(() => {
+        this.initChart();
+      });
+
+      this.checkType();
+    }
+
     // Re-init chart instance when type, plugins, colorPalette, width, or height change.
     if (
-      this.datasets &&
-      this.datasets.length &&
+      this.chart &&
       (changedProps.has('type') ||
         changedProps.has('plugins') ||
         changedProps.has('width') ||
@@ -410,9 +490,15 @@ export class KDChart extends LitElement {
       ...this.plugins,
     ];
 
-    // only add a11y and music plugins for standard chart types
+    // only add certain plugins for standard chart types
     if (!ignoredTypes.includes(this.type)) {
-      plugins = [...plugins, a11yPlugin, musicPlugin];
+      plugins = [
+        ...plugins,
+        a11yPlugin,
+        musicPlugin,
+        annotationPlugin,
+        datalabelsPlugin,
+      ];
     }
 
     if (this.chart) {

@@ -93,6 +93,25 @@
               "default": "100"
             }
           ]
+        },
+        {
+          "kind": "function",
+          "name": "getTextColor",
+          "parameters": [
+            {
+              "name": "bgHexColor",
+              "type": {
+                "text": "string"
+              },
+              "description": "The `bgHexColor` parameter is a string representing a hexadecimal color\r\ncode for the background color."
+            }
+          ],
+          "description": "Takes a background hex color as input and returns the appropriate text\r\ncolor (either primary or inversed) based on the brightness of the background color.",
+          "return": {
+            "type": {
+              "text": ""
+            }
+          }
         }
       ],
       "exports": [
@@ -135,6 +154,14 @@
             "name": "getRandomData",
             "module": "src/common/helpers/helpers.ts"
           }
+        },
+        {
+          "kind": "js",
+          "name": "getTextColor",
+          "declaration": {
+            "name": "getTextColor",
+            "module": "src/common/helpers/helpers.ts"
+          }
         }
       ]
     },
@@ -146,6 +173,16 @@
           "kind": "class",
           "description": "Chart.js wrapper component.",
           "name": "KDChart",
+          "slots": [
+            {
+              "description": "Slot for custom content between header and chart.",
+              "name": "unnamed"
+            },
+            {
+              "description": "Slot for custom controls such as an overflow menu.",
+              "name": "controls"
+            }
+          ],
           "members": [
             {
               "kind": "field",
@@ -257,6 +294,26 @@
             },
             {
               "kind": "field",
+              "name": "hideHeader",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the header.",
+              "attribute": "hideHeader"
+            },
+            {
+              "kind": "field",
+              "name": "hideControls",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the controls.",
+              "attribute": "hideControls"
+            },
+            {
+              "kind": "field",
               "name": "noBorder",
               "type": {
                 "text": "boolean"
@@ -271,9 +328,14 @@
               "type": {
                 "text": "object"
               },
-              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
+              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadMenu: 'Download Menu',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
               "description": "Customizable text labels.",
               "attribute": "customLabels"
+            },
+            {
+              "kind": "method",
+              "name": "_resizeChart",
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -444,6 +506,24 @@
               "fieldName": "hideCaptions"
             },
             {
+              "name": "hideHeader",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the header.",
+              "fieldName": "hideHeader"
+            },
+            {
+              "name": "hideControls",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the controls.",
+              "fieldName": "hideControls"
+            },
+            {
               "name": "noBorder",
               "type": {
                 "text": "boolean"
@@ -457,7 +537,7 @@
               "type": {
                 "text": "object"
               },
-              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
+              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadMenu: 'Download Menu',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
               "description": "Customizable text labels.",
               "fieldName": "customLabels"
             }
