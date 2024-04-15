@@ -1,3 +1,10 @@
+# [1.4.0-beta.1](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.3.0...v1.4.0-beta.1) (2024-04-15)
+
+
+### Features
+
+* **chart:** widget interop ([560d4d0](https://github.com/kyndryl-design-system/shidoka-charts/commit/560d4d002a350bc60bbe1e77133ff2965bea528a))
+
 # [1.3.0](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.2.2...v1.3.0) (2024-04-11)
 
 
