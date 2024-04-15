@@ -24,62 +24,10 @@ const args = {
   datasets: [
     {
       data: [30, 30, 30],
-      borderWidth: 2,
-
-      cutout: '80%',
       // Required needleValue to show needle
       needleValue: 40,
-      //   cutoutPercentage: 50,
     },
   ],
-  options: {
-    plugins: {
-      aspectRatio: 1.7,
-      legend: {
-        display: false,
-      },
-      //   tooltip: { enabled: false },
-    },
-  },
-  // plugins: [gaugeNeedle],
-  //   options: {
-  //     scales: {
-  //       x: {
-  //         title: {
-  //           text: 'Color',
-  //         },
-  //       },
-  //       y: {
-  //         title: {
-  //           text: 'Votes',
-  //         },
-  //       },
-  //     },
-  //   },
-  //   options: {
-  //     scales: {
-  //       y: {
-  //         title: {
-  //           text: 'Votes',
-  //         },
-  //       },
-  //     },
-  //     responsive: true,
-  //     maintainAspectRatio: false,
-  //     cutoutPercentage: 50,
-  //     rotation: -90,
-  //     circumference: 180,
-  //     tooltips: {
-  //       enabled: false,
-  //     },
-  //     legend: {
-  //       display: false,
-  //     },
-  //     animation: {
-  //       animateRotate: true,
-  //       animateScale: false,
-  //     },
-  //   },
   hideDescription: false,
   hideCaptions: false,
   hideHeader: false,

@@ -12,7 +12,18 @@ export const options = () => {
     radius: '80%',
     circumference: 180,
     rotation: 270,
+    aspectRatio: 1.7,
+    borderWidth: 2,
+    cutout: '80%',
+    datasets: {
+      borderWidth: 2,
+      cutout: '80%',
+    },
     plugins: {
+      legend: {
+        display: false,
+      },
+
       datalabels: {
         color: LabelColor,
         font: function (context) {
@@ -35,6 +46,6 @@ export const options = () => {
 
 export const datasetOptions = (ctx, index) => {
   return {
-    backgroundColor: colorPalettes[ctx.options.colorPalette || 'categorical'],
+    backgroundColor: colorPalettes[ctx.options.colorPalette || 'rag03'],
   };
 };
