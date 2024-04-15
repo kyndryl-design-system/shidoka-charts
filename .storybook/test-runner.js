@@ -37,7 +37,6 @@ module.exports = {
           rules: Rules,
         });
       }
-      }
 
       await checkA11y(page, '#storybook-root', Options);
     }
