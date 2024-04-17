@@ -39,7 +39,9 @@ Chart.register(
   SizeScale,
   ProjectionScale,
   TreemapController,
-  TreemapElement
+  TreemapElement,
+  annotationPlugin,
+  datalabelsPlugin
 );
 
 /**
@@ -507,13 +509,7 @@ export class KDChart extends LitElement {
 
     // only add certain plugins for standard chart types
     if (!ignoredTypes.includes(this.type)) {
-      plugins = [
-        ...plugins,
-        a11yPlugin,
-        musicPlugin,
-        annotationPlugin,
-        datalabelsPlugin,
-      ];
+      plugins = [...plugins, a11yPlugin, musicPlugin];
     }
 
     if (this.chart) {
