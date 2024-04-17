@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.4.0...v1.4.1) (2024-04-17)
+
+
+### Bug Fixes
+
+* **chart:** check treemap data before init, resolves [#21](https://github.com/kyndryl-design-system/shidoka-charts/issues/21) ([c7c6a86](https://github.com/kyndryl-design-system/shidoka-charts/commit/c7c6a86b7f4cf9f73146aa16075d1401b3f8cb1e))
+
 # [1.4.0](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.3.0...v1.4.0) (2024-04-17)
 
 
