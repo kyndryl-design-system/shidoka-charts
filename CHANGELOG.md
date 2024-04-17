@@ -1,3 +1,10 @@
+## [1.4.5](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.4.4...v1.4.5) (2024-04-17)
+
+
+### Bug Fixes
+
+* bubble and scatter table view ([ec918a9](https://github.com/kyndryl-design-system/shidoka-charts/commit/ec918a9312194321c5f72ebcc14b508204872c67))
+
 ## [1.4.4](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.4.3...v1.4.4) (2024-04-17)
 
 
