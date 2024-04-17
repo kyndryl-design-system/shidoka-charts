@@ -132,7 +132,7 @@ export const WorldBubbleMap = {
         outline: countries,
         label: 'Countries',
         data: nationCapitals.map((d) =>
-          Object.assign(d, { value: d.description.length * 100 })
+          Object.assign(d, { value: d.description.length * 10 })
         ),
       },
     ],
@@ -167,7 +167,7 @@ export const CountryBubbleMap = {
       {
         outline: states,
         data: capitals.map((d) =>
-          Object.assign(d, { value: d.description.length * 100 })
+          Object.assign(d, { value: d.description.length * 10 })
         ),
       },
     ],
