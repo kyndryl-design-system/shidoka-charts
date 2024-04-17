@@ -315,16 +315,14 @@ export class KDChart extends LitElement {
                   <tbody>
                     ${this.type === 'treemap'
                       ? Array.isArray(this.datasets[0].tree)
-                        ? this.datasets[0].tree.map(
-                            (_value: any, i: number) => {
-                              return html`
-                                <tr>
-                                  <td>${_value[this.datasets[0].labelKey]}</td>
-                                  <td>${_value[this.datasets[0].key]}</td>
-                                </tr>
-                              `;
-                            }
-                          )
+                        ? this.datasets[0].tree.map((_value: any) => {
+                            return html`
+                              <tr>
+                                <td>${_value[this.datasets[0].labelKey]}</td>
+                                <td>${_value[this.datasets[0].key]}</td>
+                              </tr>
+                            `;
+                          })
                         : Object.entries(this.datasets[0].tree).map(
                             (_value: any) => {
                               const HtmlStrings = [];
