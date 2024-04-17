@@ -438,7 +438,10 @@ export class KDChart extends LitElement {
     let hasData = false;
     if (this.datasets && this.datasets.length) {
       this.datasets.forEach((dataset) => {
-        hasData = dataset.data.length > 0;
+        hasData =
+          dataset.data?.length ||
+          dataset.tree?.length ||
+          Object.keys(dataset.tree).length;
       });
     }
 
