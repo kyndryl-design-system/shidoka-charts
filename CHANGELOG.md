@@ -1,3 +1,10 @@
+## [1.4.2](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.4.1...v1.4.2) (2024-04-17)
+
+
+### Bug Fixes
+
+* **chart:** restore bubblemap datalabels ([2edbeca](https://github.com/kyndryl-design-system/shidoka-charts/commit/2edbeca1697c4392ba03f111441af7570bb5c02f))
+
 ## [1.4.1](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.4.0...v1.4.1) (2024-04-17)
 
 
