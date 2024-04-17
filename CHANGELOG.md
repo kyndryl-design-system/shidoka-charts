@@ -1,3 +1,10 @@
+## [1.4.3](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.4.2...v1.4.3) (2024-04-17)
+
+
+### Bug Fixes
+
+* **geo:** enable table view ([717c9e8](https://github.com/kyndryl-design-system/shidoka-charts/commit/717c9e89fcd3d110d227621e7bf3b864765ae75d))
+
 ## [1.4.2](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.4.1...v1.4.2) (2024-04-17)
 
 
