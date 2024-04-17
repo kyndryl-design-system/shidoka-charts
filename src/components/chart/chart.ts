@@ -305,7 +305,9 @@ export class KDChart extends LitElement {
                 <table>
                   <thead>
                     <tr>
-                      <th>${this.getTableAxisLabel()}</th>
+                      ${this.labels?.length || this.type === 'treemap'
+                        ? html`<th>${this.getTableAxisLabel()}</th>`
+                        : null}
                       ${this.datasets.map((dataset) => {
                         return html`<th>${dataset.label}</th>`;
                       })}
