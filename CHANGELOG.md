@@ -1,3 +1,23 @@
+# [1.4.0](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.3.0...v1.4.0) (2024-04-17)
+
+
+### Bug Fixes
+
+* **meter:** [@esbuild](https://github.com/esbuild) error while npm run storybook ([d3ee3af](https://github.com/kyndryl-design-system/shidoka-charts/commit/d3ee3af3d115be7083e1614bf6f8e720f646c4e7))
+* **meter:** Added customWord below needle ([5a35903](https://github.com/kyndryl-design-system/shidoka-charts/commit/5a359031fa9671070882f1287c071c49fb630660))
+* **meter:** ctx ununsed inside meter ([08bdb73](https://github.com/kyndryl-design-system/shidoka-charts/commit/08bdb732f7a666625b9ab9c4f7978713e522d82e))
+* **meter:** esbuild error at repo end ([929ea9d](https://github.com/kyndryl-design-system/shidoka-charts/commit/929ea9dcd56f5d4b5ee1f39c56125dfcb6fe1d73))
+* **meter:** moved meter chart options inside meter.js ([b73cdfc](https://github.com/kyndryl-design-system/shidoka-charts/commit/b73cdfc8edacf3844a3ad6bd7e42bf1a7f5c4709))
+* **meter:** Remove debugger ([02bb53d](https://github.com/kyndryl-design-system/shidoka-charts/commit/02bb53df564df130c21778273f13d24744f9a106))
+
+
+### Features
+
+* **color:** Added RAG3 and RAG6 color palette ([9efc1b0](https://github.com/kyndryl-design-system/shidoka-charts/commit/9efc1b0647f579b45b452792d9a05274d40a1f1d))
+* **meter:** Added datalabel below needle ([0cd4a94](https://github.com/kyndryl-design-system/shidoka-charts/commit/0cd4a947bba6a3e108c717a0b950eb07c2e381ac))
+* **meter:** Added meter chart derrived from donut chart and adjust plugin calls and chart type accordingly ([b5bb8a9](https://github.com/kyndryl-design-system/shidoka-charts/commit/b5bb8a95b4da13d94cd53cb4b83d9314e685037f))
+* **meter:** Added new color palette inside meter stories and add DataLabels and hide legends default as per UX request ([f8cd634](https://github.com/kyndryl-design-system/shidoka-charts/commit/f8cd63407208a353642239fe31b856d3609f546e))
+
 # [1.3.0](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.2.2...v1.3.0) (2024-04-11)
 
 
