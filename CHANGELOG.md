@@ -1,3 +1,10 @@
+## [1.4.4](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.4.3...v1.4.4) (2024-04-17)
+
+
+### Bug Fixes
+
+* **chart:** enable table view for treemap ([5ec6c0f](https://github.com/kyndryl-design-system/shidoka-charts/commit/5ec6c0f5ad083d6fb2de3d0ab1f9c74166543d5e))
+
 ## [1.4.3](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.4.2...v1.4.3) (2024-04-17)
 
 
