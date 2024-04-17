@@ -323,7 +323,12 @@ export class KDChart extends LitElement {
                           ${this.datasets.map((dataset) => {
                             const dataPoint = dataset.data[i];
 
-                            if (Array.isArray(dataPoint)) {
+                            if (
+                              this.type === 'bubbleMap' ||
+                              this.type === 'choropleth'
+                            ) {
+                              return html`<td>${dataset.data[i].value}</td>`;
+                            } else if (Array.isArray(dataPoint)) {
                               // handle data in array format
                               return html`
                                 <td>${dataPoint[0]}, ${dataPoint[1]}</td>
@@ -625,7 +630,7 @@ export class KDChart extends LitElement {
 
   private checkType() {
     // chart types that can't have a data table view
-    const blacklist = ['choropleth', 'bubbleMap', 'treemap'];
+    const blacklist = ['treemap'];
     this.tableDisabled = blacklist.includes(this.type);
   }
 

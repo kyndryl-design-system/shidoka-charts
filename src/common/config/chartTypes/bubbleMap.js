@@ -45,6 +45,12 @@ export const options = (ctx) => {
         axis: 'x',
         projection: 'naturalEarth1',
       },
+      x: {
+        display: false,
+      },
+      y: {
+        display: false,
+      },
       //   size: {
       //     axis: 'x',
       //     legend: {
