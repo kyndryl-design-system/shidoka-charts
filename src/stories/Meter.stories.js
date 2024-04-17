@@ -26,6 +26,8 @@ const args = {
       data: [30, 30, 30],
       // Required needleValue to show needle
       needleValue: 40,
+      // optional customWord to provide user to add extra word along woth label text below needle
+      customWord: 'RISK',
     },
   ],
   hideDescription: false,

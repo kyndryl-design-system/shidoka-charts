@@ -22,9 +22,12 @@ const displayLabelBelowNeedle = (
   dataLabels,
   data,
   needleVal,
-  circumference
+  circumference,
+  customWord
 ) => {
   const defaultVal = `${(circumference * 100).toFixed(1)}%`;
+  // default customWord along with Lable is RISK, user can modify it.
+  const appendCustomWord = customWord ?? '';
   // if dataLabels arr not provided or needleVal is not prsent then we returning % of circumference of where needle points
   if (dataLabels.length === 0 || needleVal === undefined) {
     return defaultVal;
@@ -35,7 +38,7 @@ const displayLabelBelowNeedle = (
     // Check if needleValue is less than or equal to the cumulative value
     if (needleVal <= cumulativeValue) {
       // Return the corresponding data label
-      return dataLabels[i];
+      return `${dataLabels[i]} ${appendCustomWord}`;
     }
   }
   // If needleValue is greater than the cumulative value of all data points, return the last data label
@@ -74,12 +77,15 @@ export default {
       needleValue;
 
     // Dynamically add dataLabel below needle
-    const textBelowNeedle = displayLabelBelowNeedle(
-      chart.data.labels,
-      data.datasets[0].data,
-      needleValue,
-      circumference
-    );
+    // const textBelowNeedle = displayLabelBelowNeedle(
+    //   chart.data.labels,
+    //   data.datasets[0].data,
+    //   needleValue,
+    //   circumference,
+    //   data.datasets[0].customWord
+    // );
+
+    const textBelowNeedle = data.datasets[0].customWord ?? '';
 
     // ctx.save();
     // Enter text below needle
@@ -95,9 +101,9 @@ export default {
     ctx.beginPath();
 
     // Needle color
-    ctx.strokeStyle = NeedleColor;
+    ctx.strokeStyle = '#ffffff';
     ctx.fillStyle = NeedleColor;
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 2;
 
     // Draw needle
     ctx.moveTo(0 - radius, 0);
