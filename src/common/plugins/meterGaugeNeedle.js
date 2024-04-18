@@ -91,7 +91,8 @@ export default {
     ctx.font = '14px "Helvetica Neue", Helvetica, Arial, sans-serif';
     ctx.fillStyle = 'grey';
     ctx.textAlign = 'center';
-    ctx.fillText(textBelowNeedle, xCenter, yCenter + 30);
+    ctx.fillText(needleValue, xCenter, yCenter + 25);
+    ctx.fillText(textBelowNeedle, xCenter, yCenter + 43);
 
     ctx.translate(xCenter, yCenter);
 

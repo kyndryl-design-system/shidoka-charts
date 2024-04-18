@@ -20,7 +20,7 @@ export default {
 const args = {
   chartTitle: 'Meter Chart',
   description: 'Chart description.',
-  labels: ['Low', 'Med', 'High'],
+  labels: ['LOW', 'MED', 'HIGH'],
   datasets: [
     {
       label: 'Segment Size',
@@ -28,14 +28,14 @@ const args = {
       // Required needleValue to show needle
       needleValue: 40,
       // optional customWord to provide user to add extra word along with label text below needle
-      customWord: 'Risk',
+      customWord: 'RISK',
     },
   ],
   options: {
     scales: {
       x: {
         title: {
-          text: 'Risk',
+          text: 'RISK',
         },
       },
     },
