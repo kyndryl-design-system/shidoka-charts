@@ -84,7 +84,6 @@ export default {
     //   circumference,
     //   data.datasets[0].customWord
     // );
-
     const textBelowNeedle = data.datasets[0].customWord ?? '';
 
     // ctx.save();
@@ -95,6 +94,16 @@ export default {
     ctx.fillText(textBelowNeedle, xCenter, yCenter + 30);
 
     ctx.translate(xCenter, yCenter);
+
+    // Min - Max value
+    ctx.font = '14px "Helvetica Neue", Helvetica, Arial, sans-serif';
+    ctx.fillStyle = 'black';
+    ctx.textAlign = 'center';
+    // Min value 0
+    ctx.fillText('0', 0 - innerRadius - widthSlice, 20);
+    // Max value 100
+    ctx.fillText('100', 0 + innerRadius + widthSlice, 20);
+
     // rotate needle
     ctx.rotate(Math.PI * (circumference + 1.5));
 
