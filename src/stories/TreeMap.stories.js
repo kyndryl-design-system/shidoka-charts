@@ -24,9 +24,10 @@ const args = {
   description: 'Chart description.',
   datasets: [
     {
-      label: 'Dataset 1',
+      label: 'Population',
       tree: statsByState,
       key: 'population',
+      labelKey: 'state',
       labels: {
         formatter(ctx) {
           if (ctx.type !== 'data') {
@@ -37,20 +38,15 @@ const args = {
       },
     },
   ],
-  // options: {
-  //   plugins: {
-  //     zoom: {
-  //       zoom: {
-  //         wheel: {
-  //           enabled: true,
-  //         },
-  //       },
-  //       pan: {
-  //         enabled: true,
-  //       },
-  //     },
-  //   },
-  // },
+  options: {
+    scales: {
+      x: {
+        title: {
+          text: 'State',
+        },
+      },
+    },
+  },
   hideDescription: false,
   hideCaptions: false,
   hideHeader: false,
@@ -71,6 +67,7 @@ export const TreeMap = {
         .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
+        .options=${args.options}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?hideHeader=${args.hideHeader}
@@ -89,9 +86,10 @@ export const Grouped = {
     ...args,
     datasets: [
       {
-        label: 'Dataset 1',
+        label: 'Population',
         tree: statsByState,
         key: 'population',
+        labelKey: 'state',
         groups: ['region', 'state'],
         labels: {
           formatter(ctx) {
@@ -130,7 +128,7 @@ export const NestedData = {
     ...args,
     datasets: [
       {
-        label: 'Dataset 1',
+        label: 'Value',
         tree: nestedTree,
         treeLeafKey: 'name',
         key: 'value',
@@ -145,6 +143,15 @@ export const NestedData = {
         },
       },
     ],
+    options: {
+      scales: {
+        x: {
+          title: {
+            text: 'Category',
+          },
+        },
+      },
+    },
   },
   render: (args) => {
     return html`

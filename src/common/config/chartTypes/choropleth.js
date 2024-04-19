@@ -21,6 +21,12 @@ export const options = (ctx) => {
         axis: 'x',
         projection: 'naturalEarth1',
       },
+      x: {
+        display: false,
+      },
+      y: {
+        display: false,
+      },
       color: {
         axis: 'x',
         interpolate: (value) => {

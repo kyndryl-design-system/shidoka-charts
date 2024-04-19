@@ -50,13 +50,22 @@ export const WorldChoropleth = {
     labels: countries.map((d) => d.properties.name),
     datasets: [
       {
-        label: 'Countries',
+        label: 'Population',
         data: countries.map((d) => ({
           feature: d,
           value: d.properties.name.length * 10,
         })),
       },
     ],
+    options: {
+      scales: {
+        x: {
+          title: {
+            text: 'Country',
+          },
+        },
+      },
+    },
   },
   render: (args) => {
     return html`
@@ -85,7 +94,7 @@ export const CountryChoropleth = {
     labels: states.map((d) => d.properties.name),
     datasets: [
       {
-        label: 'States',
+        label: 'Population',
         outline: nation,
         data: states.map((d) => ({
           feature: d,
@@ -98,6 +107,11 @@ export const CountryChoropleth = {
         projection: {
           axis: 'x',
           projection: 'albersUsa',
+        },
+        x: {
+          title: {
+            text: 'State',
+          },
         },
       },
     },
@@ -129,13 +143,22 @@ export const WorldBubbleMap = {
     labels: nationCapitals.map((d) => d.description),
     datasets: [
       {
+        label: 'Population',
         outline: countries,
-        label: 'Countries',
         data: nationCapitals.map((d) =>
-          Object.assign(d, { value: d.description.length * 100 })
+          Object.assign(d, { value: d.description.length * 10 })
         ),
       },
     ],
+    options: {
+      scales: {
+        x: {
+          title: {
+            text: 'Capital City',
+          },
+        },
+      },
+    },
     colorPalette: 'categorical',
   },
   render: (args) => {
@@ -165,9 +188,10 @@ export const CountryBubbleMap = {
     labels: capitals.map((d) => d.description),
     datasets: [
       {
+        label: 'Population',
         outline: states,
         data: capitals.map((d) =>
-          Object.assign(d, { value: d.description.length * 100 })
+          Object.assign(d, { value: d.description.length * 10 })
         ),
       },
     ],
@@ -176,6 +200,11 @@ export const CountryBubbleMap = {
         projection: {
           axis: 'x',
           projection: 'albersUsa',
+        },
+        x: {
+          title: {
+            text: 'Capital City',
+          },
         },
       },
     },

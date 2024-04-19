@@ -15,6 +15,7 @@ import {
 import { TreemapController, TreemapElement } from 'chartjs-chart-treemap';
 import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
+import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import musicPlugin from 'chartjs-plugin-chart2music';
 import datalabelsPlugin from 'chartjs-plugin-datalabels';
@@ -40,7 +41,9 @@ Chart.register(
   SizeScale,
   ProjectionScale,
   TreemapController,
-  TreemapElement
+  TreemapElement,
+  annotationPlugin,
+  datalabelsPlugin
 );
 
 /**
@@ -334,7 +337,7 @@ export class KDChart extends LitElement {
                 <table>
                   <thead>
                     <tr>
-                      ${this.labels.length
+                      ${this.labels?.length || this.type === 'treemap'
                         ? html`<th>${this.getTableAxisLabel()}</th>`
                         : null}
                       ${this.datasets.map((dataset) => {
@@ -342,44 +345,102 @@ export class KDChart extends LitElement {
                       })}
                     </tr>
                   </thead>
-                  <tbody>
-                    ${this.datasets[0].data.map((_value: any, i: number) => {
-                      return html`
-                        <tr>
-                          ${this.labels.length
-                            ? html`<td>${this.labels[i]}</td>`
-                            : null}
-                          ${this.datasets.map((dataset) => {
-                            const dataPoint = dataset.data[i];
 
-                            if (Array.isArray(dataPoint)) {
-                              // handle data in array format
-                              return html`
-                                <td>${dataPoint[0]}, ${dataPoint[1]}</td>
-                              `;
-                            } else if (
-                              typeof dataPoint === 'object' &&
-                              !Array.isArray(dataPoint) &&
-                              dataPoint !== null
-                            ) {
-                              // handle data in object format
-                              return html`
-                                <td>
-                                  ${Object.keys(dataPoint).map((key) => {
-                                    return html`
-                                      <span>${key}: ${dataPoint[key]}</span>
-                                    `;
-                                  })}
-                                </td>
-                              `;
-                            } else {
-                              // handle data in number/basic format
-                              return html`<td>${dataset.data[i]}</td>`;
+                  <tbody>
+                    ${this.type === 'treemap'
+                      ? Array.isArray(this.datasets[0].tree)
+                        ? this.datasets[0].tree.map((_value: any) => {
+                            return html`
+                              <tr>
+                                <td>${_value[this.datasets[0].labelKey]}</td>
+                                <td>${_value[this.datasets[0].key]}</td>
+                              </tr>
+                            `;
+                          })
+                        : Object.entries(this.datasets[0].tree).map(
+                            (_value: any) => {
+                              const HtmlStrings = [];
+
+                              if (_value[1].value) {
+                                HtmlStrings.push(html`
+                                  <tr>
+                                    <td>${_value[0]}</td>
+                                    <td>${_value[1].value}</td>
+                                  </tr>
+                                `);
+                              } else {
+                                Object.entries(_value[1]).map(
+                                  (_subValue: any) => {
+                                    if (_subValue[1].value) {
+                                      HtmlStrings.push(html`
+                                        <tr>
+                                          <td>${_subValue[0]}</td>
+                                          <td>${_subValue[1].value}</td>
+                                        </tr>
+                                      `);
+                                    } else {
+                                      Object.entries(_subValue[1]).map(
+                                        (_subSubValue: any) => {
+                                          HtmlStrings.push(html`
+                                            <tr>
+                                              <td>${_subSubValue[0]}</td>
+                                              <td>${_subSubValue[1].value}</td>
+                                            </tr>
+                                          `);
+                                        }
+                                      );
+                                    }
+                                  }
+                                );
+                              }
+
+                              return HtmlStrings;
                             }
-                          })}
-                        </tr>
-                      `;
-                    })}
+                          )
+                      : this.datasets[0].data.map((_value: any, i: number) => {
+                          return html`
+                            <tr>
+                              ${this.labels.length
+                                ? html`<td>${this.labels[i]}</td>`
+                                : null}
+                              ${this.datasets.map((dataset) => {
+                                const dataPoint = dataset.data[i];
+
+                                if (
+                                  this.type === 'bubbleMap' ||
+                                  this.type === 'choropleth'
+                                ) {
+                                  return html`<td>
+                                    ${dataset.data[i].value}
+                                  </td>`;
+                                } else if (Array.isArray(dataPoint)) {
+                                  // handle data in array format
+                                  return html`
+                                    <td>${dataPoint[0]}, ${dataPoint[1]}</td>
+                                  `;
+                                } else if (
+                                  typeof dataPoint === 'object' &&
+                                  !Array.isArray(dataPoint) &&
+                                  dataPoint !== null
+                                ) {
+                                  // handle data in object format
+                                  return html`
+                                    <td>
+                                      ${Object.keys(dataPoint).map((key) => {
+                                        return html`
+                                          <span>${key}: ${dataPoint[key]}</span>
+                                        `;
+                                      })}
+                                    </td>
+                                  `;
+                                } else {
+                                  // handle data in number/basic format
+                                  return html`<td>${dataset.data[i]}</td>`;
+                                }
+                              })}
+                            </tr>
+                          `;
+                        })}
                   </tbody>
                 </table>
               </div>
@@ -469,7 +530,10 @@ export class KDChart extends LitElement {
     let hasData = false;
     if (this.datasets && this.datasets.length) {
       this.datasets.forEach((dataset) => {
-        hasData = dataset.data.length > 0;
+        hasData =
+          dataset.data?.length ||
+          dataset.tree?.length ||
+          Object.keys(dataset.tree).length;
       });
     }
 
@@ -516,21 +580,26 @@ export class KDChart extends LitElement {
         '--kd-color-text-primary'
       ) || '#3d3c3c';
 
+    // let plugins = [
+    //   canvasBackgroundPlugin,
+    //   doughnutLabelPlugin,
+    //   meterGaugePlugin,
+    //   ...this.plugins,
+    // ];
+
+    // Select plugin when type='meter'. Otherwise both plugins (meterGaugePlugin & doughnutLabelPlugin) are called
+    const pluginSelectForDoghnutMeter =
+      this.type === 'meter' ? meterGaugePlugin : doughnutLabelPlugin;
+
     let plugins = [
       canvasBackgroundPlugin,
-      doughnutLabelPlugin,
+      pluginSelectForDoghnutMeter,
       ...this.plugins,
     ];
 
     // only add certain plugins for standard chart types
     if (!ignoredTypes.includes(this.type)) {
-      plugins = [
-        ...plugins,
-        a11yPlugin,
-        musicPlugin,
-        annotationPlugin,
-        datalabelsPlugin,
-      ];
+      plugins = [...plugins, a11yPlugin, musicPlugin];
     }
 
     if (this.chart) {
@@ -538,7 +607,8 @@ export class KDChart extends LitElement {
     }
 
     this.chart = new Chart(this.canvas, {
-      type: this.type,
+      //type: this.type,
+      type: this.type === 'meter' ? 'doughnut' : this.type,
       data: {
         labels: this.labels,
         datasets: this.mergedDatasets,
@@ -553,12 +623,12 @@ export class KDChart extends LitElement {
    * final set of options for a chart.
    */
   private async mergeOptions() {
-    const radialTypes = ['pie', 'doughnut', 'radar', 'polarArea'];
+    const radialTypes = ['pie', 'doughnut', 'radar', 'polarArea', 'meter'];
     const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
 
-    // get chart types from datasets so we can import additional configs
     const additionalTypeImports: any = [];
     this.datasets.forEach((dataset) => {
+      // get chart types from datasets so we can import additional configs
       if (dataset.type) {
         additionalTypeImports.push(
           import(`../../common/config/chartTypes/${dataset.type}.js`)
@@ -645,7 +715,7 @@ export class KDChart extends LitElement {
 
   private checkType() {
     // chart types that can't have a data table view
-    const blacklist = ['choropleth', 'bubbleMap', 'treemap'];
+    const blacklist: any = [];
     this.tableDisabled = blacklist.includes(this.type);
   }
 
