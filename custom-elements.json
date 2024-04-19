@@ -181,6 +181,10 @@
             {
               "description": "Slot for custom controls such as an overflow menu.",
               "name": "controls"
+            },
+            {
+              "description": "Slot for widget drag handle.",
+              "name": "draghandle"
             }
           ],
           "members": [
@@ -299,7 +303,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Hides the header.",
+              "description": "Hides the title & description.",
               "attribute": "hideHeader"
             },
             {
@@ -511,7 +515,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Hides the header.",
+              "description": "Hides the title & description.",
               "fieldName": "hideHeader"
             },
             {

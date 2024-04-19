@@ -25,13 +25,13 @@ import ChartScss from './chart.scss';
 import globalOptions from '../../common/config/globalOptions';
 import globalOptionsNonRadial from '../../common/config/globalOptionsNonRadial';
 import globalOptionsRadial from '../../common/config/globalOptionsRadial';
+import '@kyndryl-design-system/shidoka-foundation/components/button';
 import '@kyndryl-design-system/shidoka-foundation/components/icon';
-import chartIcon from '@carbon/icons/es/chart--line/24';
-import tableIcon from '@carbon/icons/es/table-of-contents/24';
-import downloadIcon from '@carbon/icons/es/download/20';
-import maximizeIcon from '@carbon/icons/es/maximize/20';
-import minimizeIcon from '@carbon/icons/es/minimize/20';
-import dragIcon from '@carbon/icons/es/draggable/16';
+import chartIcon from '@carbon/icons/es/chart--line/16';
+import tableIcon from '@carbon/icons/es/table-of-contents/16';
+import downloadIcon from '@carbon/icons/es/download/16';
+import maximizeIcon from '@carbon/icons/es/maximize/16';
+import minimizeIcon from '@carbon/icons/es/minimize/16';
 
 Chart.register(
   ChoroplethController,
@@ -50,6 +50,7 @@ Chart.register(
  * Chart.js wrapper component.
  * @slot unnamed - Slot for custom content between header and chart.
  * @slot controls - Slot for custom controls such as an overflow menu.
+ * @slot draghandle - Slot for widget drag handle.
  */
 @customElement('kd-chart')
 export class KDChart extends LitElement {
@@ -185,12 +186,6 @@ export class KDChart extends LitElement {
   @state()
   _widget = false;
 
-  /** Widget has drag handle. Inherited from kyn-widget.
-   * @internal
-   */
-  @state()
-  _dragHandle = false;
-
   override render() {
     const Classes = {
       container: true,
@@ -209,17 +204,7 @@ export class KDChart extends LitElement {
               <div class="header">
                 ${!this.hideHeader
                   ? html`
-                      ${this._dragHandle
-                        ? html`
-                            <span
-                              class="drag-handle"
-                              @pointerdown=${this._handleDragGrabbed}
-                              @pointerup=${this._handleDragReleased}
-                            >
-                              <kd-icon .icon=${dragIcon}></kd-icon>
-                            </span>
-                          `
-                        : null}
+                      <slot name="draghandle"></slot>
 
                       <div id="titleDesc">
                         <div class="title">${this.chartTitle}</div>
@@ -238,45 +223,47 @@ export class KDChart extends LitElement {
                       <div class="controls">
                         ${!this.tableDisabled
                           ? html`
-                              <button
-                                title="Toggle View Mode"
-                                aria-label="Toggle View Mode"
-                                class="view-toggle control-button"
-                                @click=${() => this.handleViewToggle()}
+                              <kd-button
+                                kind="tertiary"
+                                size="small"
+                                description=${this.customLabels.toggleView}
+                                @on-click=${() => this.handleViewToggle()}
                               >
                                 <kd-icon
-                                  .icon=${chartIcon}
-                                  class="${!this.tableView ? 'active' : ''}"
+                                  slot="icon"
+                                  .icon=${this.tableView
+                                    ? tableIcon
+                                    : chartIcon}
                                 ></kd-icon>
-                                <kd-icon
-                                  .icon=${tableIcon}
-                                  class="${this.tableView ? 'active' : ''}"
-                                ></kd-icon>
-                              </button>
+                              </kd-button>
                             `
                           : null}
 
-                        <button
-                          title=${this.customLabels.toggleFullscreen}
-                          aria-label=${this.customLabels.toggleFullscreen}
-                          class="control-button"
-                          @click=${() => this.handleFullscreen()}
+                        <kd-button
+                          kind="tertiary"
+                          size="small"
+                          description=${this.customLabels.toggleFullscreen}
+                          @on-click=${() => this.handleFullscreen()}
                         >
                           <kd-icon
+                            slot="icon"
                             .icon=${this.fullscreen
                               ? minimizeIcon
                               : maximizeIcon}
                           ></kd-icon>
-                        </button>
+                        </kd-button>
 
                         <div class="download">
-                          <button
-                            title=${this.customLabels.downloadMenu}
-                            aria-label=${this.customLabels.downloadMenu}
-                            class="control-button download-button"
+                          <kd-button
+                            kind="tertiary"
+                            size="small"
+                            description=${this.customLabels.downloadMenu}
                           >
-                            <kd-icon .icon=${downloadIcon}></kd-icon>
-                          </button>
+                            <kd-icon
+                              slot="icon"
+                              .icon=${downloadIcon}
+                            ></kd-icon>
+                          </kd-button>
 
                           <div class="download-menu">
                             ${!this.tableDisabled
@@ -770,16 +757,6 @@ export class KDChart extends LitElement {
 
   private handleFullscreenChange() {
     this.fullscreen = this.shadowRoot?.fullscreenElement !== null;
-  }
-
-  private _handleDragGrabbed() {
-    const Widget: any = this.parentElement;
-    Widget._dragActive = true;
-  }
-
-  private _handleDragReleased() {
-    const Widget: any = this.parentElement;
-    Widget._dragActive = false;
   }
 }
 

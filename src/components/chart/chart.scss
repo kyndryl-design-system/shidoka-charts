@@ -98,26 +98,17 @@ table {
   margin-bottom: 24px;
 
   .widget & {
-    background: var(--kd-color-background-ui-soft);
-    margin: -16px -16px 16px -16px;
-    padding: 16px;
+    margin: -16px -16px 8px -16px;
+    padding: 16px 16px 0 16px;
     border-radius: 8px 8px 0 0;
   }
-}
-
-.drag-handle {
-  cursor: move;
-  padding-right: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .title {
   font-weight: 500;
 
   .widget & {
-    @include typography.type-ui-02;
+    @include typography.type-ui-01;
     font-weight: 500;
   }
 }
