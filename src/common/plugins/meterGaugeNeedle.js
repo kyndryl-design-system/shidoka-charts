@@ -111,7 +111,7 @@ export default {
     // Min value 0
     ctx.fillText('0', 0 - innerRadius - widthSlice, 25);
     // Max value 100
-    ctx.fillText('100', 0 + innerRadius + widthSlice, 25);
+    ctx.fillText(dataTotal, 0 + innerRadius + widthSlice, 25);
 
     // rotate needle
     ctx.rotate(Math.PI * (circumference + 1.5));
