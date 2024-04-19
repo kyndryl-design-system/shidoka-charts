@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.4.5...v1.5.0) (2024-04-19)
+
+
+### Features
+
+* **meter:** added min max value on meter chart ([#22](https://github.com/kyndryl-design-system/shidoka-charts/issues/22)) ([e07383e](https://github.com/kyndryl-design-system/shidoka-charts/commit/e07383e4acd68760ea7db725b45ab9306b622b72))
+
 ## [1.4.5](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.4.4...v1.4.5) (2024-04-17)
 
 
