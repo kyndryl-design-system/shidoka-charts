@@ -22,7 +22,7 @@ const evaluateNeedleVal = (val, total) => {
   }
   return needleVal;
 };
-
+// currently no use
 const displayLabelBelowNeedle = (
   dataLabels,
   data,
@@ -89,7 +89,7 @@ export default {
     //   circumference,
     //   data.datasets[0].customWord
     // );
-    const textBelowNeedle = data.datasets[0].customWord ?? '';
+    const textBelowNeedle = chart.config.options.scales.x.title.text ?? '';
 
     // ctx.save();
     // Enter needle value
