@@ -12,6 +12,7 @@ export const options = () => {
     radius: '80%',
     circumference: 180,
     rotation: 270,
+    aspectRatio: 1.3,
     borderWidth: 2,
     cutout: '80%',
     datasets: {
