@@ -81,7 +81,6 @@
     "chromatic": "^11.2.0",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.7.3",
-    "esbuild": "^0.20.2",
     "eslint": "^8.31.0",
     "eslint-plugin-storybook": "^0.8.0",
     "husky": "^8.0.3",
