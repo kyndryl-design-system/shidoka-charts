@@ -27,15 +27,14 @@ const args = {
       data: [30, 30, 30],
       // Required needleValue to show needle
       needleValue: 40,
-      // optional customWord to provide user to add extra word along with label text below needle
-      customWord: 'RISK',
     },
   ],
   options: {
+    // x-axis title will display below needle
     scales: {
       x: {
         title: {
-          text: 'Risk',
+          text: 'RISK',
         },
       },
     },

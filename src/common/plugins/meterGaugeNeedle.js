@@ -3,6 +3,11 @@ const NeedleColor =
     '--kd-color-background-ui'
   ) || '#898888';
 
+const LabelColor =
+  getComputedStyle(document.documentElement).getPropertyValue(
+    '--kd-color-text-primary'
+  ) || '#3d3c3c';
+
 // if someone enters needle value more than total value of dataset then needle is point downwards so
 // in this scenario we set max value of needle is total value of data. Also if someone enters negative value then we need to set needle to 0
 const evaluateNeedleVal = (val, total) => {
@@ -17,7 +22,7 @@ const evaluateNeedleVal = (val, total) => {
   }
   return needleVal;
 };
-
+// currently no use
 const displayLabelBelowNeedle = (
   dataLabels,
   data,
@@ -84,17 +89,30 @@ export default {
     //   circumference,
     //   data.datasets[0].customWord
     // );
-
-    const textBelowNeedle = data.datasets[0].customWord ?? '';
+    const textBelowNeedle = chart.config.options.scales.x.title.text ?? '';
 
     // ctx.save();
-    // Enter text below needle
-    ctx.font = '14px "Helvetica Neue", Helvetica, Arial, sans-serif';
-    ctx.fillStyle = 'grey';
+    // Enter needle value
+    ctx.font = 'bold 12px "Helvetica Neue", Helvetica, Arial, sans-serif';
+    ctx.fillStyle = LabelColor;
     ctx.textAlign = 'center';
-    ctx.fillText(textBelowNeedle, xCenter, yCenter + 30);
+    ctx.fillText(needleValue, xCenter, yCenter + 25);
+    // Enter text value below needle
+    ctx.font = '16px "Helvetica Neue", Helvetica, Arial, sans-serif';
+    ctx.fillStyle = LabelColor;
+    ctx.fillText(textBelowNeedle, xCenter, yCenter + 43);
 
     ctx.translate(xCenter, yCenter);
+
+    // Min - Max value
+    ctx.font = '12px "Helvetica Neue", Helvetica, Arial, sans-serif';
+    ctx.fillStyle = 'black';
+    ctx.textAlign = 'center';
+    // Min value 0
+    ctx.fillText('0', 0 - innerRadius - widthSlice, 25);
+    // Max value 100
+    ctx.fillText(dataTotal, 0 + innerRadius + widthSlice, 25);
+
     // rotate needle
     ctx.rotate(Math.PI * (circumference + 1.5));
 
