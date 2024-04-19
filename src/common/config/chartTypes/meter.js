@@ -2,8 +2,8 @@ import colorPalettes from '../colorPalettes';
 
 const LabelColor =
   getComputedStyle(document.documentElement).getPropertyValue(
-    '--kd-color-text-secondary'
-  ) || '#6d6d6d';
+    '--kd-color-text-primary'
+  ) || '#3d3c3c';
 
 export const type = 'meter';
 
