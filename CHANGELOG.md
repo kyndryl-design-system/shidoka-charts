@@ -1,3 +1,12 @@
+# [1.6.0-beta.3](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.0-beta.2...v1.6.0-beta.3) (2024-04-20)
+
+
+### Bug Fixes
+
+* **chart:** add tooltip slot ([83a2eef](https://github.com/kyndryl-design-system/shidoka-charts/commit/83a2eef14df795f6760ab16dc5b474591cb9cd08))
+* **chart:** title font ([62760ed](https://github.com/kyndryl-design-system/shidoka-charts/commit/62760edae6ff3ce62fb9562850e8dae5bb4a3822))
+* **chart:** widget interop 100% height ([f5bed08](https://github.com/kyndryl-design-system/shidoka-charts/commit/f5bed08eb6c3637b692dc525bf1afe5a67b95b62))
+
 # [1.6.0-beta.2](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.0-beta.1...v1.6.0-beta.2) (2024-04-19)
 
 
