@@ -27,6 +27,11 @@
 
 figure {
   margin: 0;
+  flex-grow: 1;
+
+  .widget & {
+    height: 0;
+  }
 
   &.hidden {
     display: none;
@@ -47,13 +52,7 @@ figure {
 }
 
 .canvas-container {
-  .fullscreen & {
-    max-height: calc(100vh - 136px);
-  }
-}
-
-.canvas-container {
-  height: 100%;
+  height: calc(100% - 32px);
 }
 
 canvas:focus,
