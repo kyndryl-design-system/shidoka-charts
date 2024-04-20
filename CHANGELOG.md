@@ -1,3 +1,10 @@
+# [1.6.0-beta.4](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.0-beta.3...v1.6.0-beta.4) (2024-04-20)
+
+
+### Bug Fixes
+
+* **chart:** widget interop height ([1da6c5d](https://github.com/kyndryl-design-system/shidoka-charts/commit/1da6c5d30ef81b5991db0a01b45da79cd507707b))
+
 # [1.6.0-beta.3](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.0-beta.2...v1.6.0-beta.3) (2024-04-20)
 
 
