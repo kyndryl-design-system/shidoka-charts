@@ -303,7 +303,9 @@ export class KDChart extends LitElement {
             `
           : null}
 
-        <slot></slot>
+        <div>
+          <slot></slot>
+        </div>
 
         <figure class="${this.tableView ? 'hidden' : ''}">
           <div
