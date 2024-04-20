@@ -183,6 +183,10 @@
               "name": "controls"
             },
             {
+              "description": "Slot for tooltip in header.",
+              "name": "tooltip"
+            },
+            {
               "description": "Slot for widget drag handle.",
               "name": "draghandle"
             }

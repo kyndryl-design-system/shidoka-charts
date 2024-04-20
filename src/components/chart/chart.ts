@@ -50,6 +50,7 @@ Chart.register(
  * Chart.js wrapper component.
  * @slot unnamed - Slot for custom content between header and chart.
  * @slot controls - Slot for custom controls such as an overflow menu.
+ * @slot tooltip - Slot for tooltip in header.
  * @slot draghandle - Slot for widget drag handle.
  */
 @customElement('kd-chart')
@@ -207,7 +208,10 @@ export class KDChart extends LitElement {
                       <slot name="draghandle"></slot>
 
                       <div id="titleDesc">
-                        <div class="title">${this.chartTitle}</div>
+                        <div class="title">
+                          ${this.chartTitle}
+                          <slot name="tooltip"></slot>
+                        </div>
                         <div
                           class="description ${this.hideDescription
                             ? 'hidden-visually'
