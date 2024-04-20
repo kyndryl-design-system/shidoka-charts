@@ -113,12 +113,8 @@ table {
 }
 
 .title {
+  @include typography.type-ui-01;
   font-weight: 500;
-
-  .widget & {
-    @include typography.type-ui-01;
-    font-weight: 500;
-  }
 }
 
 .description {
