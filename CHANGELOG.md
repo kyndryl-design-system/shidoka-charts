@@ -1,3 +1,10 @@
+# [1.6.0-beta.7](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.0-beta.6...v1.6.0-beta.7) (2024-04-23)
+
+
+### Bug Fixes
+
+* **chart:** use ResizeObserver ([8cda53f](https://github.com/kyndryl-design-system/shidoka-charts/commit/8cda53f862a2c9d1240d5eb260dc615e8642ed36))
+
 # [1.6.0-beta.6](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.0-beta.5...v1.6.0-beta.6) (2024-04-20)
 
 
