@@ -187,6 +187,15 @@ export class KDChart extends LitElement {
   @state()
   _widget = false;
 
+  /** ResizeObserver for canvas-container.
+   * @internal
+   */
+  _resizeObserver: any = new ResizeObserver(
+    debounce(() => {
+      this._resizeChart();
+    })
+  );
+
   override render() {
     const Classes = {
       container: true,
@@ -443,34 +452,21 @@ export class KDChart extends LitElement {
     `;
   }
 
-  override connectedCallback() {
-    super.connectedCallback();
-
-    const Parent = this;
-    window?.addEventListener(
-      'resize',
-      debounce(() => {
-        Parent._resizeChart();
-      }, 50)
-    );
-  }
-
-  override disconnectedCallback() {
-    const Parent = this;
-    window?.removeEventListener(
-      'resize',
-      debounce(() => {
-        Parent._resizeChart();
-      }, 50)
-    );
-
-    super.disconnectedCallback();
-  }
-
   private _resizeChart() {
     if (this.chart) {
       this.chart.resize();
     }
+  }
+
+  override disconnectedCallback() {
+    this._resizeObserver.disconnect();
+
+    super.disconnectedCallback();
+  }
+
+  override firstUpdated() {
+    const el = this.shadowRoot?.querySelector('.canvas-container');
+    this._resizeObserver.observe(el);
   }
 
   override updated(changedProps: any) {
