@@ -1,3 +1,22 @@
+# [1.6.0](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.5.0...v1.6.0) (2024-04-25)
+
+
+### Bug Fixes
+
+* **chart:** add tooltip slot ([83a2eef](https://github.com/kyndryl-design-system/shidoka-charts/commit/83a2eef14df795f6760ab16dc5b474591cb9cd08))
+* **chart:** title font ([62760ed](https://github.com/kyndryl-design-system/shidoka-charts/commit/62760edae6ff3ce62fb9562850e8dae5bb4a3822))
+* **chart:** use ResizeObserver ([8cda53f](https://github.com/kyndryl-design-system/shidoka-charts/commit/8cda53f862a2c9d1240d5eb260dc615e8642ed36))
+* **chart:** widget interop 100% height ([f5bed08](https://github.com/kyndryl-design-system/shidoka-charts/commit/f5bed08eb6c3637b692dc525bf1afe5a67b95b62))
+* **chart:** widget interop height ([afd47a2](https://github.com/kyndryl-design-system/shidoka-charts/commit/afd47a2ef4046f4a20558e811ac653aa33ef4ecf))
+* **chart:** widget interop height ([1da6c5d](https://github.com/kyndryl-design-system/shidoka-charts/commit/1da6c5d30ef81b5991db0a01b45da79cd507707b))
+* **chart:** widget interop size ([12545b0](https://github.com/kyndryl-design-system/shidoka-charts/commit/12545b0f1ecabe95592984575ea1c5fc5fe0e968))
+* **chart:** widget interop updates ([09ffcb3](https://github.com/kyndryl-design-system/shidoka-charts/commit/09ffcb3e0df6bd9fa378433f5c46864f6a5827a6))
+
+
+### Features
+
+* **chart:** widget interop ([560d4d0](https://github.com/kyndryl-design-system/shidoka-charts/commit/560d4d002a350bc60bbe1e77133ff2965bea528a))
+
 # [1.6.0-beta.7](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.0-beta.6...v1.6.0-beta.7) (2024-04-23)
 
 
