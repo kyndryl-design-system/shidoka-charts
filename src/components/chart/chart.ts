@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
 import { deepmerge, deepmergeCustom } from 'deepmerge-ts';
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
@@ -24,12 +25,13 @@ import ChartScss from './chart.scss';
 import globalOptions from '../../common/config/globalOptions';
 import globalOptionsNonRadial from '../../common/config/globalOptionsNonRadial';
 import globalOptionsRadial from '../../common/config/globalOptionsRadial';
+import '@kyndryl-design-system/shidoka-foundation/components/button';
 import '@kyndryl-design-system/shidoka-foundation/components/icon';
-import chartIcon from '@carbon/icons/es/chart--line/24';
-import tableIcon from '@carbon/icons/es/table-of-contents/24';
-import downloadIcon from '@carbon/icons/es/download/20';
-import maximizeIcon from '@carbon/icons/es/maximize/20';
-import minimizeIcon from '@carbon/icons/es/minimize/20';
+import chartIcon from '@carbon/icons/es/chart--line/16';
+import tableIcon from '@carbon/icons/es/table-of-contents/16';
+import downloadIcon from '@carbon/icons/es/download/16';
+import maximizeIcon from '@carbon/icons/es/maximize/16';
+import minimizeIcon from '@carbon/icons/es/minimize/16';
 
 Chart.register(
   ChoroplethController,
@@ -48,6 +50,8 @@ Chart.register(
  * Chart.js wrapper component.
  * @slot unnamed - Slot for custom content between header and chart.
  * @slot controls - Slot for custom controls such as an overflow menu.
+ * @slot tooltip - Slot for tooltip in header.
+ * @slot draghandle - Slot for widget drag handle.
  */
 @customElement('kd-chart')
 export class KDChart extends LitElement {
@@ -177,11 +181,32 @@ export class KDChart extends LitElement {
   @state()
   mergedDatasets: any = {};
 
+  /** Is Widget. Inherited from kyn-widget.
+   * @internal
+   */
+  @state()
+  _widget = false;
+
+  /** ResizeObserver for canvas-container.
+   * @internal
+   */
+  _resizeObserver: any = new ResizeObserver(
+    debounce(() => {
+      this._resizeChart();
+    })
+  );
+
   override render() {
+    const Classes = {
+      container: true,
+      fullscreen: this.fullscreen,
+      'no-border': this.noBorder || this._widget,
+      widget: this._widget,
+    };
+
     return html`
       <div
-        class="container ${this.fullscreen ? 'fullscreen' : ''}
-          ${this.noBorder ? 'no-border' : ''}"
+        class=${classMap(Classes)}
         @fullscreenchange=${() => this.handleFullscreenChange()}
       >
         ${!this.hideHeader || !this.hideControls
@@ -189,8 +214,13 @@ export class KDChart extends LitElement {
               <div class="header">
                 ${!this.hideHeader
                   ? html`
+                      <slot name="draghandle"></slot>
+
                       <div id="titleDesc">
-                        <div class="title">${this.chartTitle}</div>
+                        <div class="title">
+                          ${this.chartTitle}
+                          <slot name="tooltip"></slot>
+                        </div>
                         <div
                           class="description ${this.hideDescription
                             ? 'hidden-visually'
@@ -206,45 +236,47 @@ export class KDChart extends LitElement {
                       <div class="controls">
                         ${!this.tableDisabled
                           ? html`
-                              <button
-                                title="Toggle View Mode"
-                                aria-label="Toggle View Mode"
-                                class="view-toggle control-button"
-                                @click=${() => this.handleViewToggle()}
+                              <kd-button
+                                kind="tertiary"
+                                size="small"
+                                description=${this.customLabels.toggleView}
+                                @on-click=${() => this.handleViewToggle()}
                               >
                                 <kd-icon
-                                  .icon=${chartIcon}
-                                  class="${!this.tableView ? 'active' : ''}"
+                                  slot="icon"
+                                  .icon=${this.tableView
+                                    ? tableIcon
+                                    : chartIcon}
                                 ></kd-icon>
-                                <kd-icon
-                                  .icon=${tableIcon}
-                                  class="${this.tableView ? 'active' : ''}"
-                                ></kd-icon>
-                              </button>
+                              </kd-button>
                             `
                           : null}
 
-                        <button
-                          title=${this.customLabels.toggleFullscreen}
-                          aria-label=${this.customLabels.toggleFullscreen}
-                          class="control-button"
-                          @click=${() => this.handleFullscreen()}
+                        <kd-button
+                          kind="tertiary"
+                          size="small"
+                          description=${this.customLabels.toggleFullscreen}
+                          @on-click=${() => this.handleFullscreen()}
                         >
                           <kd-icon
+                            slot="icon"
                             .icon=${this.fullscreen
                               ? minimizeIcon
                               : maximizeIcon}
                           ></kd-icon>
-                        </button>
+                        </kd-button>
 
                         <div class="download">
-                          <button
-                            title=${this.customLabels.downloadMenu}
-                            aria-label=${this.customLabels.downloadMenu}
-                            class="control-button download-button"
+                          <kd-button
+                            kind="tertiary"
+                            size="small"
+                            description=${this.customLabels.downloadMenu}
                           >
-                            <kd-icon .icon=${downloadIcon}></kd-icon>
-                          </button>
+                            <kd-icon
+                              slot="icon"
+                              .icon=${downloadIcon}
+                            ></kd-icon>
+                          </kd-button>
 
                           <div class="download-menu">
                             ${!this.tableDisabled
@@ -280,7 +312,9 @@ export class KDChart extends LitElement {
             `
           : null}
 
-        <slot></slot>
+        <div>
+          <slot></slot>
+        </div>
 
         <figure class="${this.tableView ? 'hidden' : ''}">
           <div
@@ -418,34 +452,21 @@ export class KDChart extends LitElement {
     `;
   }
 
-  override connectedCallback() {
-    super.connectedCallback();
-
-    const Parent = this;
-    window?.addEventListener(
-      'resize',
-      debounce(() => {
-        Parent._resizeChart();
-      }, 50)
-    );
-  }
-
-  override disconnectedCallback() {
-    const Parent = this;
-    window?.removeEventListener(
-      'resize',
-      debounce(() => {
-        Parent._resizeChart();
-      }, 50)
-    );
-
-    super.disconnectedCallback();
-  }
-
   private _resizeChart() {
     if (this.chart) {
       this.chart.resize();
     }
+  }
+
+  override disconnectedCallback() {
+    this._resizeObserver.disconnect();
+
+    super.disconnectedCallback();
+  }
+
+  override firstUpdated() {
+    const el = this.shadowRoot?.querySelector('.canvas-container');
+    this._resizeObserver.observe(el);
   }
 
   override updated(changedProps: any) {
