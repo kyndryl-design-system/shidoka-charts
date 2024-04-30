@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.0...v1.6.1) (2024-04-30)
+
+
+### Bug Fixes
+
+* **chart:** header remove justify-content ([fa8662a](https://github.com/kyndryl-design-system/shidoka-charts/commit/fa8662ad2761b8d865de8fe974913edab27b2008))
+
 # [1.6.0](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.5.0...v1.6.0) (2024-04-25)
 
 
