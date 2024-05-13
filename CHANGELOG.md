@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.1...v1.6.2) (2024-05-13)
+
+
+### Bug Fixes
+
+* **chart:** title font ([e1af25b](https://github.com/kyndryl-design-system/shidoka-charts/commit/e1af25b7860c84220ae2e00c2b6cb66c89b60b39))
+
 ## [1.6.1](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.0...v1.6.1) (2024-04-30)
 
 
