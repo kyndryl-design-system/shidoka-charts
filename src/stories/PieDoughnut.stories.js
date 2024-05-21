@@ -118,6 +118,7 @@ export const DoughnutCustomCenterLabel = {
           return defaultValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         },
         line2text: 'Test',
+        line2fontSize: '12px',
       },
       scales: {
         x: {

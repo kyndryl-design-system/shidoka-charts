@@ -21,13 +21,16 @@ export default {
       ctx.textBaseline = 'middle';
       var centerX = (chart.chartArea.left + chart.chartArea.right) / 2;
       var centerY = (chart.chartArea.top + chart.chartArea.bottom) / 2 - 10;
-      ctx.font = '16px "Helvetica Neue", Helvetica, Arial, sans-serif';
       ctx.fillStyle = TextColor;
 
       //Draw text in center
       // get custom options for center text
       const Line1textOption = chart.config.options.doughnutLabel?.line1text;
+      const Line1fontSize =
+        chart.config.options.doughnutLabel?.line1fontSize || '16px';
       const Line2textOption = chart.config.options.doughnutLabel?.line2text;
+      const Line2fontSize =
+        chart.config.options.doughnutLabel?.line2fontSize || '16px';
 
       // set default values
       let Line1text = total;
@@ -49,7 +52,9 @@ export default {
             : Line2textOption;
       }
 
+      ctx.font = `${Line1fontSize} "Helvetica Neue", Helvetica, Arial, sans-serif`;
       ctx.fillText(Line1text, centerX, centerY);
+      ctx.font = `${Line2fontSize} "Helvetica Neue", Helvetica, Arial, sans-serif`;
       ctx.fillText(Line2text, centerX, centerY + 20);
     }
   },
