@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.2...v1.6.3) (2024-05-21)
+
+
+### Bug Fixes
+
+* **chart:** doughnut label font size control ([5bc566b](https://github.com/kyndryl-design-system/shidoka-charts/commit/5bc566b9b38307550973c8eadfefcbe54365e644))
+
 ## [1.6.2](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.1...v1.6.2) (2024-05-13)
 
 
