@@ -245,8 +245,8 @@ export class KDChart extends LitElement {
                                 <kd-icon
                                   slot="icon"
                                   .icon=${this.tableView
-                                    ? tableIcon
-                                    : chartIcon}
+                                    ? chartIcon
+                                    : tableIcon}
                                 ></kd-icon>
                               </kd-button>
                             `
