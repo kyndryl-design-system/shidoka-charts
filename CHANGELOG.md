@@ -1,3 +1,10 @@
+## [1.6.4](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.3...v1.6.4) (2024-06-17)
+
+
+### Bug Fixes
+
+* **chart:** swap chart & table icons ([f5b4c44](https://github.com/kyndryl-design-system/shidoka-charts/commit/f5b4c44442bd10568df1bde355ff53fb3f0628d4))
+
 ## [1.6.3](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.2...v1.6.3) (2024-05-21)
 
 
