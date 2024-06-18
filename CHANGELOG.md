@@ -1,3 +1,10 @@
+## [1.6.5](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.4...v1.6.5) (2024-06-18)
+
+
+### Bug Fixes
+
+* remove music plugin causing error on load ([#24](https://github.com/kyndryl-design-system/shidoka-charts/issues/24)) ([620ccf3](https://github.com/kyndryl-design-system/shidoka-charts/commit/620ccf3e51ec6bfc28336986edd938947cb20c3e))
+
 ## [1.6.4](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.3...v1.6.4) (2024-06-17)
 
 
