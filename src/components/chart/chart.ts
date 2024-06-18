@@ -588,7 +588,8 @@ export class KDChart extends LitElement {
 
     // only add certain plugins for standard chart types
     if (!ignoredTypes.includes(this.type)) {
-      plugins = [...plugins, a11yPlugin, musicPlugin];
+      // plugins = [...plugins, a11yPlugin, musicPlugin];
+      plugins = [...plugins, a11yPlugin];
     }
 
     if (this.chart) {
