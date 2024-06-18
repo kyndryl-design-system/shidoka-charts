@@ -17,7 +17,7 @@ import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
-import musicPlugin from 'chartjs-plugin-chart2music';
+// import musicPlugin from 'chartjs-plugin-chart2music';
 import datalabelsPlugin from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { convertChartDataToCSV, debounce } from '../../common/helpers/helpers';
@@ -588,7 +588,8 @@ export class KDChart extends LitElement {
 
     // only add certain plugins for standard chart types
     if (!ignoredTypes.includes(this.type)) {
-      plugins = [...plugins, a11yPlugin, musicPlugin];
+      // plugins = [...plugins, a11yPlugin, musicPlugin];
+      plugins = [...plugins, a11yPlugin];
     }
 
     if (this.chart) {
