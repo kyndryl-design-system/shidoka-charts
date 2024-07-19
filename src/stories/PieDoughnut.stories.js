@@ -24,7 +24,7 @@ const args = {
   datasets: [
     {
       label: 'Dataset 1',
-      data: [0, 0, 0, 0, 0, 0],
+      data: [120, 190, 300, 500, 200, 300],
     },
   ],
   options: {
