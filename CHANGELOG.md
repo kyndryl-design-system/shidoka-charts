@@ -1,3 +1,10 @@
+## [1.6.6](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.5...v1.6.6) (2024-07-19)
+
+
+### Bug Fixes
+
+* **doughnut:** prevent NaN percentage appearing for 0 total ([0fac2b5](https://github.com/kyndryl-design-system/shidoka-charts/commit/0fac2b5d07fb7f89e9a08cdb1ce6c017b2c57198))
+
 ## [1.6.5](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.4...v1.6.5) (2024-06-18)
 
 
