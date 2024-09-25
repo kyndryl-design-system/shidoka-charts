@@ -19,154 +19,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/common/helpers/helpers.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "debounce",
-          "parameters": [
-            {
-              "name": "fn",
-              "type": {
-                "text": "Function"
-              }
-            },
-            {
-              "name": "ms",
-              "default": "100"
-            }
-          ]
-        },
-        {
-          "kind": "function",
-          "name": "stringToReactHtml",
-          "parameters": [
-            {
-              "name": "string",
-              "type": {
-                "text": "String"
-              }
-            }
-          ]
-        },
-        {
-          "kind": "function",
-          "name": "createOptionsArray",
-          "parameters": [
-            {
-              "name": "options",
-              "default": "{}",
-              "type": {
-                "text": "*"
-              },
-              "description": " imported enums object"
-            }
-          ],
-          "description": "Convert an object to an array of only its values.\r\nUsed when importing enums in component stories for populating argType dropdowns."
-        },
-        {
-          "kind": "function",
-          "name": "convertChartDataToCSV",
-          "parameters": [
-            {
-              "name": "args",
-              "type": {
-                "text": "any"
-              }
-            }
-          ]
-        },
-        {
-          "kind": "function",
-          "name": "getRandomData",
-          "parameters": [
-            {
-              "name": "arrayLength",
-              "default": "6"
-            },
-            {
-              "name": "min",
-              "default": "-100"
-            },
-            {
-              "name": "max",
-              "default": "100"
-            }
-          ]
-        },
-        {
-          "kind": "function",
-          "name": "getTextColor",
-          "parameters": [
-            {
-              "name": "bgHexColor",
-              "type": {
-                "text": "string"
-              },
-              "description": "The `bgHexColor` parameter is a string representing a hexadecimal color\r\ncode for the background color."
-            }
-          ],
-          "description": "Takes a background hex color as input and returns the appropriate text\r\ncolor (either primary or inversed) based on the brightness of the background color.",
-          "return": {
-            "type": {
-              "text": ""
-            }
-          }
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "debounce",
-          "declaration": {
-            "name": "debounce",
-            "module": "src/common/helpers/helpers.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "stringToReactHtml",
-          "declaration": {
-            "name": "stringToReactHtml",
-            "module": "src/common/helpers/helpers.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "createOptionsArray",
-          "declaration": {
-            "name": "createOptionsArray",
-            "module": "src/common/helpers/helpers.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "convertChartDataToCSV",
-          "declaration": {
-            "name": "convertChartDataToCSV",
-            "module": "src/common/helpers/helpers.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "getRandomData",
-          "declaration": {
-            "name": "getRandomData",
-            "module": "src/common/helpers/helpers.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "getTextColor",
-          "declaration": {
-            "name": "getTextColor",
-            "module": "src/common/helpers/helpers.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/chart/chart.ts",
       "declarations": [
         {
@@ -336,7 +188,7 @@
               "type": {
                 "text": "object"
               },
-              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadMenu: 'Download Menu',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
+              "default": "{\n    toggleView: 'Toggle View Mode',\n    toggleFullscreen: 'Toggle Fullscreen',\n    downloadMenu: 'Download Menu',\n    downloadCsv: 'Download as CSV',\n    downloadPng: 'Download as PNG',\n    downloadJpg: 'Download as JPG',\n  }",
               "description": "Customizable text labels.",
               "attribute": "customLabels"
             },
@@ -349,13 +201,13 @@
               "kind": "method",
               "name": "initChart",
               "privacy": "private",
-              "description": "Initializes a bar chart using the Chart.js library with provided labels, datasets,\r\nand options."
+              "description": "Initializes a bar chart using the Chart.js library with provided labels, datasets,\nand options."
             },
             {
               "kind": "method",
               "name": "mergeOptions",
               "privacy": "private",
-              "description": "Merges various chart type options and dataset options to create a\r\nfinal set of options for a chart."
+              "description": "Merges various chart type options and dataset options to create a\nfinal set of options for a chart."
             },
             {
               "kind": "method",
@@ -545,7 +397,7 @@
               "type": {
                 "text": "object"
               },
-              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadMenu: 'Download Menu',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
+              "default": "{\n    toggleView: 'Toggle View Mode',\n    toggleFullscreen: 'Toggle Fullscreen',\n    downloadMenu: 'Download Menu',\n    downloadCsv: 'Download as CSV',\n    downloadPng: 'Download as PNG',\n    downloadJpg: 'Download as JPG',\n  }",
               "description": "Customizable text labels.",
               "fieldName": "customLabels"
             }
@@ -588,6 +440,154 @@
           "declaration": {
             "name": "KDChart",
             "module": "./chart"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/common/helpers/helpers.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "debounce",
+          "parameters": [
+            {
+              "name": "fn",
+              "type": {
+                "text": "Function"
+              }
+            },
+            {
+              "name": "ms",
+              "default": "100"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "stringToReactHtml",
+          "parameters": [
+            {
+              "name": "string",
+              "type": {
+                "text": "String"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "createOptionsArray",
+          "parameters": [
+            {
+              "name": "options",
+              "default": "{}",
+              "type": {
+                "text": "*"
+              },
+              "description": " imported enums object"
+            }
+          ],
+          "description": "Convert an object to an array of only its values.\nUsed when importing enums in component stories for populating argType dropdowns."
+        },
+        {
+          "kind": "function",
+          "name": "convertChartDataToCSV",
+          "parameters": [
+            {
+              "name": "args",
+              "type": {
+                "text": "any"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "getRandomData",
+          "parameters": [
+            {
+              "name": "arrayLength",
+              "default": "6"
+            },
+            {
+              "name": "min",
+              "default": "-100"
+            },
+            {
+              "name": "max",
+              "default": "100"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "getTextColor",
+          "parameters": [
+            {
+              "name": "bgHexColor",
+              "type": {
+                "text": "string"
+              },
+              "description": "The `bgHexColor` parameter is a string representing a hexadecimal color\ncode for the background color."
+            }
+          ],
+          "description": "Takes a background hex color as input and returns the appropriate text\ncolor (either primary or inversed) based on the brightness of the background color.",
+          "return": {
+            "type": {
+              "text": ""
+            }
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "debounce",
+          "declaration": {
+            "name": "debounce",
+            "module": "src/common/helpers/helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "stringToReactHtml",
+          "declaration": {
+            "name": "stringToReactHtml",
+            "module": "src/common/helpers/helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "createOptionsArray",
+          "declaration": {
+            "name": "createOptionsArray",
+            "module": "src/common/helpers/helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "convertChartDataToCSV",
+          "declaration": {
+            "name": "convertChartDataToCSV",
+            "module": "src/common/helpers/helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "getRandomData",
+          "declaration": {
+            "name": "getRandomData",
+            "module": "src/common/helpers/helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "getTextColor",
+          "declaration": {
+            "name": "getTextColor",
+            "module": "src/common/helpers/helpers.ts"
           }
         }
       ]
