@@ -62,7 +62,7 @@
               "description": " imported enums object"
             }
           ],
-          "description": "Convert an object to an array of only its values.\r\nUsed when importing enums in component stories for populating argType dropdowns."
+          "description": "Convert an object to an array of only its values.\nUsed when importing enums in component stories for populating argType dropdowns."
         },
         {
           "kind": "function",
@@ -103,10 +103,10 @@
               "type": {
                 "text": "string"
               },
-              "description": "The `bgHexColor` parameter is a string representing a hexadecimal color\r\ncode for the background color."
+              "description": "The `bgHexColor` parameter is a string representing a hexadecimal color\ncode for the background color."
             }
           ],
-          "description": "Takes a background hex color as input and returns the appropriate text\r\ncolor (either primary or inversed) based on the brightness of the background color.",
+          "description": "Takes a background hex color as input and returns the appropriate text\ncolor (either primary or inversed) based on the brightness of the background color.",
           "return": {
             "type": {
               "text": ""
@@ -336,7 +336,7 @@
               "type": {
                 "text": "object"
               },
-              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadMenu: 'Download Menu',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
+              "default": "{\n    toggleView: 'Toggle View Mode',\n    toggleFullscreen: 'Toggle Fullscreen',\n    downloadMenu: 'Download Menu',\n    downloadCsv: 'Download as CSV',\n    downloadPng: 'Download as PNG',\n    downloadJpg: 'Download as JPG',\n  }",
               "description": "Customizable text labels.",
               "attribute": "customLabels"
             },
@@ -349,13 +349,13 @@
               "kind": "method",
               "name": "initChart",
               "privacy": "private",
-              "description": "Initializes a bar chart using the Chart.js library with provided labels, datasets,\r\nand options."
+              "description": "Initializes a bar chart using the Chart.js library with provided labels, datasets,\nand options."
             },
             {
               "kind": "method",
               "name": "mergeOptions",
               "privacy": "private",
-              "description": "Merges various chart type options and dataset options to create a\r\nfinal set of options for a chart."
+              "description": "Merges various chart type options and dataset options to create a\nfinal set of options for a chart."
             },
             {
               "kind": "method",
@@ -545,7 +545,7 @@
               "type": {
                 "text": "object"
               },
-              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadMenu: 'Download Menu',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
+              "default": "{\n    toggleView: 'Toggle View Mode',\n    toggleFullscreen: 'Toggle Fullscreen',\n    downloadMenu: 'Download Menu',\n    downloadCsv: 'Download as CSV',\n    downloadPng: 'Download as PNG',\n    downloadJpg: 'Download as JPG',\n  }",
               "description": "Customizable text labels.",
               "fieldName": "customLabels"
             }
