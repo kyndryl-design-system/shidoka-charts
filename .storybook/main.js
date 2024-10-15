@@ -76,7 +76,4 @@ export default {
     disableTelemetry: true,
   },
   staticDirs: ['./static'],
-  docs: {
-    autodocs: true,
-  },
 };
