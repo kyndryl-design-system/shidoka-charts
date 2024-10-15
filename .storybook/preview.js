@@ -39,6 +39,8 @@ export default {
       },
     },
   },
+
+  tags: ['autodocs']
 };
 
 setCustomElementsManifest(customElements);
