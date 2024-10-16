@@ -1,3 +1,10 @@
+# [1.7.0-next.1](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.6...v1.7.0-next.1) (2024-10-16)
+
+
+### Features
+
+* **color-palettes:** removed unused color palettes ([#27](https://github.com/kyndryl-design-system/shidoka-charts/issues/27)) ([b50794a](https://github.com/kyndryl-design-system/shidoka-charts/commit/b50794af4470688f8b4e4f144dab0d42426f66cc))
+
 ## [1.6.6](https://github.com/kyndryl-design-system/shidoka-charts/compare/v1.6.5...v1.6.6) (2024-07-19)
 
 
