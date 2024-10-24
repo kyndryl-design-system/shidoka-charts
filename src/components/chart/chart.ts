@@ -27,11 +27,17 @@ import globalOptionsNonRadial from '../../common/config/globalOptionsNonRadial';
 import globalOptionsRadial from '../../common/config/globalOptionsRadial';
 import '@kyndryl-design-system/shidoka-foundation/components/button';
 import '@kyndryl-design-system/shidoka-foundation/components/icon';
-import chartIcon from '@carbon/icons/es/chart--line/16';
-import tableIcon from '@carbon/icons/es/table-of-contents/16';
-import downloadIcon from '@carbon/icons/es/download/16';
-import maximizeIcon from '@carbon/icons/es/maximize/16';
-import minimizeIcon from '@carbon/icons/es/minimize/16';
+//import chartIcon from '@carbon/icons/es/chart--line/16';
+import chartIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/analytics.svg';
+//import tableIcon from '@carbon/icons/es/table-of-contents/16';
+import tableIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/list.svg';
+//import downloadIcon from '@carbon/icons/es/download/16';
+import downloadIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/download.svg';
+//import maximizeIcon from '@carbon/icons/es/maximize/16';
+import maximizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/expand.svg';
+//import minimizeIcon from '@carbon/icons/es/minimize/16';
+import minimizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/connect.svg';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 
 Chart.register(
   ChoroplethController,
@@ -242,12 +248,17 @@ export class KDChart extends LitElement {
                                 description=${this.customLabels.toggleView}
                                 @on-click=${() => this.handleViewToggle()}
                               >
-                                <kd-icon
+                                <!-- <kd-icon
                                   slot="icon"
                                   .icon=${this.tableView
-                                    ? chartIcon
-                                    : tableIcon}
-                                ></kd-icon>
+                                  ? chartIcon
+                                  : tableIcon}
+                                ></kd-icon> -->
+                                <span slot="icon"
+                                  >${this.tableView
+                                    ? unsafeSVG(chartIcon)
+                                    : unsafeSVG(tableIcon)}</span
+                                >
                               </kd-button>
                             `
                           : null}
@@ -258,12 +269,17 @@ export class KDChart extends LitElement {
                           description=${this.customLabels.toggleFullscreen}
                           @on-click=${() => this.handleFullscreen()}
                         >
-                          <kd-icon
+                          <!-- <kd-icon
                             slot="icon"
                             .icon=${this.fullscreen
-                              ? minimizeIcon
-                              : maximizeIcon}
-                          ></kd-icon>
+                            ? minimizeIcon
+                            : maximizeIcon}
+                          ></kd-icon> -->
+                          <span slot="icon"
+                            >${this.fullscreen
+                              ? unsafeSVG(minimizeIcon)
+                              : unsafeSVG(maximizeIcon)}</span
+                          >
                         </kd-button>
 
                         <div class="download">
@@ -272,10 +288,11 @@ export class KDChart extends LitElement {
                             size="small"
                             description=${this.customLabels.downloadMenu}
                           >
-                            <kd-icon
+                            <!-- <kd-icon
                               slot="icon"
                               .icon=${downloadIcon}
-                            ></kd-icon>
+                            ></kd-icon> -->
+                            <span slot="icon">${unsafeSVG(downloadIcon)}</span>
                           </kd-button>
 
                           <div class="download-menu">

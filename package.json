@@ -25,8 +25,6 @@
     "prepare": "npx husky install"
   },
   "dependencies": {
-    "@carbon/icon-helpers": "^10.37.0",
-    "@carbon/icons": "^11.14.0",
     "chart.js": "^4.4.0",
     "chartjs-adapter-date-fns": "^3.0.0",
     "chartjs-chart-geo": "^4.2.4",
@@ -37,7 +35,8 @@
     "chartjs-plugin-datalabels": "^2.2.0",
     "date-fns": "^2.30.0",
     "deepmerge-ts": "^5.1.0",
-    "lit": "^2.7.6"
+    "lit": "^2.7.6",
+    "@kyndryl-design-system/shidoka-icons": "^1.5.0"
   },
   "peerDependencies": {
     "@kyndryl-design-system/shidoka-foundation": "^1.10.0"
@@ -71,7 +70,6 @@
     "@storybook/theming": "^8.3.5",
     "@storybook/web-components": "^8.3.5",
     "@storybook/web-components-webpack5": "^8.3.5",
-    "@types/carbon__icon-helpers": "^10.7.2",
     "@types/query-selector-shadow-dom": "^1.0.1",
     "@types/sass": "^1.43.1",
     "@typescript-eslint/eslint-plugin": "^5.48.1",
