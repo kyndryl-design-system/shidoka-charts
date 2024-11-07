@@ -3,7 +3,7 @@ import '../components/chart';
 import argTypes from '../common/config/chartArgTypes';
 
 export default {
-  title: 'Future/Scatter',
+  title: 'Provisional/Scatter',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,

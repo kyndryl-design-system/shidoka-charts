@@ -3,7 +3,7 @@ import '../components/chart';
 import argTypes from '../common/config/chartArgTypes';
 
 export default {
-  title: 'Future/Polar Area',
+  title: 'Provisional/Polar Area',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 600px;">${story()}</div> `,
