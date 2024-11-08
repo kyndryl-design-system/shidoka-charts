@@ -3,7 +3,7 @@ import '../components/chart';
 import argTypes from '../common/config/chartArgTypes';
 
 export default {
-  title: 'Future/Bubble',
+  title: 'Provisional/Bubble',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,
