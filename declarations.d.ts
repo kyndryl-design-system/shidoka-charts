@@ -4,8 +4,6 @@ declare module '*.scss' {
   export default styles;
 }
 
-declare module '@carbon/icons/*';
-
 declare module '*.svg';
 
 declare module 'chartjs-plugin-a11y-legend';

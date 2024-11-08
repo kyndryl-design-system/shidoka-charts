@@ -17,7 +17,6 @@ import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
-// import musicPlugin from 'chartjs-plugin-chart2music';
 import datalabelsPlugin from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { convertChartDataToCSV, debounce } from '../../common/helpers/helpers';
@@ -26,12 +25,12 @@ import globalOptions from '../../common/config/globalOptions';
 import globalOptionsNonRadial from '../../common/config/globalOptionsNonRadial';
 import globalOptionsRadial from '../../common/config/globalOptionsRadial';
 import '@kyndryl-design-system/shidoka-foundation/components/button';
-import '@kyndryl-design-system/shidoka-foundation/components/icon';
-import chartIcon from '@carbon/icons/es/chart--line/16';
-import tableIcon from '@carbon/icons/es/table-of-contents/16';
-import downloadIcon from '@carbon/icons/es/download/16';
-import maximizeIcon from '@carbon/icons/es/maximize/16';
-import minimizeIcon from '@carbon/icons/es/minimize/16';
+import chartIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/analytics.svg';
+import tableIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/table-view.svg';
+import downloadIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/download.svg';
+import maximizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/expand.svg';
+import minimizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/shrink.svg';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 
 Chart.register(
   ChoroplethController,
@@ -242,12 +241,11 @@ export class KDChart extends LitElement {
                                 description=${this.customLabels.toggleView}
                                 @on-click=${() => this.handleViewToggle()}
                               >
-                                <kd-icon
-                                  slot="icon"
-                                  .icon=${this.tableView
-                                    ? chartIcon
-                                    : tableIcon}
-                                ></kd-icon>
+                                <span slot="icon"
+                                  >${this.tableView
+                                    ? unsafeSVG(chartIcon)
+                                    : unsafeSVG(tableIcon)}</span
+                                >
                               </kd-button>
                             `
                           : null}
@@ -258,12 +256,11 @@ export class KDChart extends LitElement {
                           description=${this.customLabels.toggleFullscreen}
                           @on-click=${() => this.handleFullscreen()}
                         >
-                          <kd-icon
-                            slot="icon"
-                            .icon=${this.fullscreen
-                              ? minimizeIcon
-                              : maximizeIcon}
-                          ></kd-icon>
+                          <span slot="icon"
+                            >${this.fullscreen
+                              ? unsafeSVG(minimizeIcon)
+                              : unsafeSVG(maximizeIcon)}</span
+                          >
                         </kd-button>
 
                         <div class="download">
@@ -272,10 +269,7 @@ export class KDChart extends LitElement {
                             size="small"
                             description=${this.customLabels.downloadMenu}
                           >
-                            <kd-icon
-                              slot="icon"
-                              .icon=${downloadIcon}
-                            ></kd-icon>
+                            <span slot="icon">${unsafeSVG(downloadIcon)}</span>
                           </kd-button>
 
                           <div class="download-menu">
