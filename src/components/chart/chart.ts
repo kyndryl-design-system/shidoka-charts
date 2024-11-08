@@ -27,10 +27,10 @@ import globalOptionsRadial from '../../common/config/globalOptionsRadial';
 import '@kyndryl-design-system/shidoka-foundation/components/button';
 import '@kyndryl-design-system/shidoka-foundation/components/icon';
 import chartIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/analytics.svg';
-import tableIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/list.svg';
+import tableIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/table-view.svg';
 import downloadIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/download.svg';
 import maximizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/expand.svg';
-import minimizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/connect.svg';
+import minimizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/shrink.svg';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 
 Chart.register(

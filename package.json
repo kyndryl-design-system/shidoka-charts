@@ -36,7 +36,7 @@
     "date-fns": "^2.30.0",
     "deepmerge-ts": "^5.1.0",
     "lit": "^2.7.6",
-    "@kyndryl-design-system/shidoka-icons": "^1.5.0"
+    "@kyndryl-design-system/shidoka-icons": "^1.6.0"
   },
   "peerDependencies": {
     "@kyndryl-design-system/shidoka-foundation": "^1.10.0"
