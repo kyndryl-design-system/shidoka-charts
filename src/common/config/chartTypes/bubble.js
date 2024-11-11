@@ -1,4 +1,4 @@
-import colorPalettes from '../colorPalettes';
+import { getColorPalette } from '../colorPalettes';
 
 export const type = 'bubble';
 
@@ -7,7 +7,7 @@ export const options = (ctx) => {
 };
 
 export const datasetOptions = (ctx, index) => {
-  const Colors = colorPalettes[ctx.options.colorPalette || 'categorical'];
+  const Colors = getColorPalette(ctx.options.colorPalette || 'categorical');
   const ColorCycles = Math.floor(index / (Colors.length - 1));
   const Index =
     index > Colors.length - 1

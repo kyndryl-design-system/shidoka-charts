@@ -1,4 +1,4 @@
-import colorPalettes from '../colorPalettes';
+import { getColorPalette } from '../colorPalettes';
 import { getTextColor } from '../../helpers/helpers';
 
 const BorderColor =
@@ -57,7 +57,7 @@ export const options = (ctx) => {
 export const datasetOptions = (ctx, index) => {
   return {
     backgroundColor: function (context) {
-      return colorPalettes[ctx.options.colorPalette || 'categorical'][
+      return getColorPalette(ctx.options.colorPalette || 'categorical')[
         getGroupColorIndex(context)
       ]; // + '80'
     },

@@ -1,4 +1,4 @@
-import colorPalettes from '../colorPalettes';
+import { getColorPalette } from '../colorPalettes';
 
 const BorderColor =
   getComputedStyle(document.documentElement).getPropertyValue(
@@ -30,8 +30,9 @@ export const options = (ctx) => {
       color: {
         axis: 'x',
         interpolate: (value) => {
-          const Colors =
-            colorPalettes[ctx.options.colorPalette || 'sequential01'];
+          const Colors = getColorPalette(
+            ctx.options.colorPalette || 'sequential01'
+          );
           const Index = Math.round(value * (Colors.length - 1));
           return Colors[Index];
         },

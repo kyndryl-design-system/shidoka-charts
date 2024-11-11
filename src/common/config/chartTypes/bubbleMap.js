@@ -1,4 +1,4 @@
-import colorPalettes from '../colorPalettes';
+import { getColorPalette } from '../colorPalettes';
 
 const BorderColor =
   getComputedStyle(document.documentElement).getPropertyValue(
@@ -8,7 +8,7 @@ const BorderColor =
 export const type = 'bubbleMap';
 
 export const options = (ctx) => {
-  const Colors = colorPalettes[ctx.options.colorPalette || 'categorical'];
+  const Colors = getColorPalette(ctx.options.colorPalette || 'categorical');
 
   return {
     outlineBorderWidth: 0.5,
