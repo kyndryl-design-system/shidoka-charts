@@ -31,6 +31,7 @@ import downloadIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16
 import maximizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/expand.svg';
 import minimizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/shrink.svg';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 Chart.register(
   ChoroplethController,
@@ -576,10 +577,7 @@ export class KDChart extends LitElement {
     // Chart.defaults.font.family = getComputedStyle(
     //   document.documentElement
     // ).getPropertyValue('--kd-font-family-secondary');
-    Chart.defaults.color =
-      getComputedStyle(document.documentElement).getPropertyValue(
-        '--kd-color-text-primary'
-      ) || '#3d3c3c';
+    Chart.defaults.color = getTokenThemeVal('--kd-color-text-primary');
 
     // let plugins = [
     //   canvasBackgroundPlugin,

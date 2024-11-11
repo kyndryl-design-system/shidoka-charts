@@ -4,14 +4,14 @@ import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/comm
 //   getComputedStyle(document.documentElement).getPropertyValue(
 //     '--kd-color-background-ui-default'
 //   ) || '#ffffff';
-// const TooltipBgColor =
-//   getComputedStyle(document.documentElement).getPropertyValue(
-//     '--kd-color-background-ui-strong'
-//   ) || '#3d3c3c';
+const TooltipBgColor =
+  getComputedStyle(document.documentElement).getPropertyValue(
+    '--kd-color-background-ui-strong'
+  ) || '#3d3c3c';
 
 const defaultConfig = (ctx) => {
   const BgColor = getTokenThemeVal('--kd-color-page-bg');
-  const TooltipBgColor = getTokenThemeVal('--kd-color-page-bg');
+  // const TooltipBgColor = getTokenThemeVal('--kd-color-page-bg'); // token tbd
   const ExplicitSize = ctx.height !== null || ctx.width !== null;
 
   return {
