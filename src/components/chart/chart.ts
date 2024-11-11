@@ -195,6 +195,14 @@ export class KDChart extends LitElement {
     })
   );
 
+  _themeObserver: any = new MutationObserver(() => {
+    if (this.chart) {
+      this.mergeOptions().then(() => {
+        this.initChart();
+      });
+    }
+  });
+
   override render() {
     const Classes = {
       container: true,
@@ -452,8 +460,18 @@ export class KDChart extends LitElement {
     }
   }
 
+  override connectedCallback() {
+    super.connectedCallback();
+
+    this._themeObserver.observe(
+      document.querySelector('meta[name="color-scheme"]'),
+      { attributes: true }
+    );
+  }
+
   override disconnectedCallback() {
     this._resizeObserver.disconnect();
+    this._themeObserver.disconnect();
 
     super.disconnectedCallback();
   }
