@@ -1,4 +1,4 @@
-import { getColorPalette } from '../colorPalettes';
+import { getComputedColorPalette } from '../colorPalettes';
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 export const type = 'polarArea';
@@ -28,7 +28,7 @@ export const options = (ctx) => {
 
 export const datasetOptions = (ctx, index) => {
   return {
-    backgroundColor: getColorPalette(
+    backgroundColor: getComputedColorPalette(
       ctx.options.colorPalette || 'categorical'
     ).map(
       (color) => color + 'BF' // 75% opacity

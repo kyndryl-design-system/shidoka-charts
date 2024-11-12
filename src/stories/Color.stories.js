@@ -33,7 +33,7 @@ export const Categorical = {
       categorical
       <div class="colors">
         ${getColorPalette('categorical').map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
+          return html`<span style="background-color: var(${color})"></span>`;
         })}
       </div>
     `;
@@ -47,7 +47,7 @@ export const Sequential01 = {
       sequential01
       <div class="colors">
         ${getColorPalette('sequential01').map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
+          return html`<span style="background-color: var(${color})"></span>`;
         })}
       </div>
     `;
@@ -61,7 +61,7 @@ export const Sequential02 = {
       sequential02
       <div class="colors">
         ${getColorPalette('sequential02').map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
+          return html`<span style="background-color: var(${color})"></span>`;
         })}
       </div>
     `;
@@ -75,7 +75,7 @@ export const Sequential03 = {
       sequential03
       <div class="colors">
         ${getColorPalette('sequential03').map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
+          return html`<span style="background-color: var(${color})"></span>`;
         })}
       </div>
     `;
@@ -89,7 +89,7 @@ export const Sequential04 = {
       sequential04
       <div class="colors">
         ${getColorPalette('sequential04').map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
+          return html`<span style="background-color: var(${color})"></span>`;
         })}
       </div>
     `;
@@ -103,7 +103,7 @@ export const Sequential05 = {
       sequential05
       <div class="colors">
         ${getColorPalette('sequential05').map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
+          return html`<span style="background-color: var(${color})"></span>`;
         })}
       </div>
     `;
@@ -117,7 +117,7 @@ export const Divergent01 = {
       divergent01
       <div class="colors">
         ${getColorPalette('divergent01').map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
+          return html`<span style="background-color: var(${color})"></span>`;
         })}
       </div>
     `;
@@ -131,7 +131,7 @@ export const Divergent02 = {
       divergent02
       <div class="colors">
         ${getColorPalette('divergent02').map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
+          return html`<span style="background-color: var(${color})"></span>`;
         })}
       </div>
     `;
@@ -145,7 +145,7 @@ export const RAG03 = {
       Red-Amber-Green-03
       <div class="colors">
         ${getColorPalette('rag03').map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
+          return html`<span style="background-color: var(${color})"></span>`;
         })}
       </div>
     `;
@@ -159,7 +159,7 @@ export const RAG08 = {
       Red-Amber-Green-08
       <div class="colors">
         ${getColorPalette('rag08').map((color) => {
-          return html`<span style="background-color: ${color}"></span>`;
+          return html`<span style="background-color: var(${color})"></span>`;
         })}
       </div>
     `;

@@ -1,4 +1,4 @@
-import { getColorPalette } from '../colorPalettes';
+import { getComputedColorPalette } from '../colorPalettes';
 
 const LabelColor =
   getComputedStyle(document.documentElement).getPropertyValue(
@@ -39,6 +39,8 @@ export const options = (ctx) => {
 
 export const datasetOptions = (ctx, index) => {
   return {
-    backgroundColor: getColorPalette(ctx.options.colorPalette || 'categorical'),
+    backgroundColor: getComputedColorPalette(
+      ctx.options.colorPalette || 'categorical'
+    ),
   };
 };

@@ -1,4 +1,4 @@
-import { getColorPalette } from '../colorPalettes';
+import { getComputedColorPalette } from '../colorPalettes';
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 export const type = 'radar';
@@ -31,7 +31,9 @@ export const options = (ctx) => {
 };
 
 export const datasetOptions = (ctx, index) => {
-  const Colors = getColorPalette(ctx.options.colorPalette || 'categorical');
+  const Colors = getComputedColorPalette(
+    ctx.options.colorPalette || 'categorical'
+  );
   const ColorCycles = Math.floor(index / (Colors.length - 1));
   const Index =
     index > Colors.length - 1
