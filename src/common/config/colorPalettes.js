@@ -30,7 +30,7 @@ export const getColorPalette = (key) => {
       '--kd-color-data-viz-categorical-01-07',
       '--kd-color-data-viz-categorical-01-08',
       '--kd-color-data-viz-categorical-01-09',
-      '--kd-color-data-viz-categorical-01-010',
+      '--kd-color-data-viz-categorical-01-10',
     ],
     // sequential01: [
     //   '#ACE1F8',
