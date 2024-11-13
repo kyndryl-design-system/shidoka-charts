@@ -6,7 +6,7 @@ import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/comm
 //   ) || '#dcdad8';
 
 const defaultConfig = (ctx) => {
-  const GridLinesColor = getTokenThemeVal('--kd-color-utility-border');
+  const GridLinesColor = getTokenThemeVal('--kd-color-border-level-1');
 
   const MultiAxis =
     ctx.options.scales && Object.keys(ctx.options.scales).length > 2;
