@@ -1,6 +1,8 @@
 import DocumentationTemplate from './DocumentationTemplate.mdx';
 import { setCustomElementsManifest } from '@storybook/web-components';
 import customElements from '../custom-elements.json';
+import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
+import { BREAKPOINT_VIEWPORTS } from '@kyndryl-design-system/shidoka-foundation/common/helpers/breakpoints';
 
 import './global.scss?global';
 
@@ -23,6 +25,12 @@ export default {
       },
     },
     backgrounds: { disable: true },
+    viewport: {
+      viewports: {
+        ...BREAKPOINT_VIEWPORTS,
+        ...INITIAL_VIEWPORTS,
+      },
+    },
     a11y: {
       // disable violations flagged in chartjs-plugin-a11y-legend
       config: {
@@ -40,7 +48,7 @@ export default {
     },
   },
 
-  tags: ['autodocs']
+  tags: ['autodocs'],
 };
 
 setCustomElementsManifest(customElements);
