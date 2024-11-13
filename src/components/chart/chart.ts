@@ -577,7 +577,7 @@ export class KDChart extends LitElement {
     // Chart.defaults.font.family = getComputedStyle(
     //   document.documentElement
     // ).getPropertyValue('--kd-font-family-secondary');
-    Chart.defaults.color = getTokenThemeVal('--kd-color-text-primary');
+    Chart.defaults.color = getTokenThemeVal('--kd-color-text-levels-primary');
 
     // let plugins = [
     //   canvasBackgroundPlugin,
