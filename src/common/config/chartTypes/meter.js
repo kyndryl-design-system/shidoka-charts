@@ -1,10 +1,5 @@
 import { getComputedColorPalette } from '../colorPalettes';
 
-const LabelColor =
-  getComputedStyle(document.documentElement).getPropertyValue(
-    '--kd-color-text-primary'
-  ) || '#3d3c3c';
-
 export const type = 'meter';
 
 export const options = () => {
@@ -25,7 +20,6 @@ export const options = () => {
       },
 
       datalabels: {
-        color: LabelColor,
         font: function (context) {
           var w = context.chart.width;
           return {

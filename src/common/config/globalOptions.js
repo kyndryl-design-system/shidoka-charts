@@ -11,6 +11,10 @@ const TooltipBgColor =
 
 const defaultConfig = (ctx) => {
   const BgColor = getTokenThemeVal('--kd-color-page-bg');
+  // const TextColor = getTokenThemeVal('--kd-color-text-levels-primary');
+  const SecondaryTextColor = getTokenThemeVal(
+    '--kd-color-text-levels-secondary'
+  );
   // const TooltipBgColor = getTokenThemeVal('--kd-color-page-bg'); // token tbd
   const ExplicitSize = ctx.height !== null || ctx.width !== null;
 
@@ -52,6 +56,7 @@ const defaultConfig = (ctx) => {
       },
       datalabels: {
         display: false,
+        color: SecondaryTextColor,
       },
       chartjs2music: {
         internal: {},

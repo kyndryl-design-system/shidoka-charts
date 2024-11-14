@@ -1,12 +1,9 @@
+import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
+
 const NeedleColor =
   getComputedStyle(document.documentElement).getPropertyValue(
     '--kd-color-background-ui'
   ) || '#898888';
-
-const LabelColor =
-  getComputedStyle(document.documentElement).getPropertyValue(
-    '--kd-color-text-primary'
-  ) || '#3d3c3c';
 
 // if someone enters needle value more than total value of dataset then needle is point downwards so
 // in this scenario we set max value of needle is total value of data. Also if someone enters negative value then we need to set needle to 0
@@ -53,6 +50,9 @@ const displayLabelBelowNeedle = (
 export default {
   id: 'meterGaugeNeedle',
   afterDatasetsDraw: (chart, args, plugins) => {
+    const TextColor = getTokenThemeVal('--kd-color-text-levels-secondary');
+    const NeedleBorderColor = getTokenThemeVal('--kd-color-page-bg');
+
     const { ctx, data } = chart;
     ctx.save();
     // fetch x and y for needle position
@@ -94,19 +94,19 @@ export default {
     // ctx.save();
     // Enter needle value
     ctx.font = 'bold 12px "Helvetica Neue", Helvetica, Arial, sans-serif';
-    ctx.fillStyle = LabelColor;
+    ctx.fillStyle = TextColor;
     ctx.textAlign = 'center';
     ctx.fillText(needleValue, xCenter, yCenter + 25);
     // Enter text value below needle
     ctx.font = '16px "Helvetica Neue", Helvetica, Arial, sans-serif';
-    ctx.fillStyle = LabelColor;
+    ctx.fillStyle = TextColor;
     ctx.fillText(textBelowNeedle, xCenter, yCenter + 43);
 
     ctx.translate(xCenter, yCenter);
 
     // Min - Max value
     ctx.font = '12px "Helvetica Neue", Helvetica, Arial, sans-serif';
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = TextColor;
     ctx.textAlign = 'center';
     // Min value 0
     ctx.fillText('0', 0 - innerRadius - widthSlice, 25);
@@ -119,7 +119,7 @@ export default {
     ctx.beginPath();
 
     // Needle color
-    ctx.strokeStyle = '#ffffff';
+    ctx.strokeStyle = NeedleBorderColor;
     ctx.fillStyle = NeedleColor;
     ctx.lineWidth = 2;
 
