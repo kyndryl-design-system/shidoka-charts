@@ -1,10 +1,5 @@
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
-const NeedleColor =
-  getComputedStyle(document.documentElement).getPropertyValue(
-    '--kd-color-background-ui'
-  ) || '#898888';
-
 // if someone enters needle value more than total value of dataset then needle is point downwards so
 // in this scenario we set max value of needle is total value of data. Also if someone enters negative value then we need to set needle to 0
 const evaluateNeedleVal = (val, total) => {
@@ -50,8 +45,13 @@ const displayLabelBelowNeedle = (
 export default {
   id: 'meterGaugeNeedle',
   afterDatasetsDraw: (chart, args, plugins) => {
-    const TextColor = getTokenThemeVal('--kd-color-text-levels-secondary');
-    const NeedleBorderColor = getTokenThemeVal('--kd-color-page-bg');
+    const TextColor = getTokenThemeVal('--kd-color-text-level-secondary');
+    const NeedleColor = getTokenThemeVal(
+      '--kd-color-background-container-bold'
+    );
+    const NeedleBorderColor = getTokenThemeVal(
+      '--kd-color-background-page-default'
+    );
 
     const { ctx, data } = chart;
     ctx.save();

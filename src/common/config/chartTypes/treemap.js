@@ -1,14 +1,12 @@
 import { getComputedColorPalette } from '../colorPalettes';
 import { getTextColor } from '../../helpers/helpers';
-
-const BorderColor =
-  getComputedStyle(document.documentElement).getPropertyValue(
-    '--kd-color-border-inverse'
-  ) || '#ffffff';
+import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 export const type = 'treemap';
 
 export const options = (ctx) => {
+  const BorderColor = getTokenThemeVal('--kd-color-background-page-default');
+
   return {
     plugins: {
       legend: {

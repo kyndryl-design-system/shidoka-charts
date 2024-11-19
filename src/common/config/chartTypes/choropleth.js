@@ -1,13 +1,11 @@
 import { getComputedColorPalette } from '../colorPalettes';
-
-const BorderColor =
-  getComputedStyle(document.documentElement).getPropertyValue(
-    '--kd-color-background-ui-default'
-  ) || '#ffffff';
+import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 export const type = 'choropleth';
 
 export const options = (ctx) => {
+  const BorderColor = getTokenThemeVal('--kd-color-background-page-default');
+
   return {
     borderWidth: 0.5,
     borderColor: BorderColor,

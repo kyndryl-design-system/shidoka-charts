@@ -1,7 +1,7 @@
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 const defaultConfig = (ctx) => {
-  const ArcColor = getTokenThemeVal('--kd-color-page-bg');
+  const ArcColor = getTokenThemeVal('--kd-color-background-page-default');
 
   return {
     elements: {

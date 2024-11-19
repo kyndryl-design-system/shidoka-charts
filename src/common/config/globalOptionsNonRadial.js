@@ -1,12 +1,7 @@
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
-// const GridLinesColor =
-//   getComputedStyle(document.documentElement).getPropertyValue(
-//     '--kd-color-border-light'
-//   ) || '#dcdad8';
-
 const defaultConfig = (ctx) => {
-  const GridLinesColor = getTokenThemeVal('--kd-color-border-level-1');
+  const GridLinesColor = getTokenThemeVal('--kd-color-border-variants-light');
 
   const MultiAxis =
     ctx.options.scales && Object.keys(ctx.options.scales).length > 2;

@@ -4,9 +4,9 @@ import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/comm
 export const type = 'radar';
 
 export const options = (ctx) => {
-  const TextColor = getTokenThemeVal('--kd-color-text-levels-primary');
-  const BgColor = getTokenThemeVal('--kd-color-page-bg');
-  const GridLinesColor = getTokenThemeVal('--kd-color-border-level-1');
+  const TextColor = getTokenThemeVal('--kd-color-text-level-primary');
+  const BgColor = getTokenThemeVal('--kd-color-background-page-default');
+  const GridLinesColor = getTokenThemeVal('--kd-color-border-variants-light');
 
   return {
     pointRadius: 4,

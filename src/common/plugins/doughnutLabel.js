@@ -3,7 +3,7 @@ import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/comm
 export default {
   id: 'doughnutLabel',
   beforeDraw: (chart, args, options) => {
-    const TextColor = getTokenThemeVal('--kd-color-text-levels-primary');
+    const TextColor = getTokenThemeVal('--kd-color-text-level-primary');
 
     if (
       chart.config.type === 'doughnut' &&
