@@ -244,42 +244,44 @@ export class KDChart extends LitElement {
                       <div class="controls">
                         ${!this.tableDisabled
                           ? html`
-                              <kd-button
-                                kind="tertiary"
-                                size="small"
-                                description=${this.customLabels.toggleView}
-                                @on-click=${() => this.handleViewToggle()}
+                              <button
+                                class="control-button"
+                                @click=${() => this.handleViewToggle()}
+                                aria-label=${this.customLabels.toggleView}
+                                title=${this.customLabels.toggleView}
                               >
-                                <span slot="icon"
-                                  >${this.tableView
+                                <span slot="icon">
+                                  ${this.tableView
                                     ? unsafeSVG(chartIcon)
-                                    : unsafeSVG(tableIcon)}</span
-                                >
-                              </kd-button>
+                                    : unsafeSVG(tableIcon)}
+                                </span>
+                              </button>
                             `
                           : null}
 
-                        <kd-button
-                          kind="tertiary"
-                          size="small"
-                          description=${this.customLabels.toggleFullscreen}
-                          @on-click=${() => this.handleFullscreen()}
+                        <button
+                          class="control-button"
+                          @click=${() => this.handleFullscreen()}
+                          aria-label=${this.customLabels.toggleFullscreen}
+                          title=${this.customLabels.toggleFullscreen}
                         >
-                          <span slot="icon"
-                            >${this.fullscreen
+                          <span slot="icon">
+                            ${this.fullscreen
                               ? unsafeSVG(minimizeIcon)
-                              : unsafeSVG(maximizeIcon)}</span
-                          >
-                        </kd-button>
+                              : unsafeSVG(maximizeIcon)}
+                          </span>
+                        </button>
 
                         <div class="download">
-                          <kd-button
-                            kind="tertiary"
-                            size="small"
-                            description=${this.customLabels.downloadMenu}
+                          <button
+                            class="control-button"
+                            aria-label=${this.customLabels.downloadMenu}
+                            title=${this.customLabels.downloadMenu}
                           >
-                            <span slot="icon">${unsafeSVG(downloadIcon)}</span>
-                          </kd-button>
+                            <span slot="icon">
+                              ${unsafeSVG(downloadIcon)}
+                            </span>
+                          </button>
 
                           <div class="download-menu">
                             ${!this.tableDisabled

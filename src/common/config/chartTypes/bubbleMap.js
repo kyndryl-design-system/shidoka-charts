@@ -9,11 +9,12 @@ export const options = (ctx) => {
   const Colors = getComputedColorPalette(
     ctx.options.colorPalette || 'categorical'
   );
+  const BubbleColor = getTokenThemeVal('--kd-color-data-viz-level-secondary');
 
   return {
     outlineBorderWidth: 0.5,
     outlineBorderColor: BorderColor,
-    outlineBackgroundColor: '#D9D7D7', // TO DO, need token
+    outlineBackgroundColor: BubbleColor,
     backgroundColor: Colors[0], // + '80', // 50% opacity
     plugins: {
       legend: {

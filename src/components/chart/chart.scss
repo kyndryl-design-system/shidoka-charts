@@ -170,6 +170,7 @@ table {
 
 .controls {
   display: flex;
+  gap: 8px;
   align-items: center;
   margin-left: auto;
 
@@ -183,19 +184,24 @@ table {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: outline-color 150ms ease-out, color 150ms ease-out,
+      background-color 150ms ease-out;
+    background: var(--kd-color-background-button-tertiary-default);
+    color: var(--kd-color-text-level-primary);
+    outline: 2px solid transparent;
+
+    &:hover {
+      background: var(--kd-color-background-button-tertiary-hover);
+      color: var(--kd-color-text-level-tertiary);
+    }
+
+    &:active {
+      background: var(--kd-color-background-button-tertiary-pressed);
+      color: var(--kd-color-text-link-level-pressed);
+    }
 
     &:focus {
-      outline: 2px solid var(--kd-color-border-variants-focus);
-    }
-  }
-
-  .view-toggle {
-    kd-icon {
-      display: block;
-
-      &.active {
-        display: none;
-      }
+      outline-color: var(--kd-color-border-variants-focus);
     }
   }
 
@@ -203,7 +209,9 @@ table {
     position: relative;
 
     &:focus-within .download-menu {
-      display: block;
+      transform: scale(1);
+      visibility: visible;
+      opacity: 1;
     }
   }
 
@@ -214,14 +222,19 @@ table {
   .download-menu {
     position: absolute;
     right: 0;
-    top: 100%;
-    background: var(--kd-color-background-page-default);
-    border: 1px solid var(--kd-color-border-level-tertiary);
-    display: none;
+    top: calc(100% + 8px);
+    background: var(--kd-color-background-container-default);
+    border: 1px solid var(--kd-color-border-level-primary);
     @include elevation.shadow(2);
     border-radius: 4px;
     overflow: hidden;
     text-align: left;
+    transition: transform 150ms ease-out, visibility 150ms ease-out,
+      opacity 150ms ease-out;
+    transform: scale(0);
+    transform-origin: top right;
+    visibility: hidden;
+    opacity: 0;
 
     & button {
       display: block;
