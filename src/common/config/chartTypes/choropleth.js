@@ -5,6 +5,7 @@ export const type = 'choropleth';
 
 export const options = (ctx) => {
   const BorderColor = getTokenThemeVal('--kd-color-background-page-default');
+  const LegendTicksColor = getTokenThemeVal('--kd-color-border-variants-light');
 
   return {
     borderWidth: 0.5,
@@ -34,10 +35,12 @@ export const options = (ctx) => {
           const Index = Math.round(value * (Colors.length - 1));
           return Colors[Index];
         },
-        // legend: {
-        //   position: 'bottom-left',
-        //   align: 'bottom',
-        // },
+        grid: {
+          color: LegendTicksColor,
+        },
+        border: {
+          color: LegendTicksColor,
+        },
       },
     },
   };

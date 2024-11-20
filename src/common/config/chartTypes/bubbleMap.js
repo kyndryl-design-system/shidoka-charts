@@ -10,6 +10,7 @@ export const options = (ctx) => {
     ctx.options.colorPalette || 'categorical'
   );
   const BubbleColor = getTokenThemeVal('--kd-color-data-viz-level-secondary');
+  const LegendTicksColor = getTokenThemeVal('--kd-color-border-variants-light');
 
   return {
     outlineBorderWidth: 0.5,
@@ -52,13 +53,15 @@ export const options = (ctx) => {
       y: {
         display: false,
       },
-      //   size: {
-      //     axis: 'x',
-      //     legend: {
-      //       position: 'bottom-left',
-      //       align: 'bottom',
-      //     },
-      //   },
+      size: {
+        axis: 'x',
+        grid: {
+          color: LegendTicksColor,
+        },
+        border: {
+          color: LegendTicksColor,
+        },
+      },
     },
   };
 };
