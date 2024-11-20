@@ -24,7 +24,6 @@ import ChartScss from './chart.scss';
 import globalOptions from '../../common/config/globalOptions';
 import globalOptionsNonRadial from '../../common/config/globalOptionsNonRadial';
 import globalOptionsRadial from '../../common/config/globalOptionsRadial';
-import '@kyndryl-design-system/shidoka-foundation/components/button';
 import chartIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/analytics.svg';
 import tableIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/table-view.svg';
 import downloadIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/download.svg';
