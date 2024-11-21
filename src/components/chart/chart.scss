@@ -186,18 +186,19 @@ table {
     justify-content: center;
     transition: outline-color 150ms ease-out, color 150ms ease-out,
       background-color 150ms ease-out;
-    background: var(--kd-color-background-button-tertiary-default);
+    background: var(--kd-color-background-button-tertiary-state-default);
     color: var(--kd-color-text-level-primary);
     outline: 2px solid transparent;
+    outline-offset: 2px;
 
     &:hover {
-      background: var(--kd-color-background-button-tertiary-hover);
-      color: var(--kd-color-text-level-tertiary);
+      background: var(--kd-color-background-button-tertiary-state-hover);
+      color: var(--kd-color-text-button-light-primary);
     }
 
     &:active {
-      background: var(--kd-color-background-button-tertiary-pressed);
-      color: var(--kd-color-text-link-level-pressed);
+      background: var(--kd-color-background-button-tertiary-state-pressed);
+      color: var(--kd-color-text-button-dark-primary);
     }
 
     &:focus {
