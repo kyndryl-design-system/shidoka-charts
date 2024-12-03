@@ -139,7 +139,7 @@ export const getColorPalette = (key) => {
       '--kd-color-data-viz-rag-8-error',
       '--kd-color-data-viz-rag-8-error-light',
       '--kd-color-data-viz-rag-8-informational',
-      '--kd-color-data-viz-rag-8-information-light',
+      '--kd-color-data-viz-rag-8-informational-light',
     ],
   };
 
