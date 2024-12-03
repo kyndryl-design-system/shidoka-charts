@@ -24,13 +24,13 @@ import ChartScss from './chart.scss';
 import globalOptions from '../../common/config/globalOptions';
 import globalOptionsNonRadial from '../../common/config/globalOptionsNonRadial';
 import globalOptionsRadial from '../../common/config/globalOptionsRadial';
-import '@kyndryl-design-system/shidoka-foundation/components/button';
 import chartIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/analytics.svg';
 import tableIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/table-view.svg';
 import downloadIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/download.svg';
 import maximizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/expand.svg';
 import minimizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/shrink.svg';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 Chart.register(
   ChoroplethController,
@@ -195,6 +195,14 @@ export class KDChart extends LitElement {
     })
   );
 
+  _themeObserver: any = new MutationObserver(() => {
+    if (this.chart) {
+      this.mergeOptions().then(() => {
+        this.initChart();
+      });
+    }
+  });
+
   override render() {
     const Classes = {
       container: true,
@@ -235,42 +243,44 @@ export class KDChart extends LitElement {
                       <div class="controls">
                         ${!this.tableDisabled
                           ? html`
-                              <kd-button
-                                kind="tertiary"
-                                size="small"
-                                description=${this.customLabels.toggleView}
-                                @on-click=${() => this.handleViewToggle()}
+                              <button
+                                class="control-button"
+                                @click=${() => this.handleViewToggle()}
+                                aria-label=${this.customLabels.toggleView}
+                                title=${this.customLabels.toggleView}
                               >
-                                <span slot="icon"
-                                  >${this.tableView
+                                <span slot="icon">
+                                  ${this.tableView
                                     ? unsafeSVG(chartIcon)
-                                    : unsafeSVG(tableIcon)}</span
-                                >
-                              </kd-button>
+                                    : unsafeSVG(tableIcon)}
+                                </span>
+                              </button>
                             `
                           : null}
 
-                        <kd-button
-                          kind="tertiary"
-                          size="small"
-                          description=${this.customLabels.toggleFullscreen}
-                          @on-click=${() => this.handleFullscreen()}
+                        <button
+                          class="control-button"
+                          @click=${() => this.handleFullscreen()}
+                          aria-label=${this.customLabels.toggleFullscreen}
+                          title=${this.customLabels.toggleFullscreen}
                         >
-                          <span slot="icon"
-                            >${this.fullscreen
+                          <span slot="icon">
+                            ${this.fullscreen
                               ? unsafeSVG(minimizeIcon)
-                              : unsafeSVG(maximizeIcon)}</span
-                          >
-                        </kd-button>
+                              : unsafeSVG(maximizeIcon)}
+                          </span>
+                        </button>
 
                         <div class="download">
-                          <kd-button
-                            kind="tertiary"
-                            size="small"
-                            description=${this.customLabels.downloadMenu}
+                          <button
+                            class="control-button"
+                            aria-label=${this.customLabels.downloadMenu}
+                            title=${this.customLabels.downloadMenu}
                           >
-                            <span slot="icon">${unsafeSVG(downloadIcon)}</span>
-                          </kd-button>
+                            <span slot="icon">
+                              ${unsafeSVG(downloadIcon)}
+                            </span>
+                          </button>
 
                           <div class="download-menu">
                             ${!this.tableDisabled
@@ -452,8 +462,18 @@ export class KDChart extends LitElement {
     }
   }
 
+  override connectedCallback() {
+    super.connectedCallback();
+
+    this._themeObserver.observe(
+      document.querySelector('meta[name="color-scheme"]'),
+      { attributes: true }
+    );
+  }
+
   override disconnectedCallback() {
     this._resizeObserver.disconnect();
+    this._themeObserver.disconnect();
 
     super.disconnectedCallback();
   }
@@ -558,10 +578,7 @@ export class KDChart extends LitElement {
     // Chart.defaults.font.family = getComputedStyle(
     //   document.documentElement
     // ).getPropertyValue('--kd-font-family-secondary');
-    Chart.defaults.color =
-      getComputedStyle(document.documentElement).getPropertyValue(
-        '--kd-color-text-primary'
-      ) || '#3d3c3c';
+    Chart.defaults.color = getTokenThemeVal('--kd-color-text-level-primary');
 
     // let plugins = [
     //   canvasBackgroundPlugin,

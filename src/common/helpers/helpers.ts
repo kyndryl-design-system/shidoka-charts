@@ -78,15 +78,8 @@ export function getRandomData(arrayLength = 6, min = -100, max = 100) {
  * returns the inversed text color (InverseTextColor).
  */
 export function getTextColor(bgHexColor: string) {
-  const TextColor =
-    getComputedStyle(document.documentElement).getPropertyValue(
-      '--kd-color-text-primary'
-    ) || '#3d3c3c';
-
-  const InverseTextColor =
-    getComputedStyle(document.documentElement).getPropertyValue(
-      '--kd-color-text-inversed'
-    ) || '#ffffff';
+  const TextColor = '#3d3c3c';
+  const InverseTextColor = '#f9f9f9';
 
   const r = parseInt(bgHexColor.substring(1, 3), 16);
   const g = parseInt(bgHexColor.substring(3, 5), 16);

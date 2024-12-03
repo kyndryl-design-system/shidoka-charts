@@ -1,9 +1,4 @@
-import colorPalettes from '../colorPalettes';
-
-const LabelColor =
-  getComputedStyle(document.documentElement).getPropertyValue(
-    '--kd-color-text-secondary'
-  ) || '#6d6d6d';
+import { getComputedColorPalette } from '../colorPalettes';
 
 export const type = 'doughnut';
 
@@ -12,7 +7,6 @@ export const options = (ctx) => {
     radius: '80%',
     plugins: {
       datalabels: {
-        color: LabelColor,
         font: {
           size: 14,
         },
@@ -39,6 +33,8 @@ export const options = (ctx) => {
 
 export const datasetOptions = (ctx, index) => {
   return {
-    backgroundColor: colorPalettes[ctx.options.colorPalette || 'categorical'],
+    backgroundColor: getComputedColorPalette(
+      ctx.options.colorPalette || 'categorical'
+    ),
   };
 };

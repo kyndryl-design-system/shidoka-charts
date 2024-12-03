@@ -1,14 +1,12 @@
-import colorPalettes from '../colorPalettes';
+import { getComputedColorPalette } from '../colorPalettes';
 import { getTextColor } from '../../helpers/helpers';
-
-const BorderColor =
-  getComputedStyle(document.documentElement).getPropertyValue(
-    '--kd-color-border-inverse'
-  ) || '#ffffff';
+import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 export const type = 'treemap';
 
 export const options = (ctx) => {
+  const BorderColor = getTokenThemeVal('--kd-color-background-page-default');
+
   return {
     plugins: {
       legend: {
@@ -57,7 +55,7 @@ export const options = (ctx) => {
 export const datasetOptions = (ctx, index) => {
   return {
     backgroundColor: function (context) {
-      return colorPalettes[ctx.options.colorPalette || 'categorical'][
+      return getComputedColorPalette(ctx.options.colorPalette || 'categorical')[
         getGroupColorIndex(context)
       ]; // + '80'
     },

@@ -1,4 +1,4 @@
-import colorPalettes from '../colorPalettes';
+import { getComputedColorPalette } from '../colorPalettes';
 
 export const type = 'scatter';
 
@@ -11,7 +11,9 @@ export const options = (ctx) => {
 };
 
 export const datasetOptions = (ctx, index) => {
-  const Colors = colorPalettes[ctx.options.colorPalette || 'categorical'];
+  const Colors = getComputedColorPalette(
+    ctx.options.colorPalette || 'categorical'
+  );
   const ColorCycles = Math.floor(index / (Colors.length - 1));
   const Index =
     index > Colors.length - 1
