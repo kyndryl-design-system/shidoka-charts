@@ -142,7 +142,7 @@ export const RAG03 = {
   args,
   render: (args) => {
     return html`
-      Red-Amber-Green-03
+      rag03
       <div class="colors">
         ${getColorPalette('rag03').map((color) => {
           return html`<span style="background-color: var(${color})"></span>`;
@@ -156,7 +156,7 @@ export const RAG08 = {
   args,
   render: (args) => {
     return html`
-      Red-Amber-Green-08
+      rag08
       <div class="colors">
         ${getColorPalette('rag08').map((color) => {
           return html`<span style="background-color: var(${color})"></span>`;
