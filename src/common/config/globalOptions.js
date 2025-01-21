@@ -1,7 +1,6 @@
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 const defaultConfig = (ctx) => {
-  const BgColor = getTokenThemeVal('--kd-color-background-page-default');
   const SecondaryTextColor = getTokenThemeVal(
     '--kd-color-text-level-secondary'
   );
@@ -16,7 +15,7 @@ const defaultConfig = (ctx) => {
     maintainAspectRatio: !ExplicitSize,
     plugins: {
       canvasBackground: {
-        color: BgColor,
+        color: 'transparent',
       },
       legend: {
         position: 'bottom',
