@@ -332,6 +332,36 @@
             },
             {
               "kind": "field",
+              "name": "disableDownload",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disabled download controls",
+              "attribute": "disableDownload"
+            },
+            {
+              "kind": "field",
+              "name": "disableFullScreen",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disabled full Screen controls",
+              "attribute": "disableFullScreen"
+            },
+            {
+              "kind": "field",
+              "name": "disableView",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disabled view controls",
+              "attribute": "disableView"
+            },
+            {
+              "kind": "field",
               "name": "customLabels",
               "type": {
                 "text": "object"
@@ -539,6 +569,33 @@
               "default": "false",
               "description": "Removes the outer border and padding.",
               "fieldName": "noBorder"
+            },
+            {
+              "name": "disableDownload",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disabled download controls",
+              "fieldName": "disableDownload"
+            },
+            {
+              "name": "disableFullScreen",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disabled full Screen controls",
+              "fieldName": "disableFullScreen"
+            },
+            {
+              "name": "disableView",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disabled view controls",
+              "fieldName": "disableView"
             },
             {
               "name": "customLabels",

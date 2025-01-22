@@ -45,6 +45,9 @@ const args = {
   hideCaptions: false,
   hideHeader: false,
   hideControls: false,
+  disableView: false,
+  disableFullScreen: false,
+  disableDownload: false,
   colorPalette: 'categorical',
   noBorder: false,
   width: null,
@@ -66,6 +69,9 @@ export const Pie = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?disableView=${args.disableView}
+        ?disableFullScreen=${args.disableFullScreen}
+        ?disableDownload=${args.disableDownload}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -92,6 +98,9 @@ export const Doughnut = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?disableView=${args.disableView}
+        ?disableFullScreen=${args.disableFullScreen}
+        ?disableDownload=${args.disableDownload}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -147,6 +156,9 @@ export const DoughnutCustomCenterLabel = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?disableView=${args.disableView}
+        ?disableFullScreen=${args.disableFullScreen}
+        ?disableDownload=${args.disableDownload}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}

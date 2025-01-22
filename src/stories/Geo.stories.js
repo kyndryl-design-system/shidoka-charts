@@ -33,6 +33,9 @@ const args = {
   hideCaptions: false,
   hideHeader: false,
   hideControls: false,
+  disableView: false,
+  disableFullScreen: false,
+  disableDownload: false,
   colorPalette: 'sequential01',
   noBorder: false,
   width: null,
@@ -75,6 +78,9 @@ export const WorldChoropleth = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?disableView=${args.disableView}
+        ?disableFullScreen=${args.disableFullScreen}
+        ?disableDownload=${args.disableDownload}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -127,6 +133,9 @@ export const CountryChoropleth = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?disableView=${args.disableView}
+        ?disableFullScreen=${args.disableFullScreen}
+        ?disableDownload=${args.disableDownload}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -172,6 +181,9 @@ export const WorldBubbleMap = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?disableView=${args.disableView}
+        ?disableFullScreen=${args.disableFullScreen}
+        ?disableDownload=${args.disableDownload}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -221,6 +233,9 @@ export const CountryBubbleMap = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?disableView=${args.disableView}
+        ?disableFullScreen=${args.disableFullScreen}
+        ?disableDownload=${args.disableDownload}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}

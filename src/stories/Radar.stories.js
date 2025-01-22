@@ -49,6 +49,9 @@ const args = {
   hideCaptions: false,
   hideHeader: false,
   hideControls: false,
+  disableView: false,
+  disableFullScreen: false,
+  disableDownload: false,
   colorPalette: 'categorical',
   noBorder: false,
   width: null,
@@ -70,6 +73,9 @@ export const Radar = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?disableView=${args.disableView}
+        ?disableFullScreen=${args.disableFullScreen}
+        ?disableDownload=${args.disableDownload}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}

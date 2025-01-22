@@ -43,6 +43,9 @@ const args = {
   hideCaptions: false,
   hideHeader: false,
   hideControls: false,
+  disableView: false,
+  disableFullScreen: false,
+  disableDownload: false,
   colorPalette: 'rag03',
   noBorder: false,
   width: null,
@@ -64,6 +67,9 @@ export const Meter = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?disableView=${args.disableView}
+        ?disableFullScreen=${args.disableFullScreen}
+        ?disableDownload=${args.disableDownload}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}

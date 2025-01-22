@@ -50,6 +50,9 @@ const args = {
   hideCaptions: false,
   hideHeader: false,
   hideControls: false,
+  disableView: false,
+  disableFullScreen: false,
+  disableDownload: false,
   colorPalette: 'categorical',
   noBorder: false,
   width: null,
@@ -71,6 +74,9 @@ export const Vertical = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?disableView=${args.disableView}
+        ?disableFullScreen=${args.disableFullScreen}
+        ?disableDownload=${args.disableDownload}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -111,6 +117,9 @@ export const Horizontal = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?disableView=${args.disableView}
+        ?disableFullScreen=${args.disableFullScreen}
+        ?disableDownload=${args.disableDownload}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -152,6 +161,9 @@ export const Stacked = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?disableView=${args.disableView}
+        ?disableFullScreen=${args.disableFullScreen}
+        ?disableDownload=${args.disableDownload}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -194,6 +206,9 @@ export const HorizontalStacked = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?disableView=${args.disableView}
+        ?disableFullScreen=${args.disableFullScreen}
+        ?disableDownload=${args.disableDownload}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -243,6 +258,9 @@ export const Floating = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?disableView=${args.disableView}
+        ?disableFullScreen=${args.disableFullScreen}
+        ?disableDownload=${args.disableDownload}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -310,6 +328,9 @@ export const SingleLabel = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?disableView=${args.disableView}
+        ?disableFullScreen=${args.disableFullScreen}
+        ?disableDownload=${args.disableDownload}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}

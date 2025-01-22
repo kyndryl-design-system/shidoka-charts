@@ -203,6 +203,12 @@ table {
     &:focus {
       outline-color: var(--kd-color-border-variants-focus);
     }
+    &[disabled] {
+      color: var(--kd-color-text-link-level-disabled);
+      border: none;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
   }
 
   .download {
@@ -256,6 +262,12 @@ table {
 
       &:focus {
         outline-color: var(--kd-color-border-variants-focus);
+      }
+      &[disabled] {
+        color: var(--kd-color-text-link-level-disabled);
+        border: none;
+        cursor: not-allowed;
+        pointer-events: none;
       }
     }
   }

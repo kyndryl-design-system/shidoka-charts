@@ -14,6 +14,13 @@ export default {
 const args = {
   noBorder: false,
   height: null,
+  hideDescription: false,
+  hideCaptions: false,
+  hideHeader: false,
+  hideControls: false,
+  disableView: false,
+  disableFullScreen: false,
+  disableDownload: false,
 };
 
 export const Full = {
@@ -27,6 +34,13 @@ export const Full = {
           description="Full Example"
           .height=${args.height}
           ?noBorder=${args.noBorder}
+          ?hideDescription=${args.hideDescription}
+          ?hideCaptions=${args.hideCaptions}
+          ?hideHeader=${args.hideHeader}
+          ?hideControls=${args.hideControls}
+          ?disableView=${args.disableView}
+          ?disableFullScreen=${args.disableFullScreen}
+          ?disableDownload=${args.disableDownload}
           .labels=${['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange']}
           .datasets=${[
             {
@@ -68,7 +82,14 @@ export const Half = {
             chartTitle="Bar Chart"
             description="Half Example"
             .height=${args.height}
+            ?hideDescription=${args.hideDescription}
+            ?hideCaptions=${args.hideCaptions}
+            ?hideHeader=${args.hideHeader}
+            ?hideControls=${args.hideControls}
             ?noBorder=${args.noBorder}
+            ?disableView=${args.disableView}
+            ?disableFullScreen=${args.disableFullScreen}
+            ?disableDownload=${args.disableDownload}
             .labels=${['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange']}
             .datasets=${[
               {
@@ -105,6 +126,13 @@ export const Half = {
             description="Half Example"
             .height=${args.height}
             ?noBorder=${args.noBorder}
+            ?hideDescription=${args.hideDescription}
+            ?hideCaptions=${args.hideCaptions}
+            ?hideHeader=${args.hideHeader}
+            ?hideControls=${args.hideControls}
+            ?disableView=${args.disableView}
+            ?disableFullScreen=${args.disableFullScreen}
+            ?disableDownload=${args.disableDownload}
             .labels=${['Blue', 'Red', 'Orange', 'Yellow', 'Green', 'Purple']}
             .datasets=${[
               {
@@ -146,6 +174,13 @@ export const Third = {
             description="Third Example"
             .height=${args.height}
             ?noBorder=${args.noBorder}
+            ?hideDescription=${args.hideDescription}
+            ?hideCaptions=${args.hideCaptions}
+            ?hideHeader=${args.hideHeader}
+            ?hideControls=${args.hideControls}
+            ?disableView=${args.disableView}
+            ?disableFullScreen=${args.disableFullScreen}
+            ?disableDownload=${args.disableDownload}
             .labels=${['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange']}
             .datasets=${[
               {
@@ -182,6 +217,13 @@ export const Third = {
             description="Third Example"
             .height=${args.height}
             ?noBorder=${args.noBorder}
+            ?hideDescription=${args.hideDescription}
+            ?hideCaptions=${args.hideCaptions}
+            ?hideHeader=${args.hideHeader}
+            ?hideControls=${args.hideControls}
+            ?disableView=${args.disableView}
+            ?disableFullScreen=${args.disableFullScreen}
+            ?disableDownload=${args.disableDownload}
             .labels=${['Blue', 'Red', 'Orange', 'Yellow', 'Green', 'Purple']}
             .datasets=${[
               {
@@ -213,6 +255,13 @@ export const Third = {
             description="Third Example"
             .height=${args.height}
             ?noBorder=${args.noBorder}
+            ?hideDescription=${args.hideDescription}
+            ?hideCaptions=${args.hideCaptions}
+            ?hideHeader=${args.hideHeader}
+            ?hideControls=${args.hideControls}
+            ?disableView=${args.disableView}
+            ?disableFullScreen=${args.disableFullScreen}
+            ?disableDownload=${args.disableDownload}
             .labels=${['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange']}
             .datasets=${[
               {

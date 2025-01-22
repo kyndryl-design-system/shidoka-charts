@@ -112,6 +112,18 @@ export class KDChart extends LitElement {
   @property({ type: Boolean })
   noBorder = false;
 
+  /** Disabled download controls */
+  @property({ type: Boolean })
+  disableDownload = false;
+
+  /** Disabled full Screen controls */
+  @property({ type: Boolean })
+  disableFullScreen = false;
+
+  /** Disabled view controls */
+  @property({ type: Boolean })
+  disableView = false;
+
   /** Customizable text labels. */
   @property({ type: Object })
   customLabels = {
@@ -195,6 +207,9 @@ export class KDChart extends LitElement {
     })
   );
 
+  /** ThemeObserver for canvas-container.
+   * @internal
+   */
   _themeObserver: any = new MutationObserver(() => {
     if (this.chart) {
       this.mergeOptions().then(() => {
@@ -248,6 +263,7 @@ export class KDChart extends LitElement {
                                 @click=${() => this.handleViewToggle()}
                                 aria-label=${this.customLabels.toggleView}
                                 title=${this.customLabels.toggleView}
+                                ?disabled=${this.disableView}
                               >
                                 <span slot="icon">
                                   ${this.tableView
@@ -263,6 +279,7 @@ export class KDChart extends LitElement {
                           @click=${() => this.handleFullscreen()}
                           aria-label=${this.customLabels.toggleFullscreen}
                           title=${this.customLabels.toggleFullscreen}
+                          ?disabled=${this.disableFullScreen}
                         >
                           <span slot="icon">
                             ${this.fullscreen
@@ -276,6 +293,7 @@ export class KDChart extends LitElement {
                             class="control-button"
                             aria-label=${this.customLabels.downloadMenu}
                             title=${this.customLabels.downloadMenu}
+                            ?disabled=${this.disableDownload}
                           >
                             <span slot="icon">
                               ${unsafeSVG(downloadIcon)}
