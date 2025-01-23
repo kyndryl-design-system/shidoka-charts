@@ -455,21 +455,18 @@ export class KDChart extends LitElement {
                                         const Label =
                                           this.options.scales[key]?.title
                                             .text || key;
-
-                                        if (IndexAxis === key) {
-                                          return html`
-                                            <div>
-                                              <strong>${Label}:</strong>
-                                              ${new Date(
+                                        const DisplayData =
+                                          this.options.scales[key]?.type ===
+                                          'time'
+                                            ? new Date(
                                                 dataPoint[key]
-                                              ).toLocaleString()}
-                                            </div>
-                                          `;
-                                        }
+                                              ).toLocaleString()
+                                            : dataPoint[key];
+
                                         return html`
                                           <div>
                                             <strong>${Label}:</strong>
-                                            ${dataPoint[key]}
+                                            ${DisplayData}
                                           </div>
                                         `;
                                       })}
