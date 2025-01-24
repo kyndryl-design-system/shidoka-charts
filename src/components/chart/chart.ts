@@ -404,10 +404,24 @@ export class KDChart extends LitElement {
                             }
                           )
                       : this.datasets[0].data.map((_value: any, i: number) => {
+                          const IndexAxis = this.options.indexAxis || 'x';
+                          const NonIndexAxis = IndexAxis === 'x' ? 'y' : 'x';
+
                           return html`
                             <tr>
                               ${this.labels.length
-                                ? html`<td>${this.labels[i]}</td>`
+                                ? html`
+                                    ${this.options.scales[IndexAxis].type ===
+                                    'time'
+                                      ? html`
+                                          <td>
+                                            ${new Date(
+                                              this.labels[i]
+                                            ).toLocaleString()}
+                                          </td>
+                                        `
+                                      : html`<td>${this.labels[i]}</td>`}
+                                  `
                                 : null}
                               ${this.datasets.map((dataset) => {
                                 const dataPoint = dataset.data[i];
@@ -416,9 +430,18 @@ export class KDChart extends LitElement {
                                   this.type === 'bubbleMap' ||
                                   this.type === 'choropleth'
                                 ) {
-                                  return html`<td>
-                                    ${dataset.data[i].value}
-                                  </td>`;
+                                  return html`
+                                    <td>${dataset.data[i].value}</td>
+                                  `;
+                                } else if (
+                                  this.options.scales[NonIndexAxis].type ===
+                                  'time'
+                                ) {
+                                  return html`
+                                    <td>
+                                      ${new Date(dataPoint).toLocaleString()}
+                                    </td>
+                                  `;
                                 } else if (Array.isArray(dataPoint)) {
                                   // handle data in array format
                                   return html`
@@ -433,8 +456,22 @@ export class KDChart extends LitElement {
                                   return html`
                                     <td>
                                       ${Object.keys(dataPoint).map((key) => {
+                                        const Label =
+                                          this.options.scales[key]?.title
+                                            .text || key;
+                                        const DisplayData =
+                                          this.options.scales[key]?.type ===
+                                          'time'
+                                            ? new Date(
+                                                dataPoint[key]
+                                              ).toLocaleString()
+                                            : dataPoint[key];
+
                                         return html`
-                                          <span>${key}: ${dataPoint[key]}</span>
+                                          <div>
+                                            <strong>${Label}:</strong>
+                                            ${DisplayData}
+                                          </div>
                                         `;
                                       })}
                                     </td>
