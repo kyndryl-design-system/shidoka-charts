@@ -411,7 +411,7 @@ export class KDChart extends LitElement {
                             <tr>
                               ${this.labels.length
                                 ? html`
-                                    ${this.options.scales[IndexAxis].type ===
+                                    ${this.options?.scales[IndexAxis]?.type ===
                                     'time'
                                       ? html`
                                           <td>
@@ -434,7 +434,7 @@ export class KDChart extends LitElement {
                                     <td>${dataset.data[i].value}</td>
                                   `;
                                 } else if (
-                                  this.options.scales[NonIndexAxis].type ===
+                                  this.options?.scales[NonIndexAxis]?.type ===
                                   'time'
                                 ) {
                                   return html`
