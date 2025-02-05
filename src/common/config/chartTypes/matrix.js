@@ -21,12 +21,12 @@ export const options = (ctx) => {
             const isAlly = relationships.allies.some(
               ([x, y]) => x === v.x && y === v.y
             );
-            const isFriend = relationships.friends.some(
+            const isNeutral = relationships.friends.some(
               ([x, y]) => x === v.x && y === v.y
             );
 
-            if (isAlly) return [`${item1}`, 'Strong Relationship'];
-            if (isFriend) return [`${item1} - ${item2}`, 'Friendly'];
+            if (isAlly) return [`${item1}`, 'Allied'];
+            if (isNeutral) return [`${item1} - ${item2}`, 'Neutral'];
             return [`${item1} - ${item2}`, 'Opposed'];
           },
         },
@@ -52,19 +52,23 @@ export const options = (ctx) => {
   };
 };
 
-export const datasetOptions = (ctx) => {
+export const datasetOptions = (ctx, index) => {
   const Colors = getComputedColorPalette(
     ctx.options.colorPalette || 'categorical'
   );
+  const ColorCycles = Math.floor(index / (Colors.length - 1));
+  const Index =
+    index > Colors.length - 1
+      ? index - (Colors.length - 1) * ColorCycles
+      : index;
 
   return {
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.2)',
+    borderColor: Colors[Index],
     width: ({ chart }) => (chart.chartArea || {}).width / 3 - 1,
     height: ({ chart }) => (chart.chartArea || {}).height / 3 - 1,
     backgroundColor: ({ raw }) => {
       const relationships = ctx.datasets[0].relationships;
-      if (!relationships) return Colors[0];
+      if (!relationships) return Colors[0] + '90';
 
       const isAlly = relationships.allies.some(
         ([x, y]) => x === raw.x && y === raw.y
@@ -73,9 +77,9 @@ export const datasetOptions = (ctx) => {
         ([x, y]) => x === raw.x && y === raw.y
       );
 
-      if (isAlly) return Colors[0];
-      if (isFriend) return Colors[1];
-      return Colors[2];
+      if (isAlly) return Colors[0] + '90';
+      if (isFriend) return Colors[1] + '90';
+      return Colors[2] + '90';
     },
   };
 };

@@ -20,7 +20,6 @@ export default {
 const args = {
   chartTitle: 'Example Heatmap / Matrix Chart',
   description: 'Shidoka Charts example chart type matrix',
-
   labels: ['Stark', 'Lannister', 'Targaryen'],
   datasets: [
     {
@@ -55,21 +54,6 @@ const args = {
       },
     },
   ],
-  options: {
-    scales: {
-      x: {
-        display: true,
-        min: 0.5,
-        max: 3.5,
-        offset: false,
-      },
-      y: {
-        display: true,
-        min: 0.5,
-        max: 3.5,
-      },
-    },
-  },
   hideDescription: false,
   hideCaptions: false,
   hideHeader: false,
@@ -96,7 +80,7 @@ export const Heatmap = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
-        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .options=${{ colorPalette: args.colorPalette }}
         .width=${args.width}
         .height=${args.height}
       ></kd-chart>
