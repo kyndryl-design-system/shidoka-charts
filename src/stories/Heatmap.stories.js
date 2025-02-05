@@ -20,6 +20,7 @@ export default {
 const args = {
   chartTitle: 'Example Heatmap / Matrix Chart',
   description: 'Shidoka Charts example chart type matrix',
+
   labels: ['Stark', 'Lannister', 'Targaryen'],
   datasets: [
     {
@@ -35,18 +36,23 @@ const args = {
         { x: 2, y: 3 },
         { x: 3, y: 3 },
       ],
-      borderWidth: 1,
-      borderColor: 'rgba(0,0,0,0.5)',
-      backgroundColor: ({ raw }) => {
-        const x = raw.x;
-        const y = raw.y;
-        if (x === y) return 'rgba(0, 100, 0, 0.7)';
-        if ((x === 1 && y === 3) || (x === 3 && y === 1))
-          return 'rgba(218, 165, 32, 0.7)';
-        return 'rgba(139, 0, 0, 0.7)';
+      relationships: {
+        allies: [
+          [1, 1],
+          [2, 2],
+          [3, 3],
+        ],
+        friends: [
+          [1, 3],
+          [3, 1],
+        ],
+        enemies: [
+          [1, 2],
+          [2, 1],
+          [2, 3],
+          [3, 2],
+        ],
       },
-      width: ({ chart }) => (chart.chartArea || {}).width / 3 - 1,
-      height: ({ chart }) => (chart.chartArea || {}).height / 3 - 1,
     },
   ],
   options: {
@@ -56,17 +62,11 @@ const args = {
         min: 0.5,
         max: 3.5,
         offset: false,
-        ticks: {
-          callback: (value) => ['', 'Stark', 'Lannister', 'Targaryen'][value],
-        },
       },
       y: {
         display: true,
         min: 0.5,
         max: 3.5,
-        ticks: {
-          callback: (value) => ['', 'Stark', 'Lannister', 'Targaryen'][value],
-        },
       },
     },
   },
