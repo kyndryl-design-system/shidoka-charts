@@ -1,13 +1,13 @@
-const BgColor =
-  getComputedStyle(document.documentElement).getPropertyValue(
-    '--kd-color-background-ui-default'
-  ) || '#ffffff';
-const TooltipBgColor =
-  getComputedStyle(document.documentElement).getPropertyValue(
-    '--kd-color-background-ui-strong'
-  ) || '#3d3c3c';
+import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 const defaultConfig = (ctx) => {
+  const SecondaryTextColor = getTokenThemeVal(
+    '--kd-color-text-level-secondary'
+  );
+  const TooltipBgColor = getTokenThemeVal(
+    '--kd-color-background-ui-default-dark'
+  );
+  const TooltipTextColor = getTokenThemeVal('--kd-color-text-variant-inversed');
   const ExplicitSize = ctx.height !== null || ctx.width !== null;
 
   return {
@@ -15,7 +15,7 @@ const defaultConfig = (ctx) => {
     maintainAspectRatio: !ExplicitSize,
     plugins: {
       canvasBackground: {
-        color: BgColor,
+        color: 'transparent',
       },
       legend: {
         position: 'bottom',
@@ -30,6 +30,9 @@ const defaultConfig = (ctx) => {
         // onLeave: handleLegendLeave,
       },
       tooltip: {
+        bodyColor: TooltipTextColor,
+        footerColor: TooltipTextColor,
+        titleColor: TooltipTextColor,
         backgroundColor: TooltipBgColor,
         multiKeyBackground: 'transparent',
         titleFont: {
@@ -48,6 +51,7 @@ const defaultConfig = (ctx) => {
       },
       datalabels: {
         display: false,
+        color: SecondaryTextColor,
       },
       chartjs2music: {
         internal: {},

@@ -1,19 +1,21 @@
-import colorPalettes from '../colorPalettes';
-
-const BorderColor =
-  getComputedStyle(document.documentElement).getPropertyValue(
-    '--kd-color-background-ui-default'
-  ) || '#ffffff';
+import { getComputedColorPalette } from '../colorPalettes';
+import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 export const type = 'bubbleMap';
 
 export const options = (ctx) => {
-  const Colors = colorPalettes[ctx.options.colorPalette || 'categorical'];
+  const BorderColor = getTokenThemeVal('--kd-color-background-page-default');
+  const LabelColor = getTokenThemeVal('--kd-color-text-variant-inversed');
+  const Colors = getComputedColorPalette(
+    ctx.options.colorPalette || 'categorical'
+  );
+  const BubbleColor = getTokenThemeVal('--kd-color-data-viz-level-secondary');
+  const LegendTicksColor = getTokenThemeVal('--kd-color-border-variants-light');
 
   return {
     outlineBorderWidth: 0.5,
     outlineBorderColor: BorderColor,
-    outlineBackgroundColor: '#D9D7D7',
+    outlineBackgroundColor: BubbleColor,
     backgroundColor: Colors[0], // + '80', // 50% opacity
     plugins: {
       legend: {
@@ -24,7 +26,7 @@ export const options = (ctx) => {
           size: 12,
           weight: 'bold',
         },
-        color: 'white',
+        color: LabelColor,
         // display: 'auto',
         display: function (context, value) {
           const Value = context.dataset.data[context.dataIndex].value;
@@ -51,13 +53,15 @@ export const options = (ctx) => {
       y: {
         display: false,
       },
-      //   size: {
-      //     axis: 'x',
-      //     legend: {
-      //       position: 'bottom-left',
-      //       align: 'bottom',
-      //     },
-      //   },
+      size: {
+        axis: 'x',
+        grid: {
+          color: LegendTicksColor,
+        },
+        border: {
+          color: LegendTicksColor,
+        },
+      },
     },
   };
 };

@@ -1,5 +1,14 @@
+import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
+
 const defaultConfig = (ctx) => {
+  const ArcColor = getTokenThemeVal('--kd-color-background-page-default');
+
   return {
+    elements: {
+      arc: {
+        borderColor: ArcColor,
+      },
+    },
     scales: {
       x: {
         title: { text: 'X Axis ' },

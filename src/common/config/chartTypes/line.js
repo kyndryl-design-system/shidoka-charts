@@ -1,4 +1,4 @@
-import colorPalettes from '../colorPalettes';
+import { getComputedColorPalette } from '../colorPalettes';
 
 export const type = 'line';
 
@@ -58,7 +58,9 @@ export const options = (ctx) => {
 };
 
 export const datasetOptions = (ctx, index) => {
-  const Colors = colorPalettes[ctx.options.colorPalette || 'categorical'];
+  const Colors = getComputedColorPalette(
+    ctx.options.colorPalette || 'categorical'
+  );
   const ColorCycles = Math.floor(index / (Colors.length - 1));
   const Index =
     index > Colors.length - 1
@@ -67,7 +69,7 @@ export const datasetOptions = (ctx, index) => {
 
   return {
     // pointBorderColor:
-    //   colorPalettes[ctx.options.colorPalette || 'default'][index],
+    //   getColorPalette(ctx.options.colorPalette || 'default')[index],
     pointBackgroundColor: Colors[Index] + '80', // 50% opacity
     borderColor: Colors[index],
     // backgroundColor: Colors[Index] + '80',
