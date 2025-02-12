@@ -25,8 +25,8 @@
     "prepare": "npx husky install"
   },
   "dependencies": {
-    "@kyndryl-design-system/shidoka-foundation": "^2.0.0-next.43",
-    "@kyndryl-design-system/shidoka-icons": "^2.0.0-next.6",
+    "@kyndryl-design-system/shidoka-foundation": "^2.0.0-next.46",
+    "@kyndryl-design-system/shidoka-icons": "^2.0.0-next.7",
     "chart.js": "^4.4.0",
     "chartjs-adapter-date-fns": "^3.0.0",
     "chartjs-chart-geo": "^4.2.4",
