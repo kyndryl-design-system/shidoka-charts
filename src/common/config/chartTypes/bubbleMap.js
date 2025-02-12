@@ -28,7 +28,7 @@ export const options = (ctx) => {
         },
         color: LabelColor,
         // display: 'auto',
-        display: function (context, value) {
+        display: function (context) {
           const Value = context.dataset.data[context.dataIndex].value;
           const Range = context.chart.scales.size._range;
           const Avg = (Range.min + Range.max) / 2;
@@ -66,6 +66,6 @@ export const options = (ctx) => {
   };
 };
 
-export const datasetOptions = (ctx, index) => {
+export const datasetOptions = () => {
   return {};
 };

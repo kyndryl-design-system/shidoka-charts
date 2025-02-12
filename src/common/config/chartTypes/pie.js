@@ -2,7 +2,7 @@ import { getComputedColorPalette } from '../colorPalettes';
 
 export const type = 'pie';
 
-export const options = (ctx) => {
+export const options = () => {
   return {
     radius: '80%',
     plugins: {
@@ -31,7 +31,7 @@ export const options = (ctx) => {
   };
 };
 
-export const datasetOptions = (ctx, index) => {
+export const datasetOptions = (ctx) => {
   return {
     backgroundColor: getComputedColorPalette(
       ctx.options.colorPalette || 'categorical'
