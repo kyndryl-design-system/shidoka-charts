@@ -38,7 +38,7 @@ import '@kyndryl-design-system/shidoka-foundation/css/root.css';
 
 ## Start using components
 
-See [Storybook](https://kyndryl-design-system.github.io/shidoka-charts/) for the full components documentation.
+See [Storybook](https://shidoka-charts.netlify.app) for the full components documentation.
 
 ### Example
 
