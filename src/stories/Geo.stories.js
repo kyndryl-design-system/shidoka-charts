@@ -4,6 +4,8 @@ import argTypes from '../common/config/chartArgTypes';
 import { topojson } from 'chartjs-chart-geo';
 import capitals from './sampleData/us-capitals.json';
 import nationCapitals from './sampleData/nation-capitals.json';
+import usData from './sampleData/states-10m.json';
+import worldData from './sampleData/countries-50m.json';
 
 export default {
   title: 'Third Party Charts/Geo',
@@ -16,13 +18,6 @@ export default {
   },
   argTypes: argTypes,
 };
-
-const usData = await fetch(
-  'https://cdn.jsdelivr.net/npm/us-atlas/states-10m.json'
-).then((r) => r.json());
-const worldData = await fetch(
-  'https://unpkg.com/world-atlas/countries-50m.json'
-).then((r) => r.json());
 
 const countries = topojson.feature(
   worldData,
@@ -96,10 +91,13 @@ export const CountryChoropleth = {
       {
         label: 'Population',
         outline: nation,
-        data: states.map((d) => ({
-          feature: d,
-          value: d.properties.name.length * 10,
-        })),
+        data: states.map((d) => {
+          console.log(d.properties.name);
+          return {
+            feature: d,
+            value: d.properties.name.length * 10,
+          };
+        }),
       },
     ],
     options: {

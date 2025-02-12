@@ -1,9 +1,4 @@
-import colorPalettes from '../colorPalettes';
-
-const LabelColor =
-  getComputedStyle(document.documentElement).getPropertyValue(
-    '--kd-color-text-primary'
-  ) || '#3d3c3c';
+import { getComputedColorPalette } from '../colorPalettes';
 
 export const type = 'meter';
 
@@ -25,7 +20,6 @@ export const options = () => {
       },
 
       datalabels: {
-        color: LabelColor,
         font: function (context) {
           var w = context.chart.width;
           return {
@@ -46,6 +40,8 @@ export const options = () => {
 
 export const datasetOptions = (ctx, index) => {
   return {
-    backgroundColor: colorPalettes[ctx.options.colorPalette || 'rag03'],
+    backgroundColor: getComputedColorPalette(
+      ctx.options.colorPalette || 'rag03'
+    ),
   };
 };

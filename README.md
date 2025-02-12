@@ -11,7 +11,7 @@ Read the [Contributing Guide](CONTRIBUTING.md) here.
 ## Install the package
 
 ```bash
-npm install @kyndryl-design-system/shidoka-charts @kyndryl-design-system/shidoka-foundation -S
+npm install @kyndryl-design-system/shidoka-charts -S
 ```
 
 ## Import the root stylesheet to your app's global styles

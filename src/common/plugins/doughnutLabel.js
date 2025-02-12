@@ -1,11 +1,10 @@
-const TextColor =
-  getComputedStyle(document.documentElement).getPropertyValue(
-    '--kd-color-text-primary'
-  ) || '#3d3c3c';
+import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 export default {
   id: 'doughnutLabel',
   beforeDraw: (chart, args, options) => {
+    const TextColor = getTokenThemeVal('--kd-color-text-level-primary');
+
     if (
       chart.config.type === 'doughnut' &&
       !chart.config.options.doughnutLabel?.disabled
