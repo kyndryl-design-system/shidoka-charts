@@ -1,6 +1,6 @@
-# Shidoka Web Components for Applications
+# Shidoka Charts
 
-[![shidoka-charts](https://github.com/kyndryl-design-system/shidoka-charts/actions/workflows/actions.yml/badge.svg)](https://github.com/kyndryl-design-system/shidoka-charts/actions/workflows/actions.yml)
+[![Release](https://github.com/kyndryl-design-system/shidoka-charts/actions/workflows/release.yml/badge.svg)](https://github.com/kyndryl-design-system/shidoka-charts/actions/workflows/release.yml)
 
 # Contributing to this project
 
