@@ -2,7 +2,7 @@ import { getComputedColorPalette } from '../colorPalettes';
 
 export const type = 'bubble';
 
-export const options = (ctx) => {
+export const options = () => {
   return {};
 };
 

@@ -13,6 +13,7 @@ import {
   ProjectionScale,
 } from 'chartjs-chart-geo';
 import { TreemapController, TreemapElement } from 'chartjs-chart-treemap';
+import { MatrixController, MatrixElement } from 'chartjs-chart-matrix';
 import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
@@ -41,6 +42,8 @@ Chart.register(
   ProjectionScale,
   TreemapController,
   TreemapElement,
+  MatrixController,
+  MatrixElement,
   annotationPlugin,
   datalabelsPlugin
 );
