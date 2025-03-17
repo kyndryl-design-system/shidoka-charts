@@ -39,8 +39,8 @@ export default {
       x = chartArea.left + (chartArea.width - legendOptions.width) / 2;
       y = chartArea.top - legendOptions.margin - legendOptions.height;
     } else if (legendOptions.position === 'bottom-left') {
-      x = chartArea.left - 40;
-      y = chartArea.bottom + 60;
+      x = chartArea.left - 70;
+      y = chartArea.bottom + 70;
     }
 
     const Colors = options.colors ||

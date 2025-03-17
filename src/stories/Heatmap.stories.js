@@ -114,18 +114,24 @@ export const Heatmap = {
             max: 100,
             neutral: 50,
           },
+          scaleShowValues: true,
           scales: {
             x: {
+              ticks: {
+                autoSkip: false,
+                maxTicksLimit: 15,
+              },
               grid: {
                 display: false,
               },
             },
             y: {
-              grid: {
-                display: false,
-              },
               ticks: {
                 autoSkip: false,
+                maxTicksLimit: 15,
+              },
+              grid: {
+                display: false,
               },
             },
           },
@@ -136,7 +142,7 @@ export const Heatmap = {
             colorLegend: {
               display: true,
               position: 'bottom-left',
-              title: 'Value Scale',
+              title: 'Legend Title',
               margin: 15,
               height: 15,
               width: 280,

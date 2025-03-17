@@ -65,20 +65,28 @@ export const options = (ctx) => {
     },
     scales: {
       x: {
-        min: 0.5,
-        max: ctx.labels.x?.length + 0.5 || ctx.labels?.length + 0.5 || 3.5,
-        offset: false,
+        autoSkip: false,
+        maxTicksLimit: 15,
+        min: 1,
+        max: ctx.labels.x?.length || ctx.labels?.length || 3,
+        offset: true,
         ticks: {
           callback: (value) =>
-            ctx.labels.x?.[value - 1] || ctx.labels[value - 1] || '',
+            ctx.labels.x?.[value - 1] ?? ctx.labels?.[value - 1] ?? '',
+          padding: 20,
+        },
+        afterFit(scale) {
+          scale.height -= 10;
         },
       },
       y: {
-        min: 0.5,
-        max: ctx.labels.y?.length + 0.5 || ctx.labels?.length + 0.5 || 3.5,
+        autoSkip: false,
+        maxTicksLimit: 15,
+        min: 1,
+        max: ctx.labels.y?.length || ctx.labels?.length || 3,
         ticks: {
           callback: (value) =>
-            ctx.labels.y?.[value - 1] || ctx.labels[value - 1] || '',
+            ctx.labels.y?.[value - 1] ?? ctx.labels?.[value - 1] ?? '',
         },
       },
     },
@@ -89,11 +97,6 @@ export const datasetOptions = (ctx, index) => {
   const Colors = getComputedColorPalette(
     ctx.options.colorPalette || 'categorical'
   );
-  const ColorCycles = Math.floor(index / (Colors.length - 1));
-  const Index =
-    index > Colors.length - 1
-      ? index - (Colors.length - 1) * ColorCycles
-      : index;
 
   const numCols = ctx.labels.x?.length || ctx.labels?.length || 3;
   const numRows = ctx.labels.y?.length || ctx.labels?.length || 3;
@@ -109,8 +112,6 @@ export const datasetOptions = (ctx, index) => {
         const neutralColor = Colors[1];
         const positiveColor = Colors[2];
 
-        const min = ctx.options.colorScale?.min || -10;
-        const max = ctx.options.colorScale?.max || 10;
         const neutral = ctx.options.colorScale?.neutral || 0;
 
         if (raw.value < neutral) {
