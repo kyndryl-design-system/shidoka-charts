@@ -35,18 +35,14 @@ const months = [
 ];
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
-// Create a clean matrix data structure
 const matrixData = [];
-// Create a map for quick lookup
 const dataMap = new Map();
 
-// First, create a lookup table for each letter/month combination
 heatmapData.forEach((item) => {
   const key = `${item.letter}-${item.month}`;
   dataMap.set(key, item.value);
 });
 
-// Then create one data point per cell in the expected order
 for (let y = 1; y <= months.length; y++) {
   for (let x = 1; x <= letters.length; x++) {
     const month = months[y - 1];
@@ -64,7 +60,7 @@ for (let y = 1; y <= months.length; y++) {
 
 const args = {
   chartTitle: 'Cost Change by Asset Type and Month',
-  description: 'Monthly value distribution across different letters',
+  description: 'Monthly cost fluctuations across different asset types',
   labels: {
     y: months,
     x: letters,

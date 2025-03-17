@@ -81,11 +81,10 @@ export const datasetOptions = (ctx, index) => {
     height: ({ chart }) => (chart.chartArea || {}).height / numRows - 1,
     backgroundColor: ({ raw }) => {
       if (raw.value !== undefined) {
-        const baseColor = ctx.options.colorScale?.colors || [
-          Colors[0],
-          Colors[1],
-          Colors[2],
-        ];
+        const negativeColor = Colors[0];
+        const neutralColor = Colors[1];
+        const positiveColor = Colors[2];
+
         const min = ctx.options.colorScale?.min || -10;
         const max = ctx.options.colorScale?.max || 10;
         const neutral = ctx.options.colorScale?.neutral || 0;
@@ -96,7 +95,7 @@ export const datasetOptions = (ctx, index) => {
             Math.min(1, (neutral - raw.value) / (neutral - min))
           );
           return (
-            baseColor[0] +
+            negativeColor +
             Math.round(normalizedValue * 90 + 10)
               .toString(16)
               .padStart(2, '0')
@@ -107,13 +106,13 @@ export const datasetOptions = (ctx, index) => {
             Math.min(1, (raw.value - neutral) / (max - neutral))
           );
           return (
-            baseColor[2] +
+            positiveColor +
             Math.round(normalizedValue * 90 + 10)
               .toString(16)
               .padStart(2, '0')
           );
         } else {
-          return baseColor[1] + '50';
+          return neutralColor + '50';
         }
       }
 
