@@ -139,7 +139,7 @@ export const Heatmap = {
             legend: {
               display: false,
             },
-            colorLegend: {
+            gradientLegend: {
               display: true,
               position: 'bottom-left',
               title: 'Legend Title',

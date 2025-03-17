@@ -53,7 +53,7 @@ export const options = (ctx) => {
       legend: {
         display: false,
       },
-      colorLegend: {
+      gradientLegend: {
         display: true,
         position: 'bottom-left',
         title: 'Value',

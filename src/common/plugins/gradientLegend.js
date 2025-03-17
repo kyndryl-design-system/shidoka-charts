@@ -2,9 +2,19 @@
  * Chart.js plugin to add a color gradient legend for heatmap and matrix charts
  */
 export default {
-  id: 'colorLegend',
+  id: 'gradientLegend',
   afterDraw: (chart, args, options) => {
     if (!options || !options.display) {
+      return;
+    }
+
+    const Colors =
+      options.colors ||
+      chart.options.plugins?.gradientLegend?.colors ||
+      chart.options.colorScale?.colors ||
+      chart.data?.datasets?.[0]?._colorPalette;
+
+    if (!Colors || Colors.length === 0) {
       return;
     }
 
@@ -15,7 +25,7 @@ export default {
       min: 0,
       max: 100,
       neutral: 50,
-      colors: ['#d3686d', '#e8e8e8', '#5285c5'],
+      colors: [],
     };
 
     const legendOptions = {
@@ -42,15 +52,6 @@ export default {
       x = chartArea.left - 70;
       y = chartArea.bottom + 70;
     }
-
-    const Colors = options.colors ||
-      chart.options.plugins?.colorLegend?.colors ||
-      chart.options.colorScale?.colors ||
-      chart.data?.datasets?.[0]?._colorPalette || [
-        '#d3686d',
-        '#e8e8e8',
-        '#5285c5',
-      ];
 
     const getColorWithOpacity = (color, position) => {
       if (!color) return '#888888';
