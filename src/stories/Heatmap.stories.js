@@ -124,6 +124,9 @@ export const Heatmap = {
               grid: {
                 display: false,
               },
+              ticks: {
+                autoSkip: false,
+              },
             },
           },
           plugins: {

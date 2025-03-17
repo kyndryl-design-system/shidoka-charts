@@ -99,9 +99,31 @@ export const datasetOptions = (ctx, index) => {
   const numRows = ctx.labels.y?.length || ctx.labels?.length || 3;
 
   return {
-    borderColor: Colors[Index],
+    borderColor: 'transparent',
+    borderWidth: 0,
     width: ({ chart }) => (chart.chartArea || {}).width / numCols - 1,
     height: ({ chart }) => (chart.chartArea || {}).height / numRows - 1,
+    hoverBackgroundColor: ({ raw }) => {
+      if (raw.value !== undefined) {
+        const negativeColor = Colors[0];
+        const neutralColor = Colors[1];
+        const positiveColor = Colors[2];
+
+        const min = ctx.options.colorScale?.min || -10;
+        const max = ctx.options.colorScale?.max || 10;
+        const neutral = ctx.options.colorScale?.neutral || 0;
+
+        if (raw.value < neutral) {
+          return negativeColor + 'FF';
+        } else if (raw.value > neutral) {
+          return positiveColor + 'FF';
+        } else {
+          return neutralColor + 'FF';
+        }
+      }
+
+      return Colors[0] + 'FF';
+    },
     backgroundColor: ({ raw }) => {
       if (raw.value !== undefined) {
         const negativeColor = Colors[0];

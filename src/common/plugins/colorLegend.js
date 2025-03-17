@@ -197,7 +197,17 @@ export default {
       y + legendOptions.height + legendOptions.labelMargin
     );
 
-    if (colorScale.colors.length === 3 && colorScale.neutral !== undefined) {
+    if (
+      colorScale.colors &&
+      colorScale.colors.length === 3 &&
+      colorScale.neutral !== undefined
+    ) {
+      ctx.fillText(
+        colorScale.neutral.toString(),
+        x + legendOptions.width / 2,
+        y + legendOptions.height + legendOptions.labelMargin
+      );
+    } else if (Colors.length >= 3 && colorScale.neutral !== undefined) {
       ctx.fillText(
         colorScale.neutral.toString(),
         x + legendOptions.width / 2,

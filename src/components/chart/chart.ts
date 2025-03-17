@@ -407,6 +407,22 @@ export class KDChart extends LitElement {
                               return HtmlStrings;
                             }
                           )
+                      : this.type === 'matrix'
+                      ? this.datasets[0].data.map((_value: any) => {
+                          const xLabel = Array.isArray(this.labels)
+                            ? this.labels[_value.x - 1] || ''
+                            : (this.labels as any).x?.[_value.x - 1] || '';
+                          const yLabel = Array.isArray(this.labels)
+                            ? this.labels[_value.y - 1] || ''
+                            : (this.labels as any).y?.[_value.y - 1] || '';
+
+                          return html`
+                            <tr>
+                              <td>${yLabel} - ${xLabel}</td>
+                              <td>${_value.value}</td>
+                            </tr>
+                          `;
+                        })
                       : this.datasets[0].data.map((_value: any, i: number) => {
                           const IndexAxis = this.options.indexAxis || 'x';
                           const NonIndexAxis = IndexAxis === 'x' ? 'y' : 'x';
