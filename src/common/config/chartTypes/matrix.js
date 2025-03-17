@@ -12,22 +12,30 @@ export const options = (ctx) => {
           },
           label(context) {
             const v = context.dataset.data[context.dataIndex];
-            const item1 = ctx.labels[v.y - 1];
-            const item2 = ctx.labels[v.x - 1];
-            const relationships = context.dataset.relationships;
+            const rowLabel = ctx.labels.y?.[v.y - 1] || ctx.labels[v.y - 1];
+            const colLabel = ctx.labels.x?.[v.x - 1] || ctx.labels[v.x - 1];
+            const metadata = context.dataset.metadata;
 
-            if (!relationships) return [`${item1} - ${item2}`];
+            if (!metadata)
+              return [
+                `${rowLabel} - ${colLabel}`,
+                `Value: ${v.value || 'N/A'}`,
+              ];
 
-            const isAlly = relationships.allies.some(
-              ([x, y]) => x === v.x && y === v.y
+            const cellData = metadata.find(
+              (item) => item.x === v.x && item.y === v.y
             );
-            const isNeutral = relationships.friends.some(
-              ([x, y]) => x === v.x && y === v.y
-            );
 
-            if (isAlly) return [`${item1}`, 'Allied'];
-            if (isNeutral) return [`${item1} - ${item2}`, 'Neutral'];
-            return [`${item1} - ${item2}`, 'Opposed'];
+            if (cellData) {
+              return [
+                `${rowLabel} - ${colLabel}`,
+                ...Object.entries(cellData)
+                  .filter(([key]) => key !== 'x' && key !== 'y')
+                  .map(([key, value]) => `${key}: ${value}`),
+              ];
+            }
+
+            return [`${rowLabel} - ${colLabel}`, `Value: ${v.value || 'N/A'}`];
           },
         },
       },
@@ -35,17 +43,19 @@ export const options = (ctx) => {
     scales: {
       x: {
         min: 0.5,
-        max: 3.5,
+        max: ctx.labels.x?.length + 0.5 || ctx.labels?.length + 0.5 || 3.5,
         offset: false,
         ticks: {
-          callback: (value) => ctx.labels[value - 1] || '',
+          callback: (value) =>
+            ctx.labels.x?.[value - 1] || ctx.labels[value - 1] || '',
         },
       },
       y: {
         min: 0.5,
-        max: 3.5,
+        max: ctx.labels.y?.length + 0.5 || ctx.labels?.length + 0.5 || 3.5,
         ticks: {
-          callback: (value) => ctx.labels[value - 1] || '',
+          callback: (value) =>
+            ctx.labels.y?.[value - 1] || ctx.labels[value - 1] || '',
         },
       },
     },
@@ -62,24 +72,80 @@ export const datasetOptions = (ctx, index) => {
       ? index - (Colors.length - 1) * ColorCycles
       : index;
 
+  const numCols = ctx.labels.x?.length || ctx.labels?.length || 3;
+  const numRows = ctx.labels.y?.length || ctx.labels?.length || 3;
+
   return {
     borderColor: Colors[Index],
-    width: ({ chart }) => (chart.chartArea || {}).width / 3 - 1,
-    height: ({ chart }) => (chart.chartArea || {}).height / 3 - 1,
+    width: ({ chart }) => (chart.chartArea || {}).width / numCols - 1,
+    height: ({ chart }) => (chart.chartArea || {}).height / numRows - 1,
     backgroundColor: ({ raw }) => {
+      if (raw.value !== undefined) {
+        const baseColor = ctx.options.colorScale?.colors || [
+          Colors[0],
+          Colors[1],
+          Colors[2],
+        ];
+        const min = ctx.options.colorScale?.min || -10;
+        const max = ctx.options.colorScale?.max || 10;
+        const neutral = ctx.options.colorScale?.neutral || 0;
+
+        if (raw.value < neutral) {
+          const normalizedValue = Math.max(
+            0,
+            Math.min(1, (neutral - raw.value) / (neutral - min))
+          );
+          return (
+            baseColor[0] +
+            Math.round(normalizedValue * 90 + 10)
+              .toString(16)
+              .padStart(2, '0')
+          );
+        } else if (raw.value > neutral) {
+          const normalizedValue = Math.max(
+            0,
+            Math.min(1, (raw.value - neutral) / (max - neutral))
+          );
+          return (
+            baseColor[2] +
+            Math.round(normalizedValue * 90 + 10)
+              .toString(16)
+              .padStart(2, '0')
+          );
+        } else {
+          return baseColor[1] + '50';
+        }
+      }
+
+      const metadata = ctx.datasets[0].metadata;
       const relationships = ctx.datasets[0].relationships;
-      if (!relationships) return Colors[0] + '90';
 
-      const isAlly = relationships.allies.some(
-        ([x, y]) => x === raw.x && y === raw.y
-      );
-      const isFriend = relationships.friends.some(
-        ([x, y]) => x === raw.x && y === raw.y
-      );
+      if (metadata) {
+        const cellData = metadata.find(
+          (item) => item.x === raw.x && item.y === raw.y
+        );
+        if (cellData && cellData.color) {
+          return cellData.color;
+        }
+      }
 
-      if (isAlly) return Colors[0] + '90';
-      if (isFriend) return Colors[1] + '90';
-      return Colors[2] + '90';
+      if (relationships) {
+        const category1 = relationships.category1?.some(
+          ([x, y]) => x === raw.x && y === raw.y
+        );
+        const category2 = relationships.category2?.some(
+          ([x, y]) => x === raw.x && y === raw.y
+        );
+        const category3 = relationships.category3?.some(
+          ([x, y]) => x === raw.x && y === raw.y
+        );
+
+        if (category1) return Colors[0] + '90';
+        if (category2) return Colors[1] + '90';
+        if (category3) return Colors[2] + '90';
+      }
+
+      return Colors[0] + '30';
     },
   };
 };
