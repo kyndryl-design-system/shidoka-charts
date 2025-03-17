@@ -15,7 +15,17 @@ export default {
       url: '',
     },
   },
-  argTypes: argTypes,
+  argTypes: {
+    ...argTypes,
+    gradientLegendDisplay: {
+      name: 'Gradient Legend Display',
+      control: { type: 'boolean' },
+    },
+    gradientLegendTitle: {
+      name: 'Gradient Legend Title',
+      control: { type: 'text' },
+    },
+  },
 };
 
 const months = [
@@ -89,11 +99,28 @@ const args = {
   noBorder: false,
   width: null,
   height: null,
+  gradientLegendDisplay: true,
+  gradientLegendTitle: 'Legend Title',
 };
 
 export const Heatmap = {
   args,
   render: (args) => {
+    const options = {
+      colorPalette: args.colorPalette,
+      colorScale: {
+        min: 0,
+        max: 100,
+        neutral: 50,
+      },
+      plugins: {
+        gradientLegend: {
+          display: args.gradientLegendDisplay,
+          title: args.gradientLegendTitle,
+        },
+      },
+    };
+
     return html`
       <kd-chart
         type="matrix"
@@ -102,53 +129,12 @@ export const Heatmap = {
         .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
+        .options=${options}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
-        .options=${{
-          colorPalette: args.colorPalette,
-          colorScale: {
-            min: 0,
-            max: 100,
-            neutral: 50,
-          },
-          scaleShowValues: true,
-          scales: {
-            x: {
-              ticks: {
-                autoSkip: false,
-                maxTicksLimit: 15,
-              },
-              grid: {
-                display: false,
-              },
-            },
-            y: {
-              ticks: {
-                autoSkip: false,
-                maxTicksLimit: 15,
-              },
-              grid: {
-                display: false,
-              },
-            },
-          },
-          plugins: {
-            legend: {
-              display: false,
-            },
-            gradientLegend: {
-              display: true,
-              position: 'bottom-left',
-              title: 'Legend Title',
-              margin: 15,
-              height: 15,
-              width: 280,
-            },
-          },
-        }}
         .width=${args.width}
         .height=${args.height}
       ></kd-chart>

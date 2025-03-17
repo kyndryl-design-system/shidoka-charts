@@ -3,13 +3,21 @@ import { getComputedColorPalette } from '../colorPalettes';
 export const type = 'matrix';
 
 export const options = (ctx) => {
-  const legendPadding = {
-    bottom: 50,
-  };
+  const gradeintLegendVisible = ctx.options.plugins.gradientLegend.display;
+  const gradientLegendTitle = ctx.options.plugins.gradientLegend.title;
+  const legendPadding = gradeintLegendVisible
+    ? {
+        bottom: 30,
+      }
+    : {
+        bottom: 0,
+      };
 
   const Colors = getComputedColorPalette(
     ctx.options.colorPalette || 'categorical'
   );
+
+  console.log(ctx.options);
 
   return {
     layout: {
@@ -54,37 +62,64 @@ export const options = (ctx) => {
         display: false,
       },
       gradientLegend: {
-        display: true,
+        display: gradeintLegendVisible || true,
         position: 'bottom-left',
-        title: 'Value',
+        title: gradientLegendTitle || 'Value',
         margin: 15,
         height: 15,
         width: 280,
         colors: Colors,
       },
     },
+    colorPalette: ctx.options.colorPalette || 'categorical',
+    scaleShowValues: true,
+    colorScale: {
+      min:
+        ctx.options.colorScale?.min !== undefined
+          ? ctx.options.colorScale.min
+          : 0,
+      max:
+        ctx.options.colorScale?.max !== undefined
+          ? ctx.options.colorScale.max
+          : 100,
+      neutral:
+        ctx.options.colorScale?.neutral !== undefined
+          ? ctx.options.colorScale.neutral
+          : 50,
+    },
+    legend: {
+      display: false,
+    },
     scales: {
       x: {
-        autoSkip: false,
+        grid: {
+          display: false,
+        },
         maxTicksLimit: 15,
         min: 1,
         max: ctx.labels.x?.length || ctx.labels?.length || 3,
         offset: true,
         ticks: {
+          autoSkip: false,
+          maxTicksLimit: 15,
           callback: (value) =>
             ctx.labels.x?.[value - 1] ?? ctx.labels?.[value - 1] ?? '',
           padding: 20,
         },
         afterFit(scale) {
-          scale.height -= 10;
+          gradeintLegendVisible ? (scale.height -= 10) : (scale.height -= 0);
         },
       },
       y: {
-        autoSkip: false,
+        grid: {
+          display: false,
+        },
         maxTicksLimit: 15,
         min: 1,
         max: ctx.labels.y?.length || ctx.labels?.length || 3,
         ticks: {
+          autoSkip: false,
+          maxTicksLimit: 15,
           callback: (value) =>
             ctx.labels.y?.[value - 1] ?? ctx.labels?.[value - 1] ?? '',
         },
@@ -93,7 +128,7 @@ export const options = (ctx) => {
   };
 };
 
-export const datasetOptions = (ctx, index) => {
+export const datasetOptions = (ctx) => {
   const Colors = getComputedColorPalette(
     ctx.options.colorPalette || 'categorical'
   );
