@@ -3,7 +3,18 @@ import { getComputedColorPalette } from '../colorPalettes';
 export const type = 'matrix';
 
 export const options = (ctx) => {
+  const legendPadding = {
+    bottom: 50,
+  };
+
+  const Colors = getComputedColorPalette(
+    ctx.options.colorPalette || 'categorical'
+  );
+
   return {
+    layout: {
+      padding: legendPadding,
+    },
     plugins: {
       tooltip: {
         callbacks: {
@@ -38,6 +49,18 @@ export const options = (ctx) => {
             return [`${rowLabel} - ${colLabel}`, `Value: ${v.value || 'N/A'}`];
           },
         },
+      },
+      legend: {
+        display: false,
+      },
+      colorLegend: {
+        display: true,
+        position: 'bottom-left',
+        title: 'Value',
+        margin: 15,
+        height: 15,
+        width: 280,
+        colors: Colors,
       },
     },
     scales: {

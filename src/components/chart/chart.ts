@@ -17,6 +17,7 @@ import { MatrixController, MatrixElement } from 'chartjs-chart-matrix';
 import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
+import colorLegendPlugin from '../../common/plugins/colorLegend';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import datalabelsPlugin from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
@@ -634,6 +635,7 @@ export class KDChart extends LitElement {
     let plugins = [
       canvasBackgroundPlugin,
       pluginSelectForDoghnutMeter,
+      colorLegendPlugin,
       ...this.plugins,
     ];
 

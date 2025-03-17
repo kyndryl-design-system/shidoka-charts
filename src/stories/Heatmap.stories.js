@@ -18,7 +18,6 @@ export default {
   argTypes: argTypes,
 };
 
-// Get unique months and letters in the correct order
 const months = [
   'January',
   'February',
@@ -114,7 +113,6 @@ export const Heatmap = {
             min: 0,
             max: 100,
             neutral: 50,
-            colors: ['#d3686d', '#e8e8e8', '#5285c5'],
           },
           scales: {
             x: {
@@ -126,6 +124,19 @@ export const Heatmap = {
               grid: {
                 display: false,
               },
+            },
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
+            colorLegend: {
+              display: true,
+              position: 'bottom-left',
+              title: 'Value Scale',
+              margin: 15,
+              height: 15,
+              width: 280,
             },
           },
         }}
