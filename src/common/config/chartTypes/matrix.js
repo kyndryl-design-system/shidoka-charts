@@ -126,6 +126,13 @@ export const options = (ctx) => {
   };
 };
 
+const hexToRgba = (hex, alpha) => {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+};
+
 export const datasetOptions = (ctx) => {
   const Colors = getComputedColorPalette(
     ctx.options.colorPalette || 'categorical'
@@ -144,26 +151,22 @@ export const datasetOptions = (ctx) => {
         const negativeColor = Colors[0];
         const neutralColor = Colors[1];
         const positiveColor = Colors[2];
-
         const neutral = ctx.options.colorScale?.neutral || 0;
-
         if (raw.value < neutral) {
-          return negativeColor + 'FF';
+          return hexToRgba(negativeColor, 1);
         } else if (raw.value > neutral) {
-          return positiveColor + 'FF';
+          return hexToRgba(positiveColor, 1);
         } else {
-          return neutralColor + 'FF';
+          return hexToRgba(neutralColor, 1);
         }
       }
-
-      return Colors[0] + 'FF';
+      return hexToRgba(Colors[0], 1);
     },
     backgroundColor: ({ raw }) => {
       if (raw.value !== undefined) {
         const negativeColor = Colors[0];
         const neutralColor = Colors[1];
         const positiveColor = Colors[2];
-
         const min = ctx.options.colorScale?.min || -10;
         const max = ctx.options.colorScale?.max || 10;
         const neutral = ctx.options.colorScale?.neutral || 0;
@@ -173,57 +176,19 @@ export const datasetOptions = (ctx) => {
             0,
             Math.min(1, (neutral - raw.value) / (neutral - min))
           );
-          return (
-            negativeColor +
-            Math.round(normalizedValue * 90 + 10)
-              .toString(16)
-              .padStart(2, '0')
-          );
+          return hexToRgba(negativeColor, normalizedValue * 0.4 + 0.4);
         } else if (raw.value > neutral) {
           const normalizedValue = Math.max(
             0,
             Math.min(1, (raw.value - neutral) / (max - neutral))
           );
-          return (
-            positiveColor +
-            Math.round(normalizedValue * 90 + 10)
-              .toString(16)
-              .padStart(2, '0')
-          );
+          return hexToRgba(positiveColor, normalizedValue * 0.4 + 0.4);
         } else {
-          return neutralColor + '50';
+          return hexToRgba(neutralColor, 0.8);
         }
       }
 
-      const metadata = ctx.datasets[0].metadata;
-      const relationships = ctx.datasets[0].relationships;
-
-      if (metadata) {
-        const cellData = metadata.find(
-          (item) => item.x === raw.x && item.y === raw.y
-        );
-        if (cellData && cellData.color) {
-          return cellData.color;
-        }
-      }
-
-      if (relationships) {
-        const category1 = relationships.category1?.some(
-          ([x, y]) => x === raw.x && y === raw.y
-        );
-        const category2 = relationships.category2?.some(
-          ([x, y]) => x === raw.x && y === raw.y
-        );
-        const category3 = relationships.category3?.some(
-          ([x, y]) => x === raw.x && y === raw.y
-        );
-
-        if (category1) return Colors[0] + '90';
-        if (category2) return Colors[1] + '90';
-        if (category3) return Colors[2] + '90';
-      }
-
-      return Colors[0] + '60';
+      return hexToRgba(Colors[0], 0.8);
     },
   };
 };

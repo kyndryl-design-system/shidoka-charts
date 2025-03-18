@@ -1,6 +1,36 @@
 /**
  * Chart.js plugin to add a color gradient legend for heatmap and matrix charts
  */
+const hexToRgba = (hex, alpha) => {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+};
+
+const getColorWithOpacity = (color, position) => {
+  return hexToRgba(color, 0.8);
+};
+
+const generateValueBasedColor = (value, min, max, neutral, colors) => {
+  const [negativeColor, neutralColor, positiveColor] = colors;
+  if (value < neutral) {
+    const normalizedValue = Math.max(
+      0,
+      Math.min(1, (neutral - value) / (neutral - min))
+    );
+    return hexToRgba(negativeColor, normalizedValue * 0.4 + 0.4);
+  } else if (value > neutral) {
+    const normalizedValue = Math.max(
+      0,
+      Math.min(1, (value - neutral) / (max - neutral))
+    );
+    return hexToRgba(positiveColor, normalizedValue * 0.4 + 0.4);
+  } else {
+    return hexToRgba(neutralColor, 0.8);
+  }
+};
+
 export default {
   id: 'gradientLegend',
   afterDraw: (chart, args, options) => {
@@ -53,51 +83,6 @@ export default {
       x = chartArea.left - 70;
       y = chartArea.bottom + 70;
     }
-
-    const getColorWithOpacity = (color, position) => {
-      if (!color) return '#888888';
-
-      if (typeof color === 'string' && color.startsWith('#')) {
-        let opacity;
-        if (position === 0) opacity = 'AA';
-        else if (position === 0.5) opacity = '90';
-        else opacity = 'AA';
-
-        return color + (color.length === 7 ? opacity : '');
-      }
-
-      return color;
-    };
-
-    const generateValueBasedColor = (value, min, max, neutral, colors) => {
-      const [negativeColor, neutralColor, positiveColor] = colors;
-
-      if (value < neutral) {
-        const normalizedValue = Math.max(
-          0,
-          Math.min(1, (neutral - value) / (neutral - min))
-        );
-        return (
-          negativeColor +
-          Math.round(normalizedValue * 90 + 10)
-            .toString(16)
-            .padStart(2, '0')
-        );
-      } else if (value > neutral) {
-        const normalizedValue = Math.max(
-          0,
-          Math.min(1, (value - neutral) / (max - neutral))
-        );
-        return (
-          positiveColor +
-          Math.round(normalizedValue * 90 + 10)
-            .toString(16)
-            .padStart(2, '0')
-        );
-      } else {
-        return neutralColor + '50';
-      }
-    };
 
     const gradient = ctx.createLinearGradient(x, y, x + legendOptions.width, y);
 
