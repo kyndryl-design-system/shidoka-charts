@@ -8,7 +8,7 @@ export const options = (ctx) => {
   const legendPadding = gradeintLegendVisible ? { bottom: 30 } : { bottom: 0 };
 
   const Colors = getComputedColorPalette(
-    ctx.options.colorPalette || 'categorical'
+    ctx.options.colorPalette || 'divergent01'
   );
 
   return {
@@ -56,7 +56,7 @@ export const options = (ctx) => {
         colors: Colors,
       },
     },
-    colorPalette: ctx.options.colorPalette || 'categorical',
+    colorPalette: Colors,
     scaleShowValues: true,
     colorScale: {
       min:

@@ -1,601 +1,601 @@
 [
   {
-    "letter": "A",
+    "assetType": "A",
     "month": "January",
     "value": 41
   },
   {
-    "letter": "B",
+    "assetType": "B",
     "month": "January",
     "value": 7
   },
   {
-    "letter": "C",
+    "assetType": "C",
     "month": "January",
     "value": 66
   },
   {
-    "letter": "D",
+    "assetType": "D",
     "month": "January",
     "value": 85
   },
   {
-    "letter": "E",
+    "assetType": "E",
     "month": "January",
     "value": 70
   },
   {
-    "letter": "F",
+    "assetType": "F",
     "month": "January",
     "value": 98
   },
   {
-    "letter": "G",
+    "assetType": "G",
     "month": "January",
     "value": 90
   },
   {
-    "letter": "H",
+    "assetType": "H",
     "month": "January",
     "value": 66
   },
   {
-    "letter": "I",
+    "assetType": "I",
     "month": "January",
     "value": 0
   },
   {
-    "letter": "J",
+    "assetType": "J",
     "month": "January",
     "value": 13
   },
   {
-    "letter": "A",
+    "assetType": "A",
     "month": "February",
     "value": 16
   },
   {
-    "letter": "B",
+    "assetType": "B",
     "month": "February",
     "value": 5
   },
   {
-    "letter": "C",
+    "assetType": "C",
     "month": "February",
     "value": 6
   },
   {
-    "letter": "D",
+    "assetType": "D",
     "month": "February",
     "value": 48
   },
   {
-    "letter": "E",
+    "assetType": "E",
     "month": "February",
     "value": 72
   },
   {
-    "letter": "F",
+    "assetType": "F",
     "month": "February",
     "value": 26
   },
   {
-    "letter": "G",
+    "assetType": "G",
     "month": "February",
     "value": 70
   },
   {
-    "letter": "H",
+    "assetType": "H",
     "month": "February",
     "value": 99
   },
   {
-    "letter": "I",
+    "assetType": "I",
     "month": "February",
     "value": 79
   },
   {
-    "letter": "J",
+    "assetType": "J",
     "month": "February",
     "value": 83
   },
   {
-    "letter": "A",
+    "assetType": "A",
     "month": "March",
     "value": 62
   },
   {
-    "letter": "B",
+    "assetType": "B",
     "month": "March",
     "value": 57
   },
   {
-    "letter": "C",
+    "assetType": "C",
     "month": "March",
     "value": 90
   },
   {
-    "letter": "D",
+    "assetType": "D",
     "month": "March",
     "value": 68
   },
   {
-    "letter": "E",
+    "assetType": "E",
     "month": "March",
     "value": 84
   },
   {
-    "letter": "F",
+    "assetType": "F",
     "month": "March",
     "value": 21
   },
   {
-    "letter": "G",
+    "assetType": "G",
     "month": "March",
     "value": 54
   },
   {
-    "letter": "H",
+    "assetType": "H",
     "month": "March",
     "value": 25
   },
   {
-    "letter": "I",
+    "assetType": "I",
     "month": "March",
     "value": 42
   },
   {
-    "letter": "J",
+    "assetType": "J",
     "month": "March",
     "value": 62
   },
   {
-    "letter": "A",
+    "assetType": "A",
     "month": "April",
     "value": 15
   },
   {
-    "letter": "B",
+    "assetType": "B",
     "month": "April",
     "value": 52
   },
   {
-    "letter": "C",
+    "assetType": "C",
     "month": "April",
     "value": 15
   },
   {
-    "letter": "D",
+    "assetType": "D",
     "month": "April",
     "value": 22
   },
   {
-    "letter": "E",
+    "assetType": "E",
     "month": "April",
     "value": 59
   },
   {
-    "letter": "F",
+    "assetType": "F",
     "month": "April",
     "value": 36
   },
   {
-    "letter": "G",
+    "assetType": "G",
     "month": "April",
     "value": 5
   },
   {
-    "letter": "H",
+    "assetType": "H",
     "month": "April",
     "value": 18
   },
   {
-    "letter": "I",
+    "assetType": "I",
     "month": "April",
     "value": 42
   },
   {
-    "letter": "J",
+    "assetType": "J",
     "month": "April",
     "value": 72
   },
   {
-    "letter": "A",
+    "assetType": "A",
     "month": "May",
     "value": 30
   },
   {
-    "letter": "B",
+    "assetType": "B",
     "month": "May",
     "value": 39
   },
   {
-    "letter": "C",
+    "assetType": "C",
     "month": "May",
     "value": 69
   },
   {
-    "letter": "D",
+    "assetType": "D",
     "month": "May",
     "value": 73
   },
   {
-    "letter": "E",
+    "assetType": "E",
     "month": "May",
     "value": 2
   },
   {
-    "letter": "F",
+    "assetType": "F",
     "month": "May",
     "value": 15
   },
   {
-    "letter": "G",
+    "assetType": "G",
     "month": "May",
     "value": 86
   },
   {
-    "letter": "H",
+    "assetType": "H",
     "month": "May",
     "value": 23
   },
   {
-    "letter": "I",
+    "assetType": "I",
     "month": "May",
     "value": 65
   },
   {
-    "letter": "J",
+    "assetType": "J",
     "month": "May",
     "value": 0
   },
   {
-    "letter": "A",
+    "assetType": "A",
     "month": "June",
     "value": 51
   },
   {
-    "letter": "B",
+    "assetType": "B",
     "month": "June",
     "value": 30
   },
   {
-    "letter": "C",
+    "assetType": "C",
     "month": "June",
     "value": 7
   },
   {
-    "letter": "D",
+    "assetType": "D",
     "month": "June",
     "value": 74
   },
   {
-    "letter": "E",
+    "assetType": "E",
     "month": "June",
     "value": 44
   },
   {
-    "letter": "F",
+    "assetType": "F",
     "month": "June",
     "value": 62
   },
   {
-    "letter": "G",
+    "assetType": "G",
     "month": "June",
     "value": 65
   },
   {
-    "letter": "H",
+    "assetType": "H",
     "month": "June",
     "value": 35
   },
   {
-    "letter": "I",
+    "assetType": "I",
     "month": "June",
     "value": 95
   },
   {
-    "letter": "J",
+    "assetType": "J",
     "month": "June",
     "value": 59
   },
   {
-    "letter": "A",
+    "assetType": "A",
     "month": "July",
     "value": 89
   },
   {
-    "letter": "B",
+    "assetType": "B",
     "month": "July",
     "value": 50
   },
   {
-    "letter": "C",
+    "assetType": "C",
     "month": "July",
     "value": 35
   },
   {
-    "letter": "D",
+    "assetType": "D",
     "month": "July",
     "value": 45
   },
   {
-    "letter": "E",
+    "assetType": "E",
     "month": "July",
     "value": 93
   },
   {
-    "letter": "F",
+    "assetType": "F",
     "month": "July",
     "value": 19
   },
   {
-    "letter": "G",
+    "assetType": "G",
     "month": "July",
     "value": 52
   },
   {
-    "letter": "H",
+    "assetType": "H",
     "month": "July",
     "value": 81
   },
   {
-    "letter": "I",
+    "assetType": "I",
     "month": "July",
     "value": 72
   },
   {
-    "letter": "J",
+    "assetType": "J",
     "month": "July",
     "value": 99
   },
   {
-    "letter": "A",
+    "assetType": "A",
     "month": "August",
     "value": 54
   },
   {
-    "letter": "B",
+    "assetType": "B",
     "month": "August",
     "value": 41
   },
   {
-    "letter": "C",
+    "assetType": "C",
     "month": "August",
     "value": 75
   },
   {
-    "letter": "D",
+    "assetType": "D",
     "month": "August",
     "value": 10
   },
   {
-    "letter": "E",
+    "assetType": "E",
     "month": "August",
     "value": 0
   },
   {
-    "letter": "F",
+    "assetType": "F",
     "month": "August",
     "value": 93
   },
   {
-    "letter": "G",
+    "assetType": "G",
     "month": "August",
     "value": 3
   },
   {
-    "letter": "H",
+    "assetType": "H",
     "month": "August",
     "value": 80
   },
   {
-    "letter": "I",
+    "assetType": "I",
     "month": "August",
     "value": 88
   },
   {
-    "letter": "J",
+    "assetType": "J",
     "month": "August",
     "value": 27
   },
   {
-    "letter": "A",
+    "assetType": "A",
     "month": "September",
     "value": 81
   },
   {
-    "letter": "B",
+    "assetType": "B",
     "month": "September",
     "value": 36
   },
   {
-    "letter": "C",
+    "assetType": "C",
     "month": "September",
     "value": 77
   },
   {
-    "letter": "D",
+    "assetType": "D",
     "month": "September",
     "value": 1
   },
   {
-    "letter": "E",
+    "assetType": "E",
     "month": "September",
     "value": 45
   },
   {
-    "letter": "F",
+    "assetType": "F",
     "month": "September",
     "value": 23
   },
   {
-    "letter": "G",
+    "assetType": "G",
     "month": "September",
     "value": 1
   },
   {
-    "letter": "H",
+    "assetType": "H",
     "month": "September",
     "value": 13
   },
   {
-    "letter": "I",
+    "assetType": "I",
     "month": "September",
     "value": 61
   },
   {
-    "letter": "J",
+    "assetType": "J",
     "month": "September",
     "value": 87
   },
   {
-    "letter": "A",
+    "assetType": "A",
     "month": "October",
     "value": 5
   },
   {
-    "letter": "B",
+    "assetType": "B",
     "month": "October",
     "value": 29
   },
   {
-    "letter": "C",
+    "assetType": "C",
     "month": "October",
     "value": 49
   },
   {
-    "letter": "D",
+    "assetType": "D",
     "month": "October",
     "value": 81
   },
   {
-    "letter": "E",
+    "assetType": "E",
     "month": "October",
     "value": 5
   },
   {
-    "letter": "F",
+    "assetType": "F",
     "month": "October",
     "value": 6
   },
   {
-    "letter": "G",
+    "assetType": "G",
     "month": "October",
     "value": 3
   },
   {
-    "letter": "H",
+    "assetType": "H",
     "month": "October",
     "value": 72
   },
   {
-    "letter": "I",
+    "assetType": "I",
     "month": "October",
     "value": 27
   },
   {
-    "letter": "J",
+    "assetType": "J",
     "month": "October",
     "value": 99
   },
   {
-    "letter": "A",
+    "assetType": "A",
     "month": "November",
     "value": 25
   },
   {
-    "letter": "B",
+    "assetType": "B",
     "month": "November",
     "value": 11
   },
   {
-    "letter": "C",
+    "assetType": "C",
     "month": "November",
     "value": 54
   },
   {
-    "letter": "D",
+    "assetType": "D",
     "month": "November",
     "value": 90
   },
   {
-    "letter": "E",
+    "assetType": "E",
     "month": "November",
     "value": 21
   },
   {
-    "letter": "F",
+    "assetType": "F",
     "month": "November",
     "value": 5
   },
   {
-    "letter": "G",
+    "assetType": "G",
     "month": "November",
     "value": 41
   },
   {
-    "letter": "H",
+    "assetType": "H",
     "month": "November",
     "value": 4
   },
   {
-    "letter": "I",
+    "assetType": "I",
     "month": "November",
     "value": 31
   },
   {
-    "letter": "J",
+    "assetType": "J",
     "month": "November",
     "value": 22
   },
   {
-    "letter": "A",
+    "assetType": "A",
     "month": "December",
     "value": 99
   },
   {
-    "letter": "B",
+    "assetType": "B",
     "month": "December",
     "value": 54
   },
   {
-    "letter": "C",
+    "assetType": "C",
     "month": "December",
     "value": 85
   },
   {
-    "letter": "D",
+    "assetType": "D",
     "month": "December",
     "value": 39
   },
   {
-    "letter": "E",
+    "assetType": "E",
     "month": "December",
     "value": 45
   },
   {
-    "letter": "F",
+    "assetType": "F",
     "month": "December",
     "value": 24
   },
   {
-    "letter": "G",
+    "assetType": "G",
     "month": "December",
     "value": 87
   },
   {
-    "letter": "H",
+    "assetType": "H",
     "month": "December",
     "value": 69
   },
   {
-    "letter": "I",
+    "assetType": "I",
     "month": "December",
     "value": 59
   },
   {
-    "letter": "J",
+    "assetType": "J",
     "month": "December",
     "value": 44
   }

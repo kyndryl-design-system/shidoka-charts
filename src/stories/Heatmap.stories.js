@@ -43,21 +43,21 @@ const months = [
   'November',
   'December',
 ];
-const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+const assetTypes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
 const matrixData = [];
 const dataMap = new Map();
 
 heatmapData.forEach((item) => {
-  const key = `${item.letter}-${item.month}`;
+  const key = `${item.assetType}-${item.month}`;
   dataMap.set(key, item.value);
 });
 
 for (let y = 1; y <= months.length; y++) {
-  for (let x = 1; x <= letters.length; x++) {
+  for (let x = 1; x <= assetTypes.length; x++) {
     const month = months[y - 1];
-    const letter = letters[x - 1];
-    const key = `${letter}-${month}`;
+    const assetType = assetTypes[x - 1];
+    const key = `${assetType}-${month}`;
     const value = dataMap.get(key) || 0;
 
     matrixData.push({
@@ -73,7 +73,7 @@ const args = {
   description: 'Monthly cost fluctuations across different asset types',
   labels: {
     y: months,
-    x: letters,
+    x: assetTypes,
   },
   datasets: [
     {
@@ -81,12 +81,12 @@ const args = {
       data: matrixData,
       metadata: matrixData.map((item) => {
         const month = months[item.y - 1];
-        const letter = letters[item.x - 1];
+        const assetType = assetTypes[item.x - 1];
         return {
           x: item.x,
           y: item.y,
           Value: item.value,
-          Letter: letter,
+          AssetType: assetType,
           Month: month,
         };
       }),
@@ -96,13 +96,13 @@ const args = {
   hideCaptions: false,
   hideHeader: false,
   hideControls: false,
-  colorPalette: 'categorical',
+  colorPalette: 'divergent01',
   noBorder: false,
   width: null,
   height: null,
   gradientLegendDisplay: true,
   gradientLegendTitle: 'Legend Title',
-  gradientLegendShowPercentage: true,
+  gradientLegendShowPercentage: false,
 };
 
 export const Heatmap = {
