@@ -5,22 +5,14 @@ export const type = 'matrix';
 export const options = (ctx) => {
   const gradeintLegendVisible = ctx.options.plugins.gradientLegend.display;
   const gradientLegendTitle = ctx.options.plugins.gradientLegend.title;
-  const legendPadding = gradeintLegendVisible
-    ? {
-        bottom: 30,
-      }
-    : {
-        bottom: 0,
-      };
+  const legendPadding = gradeintLegendVisible ? { bottom: 30 } : { bottom: 0 };
 
   const Colors = getComputedColorPalette(
     ctx.options.colorPalette || 'categorical'
   );
 
   return {
-    layout: {
-      padding: legendPadding,
-    },
+    layout: { padding: legendPadding },
     plugins: {
       tooltip: {
         callbacks: {
@@ -32,33 +24,28 @@ export const options = (ctx) => {
             const rowLabel = ctx.labels.y?.[v.y - 1] || ctx.labels[v.y - 1];
             const colLabel = ctx.labels.x?.[v.x - 1] || ctx.labels[v.x - 1];
             const metadata = context.dataset.metadata;
-
-            if (!metadata)
-              return [
-                `${rowLabel} - ${colLabel}`,
-                `Value: ${v.value || 'N/A'}`,
-              ];
-
-            const cellData = metadata.find(
-              (item) => item.x === v.x && item.y === v.y
-            );
-
-            if (cellData) {
-              return [
-                `${rowLabel} - ${colLabel}`,
-                ...Object.entries(cellData)
-                  .filter(([key]) => key !== 'x' && key !== 'y')
-                  .map(([key, value]) => `${key}: ${value}`),
-              ];
-            }
-
-            return [`${rowLabel} - ${colLabel}`, `Value: ${v.value || 'N/A'}`];
+            return metadata
+              ? (() => {
+                  const cellData = metadata.find(
+                    (item) => item.x === v.x && item.y === v.y
+                  );
+                  return cellData
+                    ? [
+                        `${rowLabel} - ${colLabel}`,
+                        ...Object.entries(cellData)
+                          .filter(([key]) => key !== 'x' && key !== 'y')
+                          .map(([key, value]) => `${key}: ${value}`),
+                      ]
+                    : [
+                        `${rowLabel} - ${colLabel}`,
+                        `Value: ${v.value || 'N/A'}`,
+                      ];
+                })()
+              : [`${rowLabel} - ${colLabel}`, `Value: ${v.value || 'N/A'}`];
           },
         },
       },
-      legend: {
-        display: false,
-      },
+      legend: { display: false },
       gradientLegend: {
         display: gradeintLegendVisible || true,
         position: 'bottom-left',
@@ -85,14 +72,10 @@ export const options = (ctx) => {
           ? ctx.options.colorScale.neutral
           : 50,
     },
-    legend: {
-      display: false,
-    },
+    legend: { display: false },
     scales: {
       x: {
-        grid: {
-          display: false,
-        },
+        grid: { display: false },
         maxTicksLimit: 15,
         min: 1,
         max: ctx.labels.x?.length || ctx.labels?.length || 3,
@@ -109,9 +92,7 @@ export const options = (ctx) => {
         },
       },
       y: {
-        grid: {
-          display: false,
-        },
+        grid: { display: false },
         maxTicksLimit: 15,
         min: 1,
         max: ctx.labels.y?.length || ctx.labels?.length || 3,
@@ -126,69 +107,64 @@ export const options = (ctx) => {
   };
 };
 
-const hexToRgba = (hex, alpha) => {
+function parseColor(hex) {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-};
+  return { r, g, b };
+}
+
+function lerpColor(hex1, hex2, t) {
+  const c1 = parseColor(hex1);
+  const c2 = parseColor(hex2);
+  const r = Math.round(c1.r + (c2.r - c1.r) * t);
+  const g = Math.round(c1.g + (c2.g - c1.g) * t);
+  const b = Math.round(c1.b + (c2.b - c1.b) * t);
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+function getPresetSymmetricColor(
+  value,
+  colors,
+  neutral = 50,
+  band = 15,
+  min = 0,
+  max = 100
+) {
+  const negativeColor = colors[0];
+  const neutralColor = colors[1];
+  const positiveColor = colors[2];
+  if (value <= neutral - band) {
+    return negativeColor;
+  } else if (value >= neutral + band) {
+    return positiveColor;
+  } else if (value < neutral) {
+    const t = (value - (neutral - band)) / band;
+    return lerpColor(negativeColor, neutralColor, t);
+  } else {
+    const t = (value - neutral) / band;
+    return lerpColor(neutralColor, positiveColor, t);
+  }
+}
 
 export const datasetOptions = (ctx) => {
   const Colors = getComputedColorPalette(
     ctx.options.colorPalette || 'categorical'
   );
-
   const numCols = ctx.labels.x?.length || ctx.labels?.length || 3;
   const numRows = ctx.labels.y?.length || ctx.labels?.length || 3;
-
   return {
     borderColor: 'transparent',
     borderWidth: 0,
-    width: ({ chart }) => (chart.chartArea || {}).width / numCols - 1,
-    height: ({ chart }) => (chart.chartArea || {}).height / numRows - 1,
-    hoverBackgroundColor: ({ raw }) => {
-      if (raw.value !== undefined) {
-        const negativeColor = Colors[0];
-        const neutralColor = Colors[1];
-        const positiveColor = Colors[2];
-        const neutral = ctx.options.colorScale?.neutral || 0;
-        if (raw.value < neutral) {
-          return hexToRgba(negativeColor, 1);
-        } else if (raw.value > neutral) {
-          return hexToRgba(positiveColor, 1);
-        } else {
-          return hexToRgba(neutralColor, 1);
-        }
-      }
-      return hexToRgba(Colors[0], 1);
-    },
-    backgroundColor: ({ raw }) => {
-      if (raw.value !== undefined) {
-        const negativeColor = Colors[0];
-        const neutralColor = Colors[1];
-        const positiveColor = Colors[2];
-        const min = ctx.options.colorScale?.min || -10;
-        const max = ctx.options.colorScale?.max || 10;
-        const neutral = ctx.options.colorScale?.neutral || 0;
-
-        if (raw.value < neutral) {
-          const normalizedValue = Math.max(
-            0,
-            Math.min(1, (neutral - raw.value) / (neutral - min))
-          );
-          return hexToRgba(negativeColor, normalizedValue * 0.4 + 0.4);
-        } else if (raw.value > neutral) {
-          const normalizedValue = Math.max(
-            0,
-            Math.min(1, (raw.value - neutral) / (max - neutral))
-          );
-          return hexToRgba(positiveColor, normalizedValue * 0.4 + 0.4);
-        } else {
-          return hexToRgba(neutralColor, 0.8);
-        }
-      }
-
-      return hexToRgba(Colors[0], 0.8);
-    },
+    width: ({ chart }) => (chart.chartArea?.width ?? 0) / numCols - 1,
+    height: ({ chart }) => (chart.chartArea?.height ?? 0) / numRows - 1,
+    backgroundColor: ({ raw }) =>
+      raw.value !== undefined
+        ? getPresetSymmetricColor(raw.value, Colors)
+        : '#ccc',
+    hoverBackgroundColor: ({ raw }) =>
+      raw.value !== undefined
+        ? getPresetSymmetricColor(raw.value, Colors)
+        : '#999',
   };
 };
