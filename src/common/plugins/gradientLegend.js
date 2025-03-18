@@ -9,7 +9,7 @@ const hexToRgba = (hex, alpha) => {
 };
 
 const getColorWithOpacity = (color, position) => {
-  return hexToRgba(color, 0.8);
+  return hexToRgba(color, 0.85);
 };
 
 const generateValueBasedColor = (value, min, max, neutral, colors) => {
@@ -19,15 +19,15 @@ const generateValueBasedColor = (value, min, max, neutral, colors) => {
       0,
       Math.min(1, (neutral - value) / (neutral - min))
     );
-    return hexToRgba(negativeColor, normalizedValue * 0.4 + 0.4);
+    return hexToRgba(negativeColor, normalizedValue * 0.4 + 0.45);
   } else if (value > neutral) {
     const normalizedValue = Math.max(
       0,
       Math.min(1, (value - neutral) / (max - neutral))
     );
-    return hexToRgba(positiveColor, normalizedValue * 0.4 + 0.4);
+    return hexToRgba(positiveColor, normalizedValue * 0.4 + 0.45);
   } else {
-    return hexToRgba(neutralColor, 0.8);
+    return hexToRgba(neutralColor, 0.85);
   }
 };
 

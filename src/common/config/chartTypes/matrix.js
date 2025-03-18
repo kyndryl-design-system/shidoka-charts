@@ -114,7 +114,7 @@ function parseColor(hex) {
   return { r, g, b };
 }
 
-function lerpColor(hex1, hex2, t) {
+function linearInterpolationColor(hex1, hex2, t) {
   const c1 = parseColor(hex1);
   const c2 = parseColor(hex2);
   const r = Math.round(c1.r + (c2.r - c1.r) * t);
@@ -123,21 +123,38 @@ function lerpColor(hex1, hex2, t) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-function getPresetSymmetricColor(value, colors, neutral = 50, band = 15) {
+function getPresetSymmetricColor(
+  value,
+  colors,
+  neutral = 50,
+  band = 15,
+  opacity = 1
+) {
   const negativeColor = colors[0];
   const neutralColor = colors[1];
   const positiveColor = colors[2];
+  let color;
+
   if (value <= neutral - band) {
-    return negativeColor;
+    color = negativeColor;
   } else if (value >= neutral + band) {
-    return positiveColor;
+    color = positiveColor;
   } else if (value < neutral) {
     const t = (value - (neutral - band)) / band;
-    return lerpColor(negativeColor, neutralColor, t);
+    color = linearInterpolationColor(negativeColor, neutralColor, t);
   } else {
     const t = (value - neutral) / band;
-    return lerpColor(neutralColor, positiveColor, t);
+    color = linearInterpolationColor(neutralColor, positiveColor, t);
   }
+
+  if (opacity < 1 && color.startsWith('rgb(')) {
+    return color.replace('rgb(', 'rgba(').replace(')', `, ${opacity})`);
+  } else if (opacity < 1 && color.startsWith('#')) {
+    const { r, g, b } = parseColor(color);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  }
+
+  return color;
 }
 
 export const datasetOptions = (ctx) => {
@@ -146,6 +163,8 @@ export const datasetOptions = (ctx) => {
   );
   const numCols = ctx.labels.x?.length || ctx.labels?.length || 3;
   const numRows = ctx.labels.y?.length || ctx.labels?.length || 3;
+  const defaultOpacity = 0.85;
+
   return {
     borderColor: 'transparent',
     borderWidth: 0,
@@ -153,8 +172,8 @@ export const datasetOptions = (ctx) => {
     height: ({ chart }) => (chart.chartArea?.height ?? 0) / numRows - 1,
     backgroundColor: ({ raw }) =>
       raw.value !== undefined
-        ? getPresetSymmetricColor(raw.value, Colors)
-        : '#ccc',
+        ? getPresetSymmetricColor(raw.value, Colors, 50, 15, defaultOpacity)
+        : 'rgba(204, 204, 204, 0.8)',
     hoverBackgroundColor: ({ raw }) =>
       raw.value !== undefined
         ? getPresetSymmetricColor(raw.value, Colors)
