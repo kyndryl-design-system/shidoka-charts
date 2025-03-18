@@ -18,15 +18,12 @@ export default {
   argTypes: {
     ...argTypes,
     gradientLegendDisplay: {
-      name: 'Gradient Legend Display',
       control: { type: 'boolean' },
     },
     gradientLegendTitle: {
-      name: 'Gradient Legend Title',
       control: { type: 'text' },
     },
     gradientLegendShowPercentage: {
-      name: 'Show Percentages on Legend',
       control: { type: 'boolean' },
     },
   },

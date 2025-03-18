@@ -64,6 +64,7 @@ export default {
       height: options.height || 20,
       margin: options.margin || 10,
       borderRadius: options.borderRadius || 4,
+      gradientBorderRadius: 1,
       title: options.title || '',
       titleFontSize: options.titleFontSize || 12,
       labelFontSize: options.labelFontSize || 12,
@@ -167,7 +168,7 @@ export default {
       y,
       legendOptions.width,
       legendOptions.height,
-      legendOptions.borderRadius
+      legendOptions.gradientBorderRadius
     );
     ctx.fill();
 
