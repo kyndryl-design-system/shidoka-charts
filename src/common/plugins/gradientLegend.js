@@ -150,8 +150,6 @@ export default {
     };
 
     ctx.fillStyle = '#fff';
-    ctx.strokeStyle = '#ddd';
-    ctx.lineWidth = 1;
     drawRoundedRect(
       x,
       y,
@@ -160,7 +158,6 @@ export default {
       legendOptions.borderRadius
     );
     ctx.fill();
-    ctx.stroke();
 
     ctx.fillStyle = gradient;
     drawRoundedRect(

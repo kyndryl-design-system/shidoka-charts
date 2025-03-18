@@ -168,7 +168,7 @@ export const datasetOptions = (ctx) => {
   return {
     borderColor: 'transparent',
     borderWidth: 0,
-    width: ({ chart }) => (chart.chartArea?.width ?? 0) / numCols - 1,
+    width: ({ chart }) => (chart.chartArea?.width ?? 0) / numCols - 2,
     height: ({ chart }) => (chart.chartArea?.height ?? 0) / numRows - 1,
     backgroundColor: ({ raw }) =>
       raw.value !== undefined
