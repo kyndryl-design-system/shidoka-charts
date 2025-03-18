@@ -123,14 +123,7 @@ function lerpColor(hex1, hex2, t) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-function getPresetSymmetricColor(
-  value,
-  colors,
-  neutral = 50,
-  band = 15,
-  min = 0,
-  max = 100
-) {
+function getPresetSymmetricColor(value, colors, neutral = 50, band = 15) {
   const negativeColor = colors[0];
   const neutralColor = colors[1];
   const positiveColor = colors[2];
