@@ -25,6 +25,10 @@ export default {
       name: 'Gradient Legend Title',
       control: { type: 'text' },
     },
+    gradientLegendShowPercentage: {
+      name: 'Show Percentages on Legend',
+      control: { type: 'boolean' },
+    },
   },
 };
 
@@ -101,6 +105,7 @@ const args = {
   height: null,
   gradientLegendDisplay: true,
   gradientLegendTitle: 'Legend Title',
+  gradientLegendShowPercentage: true,
 };
 
 export const Heatmap = {
@@ -117,6 +122,7 @@ export const Heatmap = {
         gradientLegend: {
           display: args.gradientLegendDisplay,
           title: args.gradientLegendTitle,
+          showPercentage: args.gradientLegendShowPercentage,
         },
       },
     };

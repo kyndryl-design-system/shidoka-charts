@@ -38,6 +38,7 @@ export default {
       titleFontSize: options.titleFontSize || 12,
       labelFontSize: options.labelFontSize || 12,
       labelMargin: options.labelMargin || 5,
+      showPercentage: options.showPercentage || false,
       ...options,
     };
 
@@ -139,7 +140,7 @@ export default {
     }
 
     if (legendOptions.title) {
-      ctx.font = `${legendOptions.titleFontSize}px ${
+      ctx.font = `500 ${legendOptions.titleFontSize}px ${
         chart.options.font?.family || 'Arial'
       }`;
       ctx.textAlign = 'left';
@@ -188,36 +189,41 @@ export default {
     ctx.font = `${legendOptions.labelFontSize}px ${
       chart.options.font?.family || 'Arial'
     }`;
-    ctx.textAlign = 'center';
+    const formatValue = (value) => {
+      return legendOptions.showPercentage ? `${value}%` : value.toString();
+    };
+
+    ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
     ctx.fillStyle = chart.options.color || '#666';
-
     ctx.fillText(
-      colorScale.min.toString(),
+      formatValue(colorScale.min),
       x,
       y + legendOptions.height + legendOptions.labelMargin
     );
 
+    ctx.textAlign = 'center';
     if (
       colorScale.colors &&
       colorScale.colors.length === 3 &&
       colorScale.neutral !== undefined
     ) {
       ctx.fillText(
-        colorScale.neutral.toString(),
+        formatValue(colorScale.neutral),
         x + legendOptions.width / 2,
         y + legendOptions.height + legendOptions.labelMargin
       );
     } else if (Colors.length >= 3 && colorScale.neutral !== undefined) {
       ctx.fillText(
-        colorScale.neutral.toString(),
+        formatValue(colorScale.neutral),
         x + legendOptions.width / 2,
         y + legendOptions.height + legendOptions.labelMargin
       );
     }
 
+    ctx.textAlign = 'right';
     ctx.fillText(
-      colorScale.max.toString(),
+      formatValue(colorScale.max),
       x + legendOptions.width,
       y + legendOptions.height + legendOptions.labelMargin
     );

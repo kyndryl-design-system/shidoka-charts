@@ -17,8 +17,6 @@ export const options = (ctx) => {
     ctx.options.colorPalette || 'categorical'
   );
 
-  console.log(ctx.options);
-
   return {
     layout: {
       padding: legendPadding,
@@ -225,7 +223,7 @@ export const datasetOptions = (ctx) => {
         if (category3) return Colors[2] + '90';
       }
 
-      return Colors[0] + '30';
+      return Colors[0] + '60';
     },
   };
 };
