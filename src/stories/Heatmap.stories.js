@@ -1,6 +1,7 @@
 import { html } from 'lit';
 import '../components/chart';
 import argTypes from '../common/config/chartArgTypes';
+import { createMatrixData } from '../common/config/chartTypes/matrix';
 import heatmapData from './sampleData/heatmap';
 import divergentHeatmapData from './sampleData/divergentHeatmapData';
 
@@ -38,27 +39,21 @@ const months = [
 ];
 const assetTypes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
-const createMatrixData = (data) => {
-  const matrixData = [];
-  const dataMap = new Map();
-  data.forEach((item) => {
-    const key = `${item.assetType}-${item.month}`;
-    dataMap.set(key, item.value);
-  });
-  for (let y = 1; y <= months.length; y++) {
-    for (let x = 1; x <= assetTypes.length; x++) {
-      const month = months[y - 1];
-      const assetType = assetTypes[x - 1];
-      const key = `${assetType}-${month}`;
-      const value = dataMap.has(key) ? dataMap.get(key) : undefined;
-      matrixData.push({ x, y, value });
-    }
-  }
-  return matrixData;
-};
+const defaultMatrixData = createMatrixData(heatmapData, {
+  xAxis: assetTypes,
+  yAxis: months,
+  xKey: 'assetType',
+  yKey: 'month',
+  valueKey: 'value',
+});
 
-const defaultMatrixData = createMatrixData(heatmapData);
-const divergentMatrixData = createMatrixData(divergentHeatmapData);
+const divergentMatrixData = createMatrixData(divergentHeatmapData, {
+  xAxis: assetTypes,
+  yAxis: months,
+  xKey: 'assetType',
+  yKey: 'month',
+  valueKey: 'value',
+});
 
 const commonArgs = {
   chartTitle: 'Cost Change by Asset Type and Month',

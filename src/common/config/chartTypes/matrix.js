@@ -1,7 +1,38 @@
 import { getComputedColorPalette } from '../colorPalettes';
 
 export const type = 'matrix';
-export const defaultOpacity = 0.9;
+
+export const createMatrixData = (data, options = {}) => {
+  const { xAxis, yAxis, xKey = 'x', yKey = 'y', valueKey = 'value' } = options;
+
+  if (!xAxis || !yAxis || !Array.isArray(xAxis) || !Array.isArray(yAxis)) {
+    throw new Error('xAxis and yAxis must be provided as arrays');
+  }
+
+  const matrixData = [];
+  const dataMap = new Map();
+
+  data.forEach((item) => {
+    const xValue = item[xKey];
+    const yValue = item[yKey];
+    const key = `${xValue}-${yValue}`;
+    dataMap.set(key, item[valueKey]);
+  });
+
+  for (let y = 1; y <= yAxis.length; y++) {
+    for (let x = 1; x <= xAxis.length; x++) {
+      const yValue = yAxis[y - 1];
+      const xValue = xAxis[x - 1];
+      const key = `${xValue}-${yValue}`;
+      const value = dataMap.has(key) ? dataMap.get(key) : undefined;
+      matrixData.push({ x, y, value });
+    }
+  }
+
+  return matrixData;
+};
+
+const defaultOpacity = 0.8;
 
 function parseColor(hex) {
   if (
