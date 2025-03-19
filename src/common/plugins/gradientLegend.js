@@ -1,5 +1,5 @@
 /**
- * Chart.js plugin to add a color gradient legend for heatmap and matrix charts
+ * Chart.js plugin to add a color gradient legend for heatmap/matrix charts
  */
 const hexToRgba = (hex, alpha) => {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -8,8 +8,9 @@ const hexToRgba = (hex, alpha) => {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
-const getColorWithOpacity = (color, position) => {
-  return hexToRgba(color, 0.85);
+const getColorWithOpacity = (color, opacity) => {
+  const finalOpacity = opacity !== undefined && !isNaN(opacity) ? opacity : 0.7;
+  return hexToRgba(color, finalOpacity);
 };
 
 const generateValueBasedColor = (value, min, max, neutral, colors) => {
@@ -27,7 +28,7 @@ const generateValueBasedColor = (value, min, max, neutral, colors) => {
     );
     return hexToRgba(positiveColor, normalizedValue * 0.4 + 0.45);
   } else {
-    return hexToRgba(neutralColor, 0.85);
+    return hexToRgba(neutralColor, 0.7);
   }
 };
 
@@ -51,7 +52,7 @@ export default {
     const ctx = chart.ctx;
     const chartArea = chart.chartArea;
 
-    const colorScale = chart.options.colorScale || {
+    const colorScale = chart.options.colorScale ?? {
       min: 0,
       max: 100,
       neutral: 50,
@@ -69,7 +70,7 @@ export default {
       titleFontSize: options.titleFontSize || 12,
       labelFontSize: options.labelFontSize || 12,
       labelMargin: options.labelMargin || 5,
-      showPercentage: options.showPercentage || false,
+      opacity: typeof options.opacity === 'number' ? options.opacity : 0.7,
       ...options,
     };
 
@@ -112,7 +113,10 @@ export default {
         );
       } else if (Colors.length === 2) {
         gradient.addColorStop(0, getColorWithOpacity(Colors[0], 0));
-        gradient.addColorStop(1, getColorWithOpacity(Colors[1], 1));
+        gradient.addColorStop(
+          1,
+          getColorWithOpacity(Colors[1], legendOptions.opacity)
+        );
       }
     } else {
       if (Colors.length === 3) {
@@ -121,7 +125,10 @@ export default {
         gradient.addColorStop(1, getColorWithOpacity(Colors[2], 1));
       } else if (Colors.length === 2) {
         gradient.addColorStop(0, getColorWithOpacity(Colors[0], 0));
-        gradient.addColorStop(1, getColorWithOpacity(Colors[1], 1));
+        gradient.addColorStop(
+          1,
+          getColorWithOpacity(Colors[1], legendOptions.opacity)
+        );
       }
     }
 
@@ -135,6 +142,7 @@ export default {
       ctx.fillText(legendOptions.title, x, y - legendOptions.labelMargin);
     }
 
+    // draw gradient container (rectangle)
     const drawRoundedRect = (x, y, width, height, radius) => {
       ctx.beginPath();
       ctx.moveTo(x + radius, y);
@@ -173,7 +181,7 @@ export default {
       chart.options.font?.family || 'Arial'
     }`;
     const formatValue = (value) => {
-      return legendOptions.showPercentage ? `${value}%` : value.toString();
+      return value.toString();
     };
 
     ctx.textAlign = 'left';

@@ -1,14 +1,15 @@
 import { getComputedColorPalette } from '../colorPalettes';
 
 export const type = 'matrix';
+export const defaultOpacity = 0.7;
 
 export const options = (ctx) => {
-  const gradeintLegendVisible = ctx.options.plugins.gradientLegend.display;
+  const gradientLegendVisible = ctx.options.plugins.gradientLegend.display;
   const gradientLegendTitle = ctx.options.plugins.gradientLegend.title;
-  const legendPadding = gradeintLegendVisible ? { bottom: 30 } : { bottom: 0 };
+  const legendPadding = gradientLegendVisible ? { bottom: 30 } : { bottom: 0 };
 
   const Colors = getComputedColorPalette(
-    ctx.options.colorPalette || 'divergent01'
+    ctx.options.colorPalette || 'sequential02'
   );
 
   return {
@@ -47,30 +48,22 @@ export const options = (ctx) => {
       },
       legend: { display: false },
       gradientLegend: {
-        display: gradeintLegendVisible || true,
+        display: gradientLegendVisible,
         position: 'bottom-left',
         title: gradientLegendTitle || 'Value',
         margin: 15,
         height: 15,
         width: 280,
+        opacity: defaultOpacity,
         colors: Colors,
       },
     },
     colorPalette: Colors,
     scaleShowValues: true,
     colorScale: {
-      min:
-        ctx.options.colorScale?.min !== undefined
-          ? ctx.options.colorScale.min
-          : 0,
-      max:
-        ctx.options.colorScale?.max !== undefined
-          ? ctx.options.colorScale.max
-          : 100,
-      neutral:
-        ctx.options.colorScale?.neutral !== undefined
-          ? ctx.options.colorScale.neutral
-          : 50,
+      min: ctx.options.colorScale?.min ?? 0,
+      max: ctx.options.colorScale?.max ?? 100,
+      neutral: ctx.options.colorScale?.neutral ?? 50,
     },
     legend: { display: false },
     scales: {
@@ -78,7 +71,7 @@ export const options = (ctx) => {
         grid: { display: false },
         maxTicksLimit: 15,
         min: 1,
-        max: ctx.labels.x?.length || ctx.labels?.length || 3,
+        max: ctx.labels.x?.length ?? ctx.labels?.length ?? 3,
         offset: true,
         ticks: {
           autoSkip: false,
@@ -88,14 +81,16 @@ export const options = (ctx) => {
           padding: 20,
         },
         afterFit(scale) {
-          gradeintLegendVisible ? (scale.height -= 10) : (scale.height -= 0);
+          if (gradientLegendVisible) {
+            scale.height -= 10;
+          }
         },
       },
       y: {
         grid: { display: false },
         maxTicksLimit: 15,
         min: 1,
-        max: ctx.labels.y?.length || ctx.labels?.length || 3,
+        max: ctx.labels.y?.length ?? ctx.labels?.length ?? 3,
         ticks: {
           autoSkip: false,
           maxTicksLimit: 15,
@@ -161,9 +156,8 @@ export const datasetOptions = (ctx) => {
   const Colors = getComputedColorPalette(
     ctx.options.colorPalette || 'categorical'
   );
-  const numCols = ctx.labels.x?.length || ctx.labels?.length || 3;
-  const numRows = ctx.labels.y?.length || ctx.labels?.length || 3;
-  const defaultOpacity = 0.85;
+  const numCols = ctx.labels.x?.length ?? ctx.labels?.length ?? 3;
+  const numRows = ctx.labels.y?.length ?? ctx.labels?.length ?? 3;
 
   return {
     borderColor: 'transparent',

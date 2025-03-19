@@ -17,14 +17,11 @@ export default {
   },
   argTypes: {
     ...argTypes,
-    gradientLegendDisplay: {
+    gradientLegendVisible: {
       control: { type: 'boolean' },
     },
     gradientLegendTitle: {
       control: { type: 'text' },
-    },
-    gradientLegendShowPercentage: {
-      control: { type: 'boolean' },
     },
   },
 };
@@ -96,13 +93,12 @@ const args = {
   hideCaptions: false,
   hideHeader: false,
   hideControls: false,
-  colorPalette: 'divergent01',
+  colorPalette: 'sequential02',
   noBorder: false,
   width: null,
   height: null,
-  gradientLegendDisplay: true,
+  gradientLegendVisible: true,
   gradientLegendTitle: 'Legend Title',
-  gradientLegendShowPercentage: false,
 };
 
 export const Heatmap = {
@@ -117,9 +113,8 @@ export const Heatmap = {
       },
       plugins: {
         gradientLegend: {
-          display: args.gradientLegendDisplay,
+          display: args.gradientLegendVisible,
           title: args.gradientLegendTitle,
-          showPercentage: args.gradientLegendShowPercentage,
         },
       },
     };
