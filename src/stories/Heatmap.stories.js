@@ -50,7 +50,7 @@ const createMatrixData = (data) => {
       const month = months[y - 1];
       const assetType = assetTypes[x - 1];
       const key = `${assetType}-${month}`;
-      const value = dataMap.get(key) || 0;
+      const value = dataMap.has(key) ? dataMap.get(key) : undefined;
       matrixData.push({ x, y, value });
     }
   }
@@ -110,21 +110,14 @@ export const Default = {
   args: {
     ...commonArgs,
     datasets: [defaultDataset],
-    legendLabels: [0, 50, 100],
   },
   render: (args) => {
     const options = {
       colorPalette: args.colorPalette,
-      colorScale: {
-        min: args.legendLabels ? args.legendLabels[0] : 0,
-        neutral: args.legendLabels ? args.legendLabels[1] : 50,
-        max: args.legendLabels ? args.legendLabels[2] : 100,
-      },
       plugins: {
         gradientLegend: {
           display: true,
           title: 'Legend Title',
-          legendLabels: args.legendLabels,
           paletteKey: args.colorPalette,
         },
       },
@@ -133,6 +126,7 @@ export const Default = {
         y: { title: { text: 'Month' } },
       },
     };
+
     return html`
       <kd-chart
         type="matrix"
@@ -159,21 +153,14 @@ export const Divergent = {
     ...commonArgs,
     colorPalette: 'divergent01',
     datasets: [divergentDataset],
-    legendLabels: [-100, 0, 100],
   },
   render: (args) => {
     const options = {
       colorPalette: args.colorPalette,
-      colorScale: {
-        min: args.legendLabels ? args.legendLabels[0] : -100,
-        neutral: args.legendLabels ? args.legendLabels[1] : 0,
-        max: args.legendLabels ? args.legendLabels[2] : 100,
-      },
       plugins: {
         gradientLegend: {
           display: true,
           title: 'Legend Title',
-          legendLabels: args.legendLabels,
           paletteKey: args.colorPalette,
         },
       },
@@ -182,6 +169,7 @@ export const Divergent = {
         y: { title: { text: 'Month' } },
       },
     };
+
     return html`
       <kd-chart
         type="matrix"
@@ -207,21 +195,14 @@ export const HideLegend = {
   args: {
     ...commonArgs,
     datasets: [defaultDataset],
-    legendLabels: [0, 50, 100],
   },
   render: (args) => {
     const options = {
       colorPalette: args.colorPalette,
-      colorScale: {
-        min: args.legendLabels ? args.legendLabels[0] : 0,
-        neutral: args.legendLabels ? args.legendLabels[1] : 50,
-        max: args.legendLabels ? args.legendLabels[2] : 100,
-      },
       plugins: {
         gradientLegend: {
           display: false,
           title: '',
-          legendLabels: args.legendLabels,
           paletteKey: args.colorPalette,
         },
       },
@@ -230,6 +211,7 @@ export const HideLegend = {
         y: { title: { text: 'Month' } },
       },
     };
+
     return html`
       <kd-chart
         type="matrix"
