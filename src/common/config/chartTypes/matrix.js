@@ -1,7 +1,7 @@
 import { getComputedColorPalette } from '../colorPalettes';
 
 export const type = 'matrix';
-export const defaultOpacity = 0.7;
+export const defaultOpacity = 0.9;
 
 export const options = (ctx) => {
   const gradientLegendVisible = ctx.options.plugins.gradientLegend.display;
@@ -50,7 +50,7 @@ export const options = (ctx) => {
       gradientLegend: {
         display: gradientLegendVisible,
         position: 'bottom-left',
-        title: gradientLegendTitle || 'Value',
+        title: gradientLegendTitle || '',
         margin: 15,
         height: 15,
         width: 280,

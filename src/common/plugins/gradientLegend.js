@@ -1,6 +1,7 @@
 /**
  * Chart.js plugin to add a color gradient legend for heatmap/matrix charts
  */
+
 const hexToRgba = (hex, alpha) => {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
@@ -97,34 +98,73 @@ export default {
       const max = colorScale.max;
       const neutral =
         colorScale.neutral !== undefined ? colorScale.neutral : (min + max) / 2;
+      const band = 15;
 
       if (Colors.length >= 3) {
+        const negativeColor = Colors[0];
+        const neutralColor = Colors[1];
+        const positiveColor = Colors[2];
+
         gradient.addColorStop(
           0,
-          generateValueBasedColor(min, min, max, neutral, Colors)
+          getColorWithOpacity(negativeColor, legendOptions.opacity)
         );
+
+        const transitionPoint1 = (neutral - band - min) / (max - min);
         gradient.addColorStop(
-          0.5,
-          generateValueBasedColor(neutral, min, max, neutral, Colors)
+          transitionPoint1,
+          getColorWithOpacity(negativeColor, legendOptions.opacity)
         );
+
+        const transitionPoint2 = (neutral - min) / (max - min);
+        gradient.addColorStop(
+          transitionPoint2,
+          getColorWithOpacity(neutralColor, legendOptions.opacity)
+        );
+
+        const transitionPoint3 = (neutral + band - min) / (max - min);
+        gradient.addColorStop(
+          transitionPoint3,
+          getColorWithOpacity(positiveColor, legendOptions.opacity)
+        );
+
         gradient.addColorStop(
           1,
-          generateValueBasedColor(max, min, max, neutral, Colors)
+          getColorWithOpacity(positiveColor, legendOptions.opacity)
         );
       } else if (Colors.length === 2) {
-        gradient.addColorStop(0, getColorWithOpacity(Colors[0], 0));
+        gradient.addColorStop(
+          0,
+          getColorWithOpacity(Colors[0], legendOptions.opacity)
+        );
         gradient.addColorStop(
           1,
           getColorWithOpacity(Colors[1], legendOptions.opacity)
         );
       }
     } else {
-      if (Colors.length === 3) {
-        gradient.addColorStop(0, getColorWithOpacity(Colors[0], 0));
-        gradient.addColorStop(0.5, getColorWithOpacity(Colors[1], 0.5));
-        gradient.addColorStop(1, getColorWithOpacity(Colors[2], 1));
+      if (Colors.length >= 3) {
+        const negativeColor = Colors[0];
+        const neutralColor = Colors[1];
+        const positiveColor = Colors[2];
+
+        gradient.addColorStop(
+          0,
+          getColorWithOpacity(negativeColor, legendOptions.opacity)
+        );
+        gradient.addColorStop(
+          0.5,
+          getColorWithOpacity(neutralColor, legendOptions.opacity)
+        );
+        gradient.addColorStop(
+          1,
+          getColorWithOpacity(positiveColor, legendOptions.opacity)
+        );
       } else if (Colors.length === 2) {
-        gradient.addColorStop(0, getColorWithOpacity(Colors[0], 0));
+        gradient.addColorStop(
+          0,
+          getColorWithOpacity(Colors[0], legendOptions.opacity)
+        );
         gradient.addColorStop(
           1,
           getColorWithOpacity(Colors[1], legendOptions.opacity)
@@ -142,7 +182,6 @@ export default {
       ctx.fillText(legendOptions.title, x, y - legendOptions.labelMargin);
     }
 
-    // draw gradient container (rectangle)
     const drawRoundedRect = (x, y, width, height, radius) => {
       ctx.beginPath();
       ctx.moveTo(x + radius, y);

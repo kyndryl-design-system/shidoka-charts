@@ -4,7 +4,7 @@ import argTypes from '../common/config/chartArgTypes';
 import heatmapData from './sampleData/heatmap.json';
 
 export default {
-  title: 'Charts/Heatmap',
+  title: 'Third Party Charts/Heatmap',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,
@@ -15,15 +15,7 @@ export default {
       url: 'https://www.figma.com/design/rC5XdRnXVbDmu3vPN8tJ4q/2.1-Edinburgh?node-id=4001-45669&p=f&m=dev',
     },
   },
-  argTypes: {
-    ...argTypes,
-    gradientLegendVisible: {
-      control: { type: 'boolean' },
-    },
-    gradientLegendTitle: {
-      control: { type: 'text' },
-    },
-  },
+  argTypes: argTypes,
 };
 
 const months = [
@@ -97,11 +89,9 @@ const args = {
   noBorder: false,
   width: null,
   height: null,
-  gradientLegendVisible: true,
-  gradientLegendTitle: 'Legend Title',
 };
 
-export const Heatmap = {
+export const Default = {
   args,
   render: (args) => {
     const options = {
@@ -113,8 +103,59 @@ export const Heatmap = {
       },
       plugins: {
         gradientLegend: {
-          display: args.gradientLegendVisible,
-          title: args.gradientLegendTitle,
+          display: true,
+          title: 'Legend Title',
+        },
+      },
+      scales: {
+        x: {
+          title: {
+            text: 'Asset Type',
+          },
+        },
+        y: {
+          title: {
+            text: 'Month',
+          },
+        },
+      },
+    };
+
+    return html`
+      <kd-chart
+        type="matrix"
+        style="min-height: 500px;"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        .options=${options}
+        ?hideDescription=${args.hideDescription}
+        ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
+        ?noBorder=${args.noBorder}
+        .width=${args.width}
+        .height=${args.height}
+      ></kd-chart>
+    `;
+  },
+};
+
+export const WithoutLegend = {
+  args,
+  render: (args) => {
+    const options = {
+      colorPalette: args.colorPalette,
+      colorScale: {
+        min: 0,
+        max: 100,
+        neutral: 50,
+      },
+      plugins: {
+        gradientLegend: {
+          display: false,
+          title: '',
         },
       },
     };
