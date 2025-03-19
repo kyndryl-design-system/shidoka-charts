@@ -7,10 +7,9 @@ export const options = (ctx) => {
   const gradientLegendVisible = ctx.options.plugins.gradientLegend.display;
   const gradientLegendTitle = ctx.options.plugins.gradientLegend.title;
   const legendPadding = gradientLegendVisible ? { bottom: 30 } : { bottom: 0 };
+  const paletteKey = ctx.options.colorPalette || 'sequential02';
 
-  const Colors = getComputedColorPalette(
-    ctx.options.colorPalette || 'sequential02'
-  );
+  const Colors = getComputedColorPalette(paletteKey);
 
   return {
     layout: { padding: legendPadding },
@@ -56,10 +55,10 @@ export const options = (ctx) => {
         width: 280,
         opacity: defaultOpacity,
         colors: Colors,
+        paletteKey,
       },
     },
     colorPalette: Colors,
-    scaleShowValues: true,
     colorScale: {
       min: ctx.options.colorScale?.min ?? 0,
       max: ctx.options.colorScale?.max ?? 100,
@@ -118,44 +117,52 @@ function linearInterpolationColor(hex1, hex2, t) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
+const getColorWithOpacity = (color, opacity) => {
+  const finalOpacity = !isNaN(opacity) ? opacity : 0.7;
+  const { r, g, b } = parseColor(color);
+  return `rgba(${r}, ${g}, ${b}, ${finalOpacity})`;
+};
+
 function getPresetSymmetricColor(
   value,
   colors,
   neutral = 50,
   band = 15,
-  opacity = 1
+  opacity = 1,
+  paletteKey
 ) {
-  const negativeColor = colors[0];
-  const neutralColor = colors[1];
-  const positiveColor = colors[2];
-  let color;
-
-  if (value <= neutral - band) {
-    color = negativeColor;
-  } else if (value >= neutral + band) {
-    color = positiveColor;
-  } else if (value < neutral) {
-    const t = (value - (neutral - band)) / band;
-    color = linearInterpolationColor(negativeColor, neutralColor, t);
+  if (paletteKey && paletteKey.toLowerCase().includes('divergent')) {
+    const minVal = -100;
+    const maxVal = 100;
+    const neutralIndex = Math.floor(colors.length / 2);
+    if (value <= 0) {
+      const ratio = (value - minVal) / (0 - minVal);
+      const idx = Math.round(ratio * neutralIndex);
+      return getColorWithOpacity(colors[Math.min(idx, neutralIndex)], opacity);
+    } else {
+      const ratio = value / maxVal;
+      const idx =
+        neutralIndex + Math.round(ratio * (colors.length - neutralIndex - 1));
+      return getColorWithOpacity(
+        colors[Math.min(idx, colors.length - 1)],
+        opacity
+      );
+    }
   } else {
-    const t = (value - neutral) / band;
-    color = linearInterpolationColor(neutralColor, positiveColor, t);
+    const minVal = 0;
+    const maxVal = 100;
+    const ratio = (value - minVal) / (maxVal - minVal);
+    const idx = Math.round(ratio * (colors.length - 1));
+    return getColorWithOpacity(
+      colors[Math.min(idx, colors.length - 1)],
+      opacity
+    );
   }
-
-  if (opacity < 1 && color.startsWith('rgb(')) {
-    return color.replace('rgb(', 'rgba(').replace(')', `, ${opacity})`);
-  } else if (opacity < 1 && color.startsWith('#')) {
-    const { r, g, b } = parseColor(color);
-    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
-  }
-
-  return color;
 }
 
 export const datasetOptions = (ctx) => {
-  const Colors = getComputedColorPalette(
-    ctx.options.colorPalette || 'categorical'
-  );
+  const paletteKey = ctx.options.colorPalette || 'categorical';
+  const Colors = getComputedColorPalette(paletteKey);
   const numCols = ctx.labels.x?.length ?? ctx.labels?.length ?? 3;
   const numRows = ctx.labels.y?.length ?? ctx.labels?.length ?? 3;
 
@@ -166,11 +173,18 @@ export const datasetOptions = (ctx) => {
     height: ({ chart }) => (chart.chartArea?.height ?? 0) / numRows - 1,
     backgroundColor: ({ raw }) =>
       raw.value !== undefined
-        ? getPresetSymmetricColor(raw.value, Colors, 50, 15, defaultOpacity)
+        ? getPresetSymmetricColor(
+            raw.value,
+            Colors,
+            50,
+            15,
+            defaultOpacity,
+            paletteKey
+          )
         : 'rgba(204, 204, 204, 0.8)',
     hoverBackgroundColor: ({ raw }) =>
       raw.value !== undefined
-        ? getPresetSymmetricColor(raw.value, Colors)
+        ? getPresetSymmetricColor(raw.value, Colors, 50, 15, 1, paletteKey)
         : '#999',
   };
 };

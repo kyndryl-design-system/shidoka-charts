@@ -14,52 +14,31 @@ const getColorWithOpacity = (color, opacity) => {
   return hexToRgba(color, finalOpacity);
 };
 
-const generateValueBasedColor = (value, min, max, neutral, colors) => {
-  const [negativeColor, neutralColor, positiveColor] = colors;
-  if (value < neutral) {
-    const normalizedValue = Math.max(
-      0,
-      Math.min(1, (neutral - value) / (neutral - min))
-    );
-    return hexToRgba(negativeColor, normalizedValue * 0.4 + 0.45);
-  } else if (value > neutral) {
-    const normalizedValue = Math.max(
-      0,
-      Math.min(1, (value - neutral) / (max - neutral))
-    );
-    return hexToRgba(positiveColor, normalizedValue * 0.4 + 0.45);
-  } else {
-    return hexToRgba(neutralColor, 0.7);
-  }
-};
-
 export default {
   id: 'gradientLegend',
   afterDraw: (chart, args, options) => {
-    if (!options || !options.display) {
-      return;
-    }
-
+    if (!options || !options.display) return;
     const Colors =
       options.colors ||
       chart.options.plugins?.gradientLegend?.colors ||
       chart.options.colorScale?.colors ||
       chart.data?.datasets?.[0]?._colorPalette;
-
-    if (!Colors || Colors.length === 0) {
-      return;
-    }
-
+    if (!Colors || !Colors.length) return;
+    const paletteKey = options.paletteKey || '';
+    const isDivergentPalette = paletteKey.toLowerCase().includes('divergent');
     const ctx = chart.ctx;
     const chartArea = chart.chartArea;
 
-    const colorScale = chart.options.colorScale ?? {
-      min: 0,
-      max: 100,
-      neutral: 50,
-      colors: [],
-    };
+    const defaultLegendLabels = isDivergentPalette
+      ? [-100, 0, 100]
+      : [0, 50, 100];
+    const legendLabels = options.legendLabels || defaultLegendLabels;
 
+    let colorScale = {
+      min: legendLabels[0],
+      neutral: legendLabels[1],
+      max: legendLabels[2],
+    };
     const legendOptions = {
       position: options.position || 'bottom',
       width: options.width || Math.min(400, chartArea.width * 0.8),
@@ -74,7 +53,6 @@ export default {
       opacity: typeof options.opacity === 'number' ? options.opacity : 0.7,
       ...options,
     };
-
     let x, y;
     if (legendOptions.position === 'bottom') {
       x = chartArea.left + (chartArea.width - legendOptions.width) / 2;
@@ -86,92 +64,45 @@ export default {
       x = chartArea.left - 70;
       y = chartArea.bottom + 70;
     }
-
     const gradient = ctx.createLinearGradient(x, y, x + legendOptions.width, y);
-
-    if (
-      colorScale &&
-      colorScale.min !== undefined &&
-      colorScale.max !== undefined
-    ) {
-      const min = colorScale.min;
-      const max = colorScale.max;
-      const neutral =
-        colorScale.neutral !== undefined ? colorScale.neutral : (min + max) / 2;
-      const band = 15;
-
-      if (Colors.length >= 3) {
-        const negativeColor = Colors[0];
-        const neutralColor = Colors[1];
-        const positiveColor = Colors[2];
-
+    const neutralIndex = Colors.findIndex((c) => c.includes('neutral'));
+    if (neutralIndex > 0) {
+      const negativeColors = Colors.slice(0, neutralIndex);
+      const neutralColor = Colors[neutralIndex];
+      const positiveColors = Colors.slice(neutralIndex + 1);
+      negativeColors.forEach((color, i) => {
+        const t =
+          negativeColors.length > 1
+            ? (i / (negativeColors.length - 1)) * 0.5
+            : 0;
         gradient.addColorStop(
-          0,
-          getColorWithOpacity(negativeColor, legendOptions.opacity)
+          t,
+          getColorWithOpacity(color, legendOptions.opacity)
         );
-
-        const transitionPoint1 = (neutral - band - min) / (max - min);
+      });
+      gradient.addColorStop(
+        0.5,
+        getColorWithOpacity(neutralColor, legendOptions.opacity)
+      );
+      positiveColors.forEach((color, i) => {
+        const t =
+          0.5 +
+          (positiveColors.length > 1
+            ? (i / (positiveColors.length - 1)) * 0.5
+            : 0);
         gradient.addColorStop(
-          transitionPoint1,
-          getColorWithOpacity(negativeColor, legendOptions.opacity)
+          t,
+          getColorWithOpacity(color, legendOptions.opacity)
         );
-
-        const transitionPoint2 = (neutral - min) / (max - min);
-        gradient.addColorStop(
-          transitionPoint2,
-          getColorWithOpacity(neutralColor, legendOptions.opacity)
-        );
-
-        const transitionPoint3 = (neutral + band - min) / (max - min);
-        gradient.addColorStop(
-          transitionPoint3,
-          getColorWithOpacity(positiveColor, legendOptions.opacity)
-        );
-
-        gradient.addColorStop(
-          1,
-          getColorWithOpacity(positiveColor, legendOptions.opacity)
-        );
-      } else if (Colors.length === 2) {
-        gradient.addColorStop(
-          0,
-          getColorWithOpacity(Colors[0], legendOptions.opacity)
-        );
-        gradient.addColorStop(
-          1,
-          getColorWithOpacity(Colors[1], legendOptions.opacity)
-        );
-      }
+      });
     } else {
-      if (Colors.length >= 3) {
-        const negativeColor = Colors[0];
-        const neutralColor = Colors[1];
-        const positiveColor = Colors[2];
-
+      Colors.forEach((color, i) => {
         gradient.addColorStop(
-          0,
-          getColorWithOpacity(negativeColor, legendOptions.opacity)
+          i / (Colors.length - 1),
+          getColorWithOpacity(color, legendOptions.opacity)
         );
-        gradient.addColorStop(
-          0.5,
-          getColorWithOpacity(neutralColor, legendOptions.opacity)
-        );
-        gradient.addColorStop(
-          1,
-          getColorWithOpacity(positiveColor, legendOptions.opacity)
-        );
-      } else if (Colors.length === 2) {
-        gradient.addColorStop(
-          0,
-          getColorWithOpacity(Colors[0], legendOptions.opacity)
-        );
-        gradient.addColorStop(
-          1,
-          getColorWithOpacity(Colors[1], legendOptions.opacity)
-        );
-      }
+      });
     }
-
     if (legendOptions.title) {
       ctx.font = `500 ${legendOptions.titleFontSize}px ${
         chart.options.font?.family || 'Arial'
@@ -181,7 +112,6 @@ export default {
       ctx.fillStyle = chart.options.color || '#666';
       ctx.fillText(legendOptions.title, x, y - legendOptions.labelMargin);
     }
-
     const drawRoundedRect = (x, y, width, height, radius) => {
       ctx.beginPath();
       ctx.moveTo(x + radius, y);
@@ -195,7 +125,6 @@ export default {
       ctx.arcTo(x, y, x + radius, y, radius);
       ctx.closePath();
     };
-
     ctx.fillStyle = '#fff';
     drawRoundedRect(
       x,
@@ -205,7 +134,6 @@ export default {
       legendOptions.borderRadius
     );
     ctx.fill();
-
     ctx.fillStyle = gradient;
     drawRoundedRect(
       x,
@@ -215,14 +143,10 @@ export default {
       legendOptions.gradientBorderRadius
     );
     ctx.fill();
-
     ctx.font = `${legendOptions.labelFontSize}px ${
       chart.options.font?.family || 'Arial'
     }`;
-    const formatValue = (value) => {
-      return value.toString();
-    };
-
+    const formatValue = (val) => val.toString();
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
     ctx.fillStyle = chart.options.color || '#666';
@@ -231,26 +155,14 @@ export default {
       x,
       y + legendOptions.height + legendOptions.labelMargin
     );
-
-    ctx.textAlign = 'center';
-    if (
-      colorScale.colors &&
-      colorScale.colors.length === 3 &&
-      colorScale.neutral !== undefined
-    ) {
-      ctx.fillText(
-        formatValue(colorScale.neutral),
-        x + legendOptions.width / 2,
-        y + legendOptions.height + legendOptions.labelMargin
-      );
-    } else if (Colors.length >= 3 && colorScale.neutral !== undefined) {
+    if (Colors.length >= 3 && colorScale.neutral !== undefined) {
+      ctx.textAlign = 'center';
       ctx.fillText(
         formatValue(colorScale.neutral),
         x + legendOptions.width / 2,
         y + legendOptions.height + legendOptions.labelMargin
       );
     }
-
     ctx.textAlign = 'right';
     ctx.fillText(
       formatValue(colorScale.max),
