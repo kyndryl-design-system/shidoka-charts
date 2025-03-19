@@ -4,13 +4,31 @@ export const type = 'matrix';
 export const defaultOpacity = 0.9;
 
 function parseColor(hex) {
+  if (
+    !hex ||
+    typeof hex !== 'string' ||
+    !hex.startsWith('#') ||
+    hex.length < 7
+  ) {
+    return { r: 0, g: 0, b: 0 };
+  }
+
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
-  return { r, g, b };
+
+  return {
+    r: isNaN(r) ? 0 : r,
+    g: isNaN(g) ? 0 : g,
+    b: isNaN(b) ? 0 : b,
+  };
 }
 
 const getColorWithOpacity = (color, opacity) => {
+  if (!color || typeof color !== 'string' || !color.startsWith('#')) {
+    return `rgba(204, 204, 204, ${!isNaN(opacity) ? opacity : 0.7})`;
+  }
+
   const finalOpacity = !isNaN(opacity) ? opacity : 0.7;
   const { r, g, b } = parseColor(color);
   return `rgba(${r}, ${g}, ${b}, ${finalOpacity})`;
@@ -24,7 +42,12 @@ function getPresetSymmetricColor(
   opacity = 1,
   paletteKey
 ) {
-  if (paletteKey.toLowerCase().includes('divergent')) {
+  if (!colors || !Array.isArray(colors) || colors.length === 0) {
+    return `rgba(204, 204, 204, ${opacity})`;
+  }
+
+  const key = paletteKey || '';
+  if (key.toLowerCase().includes('divergent')) {
     const minVal = -100;
     const maxVal = 100;
     const neutralIndex = Math.floor(colors.length / 2);

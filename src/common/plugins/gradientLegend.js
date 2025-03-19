@@ -3,19 +3,83 @@
  */
 
 const hexToRgba = (hex, alpha) => {
+  if (
+    !hex ||
+    typeof hex !== 'string' ||
+    !hex.startsWith('#') ||
+    hex.length < 7
+  ) {
+    return `rgba(204, 204, 204, ${alpha})`;
+  }
+
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+
+  return `rgba(${isNaN(r) ? 0 : r}, ${isNaN(g) ? 0 : g}, ${
+    isNaN(b) ? 0 : b
+  }, ${alpha})`;
 };
 
 const getColorWithOpacity = (color, opacity) => {
   const finalOpacity = opacity !== undefined && !isNaN(opacity) ? opacity : 0.7;
+
+  if (!color || typeof color !== 'string' || !color.startsWith('#')) {
+    return `rgba(204, 204, 204, ${finalOpacity})`;
+  }
+
   return hexToRgba(color, finalOpacity);
 };
 
 export default {
   id: 'gradientLegend',
+  _previousColorPalette: null,
+
+  beforeDraw(chart, args, options) {
+    if (!options?.display) return;
+
+    const Colors =
+      options.colors ||
+      chart.options.plugins?.gradientLegend?.colors ||
+      chart.options.colorScale?.colors ||
+      chart.data?.datasets?.[0]?._colorPalette;
+
+    if (!Colors || !Colors.length) return;
+
+    const colorScale = chart.options.colorScale || {};
+    const paletteKey = options.paletteKey || '';
+    const isDivergentPalette = paletteKey.toLowerCase().includes('divergent');
+    const fallbackMin = isDivergentPalette ? -100 : 0;
+    const fallbackNeutral = isDivergentPalette ? 0 : 50;
+    const fallbackMax = isDivergentPalette ? 100 : 100;
+
+    const minVal = colorScale.min ?? fallbackMin;
+    const neutralVal = colorScale.neutral ?? fallbackNeutral;
+    const maxVal = colorScale.max ?? fallbackMax;
+
+    const signature = `${Colors.join(',')};${minVal};${neutralVal};${maxVal}`;
+
+    if (
+      this._previousColorPalette !== null &&
+      this._previousColorPalette !== signature
+    ) {
+      this._previousColorPalette = signature;
+
+      if (!chart._gradientLegendUpdateScheduled) {
+        chart._gradientLegendUpdateScheduled = true;
+        window.requestAnimationFrame(() => {
+          if (chart.ctx) {
+            chart.update('none');
+          }
+          chart._gradientLegendUpdateScheduled = false;
+        });
+      }
+      return;
+    }
+
+    this._previousColorPalette = signature;
+  },
+
   afterDraw(chart, args, options) {
     if (!options?.display) return;
 
@@ -36,7 +100,6 @@ export default {
     const fallbackNeutral = isDivergentPalette ? 0 : 50;
     const fallbackMax = isDivergentPalette ? 100 : 100;
 
-    // rounding to nearest value in intervals of 50
     const roundToInterval = (value) => {
       if (value === 0) return 0;
 
