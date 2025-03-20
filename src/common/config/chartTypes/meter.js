@@ -38,7 +38,7 @@ export const options = () => {
   };
 };
 
-export const datasetOptions = (ctx, index) => {
+export const datasetOptions = (ctx) => {
   return {
     backgroundColor: getComputedColorPalette(
       ctx.options.colorPalette || 'rag03'

@@ -13,9 +13,11 @@ import {
   ProjectionScale,
 } from 'chartjs-chart-geo';
 import { TreemapController, TreemapElement } from 'chartjs-chart-treemap';
+import { MatrixController, MatrixElement } from 'chartjs-chart-matrix';
 import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
+import gradientLegendPlugin from '../../common/plugins/gradientLegend';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import datalabelsPlugin from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
@@ -41,6 +43,8 @@ Chart.register(
   ProjectionScale,
   TreemapController,
   TreemapElement,
+  MatrixController,
+  MatrixElement,
   annotationPlugin,
   datalabelsPlugin
 );
@@ -324,7 +328,7 @@ export class KDChart extends LitElement {
           <div
             class="canvas-container"
             style="${this.width ? `width: ${this.width}px;` : ''}
-              ${this.height ? `height: ${this.height}px;` : ''}"
+            ${this.height ? `height: ${this.height}px;` : ''}"
           >
             <canvas role="img" aria-labelledby="titleDesc"></canvas>
           </div>
@@ -341,150 +345,200 @@ export class KDChart extends LitElement {
           ? html`
               <div class="table">
                 <table>
-                  <thead>
-                    <tr>
-                      ${this.labels?.length || this.type === 'treemap'
-                        ? html`<th>${this.getTableAxisLabel()}</th>`
-                        : null}
-                      ${this.datasets.map((dataset) => {
-                        return html`<th>${dataset.label}</th>`;
-                      })}
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    ${this.type === 'treemap'
-                      ? Array.isArray(this.datasets[0].tree)
-                        ? this.datasets[0].tree.map((_value: any) => {
+                  ${this.type === 'matrix'
+                    ? html`
+                        <thead>
+                          <tr>
+                            <th>
+                              ${this.options?.scales?.y?.title?.text ||
+                              'Y Axis'}
+                            </th>
+                            <th>
+                              ${this.options?.scales?.x?.title?.text ||
+                              'X Axis'}
+                            </th>
+                            ${this.datasets.map(
+                              (dataset) => html`<th>${dataset.label}</th>`
+                            )}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          ${this.datasets[0].data.map((cell: any) => {
+                            const xLabel = Array.isArray(this.labels)
+                              ? this.labels[cell.x - 1] || ''
+                              : (this.labels as any).x?.[cell.x - 1] || '';
+                            const yLabel = Array.isArray(this.labels)
+                              ? this.labels[cell.y - 1] || ''
+                              : (this.labels as any).y?.[cell.y - 1] || '';
                             return html`
                               <tr>
-                                <td>${_value[this.datasets[0].labelKey]}</td>
-                                <td>${_value[this.datasets[0].key]}</td>
+                                <td>${yLabel}</td>
+                                <td>${xLabel}</td>
+                                ${this.datasets.map(
+                                  () => html`<td>${cell.value}</td>`
+                                )}
                               </tr>
                             `;
-                          })
-                        : Object.entries(this.datasets[0].tree).map(
-                            (_value: any) => {
-                              const HtmlStrings = [];
-
-                              if (_value[1].value) {
-                                HtmlStrings.push(html`
-                                  <tr>
-                                    <td>${_value[0]}</td>
-                                    <td>${_value[1].value}</td>
-                                  </tr>
-                                `);
-                              } else {
-                                Object.entries(_value[1]).map(
-                                  (_subValue: any) => {
-                                    if (_subValue[1].value) {
+                          })}
+                        </tbody>
+                      `
+                    : html`
+                        <thead>
+                          <tr>
+                            ${this.labels?.length || this.type === 'treemap'
+                              ? html`<th>${this.getTableAxisLabel()}</th>`
+                              : null}
+                            ${this.datasets.map(
+                              (dataset) => html`<th>${dataset.label}</th>`
+                            )}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          ${this.type === 'treemap'
+                            ? Array.isArray(this.datasets[0].tree)
+                              ? this.datasets[0].tree.map(
+                                  (_value: any) => html`
+                                    <tr>
+                                      <td>
+                                        ${_value[this.datasets[0].labelKey]}
+                                      </td>
+                                      <td>${_value[this.datasets[0].key]}</td>
+                                    </tr>
+                                  `
+                                )
+                              : Object.entries(this.datasets[0].tree).map(
+                                  (_value: any) => {
+                                    const HtmlStrings = [];
+                                    if (_value[1].value) {
                                       HtmlStrings.push(html`
                                         <tr>
-                                          <td>${_subValue[0]}</td>
-                                          <td>${_subValue[1].value}</td>
+                                          <td>${_value[0]}</td>
+                                          <td>${_value[1].value}</td>
                                         </tr>
                                       `);
                                     } else {
-                                      Object.entries(_subValue[1]).map(
-                                        (_subSubValue: any) => {
-                                          HtmlStrings.push(html`
-                                            <tr>
-                                              <td>${_subSubValue[0]}</td>
-                                              <td>${_subSubValue[1].value}</td>
-                                            </tr>
-                                          `);
+                                      Object.entries(_value[1]).map(
+                                        (_subValue: any) => {
+                                          if (_subValue[1].value) {
+                                            HtmlStrings.push(html`
+                                              <tr>
+                                                <td>${_subValue[0]}</td>
+                                                <td>${_subValue[1].value}</td>
+                                              </tr>
+                                            `);
+                                          } else {
+                                            Object.entries(_subValue[1]).map(
+                                              (_subSubValue: any) => {
+                                                HtmlStrings.push(html`
+                                                  <tr>
+                                                    <td>${_subSubValue[0]}</td>
+                                                    <td>
+                                                      ${_subSubValue[1].value}
+                                                    </td>
+                                                  </tr>
+                                                `);
+                                              }
+                                            );
+                                          }
                                         }
                                       );
                                     }
+                                    return HtmlStrings;
                                   }
-                                );
-                              }
-
-                              return HtmlStrings;
-                            }
-                          )
-                      : this.datasets[0].data.map((_value: any, i: number) => {
-                          const IndexAxis = this.options.indexAxis || 'x';
-                          const NonIndexAxis = IndexAxis === 'x' ? 'y' : 'x';
-
-                          return html`
-                            <tr>
-                              ${this.labels.length
-                                ? html`
-                                    ${this.options?.scales[IndexAxis]?.type ===
-                                    'time'
-                                      ? html`
-                                          <td>
-                                            ${new Date(
-                                              this.labels[i]
-                                            ).toLocaleString()}
-                                          </td>
-                                        `
-                                      : html`<td>${this.labels[i]}</td>`}
-                                  `
-                                : null}
-                              ${this.datasets.map((dataset) => {
-                                const dataPoint = dataset.data[i];
-
-                                if (
-                                  this.type === 'bubbleMap' ||
-                                  this.type === 'choropleth'
-                                ) {
+                                )
+                            : this.datasets[0].data.map(
+                                (_value: any, i: number) => {
+                                  const IndexAxis =
+                                    this.options.indexAxis || 'x';
+                                  const NonIndexAxis =
+                                    IndexAxis === 'x' ? 'y' : 'x';
                                   return html`
-                                    <td>${dataset.data[i].value}</td>
-                                  `;
-                                } else if (
-                                  this.options?.scales[NonIndexAxis]?.type ===
-                                  'time'
-                                ) {
-                                  return html`
-                                    <td>
-                                      ${new Date(dataPoint).toLocaleString()}
-                                    </td>
-                                  `;
-                                } else if (Array.isArray(dataPoint)) {
-                                  // handle data in array format
-                                  return html`
-                                    <td>${dataPoint[0]}, ${dataPoint[1]}</td>
-                                  `;
-                                } else if (
-                                  typeof dataPoint === 'object' &&
-                                  !Array.isArray(dataPoint) &&
-                                  dataPoint !== null
-                                ) {
-                                  // handle data in object format
-                                  return html`
-                                    <td>
-                                      ${Object.keys(dataPoint).map((key) => {
-                                        const Label =
-                                          this.options.scales[key]?.title
-                                            .text || key;
-                                        const DisplayData =
-                                          this.options.scales[key]?.type ===
-                                          'time'
-                                            ? new Date(
-                                                dataPoint[key]
-                                              ).toLocaleString()
-                                            : dataPoint[key];
-
-                                        return html`
-                                          <div>
-                                            <strong>${Label}:</strong>
-                                            ${DisplayData}
-                                          </div>
-                                        `;
+                                    <tr>
+                                      ${this.labels.length
+                                        ? html`
+                                            ${this.options?.scales[IndexAxis]
+                                              ?.type === 'time'
+                                              ? html`
+                                                  <td>
+                                                    ${new Date(
+                                                      this.labels[i]
+                                                    ).toLocaleString()}
+                                                  </td>
+                                                `
+                                              : html`
+                                                  <td>${this.labels[i]}</td>
+                                                `}
+                                          `
+                                        : null}
+                                      ${this.datasets.map((dataset) => {
+                                        const dataPoint = dataset.data[i];
+                                        if (
+                                          this.type === 'bubbleMap' ||
+                                          this.type === 'choropleth'
+                                        ) {
+                                          return html`
+                                            <td>${dataset.data[i].value}</td>
+                                          `;
+                                        } else if (
+                                          this.options?.scales[NonIndexAxis]
+                                            ?.type === 'time'
+                                        ) {
+                                          return html`
+                                            <td>
+                                              ${new Date(
+                                                dataPoint
+                                              ).toLocaleString()}
+                                            </td>
+                                          `;
+                                        } else if (Array.isArray(dataPoint)) {
+                                          return html`
+                                            <td>
+                                              ${dataPoint[0]}, ${dataPoint[1]}
+                                            </td>
+                                          `;
+                                        } else if (
+                                          typeof dataPoint === 'object' &&
+                                          !Array.isArray(dataPoint) &&
+                                          dataPoint !== null
+                                        ) {
+                                          return html`
+                                            <td>
+                                              ${Object.keys(dataPoint).map(
+                                                (key) => {
+                                                  const Label =
+                                                    this.options.scales[key]
+                                                      ?.title?.text || key;
+                                                  const DisplayData =
+                                                    this.options.scales[key]
+                                                      ?.type === 'time'
+                                                      ? new Date(
+                                                          dataPoint[key]
+                                                        ).toLocaleString()
+                                                      : dataPoint[key];
+                                                  return html`
+                                                    <div>
+                                                      <strong>
+                                                        ${Label}:
+                                                      </strong>
+                                                      ${DisplayData}
+                                                    </div>
+                                                  `;
+                                                }
+                                              )}
+                                            </td>
+                                          `;
+                                        } else {
+                                          return html`
+                                            <td>${dataset.data[i]}</td>
+                                          `;
+                                        }
                                       })}
-                                    </td>
+                                    </tr>
                                   `;
-                                } else {
-                                  // handle data in number/basic format
-                                  return html`<td>${dataset.data[i]}</td>`;
                                 }
-                              })}
-                            </tr>
-                          `;
-                        })}
-                  </tbody>
+                              )}
+                        </tbody>
+                      `}
                 </table>
               </div>
             `
@@ -636,6 +690,7 @@ export class KDChart extends LitElement {
     let plugins = [
       canvasBackgroundPlugin,
       pluginSelectForDoghnutMeter,
+      gradientLegendPlugin,
       ...this.plugins,
     ];
 
