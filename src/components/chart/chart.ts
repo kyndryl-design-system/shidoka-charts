@@ -569,12 +569,17 @@ export class KDChart extends LitElement {
     // check to make sure initial datasets + data have been provided
     let hasData = false;
     if (this.datasets && this.datasets.length) {
-      this.datasets.forEach((dataset) => {
+      for (const dataset of this.datasets) {
         hasData =
-          dataset.data?.length ||
-          dataset.tree?.length ||
-          Object.keys(dataset.tree).length;
-      });
+          dataset.data?.length > 0 ||
+          dataset.tree?.length > 0 ||
+          (dataset.tree && Object.keys(dataset.tree).length > 0);
+
+        if (!hasData) {
+          console.error('Missing data for one or more chart datasets.');
+          break;
+        }
+      }
     }
 
     if (!this.chart && this.type && changedProps.has('datasets') && hasData) {
