@@ -34,6 +34,25 @@ export const createMatrixData = (data, options = {}) => {
 
 const defaultOpacity = 0.8;
 
+let isMatrixFullscreen = false;
+
+export function setMatrixFullscreen(state) {
+  isMatrixFullscreen = !!state;
+}
+
+function isFullScreen() {
+  if (isMatrixFullscreen) {
+    return true;
+  }
+
+  return !!(
+    document.fullscreenElement ||
+    document.webkitFullscreenElement ||
+    document.mozFullscreenElement ||
+    document.msFullscreenElement
+  );
+}
+
 function parseColor(hex) {
   if (
     !hex ||
@@ -47,15 +66,10 @@ function parseColor(hex) {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
-
-  return {
-    r: isNaN(r) ? 0 : r,
-    g: isNaN(g) ? 0 : g,
-    b: isNaN(b) ? 0 : b,
-  };
+  return { r: isNaN(r) ? 0 : r, g: isNaN(g) ? 0 : g, b: isNaN(b) ? 0 : b };
 }
 
-const getColorWithOpacity = (color, opacity) => {
+function getColorWithOpacity(color, opacity) {
   if (!color || typeof color !== 'string' || !color.startsWith('#')) {
     return `rgba(204, 204, 204, ${!isNaN(opacity) ? opacity : 0.7})`;
   }
@@ -63,7 +77,7 @@ const getColorWithOpacity = (color, opacity) => {
   const finalOpacity = !isNaN(opacity) ? opacity : 0.7;
   const { r, g, b } = parseColor(color);
   return `rgba(${r}, ${g}, ${b}, ${finalOpacity})`;
-};
+}
 
 function getPresetSymmetricColor(
   value,
@@ -110,7 +124,7 @@ function getPresetSymmetricColor(
 const gradientLegendPlugin = {
   id: 'gradientLegend',
   afterDraw(chart, args, options) {
-    if (!options?.display) return;
+    if (!options || !options.display) return;
     const Colors =
       options.colors ||
       chart.options.plugins?.gradientLegend?.colors ||
@@ -122,7 +136,6 @@ const gradientLegendPlugin = {
     const chartArea = chart.chartArea;
     const paletteKey = options.paletteKey || '';
     const isDivergentPalette = paletteKey.toLowerCase().includes('divergent');
-
     const computedScale = chart.options.colorScale || {};
     const minVal = computedScale.min ?? (isDivergentPalette ? -100 : 0);
     const neutralVal = computedScale.neutral ?? (isDivergentPalette ? 0 : 50);
@@ -210,7 +223,7 @@ const gradientLegendPlugin = {
       ctx.fillText(legendOptions.title, x, y - legendOptions.labelMargin);
     }
 
-    const drawRoundedRect = (xx, yy, w, h, radius) => {
+    function drawRoundedRect(xx, yy, w, h, radius) {
       ctx.beginPath();
       ctx.moveTo(xx + radius, yy);
       ctx.lineTo(xx + w - radius, yy);
@@ -222,7 +235,7 @@ const gradientLegendPlugin = {
       ctx.lineTo(xx, yy + radius);
       ctx.arcTo(xx, yy, xx + radius, yy, radius);
       ctx.closePath();
-    };
+    }
 
     ctx.fillStyle = '#fff';
     drawRoundedRect(
@@ -289,11 +302,13 @@ export const options = (ctx) => {
   const maxValue = allValues.length ? Math.max(...allValues) : 0;
   const isDivergent = paletteKey.toLowerCase().includes('divergent');
   const computedNeutral = isDivergent ? 0 : 50;
-  const legendPadding = ctx.options?.plugins?.gradientLegend?.display
-    ? { bottom: 30 }
-    : { bottom: 0 };
+  const legendEnabled = ctx.options?.plugins?.gradientLegend?.display;
+  const legendPadding = legendEnabled ? { bottom: 30 } : { bottom: 0 };
 
   return {
+    responsive: false,
+    maintainAspectRatio: true,
+    aspectRatio: 2,
     layout: { padding: legendPadding },
     plugins: {
       tooltip: {
@@ -305,33 +320,16 @@ export const options = (ctx) => {
             const v = context.dataset.data[context.dataIndex];
             const rowLabel = ctx.labels.y?.[v.y - 1] || ctx.labels[v.y - 1];
             const colLabel = ctx.labels.x?.[v.x - 1] || ctx.labels[v.x - 1];
-            const metadata = context.dataset.metadata;
-            if (!metadata) {
-              return [
-                `${rowLabel} - ${colLabel}`,
-                `Value: ${v.value ?? 'N/A'}`,
-              ];
-            }
-            const cellData = metadata.find(
-              (item) => item.x === v.x && item.y === v.y
-            );
-            return cellData
-              ? [
-                  `${rowLabel} - ${colLabel}`,
-                  ...Object.entries(cellData)
-                    .filter(([key]) => key !== 'x' && key !== 'y')
-                    .map(([key, value]) => `${key}: ${value}`),
-                ]
-              : [`${rowLabel} - ${colLabel}`, `Value: ${v.value ?? 'N/A'}`];
+            return [`${rowLabel} - ${colLabel}`, `Value: ${v.value ?? 'N/A'}`];
           },
         },
       },
       legend: { display: false },
       gradientLegend: {
-        display: ctx.options?.plugins?.gradientLegend?.display ?? false,
+        display: legendEnabled,
         position: 'bottom-left',
-        title: ctx.options?.plugins?.gradientLegend?.title ?? '',
-        margin: 15,
+        title: ctx.options?.plugins?.gradientLegend?.title || '',
+        margin: 0,
         height: 15,
         width: 280,
         opacity: defaultOpacity,
@@ -347,11 +345,9 @@ export const options = (ctx) => {
       max: maxValue,
       colors: Colors,
     },
-    legend: { display: false },
     scales: {
       x: {
         grid: { display: false },
-        maxTicksLimit: 15,
         min: 1,
         max: ctx.labels.x?.length ?? ctx.labels?.length ?? 3,
         offset: true,
@@ -360,17 +356,18 @@ export const options = (ctx) => {
           maxTicksLimit: 15,
           callback: (value) =>
             ctx.labels.x?.[value - 1] ?? ctx.labels?.[value - 1] ?? '',
-          padding: 20,
+          padding: function () {
+            return isFullScreen() ? 30 : 20;
+          },
         },
         afterFit(scale) {
-          if (ctx.options?.plugins?.gradientLegend?.display) {
+          if (legendEnabled) {
             scale.height -= 10;
           }
         },
       },
       y: {
         grid: { display: false },
-        maxTicksLimit: 15,
         min: 1,
         max: ctx.labels.y?.length ?? ctx.labels?.length ?? 3,
         ticks: {
@@ -378,6 +375,9 @@ export const options = (ctx) => {
           maxTicksLimit: 15,
           callback: (value) =>
             ctx.labels.y?.[value - 1] ?? ctx.labels?.[value - 1] ?? '',
+          padding: function () {
+            return isFullScreen() ? 15 : 8;
+          },
         },
       },
     },
@@ -391,25 +391,46 @@ export const datasetOptions = (ctx) => {
   const numRows = ctx.labels.y?.length ?? ctx.labels?.length ?? 3;
 
   return {
-    borderColor: 'transparent',
     borderWidth: 0,
-    width: ({ chart }) => (chart.chartArea?.width ?? 0) / numCols - 2,
-    height: ({ chart }) => (chart.chartArea?.height ?? 0) / numRows - 1,
-    backgroundColor: ({ raw }) =>
-      raw.value !== undefined
-        ? getPresetSymmetricColor(
-            raw.value,
-            Colors,
-            50,
-            15,
-            defaultOpacity,
-            paletteKey
-          )
-        : 'rgba(204, 204, 204, 0.8)',
-    hoverBackgroundColor: ({ raw }) =>
-      raw.value !== undefined
-        ? getPresetSymmetricColor(raw.value, Colors, 50, 15, 1, paletteKey)
-        : '#999',
+    borderColor: 'transparent',
+    width({ chart }) {
+      const gap = 2;
+      const totalWidth = chart.chartArea?.width ?? 0;
+      const cellWidth = totalWidth / numCols - gap;
+      return cellWidth > 0 ? cellWidth : 1;
+    },
+    height({ chart }) {
+      const gap = 0;
+      const totalHeight = chart.chartArea?.height ?? 0;
+      const cellHeight = totalHeight / numRows - gap;
+      return isFullScreen() ? totalHeight / 11.75 : Math.min(cellHeight, 60);
+    },
+    backgroundColor({ raw }) {
+      if (raw?.value !== undefined) {
+        return getPresetSymmetricColor(
+          raw.value,
+          Colors,
+          50,
+          15,
+          defaultOpacity,
+          paletteKey
+        );
+      }
+      return 'rgba(204, 204, 204, 0.8)';
+    },
+    hoverBackgroundColor({ raw }) {
+      if (raw?.value !== undefined) {
+        return getPresetSymmetricColor(
+          raw.value,
+          Colors,
+          50,
+          15,
+          1,
+          paletteKey
+        );
+      }
+      return '#999';
+    },
   };
 };
 

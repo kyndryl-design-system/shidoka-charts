@@ -3,7 +3,7 @@ import '../components/chart';
 import argTypes from '../common/config/chartArgTypes';
 import { createMatrixData } from '../common/config/chartTypes/matrix';
 import heatmapData from './sampleData/heatmap';
-import divergentHeatmapData from './sampleData/divergentHeatmapData';
+import divergentHeatmapData from './sampleData/divergent-heatmap';
 
 export default {
   title: 'Third Party Charts/Heatmap',
@@ -193,12 +193,12 @@ export const HideLegend = {
   },
   render: (args) => {
     const options = {
-      colorPalette: args.colorPalette,
+      colorPalette: 'sequential04',
       plugins: {
         gradientLegend: {
           display: false,
           title: '',
-          paletteKey: args.colorPalette,
+          paletteKey: '',
         },
       },
       scales: {
