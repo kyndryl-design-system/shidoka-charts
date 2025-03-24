@@ -107,6 +107,10 @@ export const Default = {
     datasets: [defaultDataset],
   },
   render: (args) => {
+    const datasets = args.colorPalette.toLowerCase().includes('divergent')
+      ? [divergentDataset]
+      : [defaultDataset];
+
     const options = {
       colorPalette: args.colorPalette,
       plugins: {
@@ -129,7 +133,7 @@ export const Default = {
         .chartTitle=${args.chartTitle}
         .description=${args.description}
         .labels=${args.labels}
-        .datasets=${args.datasets}
+        .datasets=${datasets}
         .options=${options}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
@@ -150,6 +154,10 @@ export const Divergent = {
     datasets: [divergentDataset],
   },
   render: (args) => {
+    const datasets = args.colorPalette.toLowerCase().includes('divergent')
+      ? [divergentDataset]
+      : [defaultDataset];
+
     const options = {
       colorPalette: args.colorPalette,
       plugins: {
@@ -172,7 +180,7 @@ export const Divergent = {
         .chartTitle=${args.chartTitle}
         .description=${args.description}
         .labels=${args.labels}
-        .datasets=${args.datasets}
+        .datasets=${datasets}
         .options=${options}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
