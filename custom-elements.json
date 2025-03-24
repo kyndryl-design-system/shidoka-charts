@@ -341,6 +341,14 @@
               "attribute": "customLabels"
             },
             {
+              "kind": "field",
+              "name": "_themeObserver",
+              "type": {
+                "text": "any"
+              },
+              "default": "new MutationObserver(() => {\n    if (this.chart) {\n      this.mergeOptions().then(() => {\n        this.initChart();\n      });\n    }\n  })"
+            },
+            {
               "kind": "method",
               "name": "_resizeChart",
               "privacy": "private"

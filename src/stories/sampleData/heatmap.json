@@ -1,0 +1,602 @@
+[
+  {
+    "assetType": "A",
+    "month": "January",
+    "value": 41
+  },
+  {
+    "assetType": "B",
+    "month": "January",
+    "value": 7
+  },
+  {
+    "assetType": "C",
+    "month": "January",
+    "value": 66
+  },
+  {
+    "assetType": "D",
+    "month": "January",
+    "value": 85
+  },
+  {
+    "assetType": "E",
+    "month": "January",
+    "value": 70
+  },
+  {
+    "assetType": "F",
+    "month": "January",
+    "value": 98
+  },
+  {
+    "assetType": "G",
+    "month": "January",
+    "value": 90
+  },
+  {
+    "assetType": "H",
+    "month": "January",
+    "value": 66
+  },
+  {
+    "assetType": "I",
+    "month": "January",
+    "value": 0
+  },
+  {
+    "assetType": "J",
+    "month": "January",
+    "value": 13
+  },
+  {
+    "assetType": "A",
+    "month": "February",
+    "value": 16
+  },
+  {
+    "assetType": "B",
+    "month": "February",
+    "value": 5
+  },
+  {
+    "assetType": "C",
+    "month": "February",
+    "value": 6
+  },
+  {
+    "assetType": "D",
+    "month": "February",
+    "value": 48
+  },
+  {
+    "assetType": "E",
+    "month": "February",
+    "value": 72
+  },
+  {
+    "assetType": "F",
+    "month": "February",
+    "value": 26
+  },
+  {
+    "assetType": "G",
+    "month": "February",
+    "value": 70
+  },
+  {
+    "assetType": "H",
+    "month": "February",
+    "value": 99
+  },
+  {
+    "assetType": "I",
+    "month": "February",
+    "value": 79
+  },
+  {
+    "assetType": "J",
+    "month": "February",
+    "value": 83
+  },
+  {
+    "assetType": "A",
+    "month": "March",
+    "value": 62
+  },
+  {
+    "assetType": "B",
+    "month": "March",
+    "value": 57
+  },
+  {
+    "assetType": "C",
+    "month": "March",
+    "value": 90
+  },
+  {
+    "assetType": "D",
+    "month": "March",
+    "value": 68
+  },
+  {
+    "assetType": "E",
+    "month": "March",
+    "value": 84
+  },
+  {
+    "assetType": "F",
+    "month": "March",
+    "value": 21
+  },
+  {
+    "assetType": "G",
+    "month": "March",
+    "value": 54
+  },
+  {
+    "assetType": "H",
+    "month": "March",
+    "value": 25
+  },
+  {
+    "assetType": "I",
+    "month": "March",
+    "value": 42
+  },
+  {
+    "assetType": "J",
+    "month": "March",
+    "value": 62
+  },
+  {
+    "assetType": "A",
+    "month": "April",
+    "value": 15
+  },
+  {
+    "assetType": "B",
+    "month": "April",
+    "value": 52
+  },
+  {
+    "assetType": "C",
+    "month": "April",
+    "value": 15
+  },
+  {
+    "assetType": "D",
+    "month": "April",
+    "value": 22
+  },
+  {
+    "assetType": "E",
+    "month": "April",
+    "value": 59
+  },
+  {
+    "assetType": "F",
+    "month": "April",
+    "value": 36
+  },
+  {
+    "assetType": "G",
+    "month": "April",
+    "value": 5
+  },
+  {
+    "assetType": "H",
+    "month": "April",
+    "value": 18
+  },
+  {
+    "assetType": "I",
+    "month": "April",
+    "value": 42
+  },
+  {
+    "assetType": "J",
+    "month": "April",
+    "value": 72
+  },
+  {
+    "assetType": "A",
+    "month": "May",
+    "value": 30
+  },
+  {
+    "assetType": "B",
+    "month": "May",
+    "value": 39
+  },
+  {
+    "assetType": "C",
+    "month": "May",
+    "value": 69
+  },
+  {
+    "assetType": "D",
+    "month": "May",
+    "value": 73
+  },
+  {
+    "assetType": "E",
+    "month": "May",
+    "value": 2
+  },
+  {
+    "assetType": "F",
+    "month": "May",
+    "value": 15
+  },
+  {
+    "assetType": "G",
+    "month": "May",
+    "value": 86
+  },
+  {
+    "assetType": "H",
+    "month": "May",
+    "value": 23
+  },
+  {
+    "assetType": "I",
+    "month": "May",
+    "value": 65
+  },
+  {
+    "assetType": "J",
+    "month": "May",
+    "value": 0
+  },
+  {
+    "assetType": "A",
+    "month": "June",
+    "value": 51
+  },
+  {
+    "assetType": "B",
+    "month": "June",
+    "value": 30
+  },
+  {
+    "assetType": "C",
+    "month": "June",
+    "value": 7
+  },
+  {
+    "assetType": "D",
+    "month": "June",
+    "value": 74
+  },
+  {
+    "assetType": "E",
+    "month": "June",
+    "value": 44
+  },
+  {
+    "assetType": "F",
+    "month": "June",
+    "value": 62
+  },
+  {
+    "assetType": "G",
+    "month": "June",
+    "value": 65
+  },
+  {
+    "assetType": "H",
+    "month": "June",
+    "value": 35
+  },
+  {
+    "assetType": "I",
+    "month": "June",
+    "value": 95
+  },
+  {
+    "assetType": "J",
+    "month": "June",
+    "value": 59
+  },
+  {
+    "assetType": "A",
+    "month": "July",
+    "value": 89
+  },
+  {
+    "assetType": "B",
+    "month": "July",
+    "value": 50
+  },
+  {
+    "assetType": "C",
+    "month": "July",
+    "value": 35
+  },
+  {
+    "assetType": "D",
+    "month": "July",
+    "value": 45
+  },
+  {
+    "assetType": "E",
+    "month": "July",
+    "value": 93
+  },
+  {
+    "assetType": "F",
+    "month": "July",
+    "value": 19
+  },
+  {
+    "assetType": "G",
+    "month": "July",
+    "value": 52
+  },
+  {
+    "assetType": "H",
+    "month": "July",
+    "value": 81
+  },
+  {
+    "assetType": "I",
+    "month": "July",
+    "value": 72
+  },
+  {
+    "assetType": "J",
+    "month": "July",
+    "value": 99
+  },
+  {
+    "assetType": "A",
+    "month": "August",
+    "value": 54
+  },
+  {
+    "assetType": "B",
+    "month": "August",
+    "value": 41
+  },
+  {
+    "assetType": "C",
+    "month": "August",
+    "value": 75
+  },
+  {
+    "assetType": "D",
+    "month": "August",
+    "value": 10
+  },
+  {
+    "assetType": "E",
+    "month": "August",
+    "value": 0
+  },
+  {
+    "assetType": "F",
+    "month": "August",
+    "value": 93
+  },
+  {
+    "assetType": "G",
+    "month": "August",
+    "value": 3
+  },
+  {
+    "assetType": "H",
+    "month": "August",
+    "value": 80
+  },
+  {
+    "assetType": "I",
+    "month": "August",
+    "value": 88
+  },
+  {
+    "assetType": "J",
+    "month": "August",
+    "value": 27
+  },
+  {
+    "assetType": "A",
+    "month": "September",
+    "value": 81
+  },
+  {
+    "assetType": "B",
+    "month": "September",
+    "value": 36
+  },
+  {
+    "assetType": "C",
+    "month": "September",
+    "value": 77
+  },
+  {
+    "assetType": "D",
+    "month": "September",
+    "value": 1
+  },
+  {
+    "assetType": "E",
+    "month": "September",
+    "value": 45
+  },
+  {
+    "assetType": "F",
+    "month": "September",
+    "value": 23
+  },
+  {
+    "assetType": "G",
+    "month": "September",
+    "value": 1
+  },
+  {
+    "assetType": "H",
+    "month": "September",
+    "value": 13
+  },
+  {
+    "assetType": "I",
+    "month": "September",
+    "value": 61
+  },
+  {
+    "assetType": "J",
+    "month": "September",
+    "value": 87
+  },
+  {
+    "assetType": "A",
+    "month": "October",
+    "value": 5
+  },
+  {
+    "assetType": "B",
+    "month": "October",
+    "value": 29
+  },
+  {
+    "assetType": "C",
+    "month": "October",
+    "value": 49
+  },
+  {
+    "assetType": "D",
+    "month": "October",
+    "value": 81
+  },
+  {
+    "assetType": "E",
+    "month": "October",
+    "value": 5
+  },
+  {
+    "assetType": "F",
+    "month": "October",
+    "value": 6
+  },
+  {
+    "assetType": "G",
+    "month": "October",
+    "value": 3
+  },
+  {
+    "assetType": "H",
+    "month": "October",
+    "value": 72
+  },
+  {
+    "assetType": "I",
+    "month": "October",
+    "value": 27
+  },
+  {
+    "assetType": "J",
+    "month": "October",
+    "value": 99
+  },
+  {
+    "assetType": "A",
+    "month": "November",
+    "value": 25
+  },
+  {
+    "assetType": "B",
+    "month": "November",
+    "value": 11
+  },
+  {
+    "assetType": "C",
+    "month": "November",
+    "value": 54
+  },
+  {
+    "assetType": "D",
+    "month": "November",
+    "value": 90
+  },
+  {
+    "assetType": "E",
+    "month": "November",
+    "value": 21
+  },
+  {
+    "assetType": "F",
+    "month": "November",
+    "value": 5
+  },
+  {
+    "assetType": "G",
+    "month": "November",
+    "value": 41
+  },
+  {
+    "assetType": "H",
+    "month": "November",
+    "value": 4
+  },
+  {
+    "assetType": "I",
+    "month": "November",
+    "value": 31
+  },
+  {
+    "assetType": "J",
+    "month": "November",
+    "value": 22
+  },
+  {
+    "assetType": "A",
+    "month": "December",
+    "value": 99
+  },
+  {
+    "assetType": "B",
+    "month": "December",
+    "value": 54
+  },
+  {
+    "assetType": "C",
+    "month": "December",
+    "value": 85
+  },
+  {
+    "assetType": "D",
+    "month": "December",
+    "value": 39
+  },
+  {
+    "assetType": "E",
+    "month": "December",
+    "value": 45
+  },
+  {
+    "assetType": "F",
+    "month": "December",
+    "value": 24
+  },
+  {
+    "assetType": "G",
+    "month": "December",
+    "value": 87
+  },
+  {
+    "assetType": "H",
+    "month": "December",
+    "value": 69
+  },
+  {
+    "assetType": "I",
+    "month": "December",
+    "value": 59
+  },
+  {
+    "assetType": "J",
+    "month": "December",
+    "value": 44
+  }
+]

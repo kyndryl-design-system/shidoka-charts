@@ -92,7 +92,6 @@ export const CountryChoropleth = {
         label: 'Population',
         outline: nation,
         data: states.map((d) => {
-          console.log(d.properties.name);
           return {
             feature: d,
             value: d.properties.name.length * 10,
