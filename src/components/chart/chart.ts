@@ -822,9 +822,7 @@ export class KDChart extends LitElement {
 
     // add bg color to canvas
     const context: any = this.canvas.getContext('2d');
-    const color = getComputedStyle(document.documentElement).getPropertyValue(
-      '--kd-color-background-page-default'
-    );
+    const color = getTokenThemeVal('--kd-color-background-page-default');
     context.save();
     context.globalCompositeOperation = 'destination-over';
     context.fillStyle = color;
