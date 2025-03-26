@@ -820,15 +820,28 @@ export class KDChart extends LitElement {
   private handleDownloadImage(e: Event, jpeg: boolean) {
     e.preventDefault();
 
+    // add bg color to canvas
+    const context: any = this.canvas.getContext('2d');
+    const color = getTokenThemeVal('--kd-color-background-page-default');
+    context.save();
+    context.globalCompositeOperation = 'destination-over';
+    context.fillStyle = color;
+    context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    // set image format
     const imgFormat = jpeg ? 'image/jpeg' : 'image/png';
     const fileExt = jpeg ? 'jpg' : 'png';
-    const a = document.createElement('a');
 
+    // create a fake link to download the image
+    const a = document.createElement('a');
     a.href = this.chart.toBase64Image(imgFormat, 1);
     a.download = this.chartTitle + '.' + fileExt;
 
     // trigger the download
     a.click();
+
+    // remove canvas bg color
+    context.restore();
   }
 
   private handleDownloadCsv(e: Event) {
