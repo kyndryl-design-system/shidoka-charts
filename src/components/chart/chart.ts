@@ -291,6 +291,7 @@ export class KDChart extends LitElement {
                             ${!this.tableDisabled
                               ? html`
                                   <button
+                                    tabindex="0"
                                     @click=${(e: Event) =>
                                       this.handleDownloadCsv(e)}
                                   >
@@ -299,12 +300,14 @@ export class KDChart extends LitElement {
                                 `
                               : null}
                             <button
+                              tabindex="0"
                               @click=${(e: Event) =>
                                 this.handleDownloadImage(e, false)}
                             >
                               ${this.customLabels.downloadPng}
                             </button>
                             <button
+                              tabindex="0"
                               @click=${(e: Event) =>
                                 this.handleDownloadImage(e, true)}
                             >
