@@ -1,7 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
 import argTypes from '../common/config/chartArgTypes';
-import { getRandomData } from '../common/helpers/helpers';
 
 export default {
   title: 'Charts/Bar',
