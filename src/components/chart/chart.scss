@@ -53,12 +53,67 @@ figure {
   }
 }
 
+.html-legend-container {
+  margin-top: 12px;
+  width: 100%;
+
+  .scrollable-legend {
+    overflow-y: auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    border-radius: 4px;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    ul.legend-items {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 0;
+      padding: 8px 0;
+      list-style: none;
+      width: 100%;
+
+      li {
+        display: flex;
+        align-items: center;
+        margin: 0 12px 8px 0;
+        font-size: 12px;
+        cursor: pointer;
+        transition: opacity 0.2s ease;
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+}
+
 .hidden-visually {
   @include mixins.visually-hidden;
 }
 
 .canvas-container {
-  // width: 100%;
   height: 100%;
   flex-grow: 1;
 
@@ -74,7 +129,6 @@ div:focus-visible {
 }
 
 .table {
-  // width: 100%;
   flex-grow: 1;
   overflow: auto;
 

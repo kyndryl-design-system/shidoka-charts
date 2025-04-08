@@ -18,16 +18,16 @@ const defaultConfig = (ctx) => {
         color: 'transparent',
       },
       legend: {
+        display: false, // Disable default canvas legend, we'll use HTML legend
+      },
+      customLegend: {
         position: 'bottom',
-        labels: {
-          boxWidth: 16,
-          boxHeight: 16,
-          borderRadius: 2,
-          useBorderRadius: true,
-          padding: 8,
-        },
-        // onHover: handleLegendHover, // doesn't work with transparent or gradient bgs
-        // onLeave: handleLegendLeave,
+        maxHeight: 100,
+        boxWidth: 16,
+        boxHeight: 16,
+        borderRadius: 2,
+        useBorderRadius: true,
+        padding: 8,
       },
       tooltip: {
         bodyColor: TooltipTextColor,

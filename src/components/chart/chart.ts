@@ -18,6 +18,7 @@ import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
 import gradientLegendPlugin from '../../common/plugins/gradientLegend';
+import { generateScrollableLegend } from '../../common/plugins/htmlLegend';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import datalabelsPlugin from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
@@ -343,6 +344,8 @@ export class KDChart extends LitElement {
                 : ''}"
             ></div>
           </figcaption>
+
+          <div class="html-legend-container"></div>
         </figure>
 
         ${!this.tableDisabled && this.tableView
@@ -578,6 +581,24 @@ export class KDChart extends LitElement {
     this._resizeObserver.observe(el);
   }
 
+  private generateScrollableLegend() {
+    if (!this.chart) return;
+
+    const legendContainer = this.shadowRoot?.querySelector(
+      '.html-legend-container'
+    );
+    if (!legendContainer) return;
+
+    const legendOptions = this.mergedOptions.plugins.customLegend;
+
+    generateScrollableLegend(this.chart, legendContainer as HTMLElement, {
+      maxHeight: legendOptions?.maxHeight || 100,
+      boxWidth: legendOptions?.boxWidth || 16,
+      boxHeight: legendOptions?.boxHeight || 16,
+      borderRadius: legendOptions?.borderRadius || 2,
+    });
+  }
+
   override updated(changedProps: any) {
     // Update chart instance when data changes.
     if (
@@ -620,6 +641,8 @@ export class KDChart extends LitElement {
         });
 
         this.chart.update();
+
+        this.generateScrollableLegend();
       });
     }
 
@@ -680,13 +703,6 @@ export class KDChart extends LitElement {
     // ).getPropertyValue('--kd-font-family-secondary');
     Chart.defaults.color = getTokenThemeVal('--kd-color-text-level-primary');
 
-    // let plugins = [
-    //   canvasBackgroundPlugin,
-    //   doughnutLabelPlugin,
-    //   meterGaugePlugin,
-    //   ...this.plugins,
-    // ];
-
     // Select plugin when type='meter'. Otherwise both plugins (meterGaugePlugin & doughnutLabelPlugin) are called
     const pluginSelectForDoghnutMeter =
       this.type === 'meter' ? meterGaugePlugin : doughnutLabelPlugin;
@@ -718,6 +734,8 @@ export class KDChart extends LitElement {
       options: this.mergedOptions,
       plugins: plugins,
     });
+
+    this.generateScrollableLegend();
   }
 
   /**
