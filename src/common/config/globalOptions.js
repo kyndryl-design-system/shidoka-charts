@@ -18,7 +18,7 @@ const defaultConfig = (ctx) => {
         color: 'transparent',
       },
       legend: {
-        display: false, // Disable default canvas legend, we'll use HTML legend
+        display: false, // disable default canvas legend, use HTML legend
       },
       customLegend: {
         position: 'bottom',

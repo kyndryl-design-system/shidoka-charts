@@ -46,11 +46,30 @@ function shouldUseLabelBasedLegend(chart) {
 export function generateScrollableLegend(chart, container, options = {}) {
   if (!chart || !container) return;
 
-  // don't show the legend for the following chart types
-  const noLegendChartTypes = ['choropleth', 'treemap', 'bubbleMap', 'matrix'];
-  if (noLegendChartTypes.includes(chart.config.type)) {
+  const showLegendChartTypes = [
+    'bar',
+    'line',
+    'pie',
+    'doughnut',
+    'polarArea',
+    'radar',
+    'scatter',
+    'bubble',
+  ];
+
+  if (!showLegendChartTypes.includes(chart.config.type)) {
     container.innerHTML = '';
     return;
+  }
+
+  if (chart.config.type === 'doughnut') {
+    const hasMeterProperties = chart.data.datasets.some(
+      (dataset) => 'needleValue' in dataset
+    );
+    if (hasMeterProperties) {
+      container.innerHTML = '';
+      return;
+    }
   }
 
   container.innerHTML = '';
@@ -123,27 +142,17 @@ export function generateScrollableLegend(chart, container, options = {}) {
       li.appendChild(text);
 
       li.addEventListener('click', () => {
-        chart.data.datasets.forEach((ds, dsIndex) => {
-          const meta = chart.getDatasetMeta(dsIndex);
+        const isCurrentlyHidden = chart.getDataVisibility(index) === false;
 
-          const dataPoint = meta.data[index];
-          if (!dataPoint) return;
+        chart.toggleDataVisibility(index);
 
-          if (!dataPoint._custom) {
-            dataPoint._custom = { hidden: false };
-          }
-
-          dataPoint._custom.hidden = !dataPoint._custom.hidden;
-          if (dataPoint._custom.hidden) {
-            dataPoint.hidden = true;
-            li.style.opacity = '0.5';
-            li.style.textDecoration = 'line-through';
-          } else {
-            dataPoint.hidden = false;
-            li.style.opacity = '1';
-            li.style.textDecoration = 'none';
-          }
-        });
+        if (!isCurrentlyHidden) {
+          li.style.opacity = '0.5';
+          li.style.textDecoration = 'line-through';
+        } else {
+          li.style.opacity = '1';
+          li.style.textDecoration = 'none';
+        }
 
         chart.update();
       });
