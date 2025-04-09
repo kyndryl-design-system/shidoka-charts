@@ -5,22 +5,6 @@
  * Can be used as a replacement for the default Chart.js canvas-based legend.
  */
 
-/**
- * Creates a scrollable HTML legend for a Chart.js chart
- *
- * @param {Object} chart - The Chart.js chart instance
- * @param {HTMLElement} container - The container element to place the legend
- * @param {Object} options - Configuration options for the legend
- * @param {number} options.maxHeight - Maximum height for the legend container (px)
- * @param {number} options.boxWidth - Width of the color boxes (px)
- * @param {number} options.boxHeight - Height of the color boxes (px)
- * @param {number} options.borderRadius - Border radius of the color boxes (px)
- */
-/**
- * Determines whether to use labels or datasets for the legend
- * @param {Object} chart - The Chart.js chart instance
- * @returns {boolean} True if labels should be used, false if datasets should be used
- */
 function shouldUseLabelBasedLegend(chart) {
   const labelBasedChartTypes = ['pie', 'doughnut', 'polarArea'];
 
