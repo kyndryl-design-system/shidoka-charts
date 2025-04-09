@@ -46,6 +46,13 @@ function shouldUseLabelBasedLegend(chart) {
 export function generateScrollableLegend(chart, container, options = {}) {
   if (!chart || !container) return;
 
+  // don't show the legend for the following chart types
+  const noLegendChartTypes = ['choropleth', 'treemap', 'bubbleMap', 'matrix'];
+  if (noLegendChartTypes.includes(chart.config.type)) {
+    container.innerHTML = '';
+    return;
+  }
+
   container.innerHTML = '';
 
   const legendOptions = {
@@ -163,7 +170,10 @@ export function generateScrollableLegend(chart, container, options = {}) {
 
       let color;
 
-      if (chart.config.type === 'line' && dataset.borderColor) {
+      if (
+        (chart.config.type === 'line' || dataset.type === 'line') &&
+        dataset.borderColor
+      ) {
         const borderColor = dataset.borderColor;
         color = Array.isArray(borderColor)
           ? borderColor[0]
