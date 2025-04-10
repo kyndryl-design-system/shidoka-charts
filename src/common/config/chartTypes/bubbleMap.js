@@ -61,6 +61,20 @@ export const options = (ctx) => {
         border: {
           color: LegendTicksColor,
         },
+        min: function () {
+          if (ctx.datasets && ctx.datasets.length > 0) {
+            const allData = ctx.datasets.flatMap(
+              (dataset) => dataset.data || []
+            );
+            if (allData.length > 0) {
+              const minValue = Math.min(
+                ...allData.map((item) => item.value || 0)
+              );
+              return minValue;
+            }
+          }
+          return undefined;
+        },
       },
     },
   };

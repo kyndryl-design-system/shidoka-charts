@@ -1,8 +1,5 @@
 /**
  * HTML Legend Generator for Chart.js
- *
- * Creates a scrollable HTML legend that uses the chart's labels instead of dataset titles.
- * Can be used as a replacement for the default Chart.js canvas-based legend.
  */
 
 function shouldUseLabelBasedLegend(chart) {
@@ -60,8 +57,8 @@ export function generateScrollableLegend(chart, container, options = {}) {
 
   const legendOptions = {
     maxHeight: options.maxHeight || 100,
-    boxWidth: options.boxWidth || 16,
-    boxHeight: options.boxHeight || 16,
+    boxWidth: options.boxWidth || 12,
+    boxHeight: options.boxHeight || 12,
     borderRadius: options.borderRadius || 2,
   };
 
@@ -144,7 +141,7 @@ export function generateScrollableLegend(chart, container, options = {}) {
       ul.appendChild(li);
     });
   } else {
-    chart.data.datasets.forEach((dataset, datasetIndex) => {
+    chart.data.datasets.forEach((dataset) => {
       if (!dataset.label) return;
 
       const li = document.createElement('li');
@@ -183,7 +180,31 @@ export function generateScrollableLegend(chart, container, options = {}) {
           : bgColor;
       }
 
-      colorBox.style.backgroundColor = color;
+      if (
+        dataset.type === 'line' ||
+        ['bubble', 'line', 'radar', 'scatter'].indexOf(chart.config.type) > -1
+      ) {
+        let rgba = color;
+
+        if (color.startsWith('#')) {
+          const r = parseInt(color.slice(1, 3), 16);
+          const g = parseInt(color.slice(3, 5), 16);
+          const b = parseInt(color.slice(5, 7), 16);
+          rgba = `rgba(${r}, ${g}, ${b}, 0.4)`;
+        } else if (color.startsWith('rgb(')) {
+          rgba = color.replace('rgb(', 'rgba(').replace(')', ', 0.4)');
+        } else if (color.startsWith('rgba(')) {
+          rgba = color.replace(/[\d.]+\)$/, '0.4)');
+        }
+
+        colorBox.style.backgroundColor = rgba;
+        colorBox.style.border =
+          chart.config.type === 'bubble' || chart.config.type === 'scatter'
+            ? `1.5px solid ${color}`
+            : `2px solid ${color}`;
+      } else {
+        colorBox.style.backgroundColor = color;
+      }
 
       const text = document.createTextNode(dataset.label);
 
