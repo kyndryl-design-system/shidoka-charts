@@ -66,11 +66,11 @@ export const options = (ctx) => {
             const allData = ctx.datasets.flatMap(
               (dataset) => dataset.data || []
             );
-            if (allData.length > 0) {
-              const minValue = Math.min(
-                ...allData.map((item) => item.value || 0)
-              );
-              return minValue;
+            const validValues = allData
+              .map((item) => item.value)
+              .filter((v) => typeof v === 'number');
+            if (validValues.length > 0) {
+              return Math.min(...validValues);
             }
           }
           return undefined;
