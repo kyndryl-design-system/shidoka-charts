@@ -161,7 +161,7 @@ export const DoughnutCustomCenterLabel = {
   },
 };
 
-export const DoughnutLargeLegend = {
+export const DoughnutLegendOverflow = {
   args: {
     ...args,
     labels: [
