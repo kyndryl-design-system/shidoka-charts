@@ -123,7 +123,8 @@ figure {
 }
 
 canvas:focus-visible,
-div:focus-visible {
+div:focus-visible,
+.scrollable-legend:focus-visible {
   border-radius: 4px;
   outline: 2px solid var(--kd-color-border-variants-focus);
 }

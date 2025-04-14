@@ -65,6 +65,10 @@ export function generateScrollableLegend(chart, container, options = {}) {
   const scrollableContainer = document.createElement('div');
   scrollableContainer.className = 'scrollable-legend';
 
+  scrollableContainer.setAttribute('tabindex', '0');
+  scrollableContainer.setAttribute('role', 'group');
+  scrollableContainer.setAttribute('aria-label', 'Chart legend');
+
   scrollableContainer.style.maxHeight = `${legendOptions.maxHeight}px`;
   scrollableContainer.style.overflowY = 'auto';
   scrollableContainer.style.display = 'flex';
