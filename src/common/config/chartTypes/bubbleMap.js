@@ -61,20 +61,6 @@ export const options = (ctx) => {
         border: {
           color: LegendTicksColor,
         },
-        min: function () {
-          if (ctx.datasets && ctx.datasets.length > 0) {
-            const allData = ctx.datasets.flatMap(
-              (dataset) => dataset.data || []
-            );
-            const validValues = allData
-              .map((item) => item.value)
-              .filter((v) => typeof v === 'number');
-            if (validValues.length > 0) {
-              return Math.min(...validValues);
-            }
-          }
-          return undefined;
-        },
       },
     },
   };

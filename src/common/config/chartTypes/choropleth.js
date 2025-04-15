@@ -28,20 +28,6 @@ export const options = (ctx) => {
       },
       color: {
         axis: 'x',
-        min: function () {
-          if (ctx.datasets && ctx.datasets.length > 0) {
-            const allData = ctx.datasets.flatMap(
-              (dataset) => dataset.data || []
-            );
-            const validValues = allData
-              .map((item) => item.value)
-              .filter((v) => typeof v === 'number');
-            if (validValues.length > 0) {
-              return Math.min(...validValues);
-            }
-          }
-          return undefined;
-        },
         interpolate: (value) => {
           const Colors = getComputedColorPalette(
             ctx.options.colorPalette || 'sequential01'
