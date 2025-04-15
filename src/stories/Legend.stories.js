@@ -279,7 +279,6 @@ export const DoughnutLegendOverflow = {
   render: (args) => {
     return html`
       <style>
-        /* Custom CSS to ensure overflow works in story */
         .overflow-legend-container .shidoka-legend-scroll-content {
           max-height: 200px !important;
           overflow-y: auto !important;
