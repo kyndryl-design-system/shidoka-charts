@@ -14,7 +14,14 @@ export default {
       url: 'https://www.figma.com/file/9NrpK3rmbOk0lhlFkEPSaO/Data-Viz-Component-Library?node-id=64%3A4378&mode=dev',
     },
   },
-  argTypes: argTypes,
+  argTypes: {
+    ...argTypes,
+    useHtmlLegend: {
+      table: {
+        disable: true,
+      },
+    },
+  },
 };
 
 const args = {
@@ -49,7 +56,6 @@ const args = {
   noBorder: false,
   width: null,
   height: null,
-  useHtmlLegend: false,
 };
 
 export const Pie = {
@@ -67,7 +73,6 @@ export const Pie = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
-        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -94,7 +99,6 @@ export const Doughnut = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
-        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -150,114 +154,6 @@ export const DoughnutCustomCenterLabel = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
-        ?useHtmlLegend=${args.useHtmlLegend}
-        .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
-      ></kd-chart>
-    `;
-  },
-  parameters: {
-    design: {
-      type: 'figma',
-      url: 'https://www.figma.com/file/9NrpK3rmbOk0lhlFkEPSaO/Data-Viz-Component-Library?node-id=64%3A4703&mode=dev',
-    },
-  },
-};
-
-export const DoughnutLegendOverflow = {
-  args: {
-    ...args,
-    labels: [
-      'Blue',
-      'Red',
-      'Orange',
-      'Yellow',
-      'Green',
-      'Purple',
-      'Red1',
-      'Orange1',
-      'Yellow1',
-      'Green1',
-      'Purple1',
-      'Red2',
-      'Orange2',
-      'Yellow2',
-      'Green2',
-      'Purple2',
-      'Red3',
-      'Orange3',
-      'Yellow3',
-      'Green3',
-      'Purple3',
-      'Red4',
-      'Orange4',
-      'Yellow4',
-      'Green4',
-      'Purple4',
-      'Red5',
-      'Orange5',
-      'Yellow5',
-      'Green5',
-      'Purple5',
-      'Red6',
-      'Orange6',
-      'Yellow6',
-      'Green6',
-      'Purple6',
-      'Red7',
-      'Orange7',
-      'Yellow7',
-    ],
-    datasets: [
-      {
-        label: 'Dataset 1',
-        data: [
-          120, 190, 300, 500, 200, 300, 120, 190, 300, 500, 200, 300, 120, 190,
-          300, 500, 200, 300, 120, 190, 300, 500, 200, 300, 120, 190, 300, 500,
-          200, 300, 120, 190, 300, 500, 200, 300, 120, 190, 300,
-        ],
-      },
-    ],
-    chartTitle: 'Doughnut Chart',
-    description: 'With over-crowded legend to illustrate overflow.',
-    options: {
-      doughnutLabel: {
-        line1text: function (defaultValue, context) {
-          // example: add commas to total number
-          return defaultValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        },
-        line2text: 'Test',
-        line2fontSize: '12px',
-      },
-      scales: {
-        x: {
-          title: {
-            text: 'Color',
-          },
-        },
-        y: {
-          title: {
-            text: 'Votes',
-          },
-        },
-      },
-    },
-  },
-  render: (args) => {
-    return html`
-      <kd-chart
-        type="doughnut"
-        .chartTitle=${args.chartTitle}
-        .description=${args.description}
-        .labels=${args.labels}
-        .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
-        ?useHtmlLegend=${true}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}

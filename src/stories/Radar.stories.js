@@ -14,7 +14,14 @@ export default {
       url: '',
     },
   },
-  argTypes: argTypes,
+  argTypes: {
+    ...argTypes,
+    useHtmlLegend: {
+      table: {
+        disable: true,
+      },
+    },
+  },
 };
 
 const args = {
@@ -53,7 +60,6 @@ const args = {
   noBorder: false,
   width: null,
   height: null,
-  useHtmlLegend: false,
 };
 
 export const Radar = {
@@ -71,7 +77,6 @@ export const Radar = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
-        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}

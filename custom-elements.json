@@ -359,7 +359,7 @@
               "type": {
                 "text": "boolean"
               },
-              "default": "true",
+              "default": "false",
               "description": "Use HTML legend instead of Chart.js built-in canvas legend.",
               "privacy": "public",
               "attribute": "useHtmlLegend"
@@ -578,7 +578,7 @@
               "type": {
                 "text": "boolean"
               },
-              "default": "true",
+              "default": "false",
               "description": "Use HTML legend instead of Chart.js built-in canvas legend.",
               "fieldName": "useHtmlLegend"
             }

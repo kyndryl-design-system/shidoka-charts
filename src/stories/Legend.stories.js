@@ -6,7 +6,6 @@ import {
   renderBoxedLegend,
 } from '../common/legend';
 import argTypes from '../common/config/chartArgTypes';
-import { getComputedColorPalette } from '../common/config/colorPalettes';
 
 export default {
   title: 'Guidelines/Legend',
@@ -18,8 +17,16 @@ export default {
     useHtmlLegend: {
       control: { type: 'boolean' },
       description: 'Use HTML legend instead of Canvas legend',
+      defaultValue: false,
     },
-    ...argTypes,
+    argTypes: {
+      ...argTypes,
+      useHtmlLegend: {
+        table: {
+          disable: true,
+        },
+      },
+    },
   },
 };
 
@@ -101,13 +108,57 @@ const manyLabels = [
   'Mint',
   'Ivory',
   'Tan',
+  'Indigo',
+  'Teal',
+  'Lavender',
+  'Maroon',
+  'Navy',
+  'Olive',
+  'Coral',
+  'Gold',
+  'Silver',
+  'Turquoise',
+  'Violet',
+  'Beige',
+  'Khaki',
+  'Salmon',
+  'Plum',
+  'Orchid',
+  'Crimson',
+  'Sienna',
+  'Azure',
+  'Mint',
+  'Ivory',
+  'Tan',
+  'Indigo',
+  'Teal',
+  'Lavender',
+  'Maroon',
+  'Navy',
+  'Olive',
+  'Coral',
+  'Gold',
+  'Silver',
+  'Turquoise',
+  'Violet',
+  'Beige',
+  'Khaki',
+  'Salmon',
+  'Plum',
+  'Orchid',
+  'Crimson',
+  'Sienna',
+  'Azure',
+  'Mint',
+  'Ivory',
+  'Tan',
 ];
 
 export const CanvasLegend = {
   args: {
     ...basicData,
     chartTitle: 'Chart with Canvas Legend',
-    description: 'Using the built-in Canvas legend (use-html-legend="false")',
+    description: 'Using the built-in Canvas legend (useHtmlLegend="false")',
   },
   render: (args) => {
     return html`
@@ -117,7 +168,7 @@ export const CanvasLegend = {
         .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?use-html-legend=${false}
+        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${args.options}
         .colorPalette=${args.colorPalette}
       ></kd-chart>
@@ -128,8 +179,9 @@ export const CanvasLegend = {
 export const BuiltInHTMLLegend = {
   args: {
     ...basicData,
+    useHtmlLegend: true,
     chartTitle: 'Chart with HTML Legend',
-    description: 'Using the built-in HTML legend (use-html-legend="true")',
+    description: 'Using the built-in HTML legend (useHtmlLegend="true")',
   },
   render: (args) => {
     return html`
@@ -139,7 +191,7 @@ export const BuiltInHTMLLegend = {
         .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?use-html-legend=${true}
+        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${args.options}
         .colorPalette=${args.colorPalette}
       ></kd-chart>
@@ -152,14 +204,22 @@ export const HTMLLegendOverflow = {
     chartTitle: 'Pie Chart with Many Legend Items',
     description:
       'HTML legend with many items to demonstrate scrolling behavior',
-    labels: manyLabels.slice(0, 25),
+    useHtmlLegend: true,
+    labels: manyLabels.slice(0, 65),
     datasets: [
       {
         label: 'Dataset 1',
-        data: Array.from({ length: 25 }, () => Math.floor(Math.random() * 100)),
+        data: Array.from({ length: 65 }, () => Math.floor(Math.random() * 100)),
       },
     ],
     options: {
+      scales: {
+        y: {
+          title: {
+            text: 'Votes',
+          },
+        },
+      },
       plugins: {
         legend: {
           position: 'bottom',
@@ -176,7 +236,7 @@ export const HTMLLegendOverflow = {
         .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?use-html-legend=${true}
+        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${args.options}
         .colorPalette=${args.colorPalette}
       ></kd-chart>
@@ -188,17 +248,29 @@ export const DoughnutLegendOverflow = {
   args: {
     chartTitle: 'Doughnut Chart with Many Legend Items',
     description: 'HTML legend with many items demonstrating scrollable legend',
-    labels: manyLabels.slice(0, 25),
+    useHtmlLegend: true,
+    labels: manyLabels.slice(0, 55),
     datasets: [
       {
         label: 'Dataset 1',
-        data: Array.from({ length: 25 }, () => Math.floor(Math.random() * 100)),
+        data: Array.from({ length: 55 }, () => Math.floor(Math.random() * 100)),
       },
     ],
     options: {
+      scales: {
+        y: {
+          title: {
+            text: 'Votes',
+          },
+        },
+      },
       plugins: {
         legend: {
           position: 'bottom',
+        },
+        htmlLegend: {
+          containerClass: 'overflow-legend-container',
+          maxHeight: 200, // Force a max height to ensure overflow
         },
       },
     },
@@ -206,13 +278,23 @@ export const DoughnutLegendOverflow = {
   },
   render: (args) => {
     return html`
+      <style>
+        /* Custom CSS to ensure overflow works in story */
+        .overflow-legend-container .shidoka-legend-scroll-content {
+          max-height: 200px !important;
+          overflow-y: auto !important;
+          border: 1px solid #eee;
+          border-radius: 4px;
+          padding: 8px;
+        }
+      </style>
       <kd-chart
         type="doughnut"
         .chartTitle=${args.chartTitle}
         .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?use-html-legend=${true}
+        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${args.options}
         .colorPalette=${args.colorPalette}
       ></kd-chart>
@@ -223,6 +305,7 @@ export const DoughnutLegendOverflow = {
 export const ExternalHTMLLegend = {
   args: {
     ...basicData,
+    useHtmlLegend: false,
     chartTitle: 'Chart with External HTML Legend',
     description: 'Using custom external HTML legend with renderHTMLLegend()',
   },
@@ -252,7 +335,7 @@ export const ExternalHTMLLegend = {
           .description=${args.description}
           .labels=${args.labels}
           .datasets=${args.datasets}
-          ?use-html-legend=${false}
+          ?useHtmlLegend=${args.useHtmlLegend}
           .options=${{
             ...args.options,
             plugins: {
@@ -280,6 +363,7 @@ export const ExternalHTMLLegend = {
 export const CustomStyledLegend = {
   args: {
     ...basicData,
+    useHtmlLegend: false,
     chartTitle: 'Chart with Custom Styled Legend',
     description: 'Using custom external legend with renderCustomLegend()',
   },
@@ -336,7 +420,7 @@ export const CustomStyledLegend = {
           .description=${args.description}
           .labels=${args.labels}
           .datasets=${args.datasets}
-          ?use-html-legend=${false}
+          ?useHtmlLegend=${args.useHtmlLegend}
           .options=${{
             ...args.options,
             plugins: {
@@ -364,8 +448,10 @@ export const CustomStyledLegend = {
 export const BoxedLegend = {
   args: {
     ...basicData,
+    useHtmlLegend: false,
     chartTitle: 'Chart with Boxed Legend',
-    description: 'Using external boxed legend with renderBoxedLegend()',
+    description:
+      'Using external boxed legend with renderBoxedLegend() - notice the different styling from CustomStyledLegend',
   },
   render: (args) => {
     setTimeout(() => {
@@ -374,7 +460,7 @@ export const BoxedLegend = {
         const container = document.getElementById('boxed-legend-container');
 
         renderBoxedLegend(chart, container, {
-          maxHeight: 100,
+          maxHeight: 150,
         });
       }
     }, 100);
@@ -383,39 +469,43 @@ export const BoxedLegend = {
       <style>
         #boxed-legend-container .my-custom-legend {
           list-style: none;
-          padding: 0;
           display: flex;
           flex-wrap: wrap;
           gap: 12px;
           justify-content: center;
+          background-color: #f5f7fa;
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         #boxed-legend-container .my-custom-legend-item {
           display: flex;
           align-items: center;
           cursor: pointer;
-          background-color: var(
-            --kd-color-background-ui-default-light,
-            #f8f8f8
-          );
+          background-color: white;
           padding: 8px 12px;
           border-radius: 4px;
           transition: all 0.2s ease;
           font-size: 11px;
           font-family: var(--kd-font-family-body, inherit);
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
         #boxed-legend-container .my-custom-legend-item:hover {
-          background-color: var(--kd-color-background-ui-hover, #eee);
+          background-color: #f8f8f8;
+          transform: translateY(-2px);
+          box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
         }
         #boxed-legend-container .my-custom-legend-item.hidden {
           opacity: 0.5;
           text-decoration: line-through;
         }
         #boxed-legend-container .color-box {
-          width: 14px;
-          height: 14px;
+          width: 16px;
+          height: 16px;
           border-radius: 3px;
           display: inline-block;
           margin-right: 8px;
+          border: 1px solid rgba(0, 0, 0, 0.1);
         }
       </style>
       <div>
@@ -426,7 +516,7 @@ export const BoxedLegend = {
           .description=${args.description}
           .labels=${args.labels}
           .datasets=${args.datasets}
-          ?use-html-legend=${false}
+          ?useHtmlLegend=${args.useHtmlLegend}
           .options=${{
             ...args.options,
             plugins: {
@@ -444,7 +534,7 @@ export const BoxedLegend = {
         <div
           style="margin-top: 10px; font-size: 14px; color: var(--kd-color-text-level-secondary, #555);"
         >
-          Boxed legend styling using renderBoxedLegend()
+          Boxed legend with distinct styling using renderBoxedLegend()
         </div>
       </div>
     `;

@@ -51,7 +51,6 @@ export function renderHTMLLegend(chart, container, options = {}) {
   const ul = document.createElement('ul');
   ul.className = `${legendOptions.className}-items`;
   ul.style.margin = '0';
-  ul.style.padding = '0';
   ul.style.display = 'flex';
   ul.style.flexDirection =
     legendOptions.layout === 'vertical' ? 'column' : 'row';
@@ -122,13 +121,11 @@ export function renderHTMLLegend(chart, container, options = {}) {
   scrollableContainer.appendChild(scrollContent);
   container.appendChild(scrollableContainer);
 
-  setTimeout(() => {
-    if (scrollContent.scrollHeight > scrollContent.clientHeight) {
-      scrollContent.style.overflowY = 'scroll';
-    } else {
-      scrollContent.style.overflowY = 'hidden';
-    }
-  }, 0);
+  if (scrollContent.scrollHeight > scrollContent.clientHeight) {
+    scrollContent.style.overflowY = 'scroll';
+  } else {
+    scrollContent.style.overflowY = 'hidden';
+  }
 
   return container;
 }

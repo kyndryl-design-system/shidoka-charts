@@ -5,7 +5,7 @@ import * as LegendStories from './Legend.stories.js';
 
 # Legend
 
-Legends help users identify the data series displayed in a chart. The Shidoka Charts library offers several options for legends:
+Legends help users identify the data series displayed in a chart. The Shidoka Charts library offers several example options for legends:
 
 ## Legend Types
 
@@ -15,7 +15,7 @@ Legends help users identify the data series displayed in a chart. The Shidoka Ch
 
 ## Built-in Legend Usage
 
-The chart component has a `use-html-legend` attribute that controls which built-in legend to use.
+The chart component has a `useHtmlLegend` attribute that controls which built-in legend to use.
 
 ### Canvas Legend
 
@@ -24,7 +24,7 @@ This uses the default Chart.js canvas-rendered legend:
 ```html
 <kd-chart
   type="bar"
-  use-html-legend="false"
+  useHtmlLegend="false"
   .options=${{
     plugins: {
       legend: {
@@ -42,16 +42,28 @@ This uses an enhanced HTML-based legend with better styling and scrollability:
 ```html
 <kd-chart
   type="bar"
-  use-html-legend="true"
+  useHtmlLegend
   .options=${{
     plugins: {
       legend: {
         position: 'bottom'
+      },
+      htmlLegend: {
+        containerClass: 'my-legend-container',
+        maxHeight: 200, // Controls when scrolling begins
       }
     }
   }}
 ></kd-chart>
 ```
+
+The HTML legend can be configured using the `plugins.htmlLegend` options in the chart configuration:
+
+| Option           | Description                            | Default          |
+| ---------------- | -------------------------------------- | ---------------- |
+| `maxHeight`      | Maximum height before scrolling begins | 100px            |
+| `containerClass` | CSS class for the legend container     | 'shidoka-legend' |
+| `layout`         | Legend layout orientation              | 'horizontal'     |
 
 ## External Custom Legends
 
@@ -72,6 +84,7 @@ renderHTMLLegend(chart, container, {
   borderRadius: 2, // Border radius of color box
   className: 'shidoka-legend', // CSS class for legend
   itemClassName: 'shidoka-legend-item', // CSS class for legend items
+  layout: 'horizontal', // Legend layout orientation ('horizontal' or 'vertical')
 });
 ```
 
@@ -108,6 +121,47 @@ renderBoxedLegend(chart, container, {
 ## Handling Large Legends
 
 For charts with many data points, legends can become large. The HTML legend automatically adds scrolling when items exceed the container size. This behavior is demonstrated in the HTMLLegendOverflow and DoughnutLegendOverflow examples below.
+
+### Customizing Scrollable Legends
+
+You can customize the scrollable behavior by setting the `maxHeight` option and adding custom styles:
+
+```html
+<kd-chart
+  type="pie"
+  useHtmlLegend
+  .options=${{
+    plugins: {
+      htmlLegend: {
+        containerClass: 'overflow-legend-container',
+        maxHeight: 200, // Controls scrolling threshold
+      }
+    }
+  }}
+></kd-chart>
+
+<style>
+  /* Custom CSS to enhance scrollable legends */
+  .overflow-legend-container .shidoka-legend-scroll-content {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 8px;
+  }
+</style>
+```
+
+The HTML legend renders with the following structural elements that you can target for styling:
+
+```
+div.shidoka-legend (or your custom className)
+  └── div.shidoka-legend-scroll-content
+       └── ul.shidoka-legend-items
+            └── li.shidoka-legend-item
+                 ├── span.shidoka-legend-item-color
+                 └── span.shidoka-legend-item-label
+```
 
 <style>
   {`

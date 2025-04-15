@@ -17,7 +17,14 @@ export default {
       url: 'https://www.figma.com/file/9NrpK3rmbOk0lhlFkEPSaO/Data-Viz-Component-Library?node-id=1652%3A2709&mode=dev',
     },
   },
-  argTypes: argTypes,
+  argTypes: {
+    ...argTypes,
+    useHtmlLegend: {
+      table: {
+        disable: true,
+      },
+    },
+  },
 };
 
 const countries = topojson.feature(
@@ -77,7 +84,6 @@ export const WorldChoropleth = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
-        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -129,7 +135,6 @@ export const CountryChoropleth = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
-        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -175,7 +180,6 @@ export const WorldBubbleMap = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
-        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -225,7 +229,6 @@ export const CountryBubbleMap = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
-        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}

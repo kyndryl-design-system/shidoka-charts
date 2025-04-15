@@ -35,16 +35,19 @@ export function renderCustomLegend(chart, container, options = {}) {
   scrollContent.style.scrollbarWidth = 'thin';
   scrollContent.style.scrollbarColor = '#888 #f1f1f1';
   scrollContent.style.msOverflowStyle = 'scrollbar';
+  scrollContent.style.overflowX = 'hidden';
+  scrollContent.style.overflowY = 'auto';
 
   const ul = document.createElement('ul');
 
   ul.className = legendOptions.className;
   ul.style.margin = '0';
-  ul.style.padding = '0';
+  ul.style.padding = '0px';
   ul.style.display = 'flex';
   ul.style.flexDirection =
     legendOptions.layout === 'vertical' ? 'column' : 'row';
   ul.style.flexWrap = 'wrap';
+  ul.style.gap = '8px';
   ul.style.justifyContent = 'center';
   ul.style.listStyle = 'none';
   ul.style.width = '100%';
@@ -107,13 +110,11 @@ export function renderCustomLegend(chart, container, options = {}) {
 
   container.appendChild(scrollableContainer);
 
-  setTimeout(() => {
-    if (scrollContent.scrollHeight > scrollContent.clientHeight) {
-      scrollContent.style.overflowY = 'scroll';
-    } else {
-      scrollContent.style.overflowY = 'hidden';
-    }
-  }, 0);
+  if (scrollContent.scrollHeight > scrollContent.clientHeight) {
+    scrollContent.style.overflowY = 'scroll';
+  } else {
+    scrollContent.style.overflowY = 'hidden';
+  }
 
   return container;
 }
@@ -123,7 +124,7 @@ export function renderBoxedLegend(chart, container, options = {}) {
   const legendItems = getLegendData(chart);
   if (legendItems.length === 0) return;
   const legendOptions = {
-    maxHeight: options.maxHeight || 150,
+    maxHeight: options.maxHeight || 300,
     className: 'my-custom-legend',
     itemClassName: 'my-custom-legend-item',
   };
@@ -147,10 +148,20 @@ export function renderBoxedLegend(chart, container, options = {}) {
   scrollContent.style.scrollbarWidth = 'thin';
   scrollContent.style.scrollbarColor = '#888 #f1f1f1';
   scrollContent.style.msOverflowStyle = 'scrollbar';
+  scrollContent.style.overflowX = 'hidden';
+  scrollContent.style.overflowY = 'auto';
 
   const ul = document.createElement('ul');
 
   ul.className = legendOptions.className;
+  ul.style.margin = '0';
+  ul.style.padding = '0';
+  ul.style.display = 'flex';
+  ul.style.flexWrap = 'wrap';
+  ul.style.gap = '8px';
+  ul.style.justifyContent = 'center';
+  ul.style.listStyle = 'none';
+  ul.style.width = '100%';
 
   legendItems.forEach((item) => {
     const li = document.createElement('li');
@@ -179,11 +190,9 @@ export function renderBoxedLegend(chart, container, options = {}) {
   scrollableContainer.appendChild(scrollContent);
   container.appendChild(scrollableContainer);
 
-  setTimeout(() => {
-    if (scrollContent.scrollHeight > scrollContent.clientHeight) {
-      scrollContent.style.overflowY = 'scroll';
-    } else {
-      scrollContent.style.overflowY = 'hidden';
-    }
-  }, 0);
+  if (scrollContent.scrollHeight > scrollContent.clientHeight) {
+    scrollContent.style.overflowY = 'scroll';
+  } else {
+    scrollContent.style.overflowY = 'hidden';
+  }
 }
