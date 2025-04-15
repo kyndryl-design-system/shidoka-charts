@@ -38,6 +38,22 @@ export function renderCustomLegend(chart, container, options = {}) {
   scrollContent.style.overflowX = 'hidden';
   scrollContent.style.overflowY = 'auto';
 
+  scrollContent.tabIndex = 0;
+  scrollContent.setAttribute('role', 'region');
+  scrollContent.setAttribute('aria-label', 'Chart legend items');
+
+  scrollContent.addEventListener('keydown', (e) => {
+    const scrollAmount = 40;
+
+    if (e.key === 'ArrowDown') {
+      scrollContent.scrollTop += scrollAmount;
+      e.preventDefault();
+    } else if (e.key === 'ArrowUp') {
+      scrollContent.scrollTop -= scrollAmount;
+      e.preventDefault();
+    }
+  });
+
   const ul = document.createElement('ul');
 
   ul.className = legendOptions.className;
@@ -135,6 +151,9 @@ export function renderBoxedLegend(chart, container, options = {}) {
   scrollableContainer.className = `${legendOptions.className}-container`;
   scrollableContainer.style.width = '100%';
   scrollableContainer.style.marginTop = '8px';
+  scrollableContainer.setAttribute('tabindex', '0');
+  scrollableContainer.setAttribute('role', 'group');
+  scrollableContainer.setAttribute('aria-label', 'Chart legend');
 
   const scrollContent = document.createElement('div');
 
@@ -149,6 +168,25 @@ export function renderBoxedLegend(chart, container, options = {}) {
   scrollContent.style.msOverflowStyle = 'scrollbar';
   scrollContent.style.overflowX = 'hidden';
   scrollContent.style.overflowY = 'auto';
+
+  // Add keyboard accessibility to scrollable region
+  scrollContent.tabIndex = 0;
+  scrollContent.setAttribute('role', 'region');
+  scrollContent.setAttribute('aria-label', 'Chart legend items');
+
+  // Add keyboard event listeners for scrolling
+  scrollContent.addEventListener('keydown', (e) => {
+    const scrollAmount = 40; // pixels to scroll per key press
+
+    // Handle arrow keys for scrolling
+    if (e.key === 'ArrowDown') {
+      scrollContent.scrollTop += scrollAmount;
+      e.preventDefault();
+    } else if (e.key === 'ArrowUp') {
+      scrollContent.scrollTop -= scrollAmount;
+      e.preventDefault();
+    }
+  });
 
   const ul = document.createElement('ul');
 

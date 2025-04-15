@@ -48,6 +48,22 @@ export function renderHTMLLegend(chart, container, options = {}) {
   scrollContent.style.scrollbarColor = '#888 #f1f1f1';
   scrollContent.style.msOverflowStyle = 'scrollbar';
 
+  scrollContent.tabIndex = 0;
+  scrollContent.setAttribute('role', 'region');
+  scrollContent.setAttribute('aria-label', 'Chart legend items');
+
+  scrollContent.addEventListener('keydown', (e) => {
+    const scrollAmount = 40;
+
+    if (e.key === 'ArrowDown') {
+      scrollContent.scrollTop += scrollAmount;
+      e.preventDefault();
+    } else if (e.key === 'ArrowUp') {
+      scrollContent.scrollTop -= scrollAmount;
+      e.preventDefault();
+    }
+  });
+
   const ul = document.createElement('ul');
   ul.className = `${legendOptions.className}-items`;
   ul.style.margin = '0';
