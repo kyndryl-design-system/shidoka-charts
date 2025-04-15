@@ -18,7 +18,15 @@ const defaultConfig = (ctx) => {
         color: 'transparent',
       },
       legend: {
-        display: false, // disable default canvas legend, use HTML legend
+        display: false,
+        position: 'bottom',
+        labels: {
+          boxWidth: 16,
+          boxHeight: 16,
+          borderRadius: 2,
+          useBorderRadius: true,
+          padding: 8,
+        },
       },
       customLegend: {
         position: 'bottom',

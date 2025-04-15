@@ -56,6 +56,7 @@ const args = {
   noBorder: false,
   width: null,
   height: null,
+  useHtmlLegend: false,
 };
 
 export const Combo = {
@@ -73,6 +74,7 @@ export const Combo = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -132,6 +134,7 @@ export const MultiAxis = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -185,6 +188,7 @@ export const ComboStacked = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -244,6 +248,7 @@ export const ComboFloating = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}

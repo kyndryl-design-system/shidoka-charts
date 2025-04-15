@@ -53,6 +53,7 @@ const args = {
   noBorder: false,
   width: null,
   height: null,
+  useHtmlLegend: false,
 };
 
 export const Line = {
@@ -70,6 +71,7 @@ export const Line = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -110,6 +112,7 @@ export const WithoutPoints = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -150,6 +153,7 @@ export const Curved = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -241,6 +245,7 @@ export const Area = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -314,6 +319,7 @@ export const TimeScale = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}

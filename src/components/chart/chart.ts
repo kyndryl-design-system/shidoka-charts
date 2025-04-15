@@ -18,7 +18,7 @@ import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
 import gradientLegendPlugin from '../../common/plugins/gradientLegend';
-import { generateScrollableLegend } from '../../common/plugins/htmlLegend';
+import { renderHTMLLegend } from '../../common/legend';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import datalabelsPlugin from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
@@ -345,7 +345,10 @@ export class KDChart extends LitElement {
             ></div>
           </figcaption>
 
-          <div class="html-legend-container"></div>
+          <div
+            class="html-legend-container"
+            ?hidden=${!this.useHtmlLegend}
+          ></div>
         </figure>
 
         ${!this.tableDisabled && this.tableView
@@ -581,8 +584,14 @@ export class KDChart extends LitElement {
     this._resizeObserver.observe(el);
   }
 
+  /** Use HTML legend instead of Chart.js built-in canvas legend.
+   * @public
+   */
+  @property({ type: Boolean })
+  useHtmlLegend = false;
+
   private generateScrollableLegend() {
-    if (!this.chart) return;
+    if (!this.chart || !this.useHtmlLegend) return;
 
     const legendContainer = this.shadowRoot?.querySelector(
       '.html-legend-container'
@@ -591,7 +600,7 @@ export class KDChart extends LitElement {
 
     const legendOptions = this.mergedOptions.plugins.customLegend;
 
-    generateScrollableLegend(this.chart, legendContainer as HTMLElement, {
+    renderHTMLLegend(this.chart, legendContainer as HTMLElement, {
       maxHeight: legendOptions?.maxHeight || 100,
       boxWidth: legendOptions?.boxWidth || 16,
       boxHeight: legendOptions?.boxHeight || 16,
@@ -671,13 +680,14 @@ export class KDChart extends LitElement {
       this.checkType();
     }
 
-    // Re-init chart instance when type, plugins, colorPalette, width, or height change.
+    // Re-init chart instance when type, plugins, colorPalette, width, height, or useHtmlLegend change.
     if (
       this.chart &&
       (changedProps.has('type') ||
         changedProps.has('plugins') ||
         changedProps.has('width') ||
-        changedProps.has('height'))
+        changedProps.has('height') ||
+        changedProps.has('useHtmlLegend'))
     ) {
       this.mergeOptions().then(() => {
         this.initChart();
@@ -698,10 +708,10 @@ export class KDChart extends LitElement {
   private initChart() {
     const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
 
-    // Chart.defaults.font.family = getComputedStyle(
-    //   document.documentElement
-    // ).getPropertyValue('--kd-font-family-secondary');
+    // Configure chart options
     Chart.defaults.color = getTokenThemeVal('--kd-color-text-level-primary');
+
+    // We already handled legend config in mergeOptions
 
     // Select plugin when type='meter'. Otherwise both plugins (meterGaugePlugin & doughnutLabelPlugin) are called
     const pluginSelectForDoghnutMeter =
@@ -764,6 +774,19 @@ export class KDChart extends LitElement {
 
     // start with global options
     let mergedOptions: any = globalOptions(this);
+
+    // Configure legend display based on useHtmlLegend property
+    if (!this.useHtmlLegend) {
+      // Enable built-in Chart.js legend when HTML legend is disabled
+      mergedOptions.plugins = mergedOptions.plugins || {};
+      mergedOptions.plugins.legend = mergedOptions.plugins.legend || {};
+      mergedOptions.plugins.legend.display = true;
+
+      // Disable customLegend options when using built-in legend
+      if (mergedOptions.plugins.customLegend) {
+        mergedOptions.plugins.customLegend.display = false;
+      }
+    }
 
     // merge global type options
     if (radialTypes.includes(this.type)) {

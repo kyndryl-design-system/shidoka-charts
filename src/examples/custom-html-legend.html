@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom HTML Legend Example</title>
+    <link
+      rel="stylesheet"
+      href="/src/common/legend/css/custom-html-legend.css"
+    />
+  </head>
+  <body>
+    <h1>Custom HTML Legend Example</h1>
+
+    <div class="chart-container">
+      <h2>Chart with built-in HTML legend</h2>
+      <div class="chart-row">
+        <kd-chart
+          id="chart1"
+          chart-title="Sales by Product Category"
+          type="bar"
+          use-html-legend="true"
+        >
+        </kd-chart>
+      </div>
+      <p>
+        This chart uses the default HTML legend by setting
+        <code>use-html-legend="true"</code> (default).
+      </p>
+    </div>
+
+    <div class="chart-container">
+      <h2>Chart with Chart.js canvas legend</h2>
+      <div class="chart-row">
+        <kd-chart
+          id="chart2"
+          chart-title="Sales by Product Category"
+          type="bar"
+          use-html-legend="false"
+        >
+        </kd-chart>
+      </div>
+      <p>
+        This chart uses the Chart.js built-in canvas legend by setting
+        <code>use-html-legend="false"</code>.
+      </p>
+    </div>
+
+    <div class="chart-container">
+      <h2>Chart with custom HTML legend</h2>
+      <div class="chart-row">
+        <kd-chart
+          id="chart3"
+          chart-title="Sales by Product Category"
+          type="bar"
+          use-html-legend="false"
+        >
+        </kd-chart>
+      </div>
+      <div id="custom-legend-container"></div>
+      <p>
+        This chart has the built-in legend disabled with
+        <code>use-html-legend="false"</code> and uses a completely custom HTML
+        legend.
+      </p>
+    </div>
+
+    <h2>How to create a custom HTML legend</h2>
+    <p>
+      You can create your own custom HTML legend using the
+      <code>getLegendData</code> function from our legends module:
+    </p>
+
+    <pre><code>
+import { getLegendData } from 'shidoka-charts/common/legends';
+
+// Get chart instance
+const chartElement = document.querySelector('#chart3');
+
+// Create custom legend
+const legendContainer = document.getElementById('custom-legend-container');
+
+function renderMyCustomLegend() {
+  // Get the legend data
+  const legendData = getLegendData(chartElement.chart);
+  
+  // Clear the container
+  legendContainer.innerHTML = '';
+  
+  // Create the legend list
+  const ul = document.createElement('ul');
+  ul.className = 'my-custom-legend';
+  
+  legendData.forEach(item => {
+    const li = document.createElement('li');
+    li.className = 'my-custom-legend-item';
+    if (item.isHidden) {
+      li.classList.add('hidden');
+    }
+    
+    // Add color box
+    const colorBox = document.createElement('span');
+    colorBox.className = 'color-box';
+    colorBox.style.backgroundColor = item.color;
+    
+    // Add label
+    const label = document.createTextNode(item.label);
+    
+    // Add click handler
+    li.addEventListener('click', () => {
+      item.toggleVisibility();
+      renderMyCustomLegend(); // Re-render to reflect changes
+    });
+    
+    li.appendChild(colorBox);
+    li.appendChild(label);
+    ul.appendChild(li);
+  });
+  
+  legendContainer.appendChild(ul);
+}
+
+// Initial render
+renderMyCustomLegend();
+
+// You could also listen for chart updates if needed
+chartElement.addEventListener('chart-updated', renderMyCustomLegend);
+  </code></pre>
+
+    <h2>Alternative: Using the provided renderer</h2>
+    <p>If you prefer, you can use our built-in renderer with custom options:</p>
+
+    <pre><code>
+import { renderHTMLLegend } from 'shidoka-charts/common/legends';
+
+const chartElement = document.querySelector('#chart3');
+const legendContainer = document.getElementById('custom-legend-container');
+
+renderHTMLLegend(chartElement.chart, legendContainer, {
+  maxHeight: 200,
+  boxWidth: 16,
+  boxHeight: 16,
+  borderRadius: 3,
+  className: 'my-custom-legend', // Will use this as a base class name
+  itemClassName: 'my-custom-legend-item',
+  layout: 'horizontal' // or 'vertical'
+});
+  </code></pre>
+
+    <h2>Importing the default styles</h2>
+    <p>You can also import our default legend styles:</p>
+
+    <pre><code>
+// In your SCSS file:
+@import 'shidoka-charts/common/legend/styles/legend.scss';
+
+// You can then override specific styles as needed
+.shidoka-legend {
+  max-height: 150px;
+  
+  &-item {
+    background-color: #f5f5f5;
+    padding: 5px 10px;
+    border-radius: 4px;
+    
+    &:hover {
+      background-color: #e9e9e9;
+    }
+  }
+}
+  </code></pre>
+
+    <!-- Load the example script -->
+    <script
+      type="module"
+      src="/src/examples/js/custom-legend-example.js"
+    ></script>
+  </body>
+</html>

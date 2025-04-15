@@ -6,6 +6,7 @@ import capitals from './sampleData/us-capitals.json';
 import nationCapitals from './sampleData/nation-capitals.json';
 import usData from './sampleData/states-10m.json';
 import worldData from './sampleData/countries-50m.json';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 export default {
   title: 'Third Party Charts/Geo',
@@ -37,6 +38,7 @@ const args = {
   noBorder: false,
   width: null,
   height: null,
+  unsafeHTML: false,
 };
 
 export const WorldChoropleth = {
@@ -75,6 +77,7 @@ export const WorldChoropleth = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -126,6 +129,7 @@ export const CountryChoropleth = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -171,6 +175,7 @@ export const WorldBubbleMap = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
@@ -220,6 +225,7 @@ export const CountryBubbleMap = {
         ?hideHeader=${args.hideHeader}
         ?hideControls=${args.hideControls}
         ?noBorder=${args.noBorder}
+        ?useHtmlLegend=${args.useHtmlLegend}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}

@@ -1,0 +1,120 @@
+import { Meta, Story, Canvas, Controls, Stories } from '@storybook/blocks';
+import * as LegendStories from './Legend.stories.js';
+
+<Meta title="Guidelines/Legend" of={LegendStories} />
+
+# Legend
+
+Legends help users identify the data series displayed in a chart. The Shidoka Charts library offers several options for legends:
+
+## Legend Types
+
+1. **Canvas Legend** - The native Chart.js canvas-based legend
+2. **Built-in HTML Legend** - An enhanced HTML legend with better styling and scrollability
+3. **External HTML Legends** - Custom legends rendered outside the chart component
+
+## Built-in Legend Usage
+
+The chart component has a `use-html-legend` attribute that controls which built-in legend to use.
+
+### Canvas Legend
+
+This uses the default Chart.js canvas-rendered legend:
+
+```html
+<kd-chart
+  type="bar"
+  use-html-legend="false"
+  .options=${{
+    plugins: {
+      legend: {
+        position: 'bottom'
+      }
+    }
+  }}
+></kd-chart>
+```
+
+### HTML Legend
+
+This uses an enhanced HTML-based legend with better styling and scrollability:
+
+```html
+<kd-chart
+  type="bar"
+  use-html-legend="true"
+  .options=${{
+    plugins: {
+      legend: {
+        position: 'bottom'
+      }
+    }
+  }}
+></kd-chart>
+```
+
+## External Custom Legends
+
+For more customized legends, you can create external legends using provided helper functions.
+
+### Standard HTML Legend
+
+```javascript
+import { renderHTMLLegend } from 'shidoka-charts/common/legend';
+
+const chart = document.querySelector('kd-chart').chart;
+const container = document.getElementById('legend-container');
+
+renderHTMLLegend(chart, container, {
+  maxHeight: 100, // Max height before scrolling begins
+  boxWidth: 16, // Width of color box
+  boxHeight: 16, // Height of color box
+  borderRadius: 2, // Border radius of color box
+  className: 'shidoka-legend', // CSS class for legend
+  itemClassName: 'shidoka-legend-item', // CSS class for legend items
+});
+```
+
+### Custom Styled Legend
+
+```javascript
+import { renderCustomLegend } from 'shidoka-charts/common/legend';
+
+const chart = document.querySelector('kd-chart').chart;
+const container = document.getElementById('legend-container');
+
+renderCustomLegend(chart, container, {
+  maxHeight: 100,
+  boxWidth: 16,
+  boxHeight: 16,
+  className: 'custom-legend',
+  itemClassName: 'custom-legend-item',
+});
+```
+
+### Boxed Legend Style
+
+```javascript
+import { renderBoxedLegend } from 'shidoka-charts/common/legend';
+
+const chart = document.querySelector('kd-chart').chart;
+const container = document.getElementById('legend-container');
+
+renderBoxedLegend(chart, container, {
+  maxHeight: 100,
+});
+```
+
+## Handling Large Legends
+
+For charts with many data points, legends can become large. The HTML legend automatically adds scrolling when items exceed the container size. This behavior is demonstrated in the HTMLLegendOverflow and DoughnutLegendOverflow examples below.
+
+<style>
+  {`
+    .sbdocs-content {
+      max-width: none !important;
+    }
+  `}
+</style>
+
+<Stories />
