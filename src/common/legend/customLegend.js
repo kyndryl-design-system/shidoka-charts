@@ -42,7 +42,6 @@ export function renderCustomLegend(chart, container, options = {}) {
 
   ul.className = legendOptions.className;
   ul.style.margin = '0';
-  ul.style.padding = '0px';
   ul.style.display = 'flex';
   ul.style.flexDirection =
     legendOptions.layout === 'vertical' ? 'column' : 'row';
@@ -155,7 +154,6 @@ export function renderBoxedLegend(chart, container, options = {}) {
 
   ul.className = legendOptions.className;
   ul.style.margin = '0';
-  ul.style.padding = '0';
   ul.style.display = 'flex';
   ul.style.flexWrap = 'wrap';
   ul.style.gap = '8px';
