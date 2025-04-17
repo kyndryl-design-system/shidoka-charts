@@ -1,4 +1,4 @@
-import { Meta, Story, Canvas, Controls, Stories } from '@storybook/blocks';
+import { Meta, Canvas, Stories } from '@storybook/blocks';
 import * as LegendStories from './Legend.stories.js';
 
 <Meta title="Guidelines/Legend" of={LegendStories} />
@@ -45,14 +45,14 @@ This uses an enhanced HTML-based legend with better styling and scrollability:
 <kd-chart
   type="bar"
   useHtmlLegend
+  htmlLegendMaxHeight="200"
   .options=${{
     plugins: {
-      legend: {
-        position: 'bottom'
-      },
-      htmlLegend: {
-        containerClass: 'my-legend-container',
-        maxHeight: 200, // Controls when scrolling begins
+      legend: { position: 'bottom' },
+      customLegend: {
+        boxWidth: 16,
+        boxHeight: 16,
+        borderRadius: 2
       }
     }
   }}
@@ -145,7 +145,7 @@ You can customize the scrollable behavior by setting the `maxHeight` option and 
 <style>
   /* Custom CSS to enhance scrollable legends */
   .overflow-legend-container .shidoka-legend-scroll-content {
-    max-height: 200px;
+    max-height: 100px;
     overflow-y: auto;
     border: 1px solid #eee;
     border-radius: 4px;

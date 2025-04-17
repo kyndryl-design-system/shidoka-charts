@@ -134,6 +134,16 @@ export class KDChart extends LitElement {
   @state()
   fullscreen = false;
 
+  /** Use HTML legend instead of Chart.js built-in canvas legend.
+   * @public
+   */
+  @property({ type: Boolean })
+  useHtmlLegend = false;
+
+  /** Max height for HTML legend scroll container (px). */
+  @property({ type: Number, reflect: true })
+  htmlLegendMaxHeight = 100;
+
   /**
    * Queries the container element.
    * @ignore
@@ -584,12 +594,6 @@ export class KDChart extends LitElement {
     this._resizeObserver.observe(el);
   }
 
-  /** Use HTML legend instead of Chart.js built-in canvas legend.
-   * @public
-   */
-  @property({ type: Boolean })
-  useHtmlLegend = false;
-
   private generateScrollableLegend() {
     if (!this.chart || !this.useHtmlLegend) return;
 
@@ -601,7 +605,7 @@ export class KDChart extends LitElement {
     const legendOptions = this.mergedOptions.plugins.customLegend;
 
     renderHTMLLegend(this.chart, legendContainer as HTMLElement, {
-      maxHeight: legendOptions?.maxHeight || 100,
+      maxHeight: this.htmlLegendMaxHeight,
       boxWidth: legendOptions?.boxWidth || 16,
       boxHeight: legendOptions?.boxHeight || 16,
       borderRadius: legendOptions?.borderRadius || 2,
