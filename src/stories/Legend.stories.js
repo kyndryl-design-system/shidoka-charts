@@ -1,14 +1,9 @@
 import { html } from 'lit';
-import '../components/chart';
 import Chart from 'chart.js/auto';
 import { htmlLegendPlugin } from '../common/plugins/htmlLegendPlugin';
-import {
-  renderHTMLLegend,
-  renderCustomLegend,
-  renderBoxedLegend,
-} from '../common/legend';
+import { renderHTMLLegend } from '../common/legend';
 import argTypes from '../common/config/chartArgTypes';
-import '../common/legend/styles/legend.scss';
+import '../components/chart';
 
 Chart.register(htmlLegendPlugin);
 
@@ -239,6 +234,11 @@ export const ExternalHTMLLegend = {
       layout: 'horizontal',
     };
     return html`
+      <style>
+        #external-html-legend {
+          margin-top: 20px;
+        }
+      </style>
       <kd-chart
         type="bar"
         .chartTitle=${args.chartTitle}
@@ -254,7 +254,7 @@ export const ExternalHTMLLegend = {
         .colorPalette=${args.colorPalette}
       ></kd-chart>
 
-      <div id="external-html-legend" style="margin-top: 20px;"></div>
+      <div id="external-html-legend"></div>
     `;
   },
 };
@@ -285,6 +285,12 @@ const makeExternalLegendStory = (type, sliceCount, containerId) => {
       },
     },
     render: (args) => html`
+      <style>
+        #external-pie-legend,
+        #external-doughnut-legend {
+          border: 1px solid var(--kd-color-border-variants-light);
+        }
+      </style>
       <kd-chart
         type="${type}"
         .chartTitle=${args.chartTitle}
@@ -296,10 +302,7 @@ const makeExternalLegendStory = (type, sliceCount, containerId) => {
         .options=${args.options}
         .colorPalette=${args.colorPalette}
       ></kd-chart>
-      <div
-        id="${containerId}"
-        style="margin-top:20px; border:1px solid lightgrey; padding:10px;"
-      ></div>
+      <div id="${containerId}" style="margin-top:20px; padding:10px;"></div>
     `,
   };
 };
@@ -327,7 +330,7 @@ export const CustomStyledLegend = {
       const chart = document.getElementById('custom-styled-chart').chart;
       const container = document.getElementById('custom-styled-legend');
       if (chart && container) {
-        renderCustomLegend(chart, container, {
+        renderHTMLLegend(chart, container, {
           maxHeight: 100,
           boxWidth: 16,
           boxHeight: 16,
@@ -341,21 +344,36 @@ export const CustomStyledLegend = {
         #custom-styled-legend .custom-legend {
           display: flex;
           flex-wrap: wrap;
-          gap: 8px;
+          gap: 4px;
           justify-content: center;
+          padding-top: 4px;
         }
+
+        #custom-styled-legend .custom-legend-items {
+          padding-top: 4px;
+        }
+
         #custom-styled-legend .custom-legend-item {
           display: flex;
           align-items: center;
-          background: #f0f0f0;
+          background: var(--kd-color-background-accent-subtle);
+          border: none;
           border-radius: 4px;
           padding: 6px 10px;
-          transition: all 0.2s;
+          transition: opacity 0.2s ease, transform 0.2s ease;
+          will-change: transform;
+          position: relative;
         }
+
         #custom-styled-legend .custom-legend-item:hover {
-          background: #e0e0e0;
           transform: translateY(-2px);
+          background: var(--kd-color-background-ui-hollow-hover);
         }
+
+        #custom-styled-legend .custom-legend-item:focus-visible {
+          outline-color: var(--kd-color-border-variants-focus);
+        }
+
         #custom-styled-legend .custom-legend-item.hidden {
           opacity: 0.5;
           text-decoration: line-through;

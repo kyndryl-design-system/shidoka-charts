@@ -1,4 +1,4 @@
-import { Chart, Plugin } from 'chart.js';
+import { Chart } from 'chart.js';
 import { renderHTMLLegend } from '../legend/htmlRenderer';
 
 export interface HtmlLegendPluginOptions {
@@ -12,19 +12,11 @@ export interface HtmlLegendPluginOptions {
   layout?: 'horizontal' | 'vertical';
 }
 
-export const htmlLegendPlugin: Plugin = {
+export const htmlLegendPlugin = {
   id: 'htmlLegend',
   afterUpdate(chart: Chart, _: any, options: HtmlLegendPluginOptions) {
     const container = document.getElementById(options.containerId);
     if (!container) return;
-    renderHTMLLegend(chart, container, {
-      boxWidth: options.boxWidth,
-      boxHeight: options.boxHeight,
-      borderRadius: options.borderRadius,
-      className: options.className,
-      itemClassName: options.itemClassName,
-      maxHeight: options.maxHeight,
-      layout: options.layout,
-    });
+    renderHTMLLegend(chart, container, options);
   },
 };

@@ -28,15 +28,6 @@ const defaultConfig = (ctx) => {
           padding: 8,
         },
       },
-      customLegend: {
-        position: 'bottom',
-        maxHeight: 100,
-        boxWidth: 16,
-        boxHeight: 16,
-        borderRadius: 2,
-        useBorderRadius: true,
-        padding: 8,
-      },
       tooltip: {
         bodyColor: TooltipTextColor,
         footerColor: TooltipTextColor,
