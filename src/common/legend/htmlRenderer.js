@@ -25,18 +25,27 @@ export function renderHTMLLegend(chart, container, options) {
 
   const opts = { ...defaultOpts, ...options };
 
-  const scrollableContainer = document.createElement('div');
-  scrollableContainer.className = `${opts.className}-container`;
-  applyStyles(scrollableContainer, {
+  const legendOuterContainer = document.createElement('div');
+  legendOuterContainer.className = `${opts.className}-container`;
+  applyStyles(legendOuterContainer, {
     width: '100%',
     paddingLeft: '20px',
     paddingRight: '20px',
     marginRight: 'auto',
     marginLeft: 'auto',
+    boxSizing: 'border-box',
+  });
+
+  const scrollableContainer = document.createElement('div');
+  scrollableContainer.className = opts.className;
+  applyStyles(scrollableContainer, {
+    width: '100%',
+    marginTop: '8px',
     maxHeight: `${opts.maxHeight}px`,
     overflowY: 'auto',
     boxSizing: 'border-box',
   });
+
   scrollableContainer.tabIndex = 0;
   scrollableContainer.setAttribute('role', 'region');
   scrollableContainer.setAttribute('aria-label', 'Chart legend items');
@@ -121,7 +130,8 @@ export function renderHTMLLegend(chart, container, options) {
   });
 
   scrollableContainer.appendChild(ul);
-  container.appendChild(scrollableContainer);
+  legendOuterContainer.appendChild(scrollableContainer);
+  container.appendChild(legendOuterContainer);
 
   scrollableContainer.style.overflowY =
     scrollableContainer.scrollHeight > scrollableContainer.clientHeight
