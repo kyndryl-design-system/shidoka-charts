@@ -75,7 +75,6 @@ export function renderHTMLLegend(chart, container, options) {
 
   const ul = document.createElement('ul');
   ul.className = `${opts.className}-items`;
-  ul.setAttribute('role', 'list');
   applyStyles(ul, {
     display: 'flex',
     flexWrap: 'wrap',
@@ -86,7 +85,7 @@ export function renderHTMLLegend(chart, container, options) {
     paddingBottom: '8px',
     paddingLeft: '0',
     flexDirection: opts.layout === 'vertical' ? 'column' : 'row',
-    gap: '4px',
+    gap: '12px',
     width: '100%',
   });
 
@@ -108,29 +107,48 @@ export function renderHTMLLegend(chart, container, options) {
       textDecoration: item.isHidden ? 'line-through' : 'none',
     });
 
-    li.tabIndex = 0;
-    li.setAttribute('role', 'button');
-    li.setAttribute('aria-pressed', (!item.isHidden).toString());
-    li.setAttribute(
+    const buttonWrapper = document.createElement('button');
+    buttonWrapper.className = `${opts.itemClassName}-button`;
+    applyStyles(buttonWrapper, {
+      background: 'none',
+      border: 'none',
+      padding: '0',
+      margin: '0',
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      width: '100%',
+      height: '100%',
+      fontFamily: 'inherit',
+      fontSize: 'inherit',
+      color: 'inherit',
+      textAlign: 'left',
+    });
+
+    buttonWrapper.setAttribute('aria-pressed', (!item.isHidden).toString());
+    buttonWrapper.setAttribute(
       'aria-label',
       `${item.label}${item.isHidden ? ' (hidden)' : ''}`
     );
 
-    li.addEventListener('focus', () => {
-      li.style.outline = '2px solid var(--kd-color-border-variants-focus)';
-      li.style.outlineOffset = '2px';
+    buttonWrapper.addEventListener('focus', () => {
+      buttonWrapper.style.outline =
+        '2px solid var(--kd-color-border-variants-focus)';
+      buttonWrapper.style.outlineOffset = '2px';
     });
 
-    li.addEventListener('blur', () => {
-      li.style.outline = '';
-      li.style.outlineOffset = '';
+    buttonWrapper.addEventListener('blur', () => {
+      buttonWrapper.style.outline = '';
+      buttonWrapper.style.outlineOffset = '';
     });
 
-    li.addEventListener('mouseover', () => {
+    li.setAttribute('role', 'listitem');
+
+    buttonWrapper.addEventListener('mouseover', () => {
       li.style.opacity = '0.8';
     });
 
-    li.addEventListener('mouseout', () => {
+    buttonWrapper.addEventListener('mouseout', () => {
       li.style.opacity = item.isHidden ? '0.5' : '1';
     });
 
@@ -159,44 +177,48 @@ export function renderHTMLLegend(chart, container, options) {
           : chart.getDatasetMeta(item.datasetIndex).hidden;
       li.style.opacity = hidden ? '0.5' : '1';
       li.style.textDecoration = hidden ? 'line-through' : 'none';
-      li.setAttribute('aria-pressed', (!hidden).toString());
-      li.setAttribute(
+      buttonWrapper.setAttribute('aria-pressed', (!hidden).toString());
+      buttonWrapper.setAttribute(
         'aria-label',
         `${item.label}${hidden ? ' (hidden)' : ''}`
       );
 
+      const info = {
+        item,
+        chart,
+        isHidden: hidden,
+        label: item.label,
+        dataIndex: 'dataIndex' in item ? item.dataIndex : undefined,
+        datasetIndex: 'datasetIndex' in item ? item.datasetIndex : undefined,
+        element: li,
+      };
+
       if (typeof opts.onItemClick === 'function') {
-        opts.onItemClick({
-          item,
-          chart,
-          isHidden: hidden,
-          label: item.label,
-          dataIndex: 'dataIndex' in item ? item.dataIndex : undefined,
-          datasetIndex: 'datasetIndex' in item ? item.datasetIndex : undefined,
-          element: li,
-        });
+        opts.onItemClick(info);
       }
+
+      container.dispatchEvent(
+        new CustomEvent('legend-item-click', {
+          detail: info,
+          bubbles: true,
+          composed: true,
+        })
+      );
     };
 
-    li.addEventListener('click', toggleItemVisibility);
+    buttonWrapper.addEventListener('click', toggleItemVisibility);
 
-    li.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-        toggleItemVisibility();
-        e.preventDefault();
-      }
-    });
-
-    li.appendChild(colorBox);
-    li.appendChild(label);
+    buttonWrapper.appendChild(colorBox);
+    buttonWrapper.appendChild(label);
+    li.appendChild(buttonWrapper);
     ul.appendChild(li);
 
-    legendItems.push(li);
+    legendItems.push(buttonWrapper);
   });
 
   if (legendItems.length > 0) {
-    legendItems.forEach((item, index) => {
-      item.addEventListener('keydown', (e) => {
+    legendItems.forEach((button, index) => {
+      button.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
           const nextIndex = (index + 1) % legendItems.length;
           legendItems[nextIndex].focus();
@@ -242,7 +264,6 @@ export function renderHTMLLegend(chart, container, options) {
             : `calc(100% - ${legendHeight}px)`;
 
         chartContainer.style.height = newHeight;
-
         chart.resize();
       }
     }

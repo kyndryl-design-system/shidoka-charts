@@ -178,25 +178,17 @@ The HTML Legend is fully keyboard accessible, providing an equivalent experience
 
 ## Capturing Legend Item Interactions
 
-You can capture legend item click events using the `onItemClick` callback:
+Listen for the `on-click` DOM event on your container:
 
-```javascript
-const pluginOpts = {
-  containerId: 'my-html-legend-container',
-  onItemClick: (info) => {
-    console.log('Legend item clicked:', info.label);
-    console.log('Current visibility:', info.isHidden ? 'Hidden' : 'Visible');
-    console.log('Dataset index:', info.datasetIndex);
-  },
-};
-
-renderHTMLLegend(chart, container, {
-  maxHeight: 100,
-  onItemClick: (info) => {
-    console.log('Item clicked:', info);
-  },
-});
+```html
+<div
+  id="legend-container"
+  @legend-item-click=${(e: CustomEvent) => action('legendItemClick')(e.detail)}
+  style="margin-top:10px; padding:8px; border:1px solid var(--kd-color-border-variants-light)"
+></div>
 ```
+
+This bubbles up from each `<li>` toggle and sends the same info object as onItemClick.
 
 ### Using with Storybook Actions
 
@@ -221,7 +213,7 @@ renderHTMLLegend(chart, container, {
       actionData.dataIndex = info.dataIndex;
     }
 
-    action('legendItemClick')(actionData);
+    action('on-click')(actionData);
   },
 });
 ```

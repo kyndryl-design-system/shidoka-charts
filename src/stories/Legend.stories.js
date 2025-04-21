@@ -237,7 +237,7 @@ export const ExternalHTMLLegend = {
     return html`
       <style>
         #external-html-legend {
-          margin-top: 10px;
+          margin-top: 20px;
         }
       </style>
       <kd-chart
@@ -352,7 +352,7 @@ export const LegendWithClickHandler = {
               actionData.dataIndex = info.dataIndex;
             }
 
-            action('legendItemClick')(actionData);
+            action('on-click')(actionData);
           },
         });
       }
@@ -381,7 +381,10 @@ export const LegendWithClickHandler = {
         }}
         .colorPalette=${args.colorPalette}
       ></kd-chart>
-      <div id="clickable-legend-container"></div>
+      <div
+        id="clickable-legend-container"
+        @on-click=${(e) => action('on-click')(e.detail)}
+      ></div>
     `;
   },
 };
@@ -415,6 +418,7 @@ export const CustomStyledLegend = {
           gap: 4px;
           justify-content: center;
           padding-top: 4px;
+          padding-bottom: 4px;
         }
 
         #custom-styled-legend .custom-legend-items {
