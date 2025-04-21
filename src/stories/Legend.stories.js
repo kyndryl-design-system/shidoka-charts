@@ -469,3 +469,47 @@ export const CustomStyledLegend = {
     `;
   },
 };
+
+export const InlineGrid = {
+  name: 'Inline side‑by‑side (Canvas vs. HTML Legends)',
+  render: () => html`
+    <style>
+      .chart-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 24px;
+      }
+      .chart-grid kd-chart {
+        /* this drives the total height of each chart */
+        --kd-chart-height: 360px;
+        /* this caps the HTML legend height */
+        --kd-html-legend-max-height: 80px;
+        height: 100%; /* make the host fill the grid cell */
+      }
+    </style>
+
+    <div class="chart-grid">
+      <!-- Canvas legend version -->
+      <kd-chart
+        type="bar"
+        .chartTitle=${'Canvas Legend'}
+        .labels=${basicData.labels}
+        .datasets=${basicData.datasets}
+        .options=${basicData.options}
+        colorPalette=${basicData.colorPalette}
+        ?useHtmlLegend=${false}
+      ></kd-chart>
+
+      <!-- HTML legend version -->
+      <kd-chart
+        type="bar"
+        .chartTitle=${'HTML Legend'}
+        .labels=${basicData.labels}
+        .datasets=${basicData.datasets}
+        .options=${basicData.options}
+        colorPalette=${basicData.colorPalette}
+        ?useHtmlLegend=${true}
+      ></kd-chart>
+    </div>
+  `,
+};
