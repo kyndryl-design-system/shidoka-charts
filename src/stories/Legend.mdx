@@ -38,6 +38,17 @@ This uses the default Chart.js canvas-rendered legend:
 ### HTML Legend
 
 > ⚠️ **Warning:** Implementing the HTML legend should be done with caution. Depending on your implementation approach, it may lead to breakages or inconsistencies in your chart's appearance or behavior. Always test thoroughly across different browsers and with various data configurations to ensure reliability.
+>
+> **Layout Considerations:** Using the HTML legend changes the overall chart aspect ratio since it exists separate from the canvas. The library now includes automatic adjustments to maintain consistent chart dimensions between HTML and canvas legends. This behavior can be controlled with the following options:
+>
+> ```javascript
+> plugins: {
+>   htmlLegend: {
+>     adjustChartHeight: true,  // enable/disable automatic height adjustment
+>     reservedLegendHeight: 40, // base height reserved for legend (px)
+>   }
+> }
+> ```
 
 This uses an enhanced HTML-based legend with better styling and scrollability:
 
@@ -61,11 +72,14 @@ This uses an enhanced HTML-based legend with better styling and scrollability:
 
 The HTML legend can be configured using the `plugins.htmlLegend` options in the chart configuration:
 
-| Option           | Description                            | Default          |
-| ---------------- | -------------------------------------- | ---------------- |
-| `maxHeight`      | Maximum height before scrolling begins | 100px            |
-| `containerClass` | CSS class for the legend container     | 'shidoka-legend' |
-| `layout`         | Legend layout orientation              | 'horizontal'     |
+| Option                 | Description                              | Default          |
+| ---------------------- | ---------------------------------------- | ---------------- |
+| `maxHeight`            | Maximum height before scrolling begins   | 100px            |
+| `containerClass`       | CSS class for the legend container       | 'shidoka-legend' |
+| `layout`               | Legend layout orientation                | 'horizontal'     |
+| `onItemClick`          | Callback when a legend item is clicked   | null             |
+| `adjustChartHeight`    | Auto-adjust chart height for consistency | true             |
+| `reservedLegendHeight` | Base space to reserve for legend (px)    | 40               |
 
 ## External Custom Legends
 
@@ -153,6 +167,77 @@ You can customize the scrollable behavior by setting the `maxHeight` option and 
   }
 </style>
 ```
+
+## Keyboard Accessibility
+
+The HTML Legend is fully keyboard accessible, providing an equivalent experience for keyboard users:
+
+- legend container is focusable via Tab key and supports scrolling with arrow keys, Page Up/Down, Home, and End
+- each legend item is focusable and can be toggled with `Enter` or `Space` keys
+- Arrow keys can be used to navigate between legend items without having to Tab through each one
+
+## Capturing Legend Item Interactions
+
+You can capture legend item click events using the `onItemClick` callback:
+
+```javascript
+const pluginOpts = {
+  containerId: 'my-html-legend-container',
+  onItemClick: (info) => {
+    console.log('Legend item clicked:', info.label);
+    console.log('Current visibility:', info.isHidden ? 'Hidden' : 'Visible');
+    console.log('Dataset index:', info.datasetIndex);
+  },
+};
+
+renderHTMLLegend(chart, container, {
+  maxHeight: 100,
+  onItemClick: (info) => {
+    console.log('Item clicked:', info);
+  },
+});
+```
+
+### Using with Storybook Actions
+
+For components developed in Storybook, you can easily integrate with Storybook Actions to monitor legend interactions:
+
+```javascript
+import { action } from '@storybook/addon-actions';
+
+renderHTMLLegend(chart, container, {
+  maxHeight: 100,
+  onItemClick: (info) => {
+    const actionData = {
+      label: info.label,
+      isHidden: info.isHidden,
+    };
+
+    if (info.datasetIndex !== undefined) {
+      actionData.datasetIndex = info.datasetIndex;
+    }
+
+    if (info.dataIndex !== undefined) {
+      actionData.dataIndex = info.dataIndex;
+    }
+
+    action('legendItemClick')(actionData);
+  },
+});
+```
+
+This will log all legend item interactions to the Storybook Actions panel, making it easy to debug and test your chart components.
+
+### Callback Information
+
+The `info` object passed to the callback contains:
+
+- `item`: The original legend item data
+- `chart`: Reference to the Chart.js chart instance
+- `isHidden`: Boolean indicating if the item is now hidden
+- `label`: Text label of the clicked item
+- `dataIndex` or `datasetIndex`: Index of the data or dataset (depending on chart type)
+- `element`: Reference to the DOM element that was clicked
 
 The HTML legend renders with the following structural elements that you can target for styling:
 

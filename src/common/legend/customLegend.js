@@ -22,7 +22,6 @@ export function renderCustomLegend(chart, container, options = {}) {
 
   scrollableContainer.className = `${legendOptions.className}-container`;
   scrollableContainer.style.width = '100%';
-  scrollableContainer.style.marginTop = '8px';
 
   const scrollContent = document.createElement('div');
 
@@ -73,7 +72,6 @@ export function renderCustomLegend(chart, container, options = {}) {
     li.style.display = 'flex';
     li.style.alignItems = 'center';
     li.style.marginRight = '12px';
-    li.style.marginBottom = '8px';
     li.style.cursor = 'pointer';
     li.style.fontSize = legendOptions.fontSize;
     li.style.fontFamily = 'var(--kd-font-family-body, inherit)';

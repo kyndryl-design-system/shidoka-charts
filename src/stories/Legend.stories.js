@@ -4,6 +4,7 @@ import { htmlLegendPlugin } from '../common/plugins/htmlLegendPlugin';
 import { renderHTMLLegend } from '../common/legend';
 import argTypes from '../common/config/chartArgTypes';
 import '../components/chart';
+import { action } from '@storybook/addon-actions';
 
 Chart.register(htmlLegendPlugin);
 
@@ -236,7 +237,7 @@ export const ExternalHTMLLegend = {
     return html`
       <style>
         #external-html-legend {
-          margin-top: 20px;
+          margin-top: 10px;
         }
       </style>
       <kd-chart
@@ -317,6 +318,73 @@ export const ExternalDoughnutOverflow = makeExternalLegendStory(
   50,
   'external-doughnut-legend'
 );
+
+export const LegendWithClickHandler = {
+  args: {
+    ...basicData,
+    useHtmlLegend: false,
+    chartTitle: 'Chart with Clickable Legend Items',
+    description:
+      'Using onItemClick callback with Storybook actions to capture legend interactions',
+  },
+  render: (args) => {
+    setTimeout(() => {
+      const chart = document.getElementById('clickable-legend-chart').chart;
+      const container = document.getElementById('clickable-legend-container');
+
+      if (chart && container) {
+        renderHTMLLegend(chart, container, {
+          maxHeight: 120,
+          boxWidth: 16,
+          boxHeight: 16,
+          borderRadius: 2,
+          onItemClick: (info) => {
+            const actionData = {
+              label: info.label,
+              isHidden: info.isHidden,
+            };
+
+            if (info.datasetIndex !== undefined) {
+              actionData.datasetIndex = info.datasetIndex;
+            }
+
+            if (info.dataIndex !== undefined) {
+              actionData.dataIndex = info.dataIndex;
+            }
+
+            action('legendItemClick')(actionData);
+          },
+        });
+      }
+    }, 100);
+
+    return html`
+      <style>
+        #clickable-legend-container {
+          margin-top: 20px;
+          padding: 10px;
+          border: 1px solid var(--kd-color-border-variants-light);
+          border-radius: 4px;
+        }
+      </style>
+      <kd-chart
+        id="clickable-legend-chart"
+        type="bar"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        ?useHtmlLegend=${args.useHtmlLegend}
+        .options=${{
+          ...args.options,
+          plugins: { legend: { display: false } },
+        }}
+        .colorPalette=${args.colorPalette}
+      ></kd-chart>
+      <div id="clickable-legend-container"></div>
+    `;
+  },
+};
 
 export const CustomStyledLegend = {
   args: {
