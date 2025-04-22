@@ -94,6 +94,7 @@ export function renderHTMLLegend(chart, container, options) {
   items.forEach((item) => {
     const li = document.createElement('li');
     li.className = opts.itemClassName;
+    li.setAttribute('data-legend-item', item.label);
     applyStyles(li, {
       display: 'flex',
       alignItems: 'center',
@@ -109,6 +110,7 @@ export function renderHTMLLegend(chart, container, options) {
 
     const buttonWrapper = document.createElement('button');
     buttonWrapper.className = `${opts.itemClassName}-button`;
+    buttonWrapper.setAttribute('data-color-name', item.label);
     applyStyles(buttonWrapper, {
       background: 'none',
       border: 'none',

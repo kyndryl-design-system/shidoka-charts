@@ -140,8 +140,7 @@ export const CanvasLegend = {
       .datasets=${args.datasets}
       ?useHtmlLegend=${args.useHtmlLegend}
       html-legend-max-height=${args.htmlLegendMaxHeight}
-      .options=${args.options}
-      .colorPalette=${args.colorPalette}
+      .options=${{ colorPalette: args.colorPalette, ...args.options }}
     ></kd-chart>
   `,
 };
@@ -162,8 +161,7 @@ export const BuiltInHTMLLegend = {
       .datasets=${args.datasets}
       ?useHtmlLegend=${args.useHtmlLegend}
       html-legend-max-height=${args.htmlLegendMaxHeight}
-      .options=${args.options}
-      .colorPalette=${args.colorPalette}
+      .options=${{ colorPalette: args.colorPalette, ...args.options }}
     ></kd-chart>
   `,
 };
@@ -186,8 +184,10 @@ export const InternalPieOverflow = {
       .datasets=${args.datasets}
       ?useHtmlLegend=${args.useHtmlLegend}
       html-legend-max-height=${args.htmlLegendMaxHeight}
-      .options=${{ plugins: { legend: { position: 'bottom' } } }}
-      .colorPalette=${args.colorPalette}
+      .options=${{
+        plugins: { legend: { position: 'bottom' } },
+        colorPalette: args.colorPalette,
+      }}
     ></kd-chart>
   `,
 };
@@ -210,8 +210,10 @@ export const InternalDoughnutOverflow = {
       .datasets=${args.datasets}
       ?useHtmlLegend=${args.useHtmlLegend}
       html-legend-max-height=${args.htmlLegendMaxHeight}
-      .options=${{ plugins: { legend: { position: 'bottom' } } }}
-      .colorPalette=${args.colorPalette}
+      .options=${{
+        plugins: { legend: { position: 'bottom' } },
+        colorPalette: args.colorPalette,
+      }}
     ></kd-chart>
   `,
 };
@@ -251,8 +253,8 @@ export const ExternalHTMLLegend = {
         .options=${{
           ...args.options,
           plugins: { legend: { display: false }, htmlLegend: pluginOpts },
+          colorPalette: args.colorPalette,
         }}
-        .colorPalette=${args.colorPalette}
       ></kd-chart>
 
       <div id="external-html-legend"></div>
@@ -300,8 +302,7 @@ const makeExternalLegendStory = (type, sliceCount, containerId) => {
         .datasets=${args.datasets}
         ?useHtmlLegend=${args.useHtmlLegend}
         html-legend-max-height=${args.htmlLegendMaxHeight}
-        .options=${args.options}
-        .colorPalette=${args.colorPalette}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
       <div id="${containerId}" style="margin-top:20px; padding:10px;"></div>
     `,
@@ -378,8 +379,8 @@ export const LegendWithClickHandler = {
         .options=${{
           ...args.options,
           plugins: { legend: { display: false } },
+          colorPalette: args.colorPalette,
         }}
-        .colorPalette=${args.colorPalette}
       ></kd-chart>
       <div
         id="clickable-legend-container"
@@ -462,8 +463,8 @@ export const CustomStyledLegend = {
         .options=${{
           ...args.options,
           plugins: { ...args.options.plugins, legend: { display: false } },
+          colorPalette: args.colorPalette,
         }}
-        .colorPalette=${args.colorPalette}
       ></kd-chart>
       <div id="custom-styled-legend" style="margin-top:20px;"></div>
     `;
@@ -495,8 +496,10 @@ export const InlineGrid = {
         .chartTitle=${'Canvas Legend'}
         .labels=${basicData.labels}
         .datasets=${basicData.datasets}
-        .options=${basicData.options}
-        colorPalette=${basicData.colorPalette}
+        .options=${{
+          colorPalette: basicData.colorPalette,
+          ...basicData.options,
+        }}
         ?useHtmlLegend=${false}
       ></kd-chart>
 
@@ -506,8 +509,10 @@ export const InlineGrid = {
         .chartTitle=${'HTML Legend'}
         .labels=${basicData.labels}
         .datasets=${basicData.datasets}
-        .options=${basicData.options}
-        colorPalette=${basicData.colorPalette}
+        .options=${{
+          colorPalette: basicData.colorPalette,
+          ...basicData.options,
+        }}
         ?useHtmlLegend=${true}
       ></kd-chart>
     </div>

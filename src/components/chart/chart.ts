@@ -365,7 +365,26 @@ export class KDChart extends LitElement {
           ? html`
               <div class="table">
                 <table>
-                  ${this.type === 'matrix'
+                  ${['pie', 'doughnut', 'polarArea'].includes(this.type)
+                    ? html`
+                        <thead>
+                          <tr>
+                            <th>Label</th>
+                            <th>Value</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          ${this.labels.map(
+                            (label, i) => html`
+                              <tr>
+                                <td>${label}</td>
+                                <td>${this.datasets[0].data[i]}</td>
+                              </tr>
+                            `
+                          )}
+                        </tbody>
+                      `
+                    : this.type === 'matrix'
                     ? html`
                         <thead>
                           <tr>
@@ -474,9 +493,9 @@ export class KDChart extends LitElement {
                                     IndexAxis === 'x' ? 'y' : 'x';
                                   return html`
                                     <tr>
-                                      ${this.labels.length
+                                      ${this.labels?.length
                                         ? html`
-                                            ${this.options?.scales[IndexAxis]
+                                            ${this.options?.scales?.[IndexAxis]
                                               ?.type === 'time'
                                               ? html`
                                                   <td>
@@ -491,6 +510,9 @@ export class KDChart extends LitElement {
                                           `
                                         : null}
                                       ${this.datasets.map((dataset) => {
+                                        if (i >= dataset.data.length)
+                                          return html`<td></td>`;
+
                                         const dataPoint = dataset.data[i];
                                         if (
                                           this.type === 'bubbleMap' ||
@@ -517,6 +539,14 @@ export class KDChart extends LitElement {
                                             </td>
                                           `;
                                         } else if (
+                                          [
+                                            'pie',
+                                            'doughnut',
+                                            'polarArea',
+                                          ].includes(this.type)
+                                        ) {
+                                          return html` <td>${dataPoint}</td> `;
+                                        } else if (
                                           typeof dataPoint === 'object' &&
                                           !Array.isArray(dataPoint) &&
                                           dataPoint !== null
@@ -526,11 +556,12 @@ export class KDChart extends LitElement {
                                               ${Object.keys(dataPoint).map(
                                                 (key) => {
                                                   const Label =
-                                                    this.options.scales[key]
+                                                    this.options?.scales?.[key]
                                                       ?.title?.text || key;
                                                   const DisplayData =
-                                                    this.options.scales[key]
-                                                      ?.type === 'time'
+                                                    this.options?.scales?.[key]
+                                                      ?.type === 'time' &&
+                                                    dataPoint[key]
                                                       ? new Date(
                                                           dataPoint[key]
                                                         ).toLocaleString()
@@ -869,28 +900,166 @@ export class KDChart extends LitElement {
   private handleDownloadImage(e: Event, jpeg: boolean) {
     e.preventDefault();
 
-    // add bg color to canvas
-    const context: any = this.canvas.getContext('2d');
+    const imgFormat = jpeg ? 'image/jpeg' : 'image/png';
+    const fileExt = jpeg ? 'jpg' : 'png';
+
+    if (this.useHtmlLegend && this.chart) {
+      if (['doughnut', 'pie'].includes(this.type)) {
+        this.exportSimpleCanvasOnly(imgFormat, fileExt);
+        return;
+      }
+
+      const originalConfig = {
+        options: JSON.parse(JSON.stringify(this.chart.options)),
+        data: JSON.parse(JSON.stringify(this.chart.data)),
+        type: this.chart.config.type,
+      };
+
+      try {
+        if (!this.chart.options.plugins) {
+          this.chart.options.plugins = {};
+        }
+
+        if (!this.chart.options.plugins.legend) {
+          this.chart.options.plugins.legend = {};
+        }
+
+        this.chart.options.plugins.legend.display = true;
+        this.chart.options.plugins.legend.position = 'bottom';
+        this.chart.options.plugins.legend.labels = {
+          boxWidth: 12,
+          boxHeight: 12,
+          padding: 10,
+          font: {
+            size: 12,
+          },
+        };
+
+        if (!this.chart.options.layout) {
+          this.chart.options.layout = { padding: { bottom: 40 } };
+        } else if (!this.chart.options.layout.padding) {
+          this.chart.options.layout.padding = { bottom: 40 };
+        } else if (typeof this.chart.options.layout.padding === 'number') {
+          this.chart.options.layout.padding = {
+            top: this.chart.options.layout.padding,
+            right: this.chart.options.layout.padding,
+            bottom: Math.max(this.chart.options.layout.padding, 40),
+            left: this.chart.options.layout.padding,
+          };
+        } else if (this.chart.options.layout.padding) {
+          this.chart.options.layout.padding.bottom = Math.max(
+            this.chart.options.layout.padding.bottom || 0,
+            40
+          );
+        }
+
+        this.chart.update('none');
+
+        const context = this.canvas.getContext('2d');
+        if (!context) throw new Error('Could not get canvas context');
+
+        const color = getTokenThemeVal('--kd-color-background-page-default');
+        context.save();
+        context.globalCompositeOperation = 'destination-over';
+        context.fillStyle = color;
+        context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        const imgData = this.chart.toBase64Image(imgFormat, 1);
+
+        const a = document.createElement('a');
+        a.href = imgData;
+        a.download = this.chartTitle + '.' + fileExt;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        context.restore();
+
+        this.chart.data = originalConfig.data;
+        this.chart.options = originalConfig.options;
+        this.chart.update();
+      } catch (error) {
+        console.error('Error exporting chart with legend:', error);
+        this.exportCanvasOnly(imgFormat, fileExt);
+      }
+    } else {
+      this.exportCanvasOnly(imgFormat, fileExt);
+    }
+  }
+
+  private exportCanvasOnly(imgFormat: string, fileExt: string) {
+    const context = this.canvas.getContext('2d');
+    if (!context || !this.chart) return;
+
     const color = getTokenThemeVal('--kd-color-background-page-default');
     context.save();
     context.globalCompositeOperation = 'destination-over';
     context.fillStyle = color;
     context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-    // set image format
-    const imgFormat = jpeg ? 'image/jpeg' : 'image/png';
-    const fileExt = jpeg ? 'jpg' : 'png';
-
-    // create a fake link to download the image
     const a = document.createElement('a');
     a.href = this.chart.toBase64Image(imgFormat, 1);
     a.download = this.chartTitle + '.' + fileExt;
-
-    // trigger the download
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
 
-    // remove canvas bg color
     context.restore();
+  }
+
+  private exportSimpleCanvasOnly(imgFormat: string, fileExt: string) {
+    const context = this.canvas.getContext('2d');
+    if (!context || !this.chart) return;
+
+    try {
+      const originalOptions = JSON.parse(JSON.stringify(this.chart.options));
+
+      context.save();
+      const color = getTokenThemeVal('--kd-color-background-page-default');
+      context.globalCompositeOperation = 'destination-over';
+      context.fillStyle = color;
+      context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+      this.chart.options = {
+        ...this.chart.options,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'bottom',
+            labels: {
+              boxWidth: 12,
+              boxHeight: 12,
+              padding: 10,
+              font: { size: 12 },
+            },
+          },
+          datalabels: { display: false, formatter: null },
+          tooltip: { enabled: false },
+          doughnutLabel: { enabled: false },
+        },
+        layout: {
+          padding: { bottom: 40 },
+        },
+      };
+
+      this.chart.update('none');
+
+      const imgData = this.chart.toBase64Image(imgFormat, 1);
+
+      const a = document.createElement('a');
+      a.href = imgData;
+      a.download = this.chartTitle + '.' + fileExt;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      context.restore();
+      this.chart.options = originalOptions;
+      this.chart.update();
+    } catch (error) {
+      console.error('Error in exportSimpleCanvasOnly:', error);
+      this.exportCanvasOnly(imgFormat, fileExt);
+    }
   }
 
   private handleDownloadCsv(e: Event) {
