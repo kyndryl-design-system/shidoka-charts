@@ -915,6 +915,10 @@ export class KDChart extends LitElement {
         type: this.chart.config.type,
       };
 
+      const originalHidden = this.chart.data.datasets.map(
+        (_: unknown, i: number) => this.chart.getDatasetMeta(i).hidden
+      );
+
       try {
         if (!this.chart.options.plugins) {
           this.chart.options.plugins = {};
@@ -974,9 +978,10 @@ export class KDChart extends LitElement {
         document.body.removeChild(a);
 
         context.restore();
-
-        this.chart.data = originalConfig.data;
         this.chart.options = originalConfig.options;
+        originalHidden.forEach((hidden: boolean, i: number) => {
+          this.chart.getDatasetMeta(i).hidden = hidden;
+        });
         this.chart.update();
       } catch (error) {
         console.error('Error exporting chart with legend:', error);
