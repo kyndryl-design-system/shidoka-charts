@@ -14,7 +14,14 @@ export default {
       url: 'https://www.figma.com/file/uwR7B1xbaRXA5spwPvzzFO/Florence-Release?node-id=2051%3A93&mode=dev',
     },
   },
-  argTypes: argTypes,
+  argTypes: {
+    ...argTypes,
+    useHtmlLegend: {
+      table: {
+        disable: true,
+      },
+    },
+  },
 };
 
 const args = {

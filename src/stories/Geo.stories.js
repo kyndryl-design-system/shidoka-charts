@@ -6,6 +6,7 @@ import capitals from './sampleData/us-capitals.json';
 import nationCapitals from './sampleData/nation-capitals.json';
 import usData from './sampleData/states-10m.json';
 import worldData from './sampleData/countries-50m.json';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 export default {
   title: 'Third Party Charts/Geo',
@@ -16,7 +17,14 @@ export default {
       url: 'https://www.figma.com/file/9NrpK3rmbOk0lhlFkEPSaO/Data-Viz-Component-Library?node-id=1652%3A2709&mode=dev',
     },
   },
-  argTypes: argTypes,
+  argTypes: {
+    ...argTypes,
+    useHtmlLegend: {
+      table: {
+        disable: true,
+      },
+    },
+  },
 };
 
 const countries = topojson.feature(
@@ -37,6 +45,7 @@ const args = {
   noBorder: false,
   width: null,
   height: null,
+  unsafeHTML: false,
 };
 
 export const WorldChoropleth = {

@@ -14,6 +14,10 @@ export default {
     ],
     control: { type: 'select' },
   },
+  useHtmlLegend: {
+    control: { type: 'boolean' },
+    defaultValue: false,
+  },
   type: {
     table: {
       disable: true,

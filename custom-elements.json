@@ -354,6 +354,22 @@
               "privacy": "private"
             },
             {
+              "kind": "field",
+              "name": "useHtmlLegend",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Use HTML legend instead of Chart.js built-in canvas legend.",
+              "privacy": "public",
+              "attribute": "useHtmlLegend"
+            },
+            {
+              "kind": "method",
+              "name": "generateScrollableLegend",
+              "privacy": "private"
+            },
+            {
               "kind": "method",
               "name": "initChart",
               "privacy": "private",
@@ -556,6 +572,15 @@
               "default": "{\n    toggleView: 'Toggle View Mode',\n    toggleFullscreen: 'Toggle Fullscreen',\n    downloadMenu: 'Download Menu',\n    downloadCsv: 'Download as CSV',\n    downloadPng: 'Download as PNG',\n    downloadJpg: 'Download as JPG',\n  }",
               "description": "Customizable text labels.",
               "fieldName": "customLabels"
+            },
+            {
+              "name": "useHtmlLegend",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Use HTML legend instead of Chart.js built-in canvas legend.",
+              "fieldName": "useHtmlLegend"
             }
           ],
           "superclass": {

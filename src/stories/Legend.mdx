@@ -1,0 +1,255 @@
+import { Meta, Canvas, Stories } from '@storybook/blocks';
+import * as LegendStories from './Legend.stories.js';
+
+<Meta title="Guidelines/Legend" id="guidelines-legend" />
+
+# Legend
+
+Legends help users identify the data series displayed in a chart. The Shidoka Charts library offers several example options for legends:
+
+## Legend Types
+
+1. **Canvas Legend** - The native Chart.js canvas-based legend
+2. **Built-in HTML Legend** - An enhanced HTML legend with better styling and scrollability
+3. **External HTML Legends** - Custom legends rendered outside the chart component
+
+## Built-in Legend Usage
+
+The chart component has a `useHtmlLegend` attribute that controls which legend to use.
+
+### Canvas Legend
+
+This uses the default Chart.js canvas-rendered legend:
+
+```html
+<kd-chart
+  type="bar"
+  useHtmlLegend="false"
+  .options=${{
+    plugins: {
+      legend: {
+        position: 'bottom'
+      }
+    }
+  }}
+></kd-chart>
+```
+
+### HTML Legend
+
+> ⚠️ **Warning:** Implementing the HTML legend should be done with caution. Depending on your implementation approach, it may lead to breakages or inconsistencies in your chart's appearance or behavior. Always test thoroughly across different browsers and with various data configurations to ensure reliability.
+
+> **PNG/JPG Considerations:** Only the `<canvas>` itself is captured in PNG/JPG exports. Any HTML legend rendered outside the `<canvas>` will not appear in the exported image.
+>
+> **Layout Considerations:** Using the HTML legend changes the overall chart aspect ratio since it exists separate from the canvas. The library now includes automatic adjustments to maintain consistent chart dimensions between HTML and canvas legends. This behavior can be controlled with the following options:
+>
+> ```javascript
+> plugins: {
+>   htmlLegend: {
+>     adjustChartHeight: true,  // enable/disable automatic height adjustment
+>     reservedLegendHeight: 40, // base height reserved for legend (px)
+>   }
+> }
+> ```
+
+This uses an enhanced HTML-based legend with better styling and scrollability:
+
+```html
+<kd-chart
+  type="bar"
+  useHtmlLegend
+  htmlLegendMaxHeight="200"
+  .options=${{
+    plugins: {
+      legend: { position: 'bottom' },
+      customLegend: {
+        boxWidth: 16,
+        boxHeight: 16,
+        borderRadius: 2
+      }
+    }
+  }}
+></kd-chart>
+```
+
+The HTML legend can be configured using the `plugins.htmlLegend` options in the chart configuration:
+
+| Option                 | Description                              | Default          |
+| ---------------------- | ---------------------------------------- | ---------------- |
+| `maxHeight`            | Maximum height before scrolling begins   | 100px            |
+| `containerClass`       | CSS class for the legend container       | 'shidoka-legend' |
+| `layout`               | Legend layout orientation                | 'horizontal'     |
+| `onItemClick`          | Callback when a legend item is clicked   | null             |
+| `adjustChartHeight`    | Auto-adjust chart height for consistency | true             |
+| `reservedLegendHeight` | Base space to reserve for legend (px)    | 40               |
+
+## External Custom Legends
+
+For more customized legends, you can create external legends using provided helper functions.
+
+### Standard HTML Legend
+
+```javascript
+import { renderHTMLLegend } from 'shidoka-charts/common/legend';
+
+const chart = document.querySelector('kd-chart').chart;
+const container = document.getElementById('legend-container');
+
+renderHTMLLegend(chart, container, {
+  maxHeight: 100, // Max height before scrolling begins
+  boxWidth: 16, // Width of color box
+  boxHeight: 16, // Height of color box
+  borderRadius: 2, // Border radius of color box
+  className: 'shidoka-legend', // CSS class for legend
+  itemClassName: 'shidoka-legend-item', // CSS class for legend items
+  layout: 'horizontal', // Legend layout orientation ('horizontal' or 'vertical')
+});
+```
+
+### Custom Styled Legend
+
+```javascript
+import { renderCustomLegend } from 'shidoka-charts/common/legend';
+
+const chart = document.querySelector('kd-chart').chart;
+const container = document.getElementById('legend-container');
+
+renderCustomLegend(chart, container, {
+  maxHeight: 100,
+  boxWidth: 16,
+  boxHeight: 16,
+  className: 'custom-legend',
+  itemClassName: 'custom-legend-item',
+});
+```
+
+### Boxed Legend Style
+
+```javascript
+import { renderBoxedLegend } from 'shidoka-charts/common/legend';
+
+const chart = document.querySelector('kd-chart').chart;
+const container = document.getElementById('legend-container');
+
+renderBoxedLegend(chart, container, {
+  maxHeight: 100,
+});
+```
+
+## Handling Large Legends
+
+For charts with many data points, legends can become large. The HTML legend automatically adds scrolling when items exceed the container size. This behavior is demonstrated in the HTMLLegendOverflow and DoughnutLegendOverflow examples below.
+
+### Customizing Scrollable Legends
+
+You can customize the scrollable behavior by setting the `maxHeight` option and adding custom styles:
+
+```html
+<kd-chart
+  type="pie"
+  useHtmlLegend
+  .options=${{
+    plugins: {
+      htmlLegend: {
+        containerClass: 'overflow-legend-container',
+        maxHeight: 200, // Controls scrolling threshold
+      }
+    }
+  }}
+></kd-chart>
+
+<style>
+  /* Custom CSS to enhance scrollable legends */
+  .overflow-legend-container .shidoka-legend-scroll-content {
+    max-height: 100px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 8px;
+  }
+</style>
+```
+
+## Keyboard Accessibility
+
+The HTML Legend is fully keyboard accessible, providing an equivalent experience for keyboard users:
+
+- legend container is focusable via Tab key and supports scrolling with arrow keys, Page Up/Down, Home, and End
+- each legend item is focusable and can be toggled with `Enter` or `Space` keys
+- Arrow keys can be used to navigate between legend items without having to Tab through each one
+
+## Capturing Legend Item Interactions
+
+Listen for the `on-click` DOM event on your container:
+
+```html
+<div
+  id="legend-container"
+  @legend-item-click=${(e: CustomEvent) => action('legendItemClick')(e.detail)}
+  style="margin-top:10px; padding:8px; border:1px solid var(--kd-color-border-variants-light)"
+></div>
+```
+
+This bubbles up from each `<li>` toggle and sends the same info object as onItemClick.
+
+### Using with Storybook Actions
+
+For components developed in Storybook, you can easily integrate with Storybook Actions to monitor legend interactions:
+
+```javascript
+import { action } from '@storybook/addon-actions';
+
+renderHTMLLegend(chart, container, {
+  maxHeight: 100,
+  onItemClick: (info) => {
+    const actionData = {
+      label: info.label,
+      isHidden: info.isHidden,
+    };
+
+    if (info.datasetIndex !== undefined) {
+      actionData.datasetIndex = info.datasetIndex;
+    }
+
+    if (info.dataIndex !== undefined) {
+      actionData.dataIndex = info.dataIndex;
+    }
+
+    action('on-click')(actionData);
+  },
+});
+```
+
+This will log all legend item interactions to the Storybook Actions panel, making it easy to debug and test your chart components.
+
+### Callback Information
+
+The `info` object passed to the callback contains:
+
+- `item`: The original legend item data
+- `chart`: Reference to the Chart.js chart instance
+- `isHidden`: Boolean indicating if the item is now hidden
+- `label`: Text label of the clicked item
+- `dataIndex` or `datasetIndex`: Index of the data or dataset (depending on chart type)
+- `element`: Reference to the DOM element that was clicked
+
+The HTML legend renders with the following structural elements that you can target for styling:
+
+```
+div.shidoka-legend (or your custom className)
+  └── div.shidoka-legend-scroll-content
+       └── ul.shidoka-legend-items
+            └── li.shidoka-legend-item
+                 ├── span.shidoka-legend-item-color
+                 └── span.shidoka-legend-item-label
+```
+
+<style>
+  {`
+    .sbdocs-content {
+      max-width: none !important;
+    }
+  `}
+</style>
+
+<Stories />

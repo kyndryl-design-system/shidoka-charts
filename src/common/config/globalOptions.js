@@ -18,6 +18,7 @@ const defaultConfig = (ctx) => {
         color: 'transparent',
       },
       legend: {
+        display: false,
         position: 'bottom',
         labels: {
           boxWidth: 16,
@@ -26,8 +27,6 @@ const defaultConfig = (ctx) => {
           useBorderRadius: true,
           padding: 8,
         },
-        // onHover: handleLegendHover, // doesn't work with transparent or gradient bgs
-        // onLeave: handleLegendLeave,
       },
       tooltip: {
         bodyColor: TooltipTextColor,
