@@ -19,6 +19,7 @@ import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
 import gradientLegendPlugin from '../../common/plugins/gradientLegend';
 import { renderHTMLLegend } from '../../common/legend';
+import { htmlLegendPlugin } from '../../common/plugins/htmlLegendPlugin';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import datalabelsPlugin from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
@@ -606,11 +607,14 @@ export class KDChart extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback();
-
-    this._themeObserver.observe(
-      document.querySelector('meta[name="color-scheme"]'),
-      { attributes: true }
-    );
+    try {
+      const meta = document.querySelector('meta[name="color-scheme"]');
+      if (meta instanceof Node) {
+        this._themeObserver.observe(meta, { attributes: true });
+      }
+    } catch (error) {
+      console.warn('Failed to set up theme observer:', error);
+    }
   }
 
   override disconnectedCallback() {
@@ -628,19 +632,41 @@ export class KDChart extends LitElement {
   private generateScrollableLegend() {
     if (!this.chart || !this.useHtmlLegend) return;
 
-    const legendContainer = this.shadowRoot?.querySelector(
+    const legendContainer = this.shadowRoot!.querySelector(
       '.html-legend-container'
-    );
+    ) as HTMLElement;
     if (!legendContainer) return;
 
-    const legendOptions = this.mergedOptions.plugins.customLegend;
+    const htmlLegendOpts = this.mergedOptions.plugins.htmlLegend || {};
 
-    renderHTMLLegend(this.chart, legendContainer as HTMLElement, {
+    const opts: Record<string, unknown> = {
       maxHeight: this.htmlLegendMaxHeight,
-      boxWidth: legendOptions?.boxWidth || 16,
-      boxHeight: legendOptions?.boxHeight || 16,
-      borderRadius: legendOptions?.borderRadius || 2,
+    };
+
+    const availableOptions = [
+      'boxWidth',
+      'boxHeight',
+      'borderRadius',
+      'className',
+      'itemClassName',
+      'layout',
+      'fontSize',
+      'boxMargin',
+      'adjustChartHeight',
+      'reservedLegendHeight',
+    ];
+
+    availableOptions.forEach((optionName) => {
+      if (htmlLegendOpts[optionName] !== undefined) {
+        opts[optionName] = htmlLegendOpts[optionName];
+      }
     });
+
+    if (typeof htmlLegendOpts.onItemClick === 'function') {
+      opts.onItemClick = htmlLegendOpts.onItemClick;
+    }
+
+    renderHTMLLegend(this.chart, legendContainer, opts);
   }
 
   override updated(changedProps: any) {
@@ -741,43 +767,28 @@ export class KDChart extends LitElement {
    * and options.
    */
   private initChart() {
-    const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
-
-    // Configure chart options
-    Chart.defaults.color = getTokenThemeVal('--kd-color-text-level-primary');
-
-    // We already handled legend config in mergeOptions
-
-    // Select plugin when type='meter'. Otherwise both plugins (meterGaugePlugin & doughnutLabelPlugin) are called
-    const pluginSelectForDoghnutMeter =
+    const pluginSelect =
       this.type === 'meter' ? meterGaugePlugin : doughnutLabelPlugin;
 
-    let plugins = [
+    const chartPlugins = [
       canvasBackgroundPlugin,
-      pluginSelectForDoghnutMeter,
+      pluginSelect,
       gradientLegendPlugin,
       ...this.plugins,
+      a11yPlugin,
     ];
 
-    // only add certain plugins for standard chart types
-    if (!ignoredTypes.includes(this.type)) {
-      // plugins = [...plugins, a11yPlugin, musicPlugin];
-      plugins = [...plugins, a11yPlugin];
+    // add htmlLegendPlugin if useHtmlLegend is enabled
+    if (this.useHtmlLegend) {
+      chartPlugins.push(htmlLegendPlugin);
     }
 
-    if (this.chart) {
-      this.chart.destroy();
-    }
-
+    if (this.chart) this.chart.destroy();
     this.chart = new Chart(this.canvas, {
-      //type: this.type,
       type: this.type === 'meter' ? 'doughnut' : this.type,
-      data: {
-        labels: this.labels,
-        datasets: this.mergedDatasets,
-      },
+      data: { labels: this.labels, datasets: this.mergedDatasets },
       options: this.mergedOptions,
-      plugins: plugins,
+      plugins: chartPlugins,
     });
 
     this.generateScrollableLegend();
@@ -791,79 +802,58 @@ export class KDChart extends LitElement {
     const radialTypes = ['pie', 'doughnut', 'radar', 'polarArea', 'meter'];
     const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
 
-    const additionalTypeImports: any = [];
+    // dynamically import type-specific configs
+    const additionalTypeImports: any[] = [];
     this.datasets.forEach((dataset) => {
-      // get chart types from datasets so we can import additional configs
       if (dataset.type) {
         additionalTypeImports.push(
           import(`../../common/config/chartTypes/${dataset.type}.js`)
         );
       }
     });
-
-    // import main and additional chart type configs
     const chartTypeConfigs = await Promise.all([
       import(`../../common/config/chartTypes/${this.type}.js`),
       ...additionalTypeImports,
     ]);
 
-    // start with global options
     let mergedOptions: any = globalOptions(this);
+    mergedOptions.plugins = mergedOptions.plugins || {};
 
-    // Configure legend display based on useHtmlLegend property
-    if (!this.useHtmlLegend) {
-      // Enable built-in Chart.js legend when HTML legend is disabled
-      mergedOptions.plugins = mergedOptions.plugins || {};
+    if (this.useHtmlLegend) {
+      mergedOptions.plugins.legend = { display: false };
+      mergedOptions.plugins.htmlLegend = mergedOptions.plugins.htmlLegend || {};
+    } else {
       mergedOptions.plugins.legend = mergedOptions.plugins.legend || {};
       mergedOptions.plugins.legend.display = true;
-
-      // Disable customLegend options when using built-in legend
-      if (mergedOptions.plugins.customLegend) {
-        mergedOptions.plugins.customLegend.display = false;
-      }
     }
 
-    // merge global type options
+    // merge radial vs non-radial defaults
     if (radialTypes.includes(this.type)) {
       mergedOptions = deepmerge(mergedOptions, globalOptionsRadial(this));
     } else if (!ignoredTypes.includes(this.type)) {
       mergedOptions = deepmerge(mergedOptions, globalOptionsNonRadial(this));
     }
 
-    const mergedDatasets: any = JSON.parse(JSON.stringify(this.datasets));
+    const mergedDatasets: any[] = JSON.parse(JSON.stringify(this.datasets));
 
-    chartTypeConfigs.forEach((chartTypeConfig: any) => {
-      // merge all of the imported chart type options with the global options
-      mergedOptions = deepmerge(mergedOptions, chartTypeConfig.options(this));
-
-      // merge all of the imported chart type dataset options
-      mergedDatasets.forEach((dataset: any, index: number) => {
-        if (
-          (!dataset.type && chartTypeConfig.type === this.type) ||
-          dataset.type === chartTypeConfig.type
-        ) {
-          mergedDatasets[index] = deepmerge(
-            dataset,
-            chartTypeConfig.datasetOptions(this, index)
-          );
+    chartTypeConfigs.forEach((cfg: any) => {
+      mergedOptions = deepmerge(mergedOptions, cfg.options(this));
+      mergedDatasets.forEach((ds: any, i: number) => {
+        if ((!ds.type && cfg.type === this.type) || ds.type === cfg.type) {
+          mergedDatasets[i] = deepmerge(ds, cfg.datasetOptions(this, i));
         }
       });
     });
 
     if (this.options) {
-      // merge any consumer supplied options with defaults
       mergedOptions = deepmerge(mergedOptions, this.options);
     }
     this.mergedOptions = mergedOptions;
 
-    // merge default chart type dataset options with consumer supplied datasets
-    mergedDatasets.forEach((dataset: object, index: number) => {
-      const customDeepmerge = deepmergeCustom({
-        mergeArrays: false,
-      });
-      mergedDatasets[index] = customDeepmerge(dataset, this.datasets[index]);
+    mergedDatasets.forEach((ds: object, i: number) => {
+      const customDeep = deepmergeCustom({ mergeArrays: false });
+      mergedDatasets[i] = customDeep(ds, this.datasets[i]);
     });
-
     this.mergedDatasets = mergedDatasets;
   }
 

@@ -13,7 +13,7 @@ export default {
 
       // get sum of all visible data points
       const total = chart.config.data.datasets[0].data
-        .filter((dataPoint, index) => !chart.legend.legendItems[index].hidden)
+        .filter((dataPoint, index) => !chart.legend.legendItems[index]?.hidden)
         .reduce((a, b) => a + b, 0);
 
       ctx.textAlign = 'center';
