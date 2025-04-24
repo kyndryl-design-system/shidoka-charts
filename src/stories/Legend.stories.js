@@ -198,16 +198,7 @@ export const InternalDoughnutOverflow = {
     useHtmlLegend: true,
     htmlLegendMaxHeight: 150,
     chartTitle: 'Doughnut Chart with Internal HTML Legend Overflow',
-    labels: [
-      'Red',
-      'Blue',
-      'Green',
-      'Yellow',
-      'Purple',
-      'Orange',
-      'Pink',
-      'Plum',
-    ],
+    labels: manyLabels.slice(0, 50),
     datasets: [{ data: randomData(50) }],
   },
   render: (args) => html`
