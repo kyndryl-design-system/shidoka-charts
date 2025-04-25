@@ -401,6 +401,86 @@ The `info` object passed to the callback contains:
 - `dataIndex` or `datasetIndex`: Index of the data or dataset (depending on chart type)
 - `element`: Reference to the DOM element that was clicked
 
+### Angular Integration Example
+
+When using the chart in an Angular application, you can capture the legend click events to filter your data:
+
+```typescript
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { DataService } from '../services/data.service';
+
+@Component({
+  selector: 'app-sales-dashboard',
+  template: `
+    <kd-chart
+      #salesChart
+      type="bar"
+      [useHtmlLegend]="true"
+      [chartTitle]="'Sales Data'"
+      [labels]="chartLabels"
+      [datasets]="chartDatasets"
+    >
+    </kd-chart>
+  `,
+})
+export class SalesDashboardComponent implements AfterViewInit {
+  @ViewChild('salesChart') chartRef!: ElementRef;
+  chartLabels: string[] = [];
+  chartDatasets: any[] = [];
+
+  constructor(private dataService: DataService) {
+    this.loadInitialData();
+  }
+
+  ngAfterViewInit(): void {
+    // Add event listener for legend clicks
+    this.chartRef.nativeElement.addEventListener('on-click', (e: CustomEvent) =>
+      this.handleLegendClick(e)
+    );
+  }
+
+  handleLegendClick(event: CustomEvent): void {
+    const { label, isHidden, datasetIndex } = event.detail;
+
+    console.log(`Dataset '${label}' is now ${isHidden ? 'hidden' : 'visible'}`);
+
+    // call API with filtered categories
+    const hiddenCategories = this.getHiddenCategories();
+
+    this.dataService.getFilteredData(hiddenCategories).subscribe((data) => {
+      // update other components with filtered data
+      this.updateRelatedComponents(data);
+    });
+  }
+
+  getHiddenCategories(): string[] {
+    const chart = this.chartRef.nativeElement.chart;
+    const hidden: string[] = [];
+
+    if (chart) {
+      chart.data.datasets.forEach((dataset: any, index: number) => {
+        if (chart.getDatasetMeta(index).hidden) {
+          hidden.push(dataset.label);
+        }
+      });
+    }
+
+    return hidden;
+  }
+
+  loadInitialData(): void {
+    this.dataService.getData().subscribe((data) => {
+      this.chartLabels = data.labels;
+      this.chartDatasets = data.datasets;
+    });
+  }
+
+  updateRelatedComponents(data: any): void {
+    // update tables, metrics, or other visualizations
+  }
+}
+```
+
 ### Grid Layout Example
 
 ```html
