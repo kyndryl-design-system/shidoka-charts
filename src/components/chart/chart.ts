@@ -51,6 +51,20 @@ Chart.register(
   datalabelsPlugin
 );
 
+export interface HtmlLegendOptions {
+  boxWidth?: number;
+  boxHeight?: number;
+  borderRadius?: number;
+  className?: string;
+  itemClassName?: string;
+  layout?: 'horizontal' | 'vertical';
+  fontSize?: number;
+  boxMargin?: number;
+  adjustChartHeight?: boolean;
+  reservedLegendHeight?: number;
+  onItemClick?: (e: MouseEvent, legendItem: any) => void;
+}
+
 /**
  * Chart.js wrapper component.
  * @slot unnamed - Slot for custom content between header and chart.
@@ -144,6 +158,10 @@ export class KDChart extends LitElement {
   /** Max height for HTML legend scroll container (px). */
   @property({ type: Number, reflect: true })
   htmlLegendMaxHeight = 100;
+
+  /** Full set of legend customization options */
+  @property({ type: Object })
+  htmlLegendOptions: HtmlLegendOptions = {};
 
   /**
    * Queries the container element.
@@ -629,44 +647,37 @@ export class KDChart extends LitElement {
     this._resizeObserver.observe(el);
   }
 
-  private generateScrollableLegend() {
+  private generateScrollableLegend(): void {
     if (!this.chart || !this.useHtmlLegend) return;
 
-    const legendContainer = this.shadowRoot!.querySelector(
+    const legendContainer = this.shadowRoot!.querySelector<HTMLElement>(
       '.html-legend-container'
-    ) as HTMLElement;
-    if (!legendContainer) return;
+    )!;
+    legendContainer.innerHTML = '';
 
-    const htmlLegendOpts = this.mergedOptions.plugins.htmlLegend || {};
-
-    const opts: Record<string, unknown> = {
+    const opts = {
       maxHeight: this.htmlLegendMaxHeight,
+      ...this.htmlLegendOptions,
     };
 
-    const availableOptions = [
-      'boxWidth',
-      'boxHeight',
-      'borderRadius',
-      'className',
-      'itemClassName',
-      'layout',
-      'fontSize',
-      'boxMargin',
-      'adjustChartHeight',
-      'reservedLegendHeight',
-    ];
-
-    availableOptions.forEach((optionName) => {
-      if (htmlLegendOpts[optionName] !== undefined) {
-        opts[optionName] = htmlLegendOpts[optionName];
-      }
-    });
-
-    if (typeof htmlLegendOpts.onItemClick === 'function') {
-      opts.onItemClick = htmlLegendOpts.onItemClick;
-    }
-
     renderHTMLLegend(this.chart, legendContainer, opts);
+
+    legendContainer.querySelectorAll<HTMLLIElement>('li').forEach((li) => {
+      const idx = Number(li.dataset.index);
+      li.addEventListener('click', (e) => {
+        this.htmlLegendOptions.onItemClick?.(
+          e as MouseEvent,
+          this.chart.getDatasetMeta(idx)
+        );
+        this.dispatchEvent(
+          new CustomEvent('legend-item-click', {
+            detail: { label: li.textContent, datasetIndex: idx },
+            bubbles: true,
+            composed: true,
+          })
+        );
+      });
+    });
   }
 
   override updated(changedProps: any) {
