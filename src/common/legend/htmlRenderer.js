@@ -264,7 +264,7 @@ export function renderHTMLLegend(chart, container, options) {
       }
 
       container.dispatchEvent(
-        new CustomEvent('legend-item-click', {
+        new CustomEvent('on-click', {
           detail: info,
           bubbles: true,
           composed: true,
@@ -273,7 +273,6 @@ export function renderHTMLLegend(chart, container, options) {
     };
 
     buttonWrapper.addEventListener('click', toggleItemVisibility);
-    // Also add keyboard support for toggles
     buttonWrapper.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();

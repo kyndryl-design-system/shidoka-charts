@@ -242,7 +242,7 @@ When you have multiple chart instances on a page, you can synchronize them using
     type="bar"
     useHtmlLegend
     .datasets=${datasets}
-    @legend-item-click=${(e) => syncAllCharts(e.detail, 'bar-chart')}
+    @on-click=${(e) => syncAllCharts(e.detail, 'bar-chart')}
   ></kd-chart>
 
   <kd-chart
@@ -250,7 +250,7 @@ When you have multiple chart instances on a page, you can synchronize them using
     type="line"
     useHtmlLegend
     .datasets=${datasets}
-    @legend-item-click=${(e) => syncAllCharts(e.detail, 'line-chart')}
+    @on-click=${(e) => syncAllCharts(e.detail, 'line-chart')}
   ></kd-chart>
 </div>
 ```
@@ -329,30 +329,65 @@ function collectHiddenDatasets() {
 }
 ```
 
-### Using with Storybook Actions
+### Debugging With Storybook Actions
+
+To debug legend interactions in Storybook, the event listener approach is recommended:
 
 ```javascript
-import { action } from '@storybook/addon-actions';
+// In your Storybook story
+export const WithLegendDebugging = () => {
+  const container = document.createElement('div');
+  container.innerHTML = `
+    <kd-chart
+      id="debug-chart"
+      type="bar"
+      useHtmlLegend
+      .datasets=${sampleData.datasets}
+      .labels=${sampleData.labels}
+    ></kd-chart>
+  `;
 
-renderHTMLLegend(chart, container, {
-  maxHeight: 100,
-  onItemClick: (info) => {
-    const actionData = {
-      label: info.label,
-      isHidden: info.isHidden,
-    };
+  // Listen for legend click events at the container level
+  container.addEventListener('on-click', (event) => {
+    action('legend-clicked')(event.detail);
+  });
 
-    if (info.datasetIndex !== undefined) {
-      actionData.datasetIndex = info.datasetIndex;
-    }
+  return container;
+};
 
-    if (info.dataIndex !== undefined) {
-      actionData.dataIndex = info.dataIndex;
-    }
-
-    action('on-click')(actionData);
+WithLegendDebugging.parameters = {
+  docs: {
+    description: {
+      story:
+        'This example shows how to debug legend interactions using Storybook actions.',
+    },
   },
-});
+};
+```
+
+Alternatively, you can use the `htmlLegendOptions` to set up debugging:
+
+```javascript
+export const LegendWithStorybook = {
+  render: () => html`
+    <kd-chart
+      type="bar"
+      .datasets=${sampleData.datasets}
+      .labels=${sampleData.labels}
+      useHtmlLegend
+      .htmlLegendOptions=${{
+        onItemClick: (info) => {
+          action('legend-click')({
+            label: info.label,
+            isHidden: info.isHidden,
+            datasetIndex: info.datasetIndex,
+            dataIndex: info.dataIndex,
+          });
+        },
+      }}
+    ></kd-chart>
+  `,
+};
 ```
 
 ### Callback Information

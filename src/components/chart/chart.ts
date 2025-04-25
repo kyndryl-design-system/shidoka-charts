@@ -683,7 +683,7 @@ export class KDChart extends LitElement {
         }
 
         this.dispatchEvent(
-          new CustomEvent('legend-item-click', {
+          new CustomEvent('on-click', {
             detail: info,
             bubbles: true,
             composed: true,
