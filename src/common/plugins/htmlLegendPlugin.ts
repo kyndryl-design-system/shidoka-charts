@@ -9,6 +9,7 @@ export interface LegendItemClickInfo {
   dataIndex?: number;
   datasetIndex?: number;
   element: HTMLElement;
+  event?: Event;
 }
 
 export interface HtmlLegendPluginOptions {
@@ -23,6 +24,12 @@ export interface HtmlLegendPluginOptions {
   onItemClick?: (info: LegendItemClickInfo) => void;
   adjustChartHeight?: boolean;
   reservedLegendHeight?: number;
+  columns?: number;
+  labelFormatter?: (label: string, item: any) => string;
+  itemClassResolver?: (item: any) => string | null;
+  searchEnabled?: boolean;
+  searchPlaceholder?: string;
+  position?: 'top' | 'bottom' | 'left' | 'right';
 }
 
 export const htmlLegendPlugin = {

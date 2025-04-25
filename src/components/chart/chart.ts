@@ -51,6 +51,17 @@ Chart.register(
   datalabelsPlugin
 );
 
+export interface LegendClickInfo {
+  item: any;
+  chart: Chart;
+  isHidden: boolean;
+  label: string;
+  dataIndex?: number;
+  datasetIndex?: number;
+  element: HTMLElement;
+  event?: MouseEvent;
+}
+
 export interface HtmlLegendOptions {
   boxWidth?: number;
   boxHeight?: number;
@@ -62,7 +73,15 @@ export interface HtmlLegendOptions {
   boxMargin?: number;
   adjustChartHeight?: boolean;
   reservedLegendHeight?: number;
-  onItemClick?: (e: MouseEvent, legendItem: any) => void;
+  /**
+   * Callback fired when a legend item is clicked.
+   * This handler receives comprehensive information and can interact with external APIs.
+   */
+  onItemClick?: (info: LegendClickInfo) => void;
+  columns?: number;
+  labelFormatter?: (label: string, item: any) => string;
+  itemClassResolver?: (item: any) => string | null;
+  position?: 'top' | 'bottom' | 'left' | 'right';
 }
 
 /**
@@ -658,30 +677,25 @@ export class KDChart extends LitElement {
     const opts = {
       maxHeight: this.htmlLegendMaxHeight,
       ...this.htmlLegendOptions,
-    };
+      onItemClick: (info: LegendClickInfo) => {
+        if (this.htmlLegendOptions.onItemClick) {
+          this.htmlLegendOptions.onItemClick(info);
+        }
 
-    renderHTMLLegend(this.chart, legendContainer, opts);
-
-    legendContainer.querySelectorAll<HTMLLIElement>('li').forEach((li) => {
-      const idx = Number(li.dataset.index);
-      li.addEventListener('click', (e) => {
-        this.htmlLegendOptions.onItemClick?.(
-          e as MouseEvent,
-          this.chart.getDatasetMeta(idx)
-        );
         this.dispatchEvent(
           new CustomEvent('legend-item-click', {
-            detail: { label: li.textContent, datasetIndex: idx },
+            detail: info,
             bubbles: true,
             composed: true,
           })
         );
-      });
-    });
+      },
+    };
+
+    renderHTMLLegend(this.chart, legendContainer, opts);
   }
 
   override updated(changedProps: any) {
-    // Update chart instance when data changes.
     if (
       this.chart &&
       (changedProps.has('labels') ||
@@ -692,31 +706,26 @@ export class KDChart extends LitElement {
         this.chart.data.labels = this.labels;
         this.chart.options = this.mergedOptions;
 
-        // remove datasets not in mergedDatasets
         this.chart.data.datasets.forEach((dataset: any, index: number) => {
           const NewDataset = this.mergedDatasets.find(
             (newDataset: any) => newDataset.label === dataset.label
           );
 
           if (!NewDataset) {
-            // remove
             this.chart.data.datasets.splice(index, 1);
           }
         });
 
-        // update datasets, add new ones
         this.mergedDatasets.forEach((dataset: any) => {
-          const OldDataset = this.chart.data.datasets.find(
-            (oldDataset: any) => oldDataset.label === dataset.label
+          const prevDataset = this.chart.data.datasets.find(
+            (prevDataset: any) => prevDataset.label === dataset.label
           );
 
-          if (!OldDataset) {
-            // add new dataset
+          if (!prevDataset) {
             this.chart.data.datasets.push(dataset);
           } else {
-            // update each key/entry in the dataset object
             Object.keys(dataset).forEach((key) => {
-              OldDataset[key] = dataset[key];
+              prevDataset[key] = dataset[key];
             });
           }
         });
