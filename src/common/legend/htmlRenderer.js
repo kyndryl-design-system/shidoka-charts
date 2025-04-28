@@ -13,6 +13,10 @@ const defaultOpts = {
   onItemClick: null,
   adjustChartHeight: true,
   reservedLegendHeight: 40,
+  columns: 0,
+  labelFormatter: null,
+  itemClassResolver: null,
+  position: 'bottom',
 };
 
 function applyStyles(el, styles) {
@@ -75,19 +79,32 @@ export function renderHTMLLegend(chart, container, options) {
 
   const ul = document.createElement('ul');
   ul.className = `${opts.className}-items`;
-  applyStyles(ul, {
+
+  const ulStyles = {
     display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
     listStyle: 'none',
     margin: '0',
     paddingTop: '8px',
     paddingBottom: '8px',
     paddingLeft: '0',
-    flexDirection: opts.layout === 'vertical' ? 'column' : 'row',
     gap: '12px',
     width: '100%',
-  });
+  };
+
+  if (opts.layout === 'vertical') {
+    ulStyles.flexDirection = 'column';
+    ulStyles.flexWrap = 'nowrap';
+    ulStyles.justifyContent = 'flex-start';
+  } else if (opts.columns > 0) {
+    ulStyles.display = 'grid';
+    ulStyles.gridTemplateColumns = `repeat(${opts.columns}, 1fr)`;
+    ulStyles.justifyContent = 'flex-start';
+  } else {
+    ulStyles.flexWrap = 'wrap';
+    ulStyles.justifyContent = 'center';
+  }
+
+  applyStyles(ul, ulStyles);
 
   const legendItems = [];
 
@@ -95,6 +112,25 @@ export function renderHTMLLegend(chart, container, options) {
     const li = document.createElement('li');
     li.className = opts.itemClassName;
     li.setAttribute('data-legend-item', item.label);
+    li.setAttribute(
+      'data-index',
+      item.datasetIndex !== undefined
+        ? item.datasetIndex
+        : item.dataIndex !== undefined
+        ? item.dataIndex
+        : ''
+    );
+
+    if (
+      opts.itemClassResolver &&
+      typeof opts.itemClassResolver === 'function'
+    ) {
+      const customClass = opts.itemClassResolver(item);
+      if (customClass) {
+        li.classList.add(customClass);
+      }
+    }
+
     applyStyles(li, {
       display: 'flex',
       alignItems: 'center',
@@ -167,11 +203,38 @@ export function renderHTMLLegend(chart, container, options) {
       border: item.needsBorder ? `1.5px solid ${item.color}` : '',
     });
 
+    const valueVisible =
+      chart.config.type === 'doughnut' ||
+      chart.config.type === 'pie' ||
+      chart.config.type === 'polarArea';
+
     const label = document.createElement('span');
     label.className = `${opts.itemClassName}-label`;
-    label.textContent = item.label;
 
-    const toggleItemVisibility = () => {
+    if (opts.labelFormatter && typeof opts.labelFormatter === 'function') {
+      label.textContent = opts.labelFormatter(item.label, item);
+    } else {
+      label.textContent = item.label;
+    }
+
+    if (valueVisible && 'dataIndex' in item && chart.data.datasets[0].data) {
+      const value = chart.data.datasets[0].data[item.dataIndex];
+      if (value !== undefined) {
+        const valueSpan = document.createElement('span');
+        valueSpan.className = `${opts.itemClassName}-value`;
+        valueSpan.textContent = ` (${value})`;
+        applyStyles(valueSpan, {
+          marginLeft: '4px',
+          fontSize: '0.9em',
+          opacity: '0.8',
+        });
+        label.appendChild(valueSpan);
+      }
+    }
+
+    const toggleItemVisibility = (e) => {
+      e.stopPropagation();
+
       item.toggleVisibility();
       const hidden =
         'dataIndex' in item
@@ -193,6 +256,7 @@ export function renderHTMLLegend(chart, container, options) {
         dataIndex: 'dataIndex' in item ? item.dataIndex : undefined,
         datasetIndex: 'datasetIndex' in item ? item.datasetIndex : undefined,
         element: li,
+        event: e,
       };
 
       if (typeof opts.onItemClick === 'function') {
@@ -200,7 +264,7 @@ export function renderHTMLLegend(chart, container, options) {
       }
 
       container.dispatchEvent(
-        new CustomEvent('legend-item-click', {
+        new CustomEvent('on-click', {
           detail: info,
           bubbles: true,
           composed: true,
@@ -209,6 +273,12 @@ export function renderHTMLLegend(chart, container, options) {
     };
 
     buttonWrapper.addEventListener('click', toggleItemVisibility);
+    buttonWrapper.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleItemVisibility(e);
+      }
+    });
 
     buttonWrapper.appendChild(colorBox);
     buttonWrapper.appendChild(label);
@@ -221,15 +291,62 @@ export function renderHTMLLegend(chart, container, options) {
   if (legendItems.length > 0) {
     legendItems.forEach((button, index) => {
       button.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-          const nextIndex = (index + 1) % legendItems.length;
-          legendItems[nextIndex].focus();
-          e.preventDefault();
-        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-          const prevIndex =
-            (index - 1 + legendItems.length) % legendItems.length;
-          legendItems[prevIndex].focus();
-          e.preventDefault();
+        const navigateTo = (targetIndex) => {
+          if (targetIndex >= 0 && targetIndex < legendItems.length) {
+            legendItems[targetIndex].focus();
+            e.preventDefault();
+          }
+        };
+
+        if (opts.columns > 1) {
+          const totalRows = Math.ceil(legendItems.length / opts.columns);
+          const currentRow = Math.floor(index / opts.columns);
+          const currentCol = index % opts.columns;
+
+          switch (e.key) {
+            case 'ArrowRight':
+              navigateTo(
+                currentRow * opts.columns + ((currentCol + 1) % opts.columns)
+              );
+              break;
+            case 'ArrowLeft':
+              navigateTo(
+                currentRow * opts.columns +
+                  ((currentCol - 1 + opts.columns) % opts.columns)
+              );
+              break;
+            case 'ArrowDown':
+              navigateTo(
+                ((currentRow + 1) % totalRows) * opts.columns + currentCol
+              );
+              break;
+            case 'ArrowUp':
+              navigateTo(
+                ((currentRow - 1 + totalRows) % totalRows) * opts.columns +
+                  currentCol
+              );
+              break;
+          }
+        } else if (opts.layout === 'vertical' || opts.columns === 1) {
+          switch (e.key) {
+            case 'ArrowDown':
+              navigateTo((index + 1) % legendItems.length);
+              break;
+            case 'ArrowUp':
+              navigateTo((index - 1 + legendItems.length) % legendItems.length);
+              break;
+          }
+        } else {
+          switch (e.key) {
+            case 'ArrowRight':
+            case 'ArrowDown':
+              navigateTo((index + 1) % legendItems.length);
+              break;
+            case 'ArrowLeft':
+            case 'ArrowUp':
+              navigateTo((index - 1 + legendItems.length) % legendItems.length);
+              break;
+          }
         }
       });
     });
@@ -237,11 +354,34 @@ export function renderHTMLLegend(chart, container, options) {
 
   scrollableContainer.appendChild(ul);
   legendOuterContainer.appendChild(scrollableContainer);
+
+  if (opts.position === 'left' || opts.position === 'right') {
+    applyStyles(legendOuterContainer, {
+      float: opts.position,
+      maxWidth: '25%',
+      paddingLeft: opts.position === 'right' ? '15px' : '0',
+      paddingRight: opts.position === 'left' ? '15px' : '0',
+    });
+
+    applyStyles(scrollableContainer, {
+      maxHeight: '100%',
+      height: 'auto',
+    });
+
+    if (opts.layout !== 'vertical') {
+      applyStyles(ul, {
+        flexDirection: 'column',
+        flexWrap: 'nowrap',
+        alignItems: 'flex-start',
+      });
+    }
+  }
+
   container.appendChild(legendOuterContainer);
 
   scrollableContainer.style.overflowY =
     scrollableContainer.scrollHeight > scrollableContainer.clientHeight
-      ? 'scroll'
+      ? 'auto'
       : 'hidden';
 
   if (opts.adjustChartHeight && chart.canvas) {

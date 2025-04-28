@@ -17,7 +17,7 @@ export const options = () => {
           const total = context.chart.data.datasets[0].data
             .filter(
               (dataPoint, index) =>
-                !context.chart.legend.legendItems[index].hidden
+                !context.chart.legend.legendItems[index]?.hidden
             )
             .reduce((a, b) => a + b, 0);
 
