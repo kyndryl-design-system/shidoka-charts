@@ -291,61 +291,61 @@ export function renderHTMLLegend(chart, container, options) {
   if (legendItems.length > 0) {
     legendItems.forEach((button, index) => {
       button.addEventListener('keydown', (e) => {
-        let nextIndex, prevIndex;
-
-        if (opts.layout === 'vertical' || opts.columns === 1) {
-          if (e.key === 'ArrowDown') {
-            nextIndex = (index + 1) % legendItems.length;
-            legendItems[nextIndex].focus();
-            e.preventDefault();
-          } else if (e.key === 'ArrowUp') {
-            prevIndex = (index - 1 + legendItems.length) % legendItems.length;
-            legendItems[prevIndex].focus();
+        const navigateTo = (targetIndex) => {
+          if (targetIndex >= 0 && targetIndex < legendItems.length) {
+            legendItems[targetIndex].focus();
             e.preventDefault();
           }
-        } else if (opts.columns > 1) {
+        };
+
+        if (opts.columns > 1) {
           const totalRows = Math.ceil(legendItems.length / opts.columns);
           const currentRow = Math.floor(index / opts.columns);
           const currentCol = index % opts.columns;
 
-          if (e.key === 'ArrowRight') {
-            nextIndex =
-              currentRow * opts.columns + ((currentCol + 1) % opts.columns);
-            if (nextIndex < legendItems.length) {
-              legendItems[nextIndex].focus();
-              e.preventDefault();
-            }
-          } else if (e.key === 'ArrowLeft') {
-            prevIndex =
-              currentRow * opts.columns +
-              ((currentCol - 1 + opts.columns) % opts.columns);
-            legendItems[prevIndex].focus();
-            e.preventDefault();
-          } else if (e.key === 'ArrowDown') {
-            nextIndex =
-              ((currentRow + 1) % totalRows) * opts.columns + currentCol;
-            if (nextIndex < legendItems.length) {
-              legendItems[nextIndex].focus();
-              e.preventDefault();
-            }
-          } else if (e.key === 'ArrowUp') {
-            prevIndex =
-              ((currentRow - 1 + totalRows) % totalRows) * opts.columns +
-              currentCol;
-            if (prevIndex < legendItems.length) {
-              legendItems[prevIndex].focus();
-              e.preventDefault();
-            }
+          switch (e.key) {
+            case 'ArrowRight':
+              navigateTo(
+                currentRow * opts.columns + ((currentCol + 1) % opts.columns)
+              );
+              break;
+            case 'ArrowLeft':
+              navigateTo(
+                currentRow * opts.columns +
+                  ((currentCol - 1 + opts.columns) % opts.columns)
+              );
+              break;
+            case 'ArrowDown':
+              navigateTo(
+                ((currentRow + 1) % totalRows) * opts.columns + currentCol
+              );
+              break;
+            case 'ArrowUp':
+              navigateTo(
+                ((currentRow - 1 + totalRows) % totalRows) * opts.columns +
+                  currentCol
+              );
+              break;
+          }
+        } else if (opts.layout === 'vertical' || opts.columns === 1) {
+          switch (e.key) {
+            case 'ArrowDown':
+              navigateTo((index + 1) % legendItems.length);
+              break;
+            case 'ArrowUp':
+              navigateTo((index - 1 + legendItems.length) % legendItems.length);
+              break;
           }
         } else {
-          if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-            nextIndex = (index + 1) % legendItems.length;
-            legendItems[nextIndex].focus();
-            e.preventDefault();
-          } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-            prevIndex = (index - 1 + legendItems.length) % legendItems.length;
-            legendItems[prevIndex].focus();
-            e.preventDefault();
+          switch (e.key) {
+            case 'ArrowRight':
+            case 'ArrowDown':
+              navigateTo((index + 1) % legendItems.length);
+              break;
+            case 'ArrowLeft':
+            case 'ArrowUp':
+              navigateTo((index - 1 + legendItems.length) % legendItems.length);
+              break;
           }
         }
       });
