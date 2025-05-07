@@ -3,19 +3,19 @@ import { getComputedColorPalette } from '../colorPalettes';
 export const type = 'violin';
 
 export const options = (ctx) => {
-  const Horizontal = ctx.options.indexAxis === 'y';
+  const horizontal = ctx.options.indexAxis === 'y';
 
   return {
     scales: {
       x: {
         grid: {
-          display: Horizontal,
+          display: horizontal,
         },
       },
       y: {
         beginAtZero: true,
         grid: {
-          display: !Horizontal,
+          display: !horizontal,
         },
       },
     },
@@ -23,12 +23,12 @@ export const options = (ctx) => {
       tooltip: {
         callbacks: {
           title: (tooltipItems) => {
-            const AxisLabel = Horizontal
+            const axisLabel = horizontal
               ? tooltipItems[0].chart.options.scales.y.title.text
               : tooltipItems[0].chart.options.scales.x.title.text;
-            const Label = tooltipItems[0].label;
+            const label = tooltipItems[0].label;
 
-            return AxisLabel + ': ' + Label;
+            return axisLabel + ': ' + label;
           },
         },
       },
@@ -64,4 +64,24 @@ export const datasetOptions = (ctx, index) => {
     points: 100,
     width: 0.8,
   };
+};
+
+export const generateRandomData = (count, min, max, outliers = 0) => {
+  const values = Array.from({ length: count }, () =>
+    Math.floor(Math.random() * (max - min) + min)
+  ).sort((a, b) => a - b);
+
+  if (outliers > 0) {
+    for (let i = 0; i < outliers; i++) {
+      if (Math.random() > 0.5) {
+        values.push(max + Math.floor(Math.random() * max * 0.5));
+      } else {
+        values.unshift(
+          Math.max(0, min - Math.floor(Math.random() * min * 0.5))
+        );
+      }
+    }
+  }
+
+  return values;
 };

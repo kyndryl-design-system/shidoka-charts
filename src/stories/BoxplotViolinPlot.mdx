@@ -1,6 +1,6 @@
 import { Meta, Story, Canvas, Controls, Stories } from '@storybook/blocks';
 
-<Meta title="Third Party Charts/Boxplot & Violin Plot/📘 Documentation" />
+<Meta title="Third Party Charts/Boxplot & Violin Plot/📘 Docs" />
 
 # Boxplot & Violin Plot Charts
 
@@ -265,8 +265,8 @@ import { html } from 'lit';
 const BoxplotDemo = () => {
   return html`
     <kd-chart
-      chartTitle="Product Performance Analysis"
-      description="Comparing performance metrics across product lines"
+      chartTitle="Example Boxplor Chart"
+      description="Performance Metrics for On-Prem Data Center A"
       type="boxplot"
       .labels=${['Q1', 'Q2', 'Q3', 'Q4']}
       .datasets=${[
@@ -310,11 +310,11 @@ const BoxplotDemo = () => {
         plugins: {
           title: {
             display: true,
-            text: 'Product Line Performance Comparison',
+            text: 'Example Boxplot Chart',
           },
           subtitle: {
             display: true,
-            text: 'Quarterly distribution of performance metrics',
+            text: 'Performance Metrics for On-Prem Data Center A',
           },
         },
       }}

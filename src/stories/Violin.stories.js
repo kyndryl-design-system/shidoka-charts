@@ -1,4 +1,6 @@
 import { html } from 'lit';
+import '../components/chart';
+import { generateRandomData } from '../common/config/chartTypes/violin';
 
 export default {
   title: 'Third Party Charts/Boxplot & Violin Plot/Violin Plot',
@@ -15,26 +17,6 @@ export default {
       defaultValue: 'vertical',
     },
   },
-};
-
-const generateRandomData = (count, min, max, outliers = 0) => {
-  const values = Array.from({ length: count }, () =>
-    Math.floor(Math.random() * (max - min) + min)
-  ).sort((a, b) => a - b);
-
-  if (outliers > 0) {
-    for (let i = 0; i < outliers; i++) {
-      if (Math.random() > 0.5) {
-        values.push(max + Math.floor(Math.random() * max * 0.5));
-      } else {
-        values.unshift(
-          Math.max(0, min - Math.floor(Math.random() * min * 0.5))
-        );
-      }
-    }
-  }
-
-  return values;
 };
 
 const Template = (args) => {
