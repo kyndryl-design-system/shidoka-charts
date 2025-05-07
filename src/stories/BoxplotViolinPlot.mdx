@@ -143,82 +143,77 @@ The color palettes are defined using Shidoka design tokens:
 
 ### Boxplot Dataset Options
 
-Boxplots support the following customization options:
+Boxplots use the following data structure:
 
 ```javascript
 .datasets=${[
   {
-    label: 'Example Dataset',
-    data: [...], // Array of arrays containing data points
-
-    // Colors will be automatically applied from the selected palette
-    // You can override specific elements if needed:
-
-    // Box styling options
-    width: 0.5,         // Width of the box as a factor (0-1)
-    showBox: true,      // Whether to show the box (should be true for boxplots)
-    boxWidth: 1,        // Width of the box as a factor (0-1), relevant when used in violin plots
-
-    // Points styling
-    points: 100,        // Number of points used for smoother rendering
-
-    // Outlier appearance
-    outlierStyle: 'circle',    // Shape of outlier points
-    outlierRadius: 3,          // Size of outlier points
-    outlierBorderWidth: 1,     // Border width of outlier points
-
-    // Mean indicator
-    medianColor: '--kd-color-data-viz-categorical-01-01', // Color of median line
-
-    // Mean indicator (if shown)
-    meanStyle: 'circle',       // Shape of mean indicator
-    meanRadius: 3,             // Size of mean indicator
-    meanBorderWidth: 1,        // Border width of mean indicator
-
-    // Item points
-    itemStyle: 'circle',       // Shape of individual data points (if shown)
-    itemRadius: 0,             // Size of individual data points (0 to hide)
-    itemBorderWidth: 0,        // Border width of individual data points
+    label: 'Example Dataset', // Name of the dataset
+    data: [
+      [10, 20, 30, 40, 50, 60, 70, 80], // Data points for first label
+      [15, 25, 35, 45, 55, 65, 75],     // Data points for second label
+      // ... additional arrays for each label
+    ]
   }
 ]}
 ```
+
+The styling for boxplots is automatically applied based on the selected color palette.
 
 ### Violin Plot Dataset Options
 
-Violin plots support the following customization options (including all boxplot options plus violin-specific options):
+Violin plots use the same data structure as boxplots:
 
 ```javascript
 .datasets=${[
   {
-    label: 'Example Dataset',
-    data: [...], // Array of arrays containing data points
-
-    // Colors will be automatically applied from the selected palette
-
-    // Violin-specific options
-    points: 100,   // Number of points used to draw the violin curve (higher = smoother)
-    width: 0.8,    // Width of the violin as a factor (0-1)
-    showBox: true,           // Whether to show a boxplot inside the violin
-    boxWidth: 0.1,           // Width of the box as a factor of violin width
-
-    // Outlier appearance (same as boxplot)
-    outlierStyle: 'circle',  // Shape of outlier points
-    outlierRadius: 3,        // Size of outlier points
-    outlierBorderWidth: 1,   // Border width of outlier points
+    label: 'Example Dataset', // Name of the dataset
+    data: [
+      [10, 20, 30, 40, 50, 60, 70, 80], // Data points for first label
+      [15, 25, 35, 45, 55, 65, 75],     // Data points for second label
+      // ... additional arrays for each label
+    ]
   }
 ]}
 ```
 
-### Common Chart Options
+The styling for violin plots is automatically applied based on the selected color palette. The violin plot provides:
 
-Both boxplots and violin plots support standard chart.js options:
+- Smooth violin shapes that display the probability density of data
+- Automatically configured violin width
+- Points for smoothing the violin curve
+- The same outlier handling as boxplots
+
+All visual properties are derived from the selected color palette, making the violin plot ready to use without additional configuration.
+
+### Available Props
+
+Both boxplots and violin plots support the following props:
 
 ```javascript
-.options=${{
-  // Chart orientation
-  indexAxis: 'x', // 'x' for vertical (default), 'y' for horizontal
+// Main component props
+type="boxplot" // or "violin"
+chartTitle="Boxplot Example"       // Title of the chart
+description="Chart description"    // Description text
+labels={['January', 'February'...]} // Labels for categories
+datasets={[...]}                   // Data arrays (see above)
+chartOrientation="vertical"        // 'vertical' or 'horizontal'
+colorPalette="categorical"         // Color palette from Shidoka system
+showLegend={false}                 // Whether to display the legend
+hideDescription={false}            // Hide the description
+hideCaptions={false}               // Hide captions
+hideHeader={false}                 // Hide the header
+hideControls={false}               // Hide controls
+noBorder={false}                   // Remove chart border
+width={null}                       // Custom width (null = responsive)
+height={null}                      // Custom height (null = responsive)
 
-  // Color palette (from Shidoka's color system)
+// Options object for additional configuration
+options={{
+  // Chart orientation translated internally
+  indexAxis: chartOrientation === 'horizontal' ? 'y' : 'x',
+
+  // Color palette (from Shidoka's Data Viz semantic colors)
   colorPalette: 'categorical', // 'categorical', 'sequential01' through 'sequential05', 'divergent01', 'divergent02', etc.
 
   // Scale configuration
@@ -227,47 +222,38 @@ Both boxplots and violin plots support standard chart.js options:
       title: {
         display: true,
         text: 'Categories'  // X-axis title
-      },
-      grid: {
-        display: false      // Hide/show grid lines
       }
     },
     y: {
-      beginAtZero: true,    // Start Y-axis at zero
       title: {
         display: true,
         text: 'Values'      // Y-axis title
-      },
-      grid: {
-        display: true       // Hide/show grid lines
       }
     }
   },
 
-  // Plugin options (tooltips, legend, etc.)
+  // Legend display
   plugins: {
     legend: {
-      position: 'top',      // Legend position
-      // Other legend options...
-    },
-    tooltip: {
-      // Tooltip options...
+      display: showLegend  // Controls legend visibility
     }
   }
 }}
 ```
 
-## Complete Example
+## Complete Examples
 
-Here's a complete example with multiple datasets and customization:
+### Boxplot Example
+
+Complete example of a boxplot with multiple datasets:
 
 ```javascript
 const BoxplotDemo = () => {
   return html`
     <kd-chart
-      chartTitle="Example Boxplor Chart"
-      description="Performance Metrics for On-Prem Data Center A"
       type="boxplot"
+      chartTitle="Boxplot Example"
+      description="Performance Metrics for Q1-Q4"
       .labels=${['Q1', 'Q2', 'Q3', 'Q4']}
       .datasets=${[
         {
@@ -291,7 +277,7 @@ const BoxplotDemo = () => {
       ]}
       .options=${{
         colorPalette: 'categorical',
-        indexAxis: 'x',
+        indexAxis: 'x', // For vertical orientation
         scales: {
           x: {
             title: {
@@ -308,16 +294,86 @@ const BoxplotDemo = () => {
           },
         },
         plugins: {
-          title: {
-            display: true,
-            text: 'Example Boxplot Chart',
-          },
-          subtitle: {
-            display: true,
-            text: 'Performance Metrics for On-Prem Data Center A',
+          legend: {
+            display: true, // Show the legend
           },
         },
       }}
+      chartOrientation="vertical"
+      showLegend=${true}
+      ?hideDescription=${false}
+      ?hideCaptions=${false}
+      ?hideHeader=${false}
+      ?hideControls=${false}
+      ?noBorder=${false}
+    ></kd-chart>
+  `;
+};
+```
+
+### Violin Plot Example
+
+Here's a complete example of a violin plot with multiple datasets:
+
+```javascript
+const ViolinDemo = () => {
+  return html`
+    <kd-chart
+      type="violin"
+      chartTitle="Violin Plot Example"
+      description="Performance Distribution for Q1-Q4"
+      .labels=${['Q1', 'Q2', 'Q3', 'Q4']}
+      .datasets=${[
+        {
+          label: 'Product A',
+          data: [
+            [42, 45, 47, 48, 50, 52, 55, 58, 60], // Q1 performance scores
+            [44, 48, 49, 50, 52, 54, 56, 58], // Q2 performance scores
+            [40, 42, 43, 46, 48, 50, 52], // Q3 performance scores
+            [46, 48, 50, 52, 54, 56, 58, 60, 62], // Q4 performance scores
+          ],
+        },
+        {
+          label: 'Product B',
+          data: [
+            [38, 40, 42, 44, 46, 48, 50, 52], // Q1 performance scores
+            [40, 42, 44, 46, 48, 50, 52, 54], // Q2 performance scores
+            [44, 46, 48, 50, 52, 54, 56, 58, 60], // Q3 performance scores
+            [42, 44, 46, 48, 50, 52, 54], // Q4 performance scores
+          ],
+        },
+      ]}
+      .options=${{
+        colorPalette: 'sequential02',
+        indexAxis: 'x', // For vertical orientation
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Quarterly Results',
+            },
+          },
+          y: {
+            beginAtZero: false,
+            title: {
+              display: true,
+              text: 'Performance Score',
+            },
+          },
+        },
+        plugins: {
+          legend: {
+            display: true, // Show the legend
+          },
+        },
+      }}
+      chartOrientation="vertical"
+      showLegend=${true}
+      ?hideDescription=${false}
+      ?hideCaptions=${false}
+      ?hideHeader=${false}
+      ?hideControls=${false}
+      ?noBorder=${false}
     ></kd-chart>
   `;
 };
