@@ -1,8 +1,8 @@
 import { html } from 'lit';
-import '../components/chart';
 import { generateRandomData } from '../common/config/chartTypes/boxplot';
 import argTypes from '../common/config/chartArgTypes';
-import { color } from 'chart.js/helpers';
+
+import '../components/chart';
 
 export default {
   title: 'Third Party Charts/Boxplot & Violin Plot/Boxplot',
@@ -21,36 +21,53 @@ export default {
   },
 };
 
+const singleDataset = [
+  {
+    label: 'Dataset 1',
+    data: [
+      generateRandomData(30, 10, 100, 2),
+      generateRandomData(30, 20, 80, 1),
+      generateRandomData(30, 30, 120, 3),
+      generateRandomData(30, 40, 90, 2),
+      generateRandomData(30, 20, 70, 1),
+      generateRandomData(30, 10, 60, 2),
+      generateRandomData(30, 30, 80, 1),
+    ],
+  },
+];
+
+const doubleDataset = [
+  {
+    label: 'Dataset 1',
+    data: [
+      generateRandomData(30, 10, 100, 2),
+      generateRandomData(30, 20, 80, 1),
+      generateRandomData(30, 30, 120, 3),
+      generateRandomData(30, 40, 90, 2),
+      generateRandomData(30, 20, 70, 1),
+      generateRandomData(30, 10, 60, 2),
+      generateRandomData(30, 30, 80, 1),
+    ],
+  },
+  {
+    label: 'Dataset 2',
+    data: [
+      generateRandomData(30, 20, 120, 1),
+      generateRandomData(30, 10, 100, 2),
+      generateRandomData(30, 20, 90, 1),
+      generateRandomData(30, 30, 110, 3),
+      generateRandomData(30, 40, 80, 2),
+      generateRandomData(30, 20, 90, 1),
+      generateRandomData(30, 30, 70, 0),
+    ],
+  },
+];
+
 const args = {
   chartTitle: 'Boxplot Example',
   description: 'Boxplot chart with two datasets',
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: [
-        generateRandomData(30, 10, 100, 2),
-        generateRandomData(30, 20, 80, 1),
-        generateRandomData(30, 30, 120, 3),
-        generateRandomData(30, 40, 90, 2),
-        generateRandomData(30, 20, 70, 1),
-        generateRandomData(30, 10, 60, 2),
-        generateRandomData(30, 30, 80, 1),
-      ],
-    },
-    {
-      label: 'Dataset 2',
-      data: [
-        generateRandomData(30, 20, 120, 1),
-        generateRandomData(30, 10, 100, 2),
-        generateRandomData(30, 20, 90, 1),
-        generateRandomData(30, 30, 110, 3),
-        generateRandomData(30, 40, 80, 2),
-        generateRandomData(30, 20, 90, 1),
-        generateRandomData(30, 30, 70, 0),
-      ],
-    },
-  ],
+  datasets: doubleDataset,
   chartOrientation: 'vertical',
   colorPalette: 'categorical',
   showLegend: false,
@@ -126,20 +143,7 @@ export const VerticalSingleDataset = {
     chartOrientation: 'vertical',
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
     colorPalette: 'sequential01',
-    datasets: [
-      {
-        label: 'Dataset 1',
-        data: [
-          generateRandomData(30, 10, 100, 2),
-          generateRandomData(30, 20, 80, 1),
-          generateRandomData(30, 30, 120, 3),
-          generateRandomData(30, 40, 90, 2),
-          generateRandomData(30, 20, 70, 1),
-          generateRandomData(30, 10, 60, 2),
-          generateRandomData(30, 30, 80, 1),
-        ],
-      },
-    ],
+    datasets: singleDataset,
   },
   render: Default.render,
 };
@@ -152,6 +156,18 @@ export const VerticalWithLegend = {
     chartOrientation: 'vertical',
     showLegend: true,
     colorPalette: 'rag03',
+  },
+  render: Default.render,
+};
+
+export const CustomizedBoxplot = {
+  args: {
+    ...args,
+    chartTitle: 'Customized Boxplot',
+    description: 'Boxplot with customized styling properties',
+    chartOrientation: 'vertical',
+    showLegend: true,
+    colorPalette: 'sequential04',
   },
   render: Default.render,
 };

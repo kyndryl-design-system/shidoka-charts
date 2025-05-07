@@ -32,8 +32,6 @@ This provides both the statistical summary of a boxplot with the full distributi
 ### Boxplot Example
 
 ```javascript
-import { html } from 'lit';
-
 const boxplotExample = () => {
   return html`
     <kd-chart
@@ -50,11 +48,11 @@ const boxplotExample = () => {
             [5, 10, 15, 20, 25, 30, 35, 40], // March data points
             [30, 40, 50, 60, 70, 80, 90], // April data points
           ],
-          // Colors automatically sourced from the Shidoka Data Viz categorical palette
+          // colors automatically sourced from the Shidoka Data Viz palette
         },
       ]}
       .options=${{
-        colorPalette: 'categorical', // Use the Shidoka Data Viz categorical palette
+        colorPalette: 'categorical', // use the Shidoka Data Viz categorical palette
       }}
     ></kd-chart>
   `;
@@ -64,8 +62,6 @@ const boxplotExample = () => {
 ### Violin Plot Example
 
 ```javascript
-import { html } from 'lit';
-
 const violinExample = () => {
   return html`
     <kd-chart
@@ -158,6 +154,14 @@ Boxplots support the following customization options:
     // Colors will be automatically applied from the selected palette
     // You can override specific elements if needed:
 
+    // Box styling options
+    width: 0.5,         // Width of the box as a factor (0-1)
+    showBox: true,      // Whether to show the box (should be true for boxplots)
+    boxWidth: 1,        // Width of the box as a factor (0-1), relevant when used in violin plots
+
+    // Points styling
+    points: 100,        // Number of points used for smoother rendering
+
     // Outlier appearance
     outlierStyle: 'circle',    // Shape of outlier points
     outlierRadius: 3,          // Size of outlier points
@@ -194,8 +198,6 @@ Violin plots support the following customization options (including all boxplot 
     // Violin-specific options
     points: 100,   // Number of points used to draw the violin curve (higher = smoother)
     width: 0.8,    // Width of the violin as a factor (0-1)
-
-    // Include boxplot within violin
     showBox: true,           // Whether to show a boxplot inside the violin
     boxWidth: 0.1,           // Width of the box as a factor of violin width
 
@@ -260,8 +262,6 @@ Both boxplots and violin plots support standard chart.js options:
 Here's a complete example with multiple datasets and customization:
 
 ```javascript
-import { html } from 'lit';
-
 const BoxplotDemo = () => {
   return html`
     <kd-chart

@@ -21,36 +21,53 @@ export default {
   },
 };
 
+const singleDataset = [
+  {
+    label: 'Dataset 1',
+    data: [
+      generateRandomData(30, 10, 100, 2),
+      generateRandomData(30, 20, 80, 1),
+      generateRandomData(30, 30, 120, 3),
+      generateRandomData(30, 40, 90, 2),
+      generateRandomData(30, 20, 70, 1),
+      generateRandomData(30, 10, 60, 2),
+      generateRandomData(30, 30, 80, 1),
+    ],
+  },
+];
+
+const doubleDataset = [
+  {
+    label: 'Dataset 1',
+    data: [
+      generateRandomData(30, 10, 100, 2),
+      generateRandomData(30, 20, 80, 1),
+      generateRandomData(30, 30, 120, 3),
+      generateRandomData(30, 40, 90, 2),
+      generateRandomData(30, 20, 70, 1),
+      generateRandomData(30, 10, 60, 2),
+      generateRandomData(30, 30, 80, 1),
+    ],
+  },
+  {
+    label: 'Dataset 2',
+    data: [
+      generateRandomData(30, 20, 120, 1),
+      generateRandomData(30, 10, 100, 2),
+      generateRandomData(30, 20, 90, 1),
+      generateRandomData(30, 30, 110, 3),
+      generateRandomData(30, 40, 80, 2),
+      generateRandomData(30, 20, 90, 1),
+      generateRandomData(30, 30, 70, 0),
+    ],
+  },
+];
+
 const args = {
   chartTitle: 'Vertical Violin Plot Example',
   description: 'Vertical (Default) Violin plot chart with two datasets',
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: [
-        generateRandomData(30, 10, 100, 2),
-        generateRandomData(30, 20, 80, 1),
-        generateRandomData(30, 30, 120, 3),
-        generateRandomData(30, 40, 90, 2),
-        generateRandomData(30, 20, 70, 1),
-        generateRandomData(30, 10, 60, 2),
-        generateRandomData(30, 30, 80, 1),
-      ],
-    },
-    {
-      label: 'Dataset 2',
-      data: [
-        generateRandomData(30, 20, 120, 1),
-        generateRandomData(30, 10, 100, 2),
-        generateRandomData(30, 20, 90, 1),
-        generateRandomData(30, 30, 110, 3),
-        generateRandomData(30, 40, 80, 2),
-        generateRandomData(30, 20, 90, 1),
-        generateRandomData(30, 30, 70, 0),
-      ],
-    },
-  ],
+  datasets: doubleDataset,
   chartOrientation: 'vertical',
   colorPalette: 'categorical',
   showLegend: false,
@@ -125,20 +142,7 @@ export const VerticalSingleDataset = {
     description: 'Vertical violin plot chart with single datasets',
     chartOrientation: 'vertical',
     colorPalette: 'sequential04',
-    datasets: [
-      {
-        label: 'Dataset 1',
-        data: [
-          generateRandomData(30, 10, 100, 2),
-          generateRandomData(30, 20, 80, 1),
-          generateRandomData(30, 30, 120, 3),
-          generateRandomData(30, 40, 90, 2),
-          generateRandomData(30, 20, 70, 1),
-          generateRandomData(30, 10, 60, 2),
-          generateRandomData(30, 30, 80, 1),
-        ],
-      },
-    ],
+    datasets: singleDataset,
   },
   render: Default.render,
 };
@@ -151,6 +155,19 @@ export const HorizontalWithLegend = {
       'Horizontal violin plot chart with two datasets with attached legend',
     chartOrientation: 'horizontal',
     showLegend: true,
+  },
+  render: Default.render,
+};
+
+export const CustomizedViolin = {
+  args: {
+    ...args,
+    chartTitle: 'Customized Violin Plot',
+    description: 'Violin plot with customized styling properties',
+    chartOrientation: 'vertical',
+    showLegend: true,
+    colorPalette: 'sequential02',
+    datasets: doubleDataset,
   },
   render: Default.render,
 };
