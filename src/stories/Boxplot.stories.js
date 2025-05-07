@@ -1,7 +1,7 @@
 import { html } from 'lit';
 
 export default {
-  title: 'Charts/Box Plot',
+  title: 'Charts/Boxplot',
   component: 'kd-chart',
   argTypes: {
     colorPalette: {
@@ -9,10 +9,10 @@ export default {
       control: { type: 'select' },
       defaultValue: 'categorical',
     },
-    indexAxis: {
-      options: ['x', 'y'],
-      control: { type: 'radio' },
-      defaultValue: 'x',
+    chartOrientation: {
+      options: ['vertical', 'horizontal'],
+      control: { type: 'select' },
+      defaultValue: 'vertical',
     },
   },
 };
@@ -42,11 +42,11 @@ const Template = (args) => {
     <kd-chart
       .chartTitle=${args.chartTitle}
       .description=${args.description}
-      .type=${args.chartType}
+      type="boxplot"
       .labels=${args.labels}
       .datasets=${args.datasets}
       .options=${{
-        indexAxis: args.indexAxis,
+        indexAxis: args.chartOrientation === 'horizontal' ? 'y' : 'x',
         colorPalette: args.colorPalette,
         scales: {
           x: {
@@ -69,9 +69,8 @@ const Template = (args) => {
 
 export const Default = Template.bind({});
 Default.args = {
-  chartTitle: 'Box Plot Example',
-  description: 'Box plot chart with two datasets',
-  chartType: 'boxplot',
+  chartTitle: 'Boxplot Example',
+  description: 'Boxplot chart with two datasets',
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
   datasets: [
     {
@@ -99,7 +98,7 @@ Default.args = {
       ],
     },
   ],
-  indexAxis: 'x',
+  chartOrientation: 'vertical',
   colorPalette: 'categorical',
 };
 
@@ -108,5 +107,5 @@ Horizontal.args = {
   ...Default.args,
   chartTitle: 'Horizontal Box Plot Example',
   description: 'Horizontal box plot chart with two datasets',
-  indexAxis: 'y',
+  chartOrientation: 'horizontal',
 };
