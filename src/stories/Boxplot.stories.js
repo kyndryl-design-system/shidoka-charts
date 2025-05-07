@@ -2,6 +2,7 @@ import { html } from 'lit';
 import '../components/chart';
 import { generateRandomData } from '../common/config/chartTypes/boxplot';
 import argTypes from '../common/config/chartArgTypes';
+import { color } from 'chart.js/helpers';
 
 export default {
   title: 'Third Party Charts/Boxplot & Violin Plot/Boxplot',
@@ -110,9 +111,47 @@ export const Default = {
 export const Horizontal = {
   args: {
     ...args,
-    chartTitle: 'Horizontal Box Plot Example',
-    description: 'Horizontal box plot chart with two datasets',
+    chartTitle: 'Horizontal Boxplot Example',
+    description: 'Horizontal boxplot chart with two datasets',
     chartOrientation: 'horizontal',
+  },
+  render: Default.render,
+};
+
+export const VerticalSingleDataset = {
+  args: {
+    ...args,
+    chartTitle: 'Vertical Boxplot Single Dataset Example',
+    description: 'Vertical boxplot chart with single dataset',
+    chartOrientation: 'vertical',
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    colorPalette: 'sequential01',
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: [
+          generateRandomData(30, 10, 100, 2),
+          generateRandomData(30, 20, 80, 1),
+          generateRandomData(30, 30, 120, 3),
+          generateRandomData(30, 40, 90, 2),
+          generateRandomData(30, 20, 70, 1),
+          generateRandomData(30, 10, 60, 2),
+          generateRandomData(30, 30, 80, 1),
+        ],
+      },
+    ],
+  },
+  render: Default.render,
+};
+
+export const VerticalWithLegend = {
+  args: {
+    ...args,
+    chartTitle: 'Vertical Boxplot with Legend',
+    description: 'Vertical boxplot chart with two datasets',
+    chartOrientation: 'vertical',
+    showLegend: true,
+    colorPalette: 'rag03',
   },
   render: Default.render,
 };
