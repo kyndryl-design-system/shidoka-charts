@@ -159,15 +159,3 @@ export const VerticalWithLegend = {
   },
   render: Default.render,
 };
-
-export const CustomizedBoxplot = {
-  args: {
-    ...args,
-    chartTitle: 'Customized Boxplot',
-    description: 'Boxplot with customized styling properties',
-    chartOrientation: 'vertical',
-    showLegend: true,
-    colorPalette: 'sequential04',
-  },
-  render: Default.render,
-};

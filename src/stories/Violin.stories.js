@@ -158,16 +158,3 @@ export const HorizontalWithLegend = {
   },
   render: Default.render,
 };
-
-export const CustomizedViolin = {
-  args: {
-    ...args,
-    chartTitle: 'Customized Violin Plot',
-    description: 'Violin plot with customized styling properties',
-    chartOrientation: 'vertical',
-    showLegend: true,
-    colorPalette: 'sequential02',
-    datasets: doubleDataset,
-  },
-  render: Default.render,
-};
