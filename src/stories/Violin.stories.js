@@ -52,6 +52,7 @@ const args = {
   ],
   chartOrientation: 'vertical',
   colorPalette: 'categorical',
+  showLegend: false,
   hideDescription: false,
   hideCaptions: false,
   hideHeader: false,
