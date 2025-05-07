@@ -14,6 +14,12 @@ import {
 } from 'chartjs-chart-geo';
 import { TreemapController, TreemapElement } from 'chartjs-chart-treemap';
 import { MatrixController, MatrixElement } from 'chartjs-chart-matrix';
+import {
+  BoxPlotController,
+  BoxAndWiskers,
+  ViolinController,
+  Violin,
+} from '@sgratzl/chartjs-chart-boxplot';
 import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
@@ -47,6 +53,10 @@ Chart.register(
   TreemapElement,
   MatrixController,
   MatrixElement,
+  BoxPlotController,
+  BoxAndWiskers,
+  ViolinController,
+  Violin,
   annotationPlugin,
   datalabelsPlugin
 );
