@@ -19,30 +19,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/common/plugins/htmlLegendPlugin.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "htmlLegendPlugin",
-          "type": {
-            "text": "object"
-          },
-          "default": "{\n  id: 'htmlLegend',\n  afterUpdate(chart: Chart, _: any, options: HtmlLegendPluginOptions) {\n    const container = document.getElementById(options.containerId);\n    if (!container) return;\n    renderHTMLLegend(chart, container, options);\n  },\n}"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "htmlLegendPlugin",
-          "declaration": {
-            "name": "htmlLegendPlugin",
-            "module": "src/common/plugins/htmlLegendPlugin.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/common/helpers/helpers.ts",
       "declarations": [
         {
@@ -185,6 +161,30 @@
           "declaration": {
             "name": "getTextColor",
             "module": "src/common/helpers/helpers.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/common/plugins/htmlLegendPlugin.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "htmlLegendPlugin",
+          "type": {
+            "text": "object"
+          },
+          "default": "{\n  id: 'htmlLegend',\n  afterUpdate(chart: Chart, _: any, options: HtmlLegendPluginOptions) {\n    const container = document.getElementById(options.containerId);\n    if (!container) return;\n    renderHTMLLegend(chart, container, options);\n  },\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "htmlLegendPlugin",
+          "declaration": {
+            "name": "htmlLegendPlugin",
+            "module": "src/common/plugins/htmlLegendPlugin.ts"
           }
         }
       ]

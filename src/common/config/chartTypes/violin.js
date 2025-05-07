@@ -20,6 +20,9 @@ export const options = (ctx) => {
       },
     },
     plugins: {
+      legend: {
+        display: ctx.options.showLegend,
+      },
       tooltip: {
         callbacks: {
           title: (tooltipItems) => {
