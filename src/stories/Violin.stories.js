@@ -1,7 +1,7 @@
 import { html } from 'lit';
 
 export default {
-  title: 'Charts/Violin',
+  title: 'Third Party Charts/Boxplot & Violin Plot/Violin Plot',
   component: 'kd-chart',
   argTypes: {
     colorPalette: {
