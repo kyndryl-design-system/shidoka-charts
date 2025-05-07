@@ -18,6 +18,30 @@ export default {
       control: { type: 'boolean' },
       defaultValue: false,
     },
+    showTooltip: {
+      control: { type: 'boolean' },
+      defaultValue: true,
+    },
+    xAxisTitle: {
+      control: { type: 'text' },
+      defaultValue: 'Categories',
+    },
+    yAxisTitle: {
+      control: { type: 'text' },
+      defaultValue: 'Values',
+    },
+    xAxisMin: {
+      control: { type: 'number' },
+    },
+    xAxisMax: {
+      control: { type: 'number' },
+    },
+    yAxisMin: {
+      control: { type: 'number' },
+    },
+    yAxisMax: {
+      control: { type: 'number' },
+    },
   },
 };
 
@@ -71,6 +95,13 @@ const args = {
   chartOrientation: 'vertical',
   colorPalette: 'categorical',
   showLegend: false,
+  showTooltip: true,
+  xAxisTitle: 'Categories',
+  yAxisTitle: 'Values',
+  xAxisMin: null,
+  xAxisMax: null,
+  yAxisMin: null,
+  yAxisMax: null,
   hideDescription: false,
   hideCaptions: false,
   hideHeader: false,
@@ -93,25 +124,14 @@ export const Default = {
         .options=${{
           indexAxis: args.chartOrientation === 'horizontal' ? 'y' : 'x',
           colorPalette: args.colorPalette,
-          scales: {
-            x: {
-              title: {
-                display: true,
-                text: 'Categories',
-              },
-            },
-            y: {
-              title: {
-                display: true,
-                text: 'Values',
-              },
-            },
-          },
-          plugins: {
-            legend: {
-              display: args.showLegend,
-            },
-          },
+          showLegend: args.showLegend,
+          showTooltip: args.showTooltip,
+          xAxisTitle: args.xAxisTitle,
+          yAxisTitle: args.yAxisTitle,
+          xAxisMin: args.xAxisMin,
+          xAxisMax: args.xAxisMax,
+          yAxisMin: args.yAxisMin,
+          yAxisMax: args.yAxisMax,
         }}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
@@ -141,7 +161,6 @@ export const VerticalSingleDataset = {
     chartTitle: 'Vertical Boxplot Single Dataset Example',
     description: 'Vertical boxplot chart with single dataset',
     chartOrientation: 'vertical',
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
     colorPalette: 'sequential01',
     datasets: singleDataset,
   },
@@ -153,7 +172,6 @@ export const VerticalWithLegend = {
     ...args,
     chartTitle: 'Vertical Boxplot with Legend',
     description: 'Vertical boxplot chart with two datasets',
-    chartOrientation: 'vertical',
     showLegend: true,
     colorPalette: 'rag03',
   },

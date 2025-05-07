@@ -200,6 +200,7 @@ datasets={[...]}                   // Data arrays (see above)
 chartOrientation="vertical"        // 'vertical' or 'horizontal'
 colorPalette="categorical"         // Color palette from Shidoka system
 showLegend={false}                 // Whether to display the legend
+showTooltip={true}                 // Whether to display tooltips
 hideDescription={false}            // Hide the description
 hideCaptions={false}               // Hide captions
 hideHeader={false}                 // Hide the header
@@ -216,28 +217,78 @@ options={{
   // Color palette (from Shidoka's Data Viz semantic colors)
   colorPalette: 'categorical', // 'categorical', 'sequential01' through 'sequential05', 'divergent01', 'divergent02', etc.
 
-  // Scale configuration
-  scales: {
-    x: {
-      title: {
-        display: true,
-        text: 'Categories'  // X-axis title
-      }
-    },
-    y: {
-      title: {
-        display: true,
-        text: 'Values'      // Y-axis title
-      }
-    }
+  // Display options
+  showLegend: true,            // Whether to display the legend
+  showTooltip: true,           // Whether to display tooltips
+
+  // Grid configuration
+  gridX: true,                 // Show grid lines on X axis (default depends on orientation)
+  gridY: true,                 // Show grid lines on Y axis (default depends on orientation)
+
+  // Axis configuration
+  xAxisTitle: 'Categories',    // X-axis title
+  yAxisTitle: 'Values',        // Y-axis title
+  xAxisMin: null,              // Minimum value for X axis (null = auto)
+  xAxisMax: null,              // Maximum value for X axis (null = auto)
+  yAxisMin: null,              // Minimum value for Y axis (null = auto)
+  yAxisMax: null,              // Maximum value for Y axis (null = auto)
+
+  // Visual styling for both chart types
+  backgroundAlpha: '80',       // Alpha transparency for background colors (00-FF hex)
+  borderWidth: 1,              // Width of the border around elements
+
+  // Tooltip customization
+  tooltipCallbacks: {          // Custom callbacks for tooltip formatting
+    // Add custom callbacks here
   },
 
-  // Legend display
-  plugins: {
-    legend: {
-      display: showLegend  // Controls legend visibility
-    }
-  }
+  // Override options
+  chartOptionsOverride: {},    // Override any Chart.js options directly
+  datasetOptionsOverride: {},  // Override any dataset options directly
+}}
+```
+
+### Boxplot Specific Configuration Options
+
+In addition to the shared options, boxplots support these specific configuration options:
+
+```javascript
+options={{
+  // Outlier configuration
+  outlierStyle: 'circle',      // Style of outlier points: 'circle', 'rect', 'triangle', etc.
+  outlierRadius: 3,            // Radius of outlier points in pixels
+  outlierBorderWidth: 1,       // Border width of outlier points
+
+  // Item configuration (individual data points)
+  itemStyle: 'circle',         // Style of individual data points: 'circle', 'rect', 'triangle', etc.
+  itemRadius: 0,               // Radius of individual data points (0 = don't show)
+  itemBorderWidth: 0,          // Border width of individual data points
+
+  // Background transparency for quartile regions
+  lowerBackgroundAlpha: '80',  // Alpha transparency for lower quartile region
+  upperBackgroundAlpha: '80',  // Alpha transparency for upper quartile region
+}}
+```
+
+### Violin Plot Specific Configuration Options
+
+Violin plots have their own specific configuration options:
+
+```javascript
+options={{
+  // Outlier configuration (same as boxplot)
+  outlierStyle: 'circle',      // Style of outlier points: 'circle', 'rect', 'triangle', etc.
+  outlierRadius: 3,            // Radius of outlier points in pixels
+  outlierBorderWidth: 1,       // Border width of outlier points
+
+  // Mean marker configuration
+  meanStyle: 'circle',         // Style of mean marker: 'circle', 'rect', 'triangle', etc.
+  meanRadius: 3,               // Radius of mean marker in pixels
+  meanBorderWidth: 1,          // Border width of mean marker
+
+  // Violin shape configuration
+  pointCount: 100,             // Number of points used to smooth the violin shape
+  violinWidth: 0.8,            // Width of violin as a ratio of available space (0 to 1)
 }}
 ```
 
@@ -286,7 +337,6 @@ const BoxplotDemo = () => {
             },
           },
           y: {
-            beginAtZero: false,
             title: {
               display: true,
               text: 'Performance Score',
@@ -354,7 +404,6 @@ const ViolinDemo = () => {
             },
           },
           y: {
-            beginAtZero: false,
             title: {
               display: true,
               text: 'Performance Score',

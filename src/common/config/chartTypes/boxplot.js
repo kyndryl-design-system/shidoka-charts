@@ -4,71 +4,99 @@ export const type = 'boxplot';
 
 export const options = (ctx) => {
   const horizontal = ctx.options.indexAxis === 'y';
+  const {
+    showLegend = true,
+    showTooltip = true,
+    legendPosition = 'bottom',
+    gridX = horizontal,
+    gridY = !horizontal,
+    xAxisTitle,
+    yAxisTitle,
+    xAxisMin,
+    xAxisMax,
+    yAxisMin,
+    yAxisMax,
+    tooltipCallbacks,
+    chartOptionsOverride = {},
+  } = ctx.options;
 
   return {
     scales: {
       x: {
-        grid: {
-          display: horizontal,
-        },
+        grid: { display: gridX },
+        title: xAxisTitle ? { display: true, text: xAxisTitle } : undefined,
+        min: xAxisMin,
+        max: xAxisMax,
       },
       y: {
-        beginAtZero: true,
-        grid: {
-          display: !horizontal,
-        },
+        grid: { display: gridY },
+        title: yAxisTitle ? { display: true, text: yAxisTitle } : undefined,
+        min: yAxisMin,
+        max: yAxisMax,
       },
     },
     plugins: {
-      legend: {
-        display: ctx.options.showLegend,
-      },
+      legend: { display: showLegend, position: legendPosition },
       tooltip: {
+        enabled: showTooltip,
         callbacks: {
-          title: (tooltipItems) => {
+          title: (items) => {
             const axisLabel = horizontal
-              ? tooltipItems[0].chart.options.scales.y.title.text
-              : tooltipItems[0].chart.options.scales.x.title.text;
-            const label = tooltipItems[0].label;
-
-            return axisLabel + ': ' + label;
+              ? items[0].chart.options.scales.y.title?.text
+              : items[0].chart.options.scales.x.title?.text;
+            return axisLabel + ': ' + items[0].label;
           },
+          ...tooltipCallbacks,
         },
       },
     },
+    ...chartOptionsOverride,
   };
 };
 
 export const datasetOptions = (ctx, index) => {
-  const Colors = getComputedColorPalette(
-    ctx.options.colorPalette || 'categorical'
-  );
-  const ColorCycles = Math.floor(index / (Colors.length - 1));
-  const Index =
-    index > Colors.length - 1
-      ? index - (Colors.length - 1) * ColorCycles
-      : index;
+  const {
+    colorPalette = 'categorical',
+    backgroundAlpha = '80',
+    borderWidth = 1,
+    outlierStyle = 'circle',
+    outlierRadius = 3,
+    outlierBorderWidth = 1,
+    itemStyle = 'circle',
+    itemRadius = 0,
+    itemBorderWidth = 0,
+    lowerBackgroundAlpha = '80',
+    upperBackgroundAlpha = '80',
+    datasetOptionsOverride = {},
+  } = ctx.options;
+
+  const palette = getComputedColorPalette(colorPalette);
+  const cycles = Math.floor(index / (palette.length - 1));
+  const idx =
+    index > palette.length - 1 ? index - (palette.length - 1) * cycles : index;
+  const color = palette[idx];
 
   return {
-    backgroundColor: Colors[Index] + '80',
-    borderColor: Colors[Index],
-    borderWidth: 1,
-    outlierStyle: 'circle',
-    outlierRadius: 3,
-    outlierBorderWidth: 1,
-    outlierBackgroundColor: Colors[Index] + '80',
-    outlierBorderColor: Colors[Index],
-    medianColor: Colors[Index],
+    backgroundColor: color + backgroundAlpha,
+    borderColor: color,
+    borderWidth,
+    outlierStyle,
+    outlierRadius,
+    outlierBorderWidth,
+    outlierBackgroundColor: color + backgroundAlpha,
+    outlierBorderColor: color,
+    medianColor: color,
     meanStyle: 'circle',
     meanRadius: 3,
-    meanBorderWidth: 1,
-    meanBackgroundColor: Colors[Index] + '80',
-    meanBorderColor: Colors[Index],
-    itemStyle: 'circle',
-    itemRadius: 0,
-    itemBorderWidth: 0,
-    lowerBackgroundColor: Colors[Index] + '80',
-    upperBackgroundColor: Colors[Index] + '80',
+    meanBorderWidth: borderWidth,
+    meanBackgroundColor: color + backgroundAlpha,
+    meanBorderColor: color,
+    itemStyle,
+    itemRadius,
+    itemBorderWidth,
+    lowerBackgroundColor: color + lowerBackgroundAlpha,
+    upperBackgroundColor: color + upperBackgroundAlpha,
+    ...datasetOptionsOverride,
   };
 };
 
