@@ -28,6 +28,7 @@
   "dependencies": {
     "@kyndryl-design-system/shidoka-foundation": "^2.0.0",
     "@kyndryl-design-system/shidoka-icons": "^2.0.0",
+    "@sgratzl/chartjs-chart-boxplot": "^4.4.4",
     "chart.js": "^4.4.0",
     "chartjs-adapter-date-fns": "^3.0.0",
     "chartjs-chart-geo": "^4.2.4",
