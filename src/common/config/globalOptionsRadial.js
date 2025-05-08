@@ -4,7 +4,6 @@ const defaultConfig = (ctx) => {
   const ArcColor = getTokenThemeVal('--kd-color-background-page-default');
   const AxisTextColor = getTokenThemeVal('--kd-color-text-level-primary');
 
-  // base scales for all Cartesian charts
   const scales = {
     x: {
       title: { text: 'X Axis', color: AxisTextColor },
@@ -20,12 +19,11 @@ const defaultConfig = (ctx) => {
     },
   };
 
-  // only add 'r' (radial) scale for radar/polarArea charts
   const chartType = ctx.type || ctx.chart?.config.type;
   if (chartType === 'radar' || chartType === 'polarArea') {
     scales.r = {
-      grid: { display: false }, // radial grid lines
-      angleLines: { display: false }, // spoke lines
+      grid: { display: false },
+      angleLines: { display: false },
       ticks: { color: AxisTextColor },
       pointLabels: { color: AxisTextColor },
     };
