@@ -74,6 +74,16 @@ const baseArgs = {
   noBorder: false,
   width: null,
   height: null,
+  options: {
+    scales: {
+      x: {
+        title: { display: true, text: 'Categories' },
+      },
+      y: {
+        title: { display: true, text: 'Values' },
+      },
+    },
+  },
 };
 
 export const Default = {
@@ -88,18 +98,16 @@ export const Default = {
         .datasets=${args.datasets}
         .options=${{
           colorPalette: args.colorPalette,
-          chartOptionsOverride: {
-            plugins: {
-              legend: { display: true },
-              tooltip: { enabled: true },
+          plugins: {
+            legend: { display: true },
+            tooltip: { enabled: true },
+          },
+          scales: args.options?.scales || {
+            x: {
+              title: { display: true, text: 'Categories' },
             },
-            scales: {
-              x: {
-                title: { display: true, text: 'Categories' },
-              },
-              y: {
-                title: { display: true, text: 'Values' },
-              },
+            y: {
+              title: { display: true, text: 'Values' },
             },
           },
         }}
@@ -120,6 +128,16 @@ export const Horizontal = {
     ...baseArgs,
     chartTitle: 'Horizontal Boxplot Example',
     description: 'Horizontal boxplot chart with two datasets',
+    options: {
+      scales: {
+        x: {
+          title: { display: true, text: 'Values' },
+        },
+        y: {
+          title: { display: true, text: 'Categories' },
+        },
+      },
+    },
   },
   render: (args) => {
     return html`
@@ -131,19 +149,17 @@ export const Horizontal = {
         .datasets=${args.datasets}
         .options=${{
           colorPalette: args.colorPalette,
-          chartOptionsOverride: {
-            indexAxis: 'y',
-            plugins: {
-              legend: { display: true },
-              tooltip: { enabled: true },
+          indexAxis: 'y',
+          plugins: {
+            legend: { display: true },
+            tooltip: { enabled: true },
+          },
+          scales: args.options?.scales || {
+            x: {
+              title: { display: true, text: 'Values' },
             },
-            scales: {
-              x: {
-                title: { display: true, text: 'Values' },
-              },
-              y: {
-                title: { display: true, text: 'Categories' },
-              },
+            y: {
+              title: { display: true, text: 'Categories' },
             },
           },
         }}
@@ -177,18 +193,16 @@ export const VerticalSingleDataset = {
         .datasets=${args.datasets}
         .options=${{
           colorPalette: args.colorPalette,
-          chartOptionsOverride: {
-            plugins: {
-              legend: { display: true },
-              tooltip: { enabled: true },
+          plugins: {
+            legend: { display: true },
+            tooltip: { enabled: true },
+          },
+          scales: args.options?.scales || {
+            x: {
+              title: { display: true, text: 'Categories' },
             },
-            scales: {
-              x: {
-                title: { display: true, text: 'Categories' },
-              },
-              y: {
-                title: { display: true, text: 'Values' },
-              },
+            y: {
+              title: { display: true, text: 'Values' },
             },
           },
         }}
@@ -221,18 +235,16 @@ export const WithoutLegend = {
         .datasets=${args.datasets}
         .options=${{
           colorPalette: args.colorPalette,
-          chartOptionsOverride: {
-            plugins: {
-              legend: { display: false },
-              tooltip: { enabled: true },
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: true },
+          },
+          scales: args.options?.scales || {
+            x: {
+              title: { display: true, text: 'Categories' },
             },
-            scales: {
-              x: {
-                title: { display: true, text: 'Categories' },
-              },
-              y: {
-                title: { display: true, text: 'Values' },
-              },
+            y: {
+              title: { display: true, text: 'Values' },
             },
           },
         }}

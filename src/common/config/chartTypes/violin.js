@@ -34,12 +34,9 @@ export const options = (ctx) => {
       },
     },
   };
-
-  // Override with any options passed directly in ctx.options
-  // This allows direct use of Chart.js native options
   return {
     ...defaultOptions,
-    ...(ctx.options.chartOptionsOverride || {}),
+    ...(ctx.options || {}),
   };
 };
 
