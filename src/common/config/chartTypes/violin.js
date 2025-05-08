@@ -4,53 +4,42 @@ export const type = 'violin';
 
 export const options = (ctx) => {
   const horizontal = ctx.options.indexAxis === 'y';
-  const {
-    showLegend = true,
-    showTooltip = true,
-    legendPosition = 'bottom',
-    gridX = horizontal,
-    gridY = !horizontal,
-    xAxisTitle,
-    yAxisTitle,
-    xAxisMin,
-    xAxisMax,
-    yAxisMin,
-    yAxisMax,
-    tooltipCallbacks,
-    chartOptionsOverride = {},
-  } = ctx.options;
 
-  return {
+  const defaultOptions = {
     scales: {
       x: {
-        grid: { display: gridX },
-        title: xAxisTitle ? { display: true, text: xAxisTitle } : undefined,
-        min: xAxisMin,
-        max: xAxisMax,
+        grid: { display: horizontal },
       },
       y: {
-        grid: { display: gridY },
-        title: yAxisTitle ? { display: true, text: yAxisTitle } : undefined,
-        min: yAxisMin,
-        max: yAxisMax,
+        grid: { display: !horizontal },
       },
     },
     plugins: {
-      legend: { display: showLegend, position: legendPosition },
+      legend: {
+        display: true,
+        position: 'bottom',
+      },
       tooltip: {
-        enabled: showTooltip,
+        enabled: true,
         callbacks: {
           title: (items) => {
             const axisLabel = horizontal
               ? items[0].chart.options.scales.y.title?.text
               : items[0].chart.options.scales.x.title?.text;
-            return axisLabel + ': ' + items[0].label;
+            return axisLabel
+              ? axisLabel + ': ' + items[0].label
+              : items[0].label;
           },
-          ...tooltipCallbacks,
         },
       },
     },
-    ...chartOptionsOverride,
+  };
+
+  // Override with any options passed directly in ctx.options
+  // This allows direct use of Chart.js native options
+  return {
+    ...defaultOptions,
+    ...(ctx.options.chartOptionsOverride || {}),
   };
 };
 

@@ -19,24 +19,78 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/common/plugins/htmlLegendPlugin.ts",
+      "path": "src/common/helpers/boxplotViolinTableRenderer.ts",
       "declarations": [
         {
-          "kind": "variable",
-          "name": "htmlLegendPlugin",
-          "type": {
-            "text": "object"
-          },
-          "default": "{\n  id: 'htmlLegend',\n  afterUpdate(chart: Chart, _: any, options: HtmlLegendPluginOptions) {\n    const container = document.getElementById(options.containerId);\n    if (!container) return;\n    renderHTMLLegend(chart, container, options);\n  },\n}"
+          "kind": "function",
+          "name": "renderBoxplotViolinTableHeader"
+        },
+        {
+          "kind": "function",
+          "name": "renderBoxplotViolinTableRow",
+          "parameters": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "values",
+              "type": {
+                "text": "number[]"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "renderBoxplotViolinTable",
+          "parameters": [
+            {
+              "name": "labels",
+              "type": {
+                "text": "string[]"
+              }
+            },
+            {
+              "name": "datasets",
+              "type": {
+                "text": "any[]"
+              }
+            },
+            {
+              "name": "axisLabel",
+              "type": {
+                "text": "string"
+              }
+            }
+          ]
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "htmlLegendPlugin",
+          "name": "renderBoxplotViolinTableHeader",
           "declaration": {
-            "name": "htmlLegendPlugin",
-            "module": "src/common/plugins/htmlLegendPlugin.ts"
+            "name": "renderBoxplotViolinTableHeader",
+            "module": "src/common/helpers/boxplotViolinTableRenderer.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "renderBoxplotViolinTableRow",
+          "declaration": {
+            "name": "renderBoxplotViolinTableRow",
+            "module": "src/common/helpers/boxplotViolinTableRenderer.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "renderBoxplotViolinTable",
+          "declaration": {
+            "name": "renderBoxplotViolinTable",
+            "module": "src/common/helpers/boxplotViolinTableRenderer.ts"
           }
         }
       ]
@@ -185,6 +239,30 @@
           "declaration": {
             "name": "getTextColor",
             "module": "src/common/helpers/helpers.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/common/plugins/htmlLegendPlugin.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "htmlLegendPlugin",
+          "type": {
+            "text": "object"
+          },
+          "default": "{\n  id: 'htmlLegend',\n  afterUpdate(chart: Chart, _: any, options: HtmlLegendPluginOptions) {\n    const container = document.getElementById(options.containerId);\n    if (!container) return;\n    renderHTMLLegend(chart, container, options);\n  },\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "htmlLegendPlugin",
+          "declaration": {
+            "name": "htmlLegendPlugin",
+            "module": "src/common/plugins/htmlLegendPlugin.ts"
           }
         }
       ]

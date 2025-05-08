@@ -3,44 +3,19 @@ import '../components/chart';
 import { generateRandomData } from '../common/config/chartTypes/violin';
 import argTypes from '../common/config/chartArgTypes';
 
+/**
+ * Violin plot chart type is available through the integration of the
+ * [@sgratzl/chartjs-chart-boxplot](https://www.sgratzl.com/chartjs-chart-boxplot/getting-started.html) package.
+ *
+ * For detailed documentation on the availble, configurable options, refer to the [plugin's documentation](https://github.com/sgratzl/chartjs-chart-boxplot/blob/f9f20dad666f1ceac89bccffe38908fdfb9a9146/src/elements/Violin.ts#L12).
+ *
+ */
+
 export default {
   title: 'Third Party Charts/Boxplot & Violin Plot/Violin Plot',
   component: 'kd-chart',
   argTypes: {
     ...argTypes,
-    chartOrientation: {
-      options: ['vertical', 'horizontal'],
-      control: { type: 'select' },
-      defaultValue: 'vertical',
-    },
-    showLegend: {
-      control: { type: 'boolean' },
-      defaultValue: false,
-    },
-    showTooltip: {
-      control: { type: 'boolean' },
-      defaultValue: true,
-    },
-    xAxisTitle: {
-      control: { type: 'text' },
-      defaultValue: 'Categories',
-    },
-    yAxisTitle: {
-      control: { type: 'text' },
-      defaultValue: 'Values',
-    },
-    xAxisMin: {
-      control: { type: 'number' },
-    },
-    xAxisMax: {
-      control: { type: 'number' },
-    },
-    yAxisMin: {
-      control: { type: 'number' },
-    },
-    yAxisMax: {
-      control: { type: 'number' },
-    },
   },
 };
 
@@ -86,21 +61,12 @@ const doubleDataset = [
   },
 ];
 
-const args = {
-  chartTitle: 'Vertical Violin Plot Example',
-  description: 'Vertical (Default) Violin plot chart with two datasets',
+const baseArgs = {
+  chartTitle: 'Violin Plot Example',
+  description: 'Violin plot chart with two datasets',
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
   datasets: doubleDataset,
-  chartOrientation: 'vertical',
   colorPalette: 'categorical',
-  showLegend: false,
-  showTooltip: true,
-  xAxisTitle: 'Categories',
-  yAxisTitle: 'Values',
-  xAxisMin: null,
-  xAxisMax: null,
-  yAxisMin: null,
-  yAxisMax: null,
   hideDescription: false,
   hideCaptions: false,
   hideHeader: false,
@@ -111,7 +77,7 @@ const args = {
 };
 
 export const Default = {
-  args,
+  args: baseArgs,
   render: (args) => html`
     <kd-chart
       type="violin"
@@ -120,16 +86,21 @@ export const Default = {
       .labels=${args.labels}
       .datasets=${args.datasets}
       .options=${{
-        indexAxis: args.chartOrientation === 'horizontal' ? 'y' : 'x',
         colorPalette: args.colorPalette,
-        showLegend: args.showLegend,
-        showTooltip: args.showTooltip,
-        xAxisTitle: args.xAxisTitle,
-        yAxisTitle: args.yAxisTitle,
-        xAxisMin: args.xAxisMin,
-        xAxisMax: args.xAxisMax,
-        yAxisMin: args.yAxisMin,
-        yAxisMax: args.yAxisMax,
+        chartOptionsOverride: {
+          plugins: {
+            legend: { display: true },
+            tooltip: { enabled: true },
+          },
+          scales: {
+            x: {
+              title: { display: true, text: 'Categories' },
+            },
+            y: {
+              title: { display: true, text: 'Values' },
+            },
+          },
+        },
       }}
       ?hideDescription=${args.hideDescription}
       ?hideCaptions=${args.hideCaptions}
@@ -144,33 +115,127 @@ export const Default = {
 
 export const Horizontal = {
   args: {
-    ...args,
+    ...baseArgs,
     chartTitle: 'Horizontal Violin Plot Example',
     description: 'Horizontal violin plot chart with two datasets',
-    chartOrientation: 'horizontal',
   },
-  render: Default.render,
+  render: (args) => html`
+    <kd-chart
+      type="violin"
+      .chartTitle=${args.chartTitle}
+      .description=${args.description}
+      .labels=${args.labels}
+      .datasets=${args.datasets}
+      .options=${{
+        colorPalette: args.colorPalette,
+        chartOptionsOverride: {
+          indexAxis: 'y',
+          plugins: {
+            legend: { display: true },
+            tooltip: { enabled: true },
+          },
+          scales: {
+            x: {
+              title: { display: true, text: 'Values' },
+            },
+            y: {
+              title: { display: true, text: 'Categories' },
+            },
+          },
+        },
+      }}
+      ?hideDescription=${args.hideDescription}
+      ?hideCaptions=${args.hideCaptions}
+      ?hideHeader=${args.hideHeader}
+      ?hideControls=${args.hideControls}
+      ?noBorder=${args.noBorder}
+      .width=${args.width}
+      .height=${args.height}
+    ></kd-chart>
+  `,
 };
 
 export const VerticalSingleDataset = {
   args: {
-    ...args,
+    ...baseArgs,
     chartTitle: 'Vertical Violin Plot Single Dataset Example',
     description: 'Vertical violin plot chart with single dataset',
     colorPalette: 'sequential04',
     datasets: singleDataset,
   },
-  render: Default.render,
+  render: (args) => html`
+    <kd-chart
+      type="violin"
+      .chartTitle=${args.chartTitle}
+      .description=${args.description}
+      .labels=${args.labels}
+      .datasets=${args.datasets}
+      .options=${{
+        colorPalette: args.colorPalette,
+        chartOptionsOverride: {
+          plugins: {
+            legend: { display: true },
+            tooltip: { enabled: true },
+          },
+          scales: {
+            x: {
+              title: { display: true, text: 'Categories' },
+            },
+            y: {
+              title: { display: true, text: 'Values' },
+            },
+          },
+        },
+      }}
+      ?hideDescription=${args.hideDescription}
+      ?hideCaptions=${args.hideCaptions}
+      ?hideHeader=${args.hideHeader}
+      ?hideControls=${args.hideControls}
+      ?noBorder=${args.noBorder}
+      .width=${args.width}
+      .height=${args.height}
+    ></kd-chart>
+  `,
 };
 
-export const HorizontalWithLegend = {
+export const WithoutLegend = {
   args: {
-    ...args,
-    chartTitle: 'Horizontal Violin Plot Example (w/ Legend)',
-    description:
-      'Horizontal violin plot chart with two datasets with attached legend',
-    chartOrientation: 'horizontal',
-    showLegend: true,
+    ...baseArgs,
+    chartTitle: 'Violin Plot Without Legend',
+    description: 'Violin plot chart with legend hidden',
+    colorPalette: 'categorical',
   },
-  render: Default.render,
+  render: (args) => html`
+    <kd-chart
+      type="violin"
+      .chartTitle=${args.chartTitle}
+      .description=${args.description}
+      .labels=${args.labels}
+      .datasets=${args.datasets}
+      .options=${{
+        colorPalette: args.colorPalette,
+        chartOptionsOverride: {
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: true },
+          },
+          scales: {
+            x: {
+              title: { display: true, text: 'Categories' },
+            },
+            y: {
+              title: { display: true, text: 'Values' },
+            },
+          },
+        },
+      }}
+      ?hideDescription=${args.hideDescription}
+      ?hideCaptions=${args.hideCaptions}
+      ?hideHeader=${args.hideHeader}
+      ?hideControls=${args.hideControls}
+      ?noBorder=${args.noBorder}
+      .width=${args.width}
+      .height=${args.height}
+    ></kd-chart>
+  `,
 };

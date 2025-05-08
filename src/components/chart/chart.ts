@@ -30,6 +30,7 @@ import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import datalabelsPlugin from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { convertChartDataToCSV, debounce } from '../../common/helpers/helpers';
+import { renderBoxplotViolinTable } from '../../common/helpers/boxplotViolinTableRenderer';
 import ChartScss from './chart.scss';
 import globalOptions from '../../common/config/globalOptions';
 import globalOptionsNonRadial from '../../common/config/globalOptionsNonRadial';
@@ -469,6 +470,12 @@ export class KDChart extends LitElement {
                           })}
                         </tbody>
                       `
+                    : ['boxplot', 'violin'].includes(this.type)
+                    ? renderBoxplotViolinTable(
+                        this.labels,
+                        this.datasets,
+                        this.getTableAxisLabel()
+                      )
                     : html`
                         <thead>
                           <tr>
@@ -574,11 +581,13 @@ export class KDChart extends LitElement {
                                             ?.type === 'time'
                                         ) {
                                           return html`
-                                            <td>
-                                              ${new Date(
-                                                dataPoint
-                                              ).toLocaleString()}
-                                            </td>
+                                            <td>–</td>
+                                            <td>–</td>
+                                            <td>–</td>
+                                            <td>–</td>
+                                            <td>–</td>
+                                            <td>–</td>
+                                            <td>–</td>
                                           `;
                                         } else if (Array.isArray(dataPoint)) {
                                           return html`

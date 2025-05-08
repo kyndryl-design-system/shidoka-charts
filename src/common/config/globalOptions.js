@@ -1,6 +1,7 @@
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 const defaultConfig = (ctx) => {
+  const PrimaryTextColor = getTokenThemeVal('--kd-color-text-level-primary');
   const SecondaryTextColor = getTokenThemeVal(
     '--kd-color-text-level-secondary'
   );
@@ -21,6 +22,7 @@ const defaultConfig = (ctx) => {
         display: false,
         position: 'bottom',
         labels: {
+          color: PrimaryTextColor,
           boxWidth: 16,
           boxHeight: 16,
           borderRadius: 2,
