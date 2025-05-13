@@ -43,7 +43,7 @@ export const options = (ctx) => {
 export const datasetOptions = (ctx, index) => {
   const {
     colorPalette = 'categorical',
-    backgroundAlpha = '80',
+    backgroundAlpha = '95',
     borderWidth = 1,
     outlierStyle = 'circle',
     outlierRadius = 3,

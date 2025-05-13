@@ -303,7 +303,7 @@ export const options = (ctx) => {
   const isDivergent = paletteKey.toLowerCase().includes('divergent');
   const computedNeutral = isDivergent ? 0 : 50;
   const legendEnabled = ctx.options?.plugins?.gradientLegend?.display;
-  const legendPadding = legendEnabled ? { bottom: 30 } : { bottom: 0 };
+  const legendPadding = legendEnabled ? { bottom: 35 } : { bottom: 0 };
 
   return {
     responsive: false,

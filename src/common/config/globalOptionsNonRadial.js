@@ -21,6 +21,7 @@ const defaultConfig = (ctx) => {
     },
     title: {
       color: AxisTextColor,
+      display: true,
     },
   };
 
