@@ -14,6 +14,12 @@ import {
 } from 'chartjs-chart-geo';
 import { TreemapController, TreemapElement } from 'chartjs-chart-treemap';
 import { MatrixController, MatrixElement } from 'chartjs-chart-matrix';
+import {
+  BoxPlotController,
+  BoxAndWiskers,
+  ViolinController,
+  Violin,
+} from '@sgratzl/chartjs-chart-boxplot';
 import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
@@ -24,6 +30,7 @@ import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import datalabelsPlugin from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { convertChartDataToCSV, debounce } from '../../common/helpers/helpers';
+import { renderBoxplotViolinTable } from '../../common/helpers/boxplotViolinTableRenderer';
 import ChartScss from './chart.scss';
 import globalOptions from '../../common/config/globalOptions';
 import globalOptionsNonRadial from '../../common/config/globalOptionsNonRadial';
@@ -47,6 +54,10 @@ Chart.register(
   TreemapElement,
   MatrixController,
   MatrixElement,
+  BoxPlotController,
+  BoxAndWiskers,
+  ViolinController,
+  Violin,
   annotationPlugin,
   datalabelsPlugin
 );
@@ -459,6 +470,12 @@ export class KDChart extends LitElement {
                           })}
                         </tbody>
                       `
+                    : ['boxplot', 'violin'].includes(this.type)
+                    ? renderBoxplotViolinTable(
+                        this.labels,
+                        this.datasets,
+                        this.getTableAxisLabel()
+                      )
                     : html`
                         <thead>
                           <tr>

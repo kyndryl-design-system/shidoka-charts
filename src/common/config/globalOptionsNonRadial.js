@@ -2,6 +2,7 @@ import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/comm
 
 const defaultConfig = (ctx) => {
   const GridLinesColor = getTokenThemeVal('--kd-color-border-variants-light');
+  const AxisTextColor = getTokenThemeVal('--kd-color-text-level-primary');
 
   const MultiAxis =
     ctx.options.scales && Object.keys(ctx.options.scales).length > 2;
@@ -13,9 +14,14 @@ const defaultConfig = (ctx) => {
     },
     ticks: {
       padding: 8,
+      color: AxisTextColor,
     },
     border: {
       display: false,
+    },
+    title: {
+      color: AxisTextColor,
+      display: true,
     },
   };
 
