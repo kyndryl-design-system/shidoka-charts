@@ -22,8 +22,8 @@ const defaultConfig = (ctx) => {
   const chartType = ctx.type || ctx.chart?.config.type;
   if (chartType === 'radar' || chartType === 'polarArea') {
     scales.r = {
-      grid: { display: false },
-      angleLines: { display: false },
+      grid: { display: true },
+      angleLines: { display: true },
       ticks: { color: AxisTextColor },
       pointLabels: { color: AxisTextColor },
     };
