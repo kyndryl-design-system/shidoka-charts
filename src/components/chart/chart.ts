@@ -581,13 +581,11 @@ export class KDChart extends LitElement {
                                             ?.type === 'time'
                                         ) {
                                           return html`
-                                            <td>–</td>
-                                            <td>–</td>
-                                            <td>–</td>
-                                            <td>–</td>
-                                            <td>–</td>
-                                            <td>–</td>
-                                            <td>–</td>
+                                            <td>
+                                              ${new Date(
+                                                dataPoint
+                                              ).toLocaleString()}
+                                            </td>
                                           `;
                                         } else if (Array.isArray(dataPoint)) {
                                           return html`
