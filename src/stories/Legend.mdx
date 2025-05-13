@@ -35,22 +35,20 @@ This uses the default Chart.js canvas-rendered legend:
 
 The HTML legend utilizes the [chartjs HTML Legend](https://www.chartjs.org/docs/latest/samples/legend/html.html) and is enabled by setting the `useHtmlLegend` attribute to `true`. This renders the legend as a separate HTML element outside the canvas, allowing for more customization and styling options.
 
-````html
-
 > ⚠️ **Warning:** Implementing the HTML legend should be done with caution. Depending on your implementation approach, it may lead to breakages or inconsistencies in your chart's appearance or behavior. Always test thoroughly across different browsers and with various data configurations to ensure reliability.
 
 > **PNG/JPG Considerations:** Only the `<canvas>` itself is captured in PNG/JPG exports. Any HTML legend rendered outside the `<canvas>` will not appear in the exported image.
 >
 > **Layout Considerations:** Using the HTML legend changes the overall chart aspect ratio since it exists separate from the canvas. The library now includes automatic adjustments to maintain consistent chart dimensions between HTML and canvas legends. This behavior can be controlled with the following options:
->
-> ```javascript
-> plugins: {
->   htmlLegend: {
->     adjustChartHeight: true,  // enable/disable automatic height adjustment
->     reservedLegendHeight: 40, // base height reserved for legend (px)
->   }
-> }
-> ```
+
+```javascript
+plugins: {
+  htmlLegend: {
+    adjustChartHeight: true,  // enable/disable automatic height adjustment
+    reservedLegendHeight: 40, // base height reserved for legend (px)
+  }
+}
+```
 
 This uses an enhanced HTML-based legend with better styling and scrollability:
 
@@ -70,7 +68,7 @@ This uses an enhanced HTML-based legend with better styling and scrollability:
     }
   }}
 ></kd-chart>
-````
+```
 
 The HTML legend can be configured using the `plugins.htmlLegend` options in the chart configuration:
 
