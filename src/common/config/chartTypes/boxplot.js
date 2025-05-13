@@ -1,24 +1,25 @@
+import { Chart, registerables } from 'chart.js';
+import {
+  BoxPlotController,
+  BoxAndWiskers,
+} from '@sgratzl/chartjs-chart-boxplot';
 import { getComputedColorPalette } from '../colorPalettes';
+import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
+
+Chart.register(...registerables, BoxPlotController, BoxAndWiskers);
 
 export const type = 'boxplot';
+export const borderWidth = 1;
 
 export const options = (ctx) => {
   const horizontal = ctx.options.indexAxis === 'y';
-
   const defaultOptions = {
     scales: {
-      x: {
-        grid: { display: horizontal },
-      },
-      y: {
-        grid: { display: !horizontal },
-      },
+      x: { grid: { display: horizontal } },
+      y: { grid: { display: !horizontal } },
     },
     plugins: {
-      legend: {
-        display: true,
-        position: 'bottom',
-      },
+      legend: { display: true, position: 'bottom' },
       tooltip: {
         enabled: true,
         callbacks: {
@@ -34,50 +35,48 @@ export const options = (ctx) => {
       },
     },
   };
-
-  return {
-    ...defaultOptions,
-    ...(ctx.options || {}),
-  };
+  return { ...defaultOptions, ...(ctx.options || {}) };
 };
 
 export const datasetOptions = (ctx, index) => {
   const {
     colorPalette = 'categorical',
     backgroundAlpha = '80',
-    borderWidth = 1,
+    borderWidth,
     outlierStyle = 'circle',
     outlierRadius = 3,
-    outlierBorderWidth = 1,
+    outlierBorderWidth = borderWidth,
     itemStyle = 'circle',
     itemRadius = 0,
-    itemBorderWidth = 0,
+    itemBorderWidth = borderWidth,
     lowerBackgroundAlpha = '80',
     upperBackgroundAlpha = '80',
     datasetOptionsOverride = {},
   } = ctx.options;
 
   const palette = getComputedColorPalette(colorPalette);
-  const cycles = Math.floor(index / (palette.length - 1));
-  const idx =
-    index > palette.length - 1 ? index - (palette.length - 1) * cycles : index;
+  const idx = index % palette.length;
   const color = palette[idx];
+  const borderColor = getTokenThemeVal('--kd-color-border-level-primary');
+  const meanMedianOutlierBackgroundColor = getTokenThemeVal(
+    '--kd-color-background-container-default'
+  );
 
   return {
     backgroundColor: color + backgroundAlpha,
-    borderColor: color,
+    borderColor: borderColor,
     borderWidth,
     outlierStyle,
     outlierRadius,
     outlierBorderWidth,
-    outlierBackgroundColor: color + backgroundAlpha,
-    outlierBorderColor: color,
-    medianColor: color,
+    outlierBackgroundColor: meanMedianOutlierBackgroundColor,
+    outlierBorderColor: borderColor,
+    medianColor: borderColor,
     meanStyle: 'circle',
     meanRadius: 3,
-    meanBorderWidth: borderWidth,
-    meanBackgroundColor: color + backgroundAlpha,
-    meanBorderColor: color,
+    meanBorderWidth: 1,
+    meanBackgroundColor: meanMedianOutlierBackgroundColor,
+    meanBorderColor: borderColor,
     itemStyle,
     itemRadius,
     itemBorderWidth,
