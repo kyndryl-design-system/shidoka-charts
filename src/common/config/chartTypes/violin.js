@@ -10,7 +10,7 @@ import {
 Chart.register(BoxPlotController, BoxAndWiskers, ViolinController);
 
 export const type = 'violin';
-export const defaultBorderWidth = 1.5;
+export const defaultBorderWidth = 1;
 const borderColor = getTokenThemeVal('--kd-color-border-level-primary');
 const meanMedianOutlierBackgroundColor = getTokenThemeVal(
   '--kd-color-background-container-default'
