@@ -42,12 +42,10 @@ export const options = (ctx) => {
     },
     elements: {
       violin: {
-        borderColor: borderColor,
-        borderWidth,
+        borderWidth: 0,
       },
       boxplot: {
-        borderColor: borderColor,
-        borderWidth,
+        borderWidth: 0,
         backgroundColor: meanMedianOutlierBackgroundColor,
         lowerBackgroundColor: meanMedianOutlierBackgroundColor,
         upperBackgroundColor: meanMedianOutlierBackgroundColor,
@@ -73,26 +71,21 @@ export const datasetOptions = (ctx, index) => {
 
   const palette = getComputedColorPalette(colorPalette);
   const fill = palette[index % palette.length] + backgroundAlpha;
+  const mainBorder = palette[index % palette.length];
 
   return {
     backgroundColor: fill,
-    borderColor: borderColor,
+    borderColor: mainBorder,
     borderWidth,
-    lowerBackgroundColor: meanMedianOutlierBackgroundColor,
-    lowerStyle: 'circle',
-    upperBackgroundColor: meanMedianOutlierBackgroundColor,
     meanStyle: 'circle',
     meanRadius: 4,
     meanBorderWidth: borderWidth,
     meanBorderColor: borderColor,
     meanBackgroundColor: meanMedianOutlierBackgroundColor,
-    medianStyle: 'circle',
-    medianRadius: 6,
-    medianBorderWidth: borderWidth,
-    medianBorderColor: borderColor,
-    medianBackgroundColor: meanMedianOutlierBackgroundColor,
     points: pointCount,
     width: violinWidth,
+    lowerBackgroundColor: meanMedianOutlierBackgroundColor,
+    upperBackgroundColor: meanMedianOutlierBackgroundColor,
     ...datasetOptionsOverride,
   };
 };

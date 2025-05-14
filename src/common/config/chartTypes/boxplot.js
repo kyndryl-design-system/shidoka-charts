@@ -9,7 +9,7 @@ import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/comm
 Chart.register(...registerables, BoxPlotController, BoxAndWiskers);
 
 export const type = 'boxplot';
-export const borderWidth = 1;
+export const borderWidth = 2;
 
 export const options = (ctx) => {
   const horizontal = ctx.options.indexAxis === 'y';
@@ -46,9 +46,6 @@ export const datasetOptions = (ctx, index) => {
     outlierStyle = 'circle',
     outlierRadius = 3,
     outlierBorderWidth = borderWidth,
-    itemStyle = 'circle',
-    itemRadius = 0,
-    itemBorderWidth = borderWidth,
     lowerBackgroundAlpha = '80',
     upperBackgroundAlpha = '80',
     datasetOptionsOverride = {},
@@ -57,29 +54,28 @@ export const datasetOptions = (ctx, index) => {
   const palette = getComputedColorPalette(colorPalette);
   const idx = index % palette.length;
   const color = palette[idx];
+  const mainBoxplotBodyBorder = getTokenThemeVal(
+    '--kd-color-border-level-primary'
+  );
   const borderColor = getTokenThemeVal('--kd-color-border-level-primary');
-  const meanMedianOutlierBackgroundColor = getTokenThemeVal(
+  const dataPointBackground = getTokenThemeVal(
     '--kd-color-background-container-default'
   );
 
   return {
     backgroundColor: color + backgroundAlpha,
-    borderColor: borderColor,
+    borderColor: mainBoxplotBodyBorder,
     borderWidth,
     outlierStyle,
     outlierRadius,
     outlierBorderWidth,
-    outlierBackgroundColor: meanMedianOutlierBackgroundColor,
+    outlierBackgroundColor: 'transparent',
     outlierBorderColor: borderColor,
-    medianColor: borderColor,
     meanStyle: 'circle',
     meanRadius: 3,
     meanBorderWidth: 1,
-    meanBackgroundColor: meanMedianOutlierBackgroundColor,
+    meanBackgroundColor: dataPointBackground,
     meanBorderColor: borderColor,
-    itemStyle,
-    itemRadius,
-    itemBorderWidth,
     lowerBackgroundColor: color + lowerBackgroundAlpha,
     upperBackgroundColor: color + upperBackgroundAlpha,
     ...datasetOptionsOverride,
