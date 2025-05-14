@@ -9,7 +9,7 @@ import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/comm
 Chart.register(...registerables, BoxPlotController, BoxAndWiskers);
 
 export const type = 'boxplot';
-export const borderWidth = 2;
+const defaultBorderWidth = 1;
 
 export const options = (ctx) => {
   const horizontal = ctx.options.indexAxis === 'y';
@@ -42,10 +42,8 @@ export const datasetOptions = (ctx, index) => {
   const {
     colorPalette = 'categorical',
     backgroundAlpha = '80',
-    borderWidth = 2,
     outlierStyle = 'circle',
     outlierRadius = 3,
-    outlierBorderWidth = borderWidth,
     lowerBackgroundAlpha = '80',
     upperBackgroundAlpha = '80',
     datasetOptionsOverride = {},
@@ -65,15 +63,15 @@ export const datasetOptions = (ctx, index) => {
   return {
     backgroundColor: color + backgroundAlpha,
     borderColor: mainBoxplotBodyBorder,
-    borderWidth,
+    borderWidth: defaultBorderWidth,
     outlierStyle,
     outlierRadius,
-    outlierBorderWidth,
+    outlierBorderWidth: 1.5,
     outlierBackgroundColor: 'transparent',
     outlierBorderColor: borderColor,
     meanStyle: 'circle',
     meanRadius: 3,
-    meanBorderWidth: 1,
+    meanBorderWidth: defaultBorderWidth,
     meanBackgroundColor: dataPointBackground,
     meanBorderColor: borderColor,
     lowerBackgroundColor: color + lowerBackgroundAlpha,
