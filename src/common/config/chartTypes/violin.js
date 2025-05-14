@@ -90,7 +90,7 @@ export const datasetOptions = (ctx, index) => {
   };
 };
 
-export function generateRandomData(count, min, max, outliers = 0) {
+export const generateRandomData = (count, min, max, outliers = 0) => {
   const values = Array.from({ length: count }, () =>
     Math.floor(Math.random() * (max - min) + min)
   ).sort((a, b) => a - b);
@@ -104,4 +104,4 @@ export function generateRandomData(count, min, max, outliers = 0) {
   }
 
   return values;
-}
+};
