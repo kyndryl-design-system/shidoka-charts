@@ -52,17 +52,16 @@ export const datasetOptions = (ctx, index) => {
   const palette = getComputedColorPalette(colorPalette);
   const idx = index % palette.length;
   const color = palette[idx];
-  const mainBoxplotBodyBorder = getTokenThemeVal(
-    '--kd-color-border-level-primary'
+  const borderColor = getTokenThemeVal(
+    '--kd-color-data-viz-neutral-border-primary'
   );
-  const borderColor = getTokenThemeVal('--kd-color-border-level-primary');
   const dataPointBackground = getTokenThemeVal(
-    '--kd-color-background-container-default'
+    '--kd-color-data-viz-neutral-background-color'
   );
 
   return {
     backgroundColor: color + backgroundAlpha,
-    borderColor: mainBoxplotBodyBorder,
+    borderColor: borderColor,
     borderWidth: defaultBorderWidth,
     outlierStyle,
     outlierRadius,

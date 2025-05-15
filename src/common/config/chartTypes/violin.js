@@ -11,9 +11,11 @@ Chart.register(BoxPlotController, BoxAndWiskers, ViolinController);
 
 export const type = 'violin';
 export const defaultBorderWidth = 1;
-const borderColor = getTokenThemeVal('--kd-color-border-level-primary');
+const borderColor = getTokenThemeVal(
+  '--kd-color-data-viz-neutral-border-primary'
+);
 const meanMedianOutlierBackgroundColor = getTokenThemeVal(
-  '--kd-color-background-container-default'
+  '--kd-color-data-viz-neutral-background-color'
 );
 
 export const options = (ctx) => {
@@ -41,9 +43,6 @@ export const options = (ctx) => {
       },
     },
     elements: {
-      violin: {
-        borderWidth: defaultBorderWidth,
-      },
       boxplot: {
         borderWidth: defaultBorderWidth,
         backgroundColor: meanMedianOutlierBackgroundColor,
@@ -71,11 +70,10 @@ export const datasetOptions = (ctx, index) => {
 
   const palette = getComputedColorPalette(colorPalette);
   const fill = palette[index % palette.length] + backgroundAlpha;
-  const mainBorder = palette[index % palette.length];
 
   return {
     backgroundColor: fill,
-    borderColor: mainBorder,
+    borderColor: borderColor,
     borderWidth: defaultBorderWidth,
     meanStyle: 'circle',
     meanRadius: 4,
