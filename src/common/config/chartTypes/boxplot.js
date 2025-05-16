@@ -5,6 +5,7 @@ import {
 } from '@sgratzl/chartjs-chart-boxplot';
 import { getComputedColorPalette } from '../colorPalettes';
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
+import { background } from '@storybook/theming';
 
 Chart.register(...registerables, BoxPlotController, BoxAndWiskers);
 
@@ -41,7 +42,8 @@ export const options = (ctx) => {
 export const datasetOptions = (ctx, index) => {
   const {
     colorPalette = 'categorical',
-    backgroundAlpha = '95',
+    backgroundAlpha = '70',
+    upperBackgroundAlpha = '90',
     outlierStyle = 'circle',
     outlierRadius = 3,
     datasetOptionsOverride = {},
@@ -69,8 +71,8 @@ export const datasetOptions = (ctx, index) => {
     meanBorderWidth: defaultBorderWidth,
     meanBackgroundColor: dataPointBackground,
     meanBorderColor: borderColor,
-    lowerBackgroundColor: color,
-    upperBackgroundColor: color + backgroundAlpha,
+    lowerBackgroundColor: color + backgroundAlpha,
+    upperBackgroundColor: color + upperBackgroundAlpha,
     ...datasetOptionsOverride,
   };
 };
