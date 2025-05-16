@@ -1,24 +1,26 @@
+import { Chart, registerables } from 'chart.js';
+import {
+  BoxPlotController,
+  BoxAndWiskers,
+} from '@sgratzl/chartjs-chart-boxplot';
 import { getComputedColorPalette } from '../colorPalettes';
+import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
+import { background } from '@storybook/theming';
+
+Chart.register(...registerables, BoxPlotController, BoxAndWiskers);
 
 export const type = 'boxplot';
+const defaultBorderWidth = 1;
 
 export const options = (ctx) => {
   const horizontal = ctx.options.indexAxis === 'y';
-
   const defaultOptions = {
     scales: {
-      x: {
-        grid: { display: horizontal },
-      },
-      y: {
-        grid: { display: !horizontal },
-      },
+      x: { grid: { display: horizontal } },
+      y: { grid: { display: !horizontal } },
     },
     plugins: {
-      legend: {
-        display: true,
-        position: 'bottom',
-      },
+      legend: { display: true, position: 'bottom' },
       tooltip: {
         enabled: true,
         callbacks: {
@@ -34,54 +36,42 @@ export const options = (ctx) => {
       },
     },
   };
-
-  return {
-    ...defaultOptions,
-    ...(ctx.options || {}),
-  };
+  return { ...defaultOptions, ...(ctx.options || {}) };
 };
 
 export const datasetOptions = (ctx, index) => {
   const {
     colorPalette = 'categorical',
-    backgroundAlpha = '80',
-    borderWidth = 1,
+    backgroundAlpha = '70',
+    upperBackgroundAlpha = '90',
     outlierStyle = 'circle',
     outlierRadius = 3,
-    outlierBorderWidth = 1,
-    itemStyle = 'circle',
-    itemRadius = 0,
-    itemBorderWidth = 0,
-    lowerBackgroundAlpha = '80',
-    upperBackgroundAlpha = '80',
     datasetOptionsOverride = {},
   } = ctx.options;
 
   const palette = getComputedColorPalette(colorPalette);
-  const cycles = Math.floor(index / (palette.length - 1));
-  const idx =
-    index > palette.length - 1 ? index - (palette.length - 1) * cycles : index;
+  const idx = index % palette.length;
   const color = palette[idx];
+  const borderColor = color;
+  const dataPointBackground = getTokenThemeVal(
+    '--kd-color-data-viz-neutral-background-color'
+  );
 
   return {
     backgroundColor: color + backgroundAlpha,
-    borderColor: color,
-    borderWidth,
+    borderColor: borderColor,
+    borderWidth: defaultBorderWidth,
     outlierStyle,
     outlierRadius,
-    outlierBorderWidth,
-    outlierBackgroundColor: color + backgroundAlpha,
-    outlierBorderColor: color,
-    medianColor: color,
+    outlierBorderWidth: 1.5,
+    outlierBackgroundColor: 'transparent',
+    outlierBorderColor: borderColor,
     meanStyle: 'circle',
     meanRadius: 3,
-    meanBorderWidth: borderWidth,
-    meanBackgroundColor: color + backgroundAlpha,
-    meanBorderColor: color,
-    itemStyle,
-    itemRadius,
-    itemBorderWidth,
-    lowerBackgroundColor: color + lowerBackgroundAlpha,
+    meanBorderWidth: defaultBorderWidth,
+    meanBackgroundColor: dataPointBackground,
+    meanBorderColor: borderColor,
+    lowerBackgroundColor: color + backgroundAlpha,
     upperBackgroundColor: color + upperBackgroundAlpha,
     ...datasetOptionsOverride,
   };
