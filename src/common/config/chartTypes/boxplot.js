@@ -41,20 +41,16 @@ export const options = (ctx) => {
 export const datasetOptions = (ctx, index) => {
   const {
     colorPalette = 'categorical',
-    backgroundAlpha = '80',
+    backgroundAlpha = '95',
     outlierStyle = 'circle',
     outlierRadius = 3,
-    lowerBackgroundAlpha = '80',
-    upperBackgroundAlpha = '80',
     datasetOptionsOverride = {},
   } = ctx.options;
 
   const palette = getComputedColorPalette(colorPalette);
   const idx = index % palette.length;
   const color = palette[idx];
-  const borderColor = getTokenThemeVal(
-    '--kd-color-data-viz-neutral-border-primary'
-  );
+  const borderColor = color;
   const dataPointBackground = getTokenThemeVal(
     '--kd-color-data-viz-neutral-background-color'
   );
@@ -73,8 +69,8 @@ export const datasetOptions = (ctx, index) => {
     meanBorderWidth: defaultBorderWidth,
     meanBackgroundColor: dataPointBackground,
     meanBorderColor: borderColor,
-    lowerBackgroundColor: color + lowerBackgroundAlpha,
-    upperBackgroundColor: color + upperBackgroundAlpha,
+    lowerBackgroundColor: color,
+    upperBackgroundColor: color + backgroundAlpha,
     ...datasetOptionsOverride,
   };
 };
