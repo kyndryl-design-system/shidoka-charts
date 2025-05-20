@@ -61,6 +61,57 @@ const doubleDataset = [
   },
 ];
 
+const quadrupleDataset = [
+  {
+    label: 'Dataset 1',
+    data: [
+      generateRandomData(30, 10, 100, 2),
+      generateRandomData(30, 20, 80, 1),
+      generateRandomData(30, 30, 120, 3),
+      generateRandomData(30, 40, 90, 2),
+      generateRandomData(30, 20, 70, 1),
+      generateRandomData(30, 10, 60, 2),
+      generateRandomData(30, 30, 80, 1),
+    ],
+  },
+  {
+    label: 'Dataset 2',
+    data: [
+      generateRandomData(30, 20, 120, 1),
+      generateRandomData(30, 10, 100, 2),
+      generateRandomData(30, 20, 90, 1),
+      generateRandomData(30, 30, 110, 3),
+      generateRandomData(30, 40, 80, 2),
+      generateRandomData(30, 20, 90, 1),
+      generateRandomData(30, 30, 70, 0),
+    ],
+  },
+  {
+    label: 'Dataset 3',
+    data: [
+      generateRandomData(30, 20, 120, 1),
+      generateRandomData(30, 10, 100, 2),
+      generateRandomData(30, 20, 90, 1),
+      generateRandomData(30, 30, 110, 3),
+      generateRandomData(30, 40, 80, 2),
+      generateRandomData(30, 20, 90, 1),
+      generateRandomData(30, 30, 70, 0),
+    ],
+  },
+  {
+    label: 'Dataset 4',
+    data: [
+      generateRandomData(30, 20, 120, 1),
+      generateRandomData(30, 10, 100, 2),
+      generateRandomData(30, 20, 90, 1),
+      generateRandomData(30, 30, 110, 3),
+      generateRandomData(30, 40, 80, 2),
+      generateRandomData(30, 20, 90, 1),
+      generateRandomData(30, 30, 70, 0),
+    ],
+  },
+];
+
 const baseArgs = {
   chartTitle: 'Boxplot Example',
   description: 'Boxplot chart with two datasets',
@@ -88,6 +139,46 @@ const baseArgs = {
 
 export const Default = {
   args: baseArgs,
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="boxplot"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        .options=${{
+          colorPalette: args.colorPalette,
+          plugins: {
+            legend: { display: true },
+            tooltip: { enabled: true },
+          },
+          scales: args.options?.scales || {
+            x: {
+              title: { display: true, text: 'Categories' },
+            },
+            y: {
+              title: { display: true, text: 'Values' },
+            },
+          },
+        }}
+        ?hideDescription=${args.hideDescription}
+        ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
+        ?noBorder=${args.noBorder}
+        .width=${args.width}
+        .height=${args.height}
+      ></kd-chart>
+    `;
+  },
+};
+
+export const FourDatasetExample = {
+  args: {
+    ...baseArgs,
+    datasets: quadrupleDataset,
+  },
   render: (args) => {
     return html`
       <kd-chart
