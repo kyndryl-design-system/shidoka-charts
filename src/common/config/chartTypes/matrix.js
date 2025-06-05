@@ -3,7 +3,14 @@ import { getComputedColorPalette } from '../colorPalettes';
 export const type = 'matrix';
 
 export const createMatrixData = (data, options = {}) => {
-  const { xAxis, yAxis, xKey = 'x', yKey = 'y', valueKey = 'value' } = options;
+  const {
+    xAxis,
+    yAxis,
+    xKey = 'x',
+    yKey = 'y',
+    valueKey = 'value',
+    secondaryValueKey = 'secondaryValue',
+  } = options;
 
   if (!xAxis || !yAxis || !Array.isArray(xAxis) || !Array.isArray(yAxis)) {
     throw new Error('xAxis and yAxis must be provided as arrays');
@@ -16,7 +23,14 @@ export const createMatrixData = (data, options = {}) => {
     const xValue = item[xKey];
     const yValue = item[yKey];
     const key = `${xValue}-${yValue}`;
-    dataMap.set(key, item[valueKey]);
+
+    dataMap.set(key, {
+      primary: item[valueKey],
+      secondary:
+        item[secondaryValueKey] !== undefined
+          ? item[secondaryValueKey]
+          : undefined,
+    });
   });
 
   for (let y = 1; y <= yAxis.length; y++) {
@@ -24,8 +38,16 @@ export const createMatrixData = (data, options = {}) => {
       const yValue = yAxis[y - 1];
       const xValue = xAxis[x - 1];
       const key = `${xValue}-${yValue}`;
-      const value = dataMap.has(key) ? dataMap.get(key) : undefined;
-      matrixData.push({ x, y, value });
+
+      const valueObj = dataMap.has(key)
+        ? dataMap.get(key)
+        : { primary: undefined, secondary: undefined };
+      matrixData.push({
+        x,
+        y,
+        value: valueObj.primary,
+        secondaryValue: valueObj.secondary,
+      });
     }
   }
 
@@ -320,7 +342,17 @@ export const options = (ctx) => {
             const v = context.dataset.data[context.dataIndex];
             const rowLabel = ctx.labels.y?.[v.y - 1] || ctx.labels[v.y - 1];
             const colLabel = ctx.labels.x?.[v.x - 1] || ctx.labels[v.x - 1];
-            return [`${rowLabel} - ${colLabel}`, `Value: ${v.value ?? 'N/A'}`];
+
+            let tooltipLines = [
+              `${rowLabel} - ${colLabel}`,
+              `Value: ${v.value ?? 'N/A'}`,
+            ];
+
+            if (v.secondaryValue !== undefined) {
+              tooltipLines.push(`Secondary: ${v.secondaryValue}`);
+            }
+
+            return tooltipLines;
           },
         },
       },
@@ -434,8 +466,15 @@ export const datasetOptions = (ctx) => {
   };
 };
 
+const secondaryValuePlugin = {
+  id: 'secondaryValueLabels',
+  afterDatasetsDraw(chart, args, options) {
+    return;
+  },
+};
+
 export default {
   options,
   datasetOptions,
-  plugins: [gradientLegendPlugin],
+  plugins: [gradientLegendPlugin, secondaryValuePlugin],
 };
