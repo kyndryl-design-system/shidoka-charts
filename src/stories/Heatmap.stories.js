@@ -4,6 +4,7 @@ import argTypes from '../common/config/chartArgTypes';
 import { createMatrixData } from '../common/config/chartTypes/matrix';
 import heatmapData from './sampleData/heatmap';
 import divergentHeatmapData from './sampleData/divergent-heatmap';
+import dualValueHeatmapData from './sampleData/dual-value-heatmap';
 
 export default {
   title: 'Third Party Charts/Heatmap',
@@ -55,6 +56,15 @@ const divergentMatrixData = createMatrixData(divergentHeatmapData, {
   valueKey: 'value',
 });
 
+const dualValueMatrixData = createMatrixData(dualValueHeatmapData, {
+  xAxis: assetTypes,
+  yAxis: months,
+  xKey: 'assetType',
+  yKey: 'month',
+  valueKey: 'value',
+  secondaryValueKey: 'secondaryValue',
+});
+
 const commonArgs = {
   chartTitle: 'Cost Change by Asset Type and Month',
   description: 'Monthly cost fluctuations across different asset types',
@@ -95,6 +105,23 @@ const divergentDataset = {
       x: item.x,
       y: item.y,
       Value: item.value,
+      AssetType: assetType,
+      Month: month,
+    };
+  }),
+};
+
+const dualValueDataset = {
+  label: 'Dual Value Matrix',
+  data: dualValueMatrixData,
+  metadata: dualValueMatrixData.map((item) => {
+    const month = months[item.y - 1];
+    const assetType = assetTypes[item.x - 1];
+    return {
+      x: item.x,
+      y: item.y,
+      Value: item.value,
+      SecondaryValue: item.secondaryValue,
       AssetType: assetType,
       Month: month,
     };
@@ -207,6 +234,54 @@ export const HideLegend = {
           display: false,
           title: '',
           paletteKey: '',
+        },
+      },
+      scales: {
+        x: { title: { text: 'Asset Type' } },
+        y: { title: { text: 'Month' } },
+      },
+    };
+
+    return html`
+      <kd-chart
+        type="matrix"
+        style="min-height: 500px;"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        .options=${options}
+        ?hideDescription=${args.hideDescription}
+        ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
+        ?noBorder=${args.noBorder}
+        .width=${args.width}
+        .height=${args.height}
+      ></kd-chart>
+    `;
+  },
+};
+
+export const DualValue = {
+  args: {
+    ...commonArgs,
+    chartTitle: 'Heatmap with Dual Values',
+    description: 'Showing primary values with secondary values in tooltips',
+    datasets: [dualValueDataset],
+    colorPalette: 'sequential02',
+  },
+  render: (args) => {
+    const options = {
+      colorPalette: 'sequential02',
+      plugins: {
+        gradientLegend: {
+          display: true,
+          title: 'Primary Value',
+          paletteKey: 'sequential02',
+        },
+        secondaryValueLabels: {
+          display: false,
         },
       },
       scales: {
