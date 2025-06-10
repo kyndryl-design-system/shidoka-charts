@@ -17,15 +17,6 @@ export default {
         },
       },
     },
-    {
-      name: 'storybook-preset-inline-svg',
-      options: {
-        svgInlineLoaderOptions: {
-          removeSVGTagAttrs: false,
-        },
-      },
-    },
-    // '@storybook/addon-webpack5-compiler-babel',
     '@storybook/addon-a11y',
     '@storybook/addon-vitest',
   ],

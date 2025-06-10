@@ -399,7 +399,7 @@ export const CustomStyledLegend = {
   },
   render: (args) => {
     setTimeout(() => {
-      const chart = document.getElementById('custom-styled-chart').chart;
+      const chart = document.getElementById('custom-styled-chart')?.chart;
       const container = document.getElementById('custom-styled-legend');
       if (chart && container) {
         renderHTMLLegend(chart, container, {

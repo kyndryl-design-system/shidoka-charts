@@ -1,4 +1,4 @@
-export const debounce: any = (fn: Function, ms = 100) => {
+export const debounce: any = (fn: any, ms = 100) => {
   let timer: ReturnType<typeof setTimeout>;
   return function (e: Event) {
     clearTimeout(timer);
@@ -6,7 +6,7 @@ export const debounce: any = (fn: Function, ms = 100) => {
   };
 };
 
-export const stringToReactHtml = (string: String) => {
+export const stringToReactHtml = (string: string) => {
   return { __html: string };
 };
 
