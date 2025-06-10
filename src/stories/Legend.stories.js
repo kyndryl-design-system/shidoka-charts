@@ -330,7 +330,7 @@ export const LegendWithClickHandler = {
   },
   render: (args) => {
     setTimeout(() => {
-      const chart = document.getElementById('clickable-legend-chart').chart;
+      const chart = document.getElementById('clickable-legend-chart')?.chart;
       const container = document.getElementById('clickable-legend-container');
 
       if (chart && container) {
