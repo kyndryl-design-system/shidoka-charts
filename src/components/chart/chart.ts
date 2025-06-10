@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit';
+import { LitElement, html, unsafeCSS } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { deepmerge, deepmergeCustom } from 'deepmerge-ts';
@@ -31,7 +31,7 @@ import datalabelsPlugin from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { convertChartDataToCSV, debounce } from '../../common/helpers/helpers';
 import { renderBoxplotViolinTable } from '../../common/helpers/boxplotViolinTableRenderer';
-import ChartScss from './chart.scss';
+import ChartScss from './chart.scss?inline';
 import globalOptions from '../../common/config/globalOptions';
 import globalOptionsNonRadial from '../../common/config/globalOptionsNonRadial';
 import globalOptionsRadial from '../../common/config/globalOptionsRadial';
@@ -104,7 +104,7 @@ export interface HtmlLegendOptions {
  */
 @customElement('kd-chart')
 export class KDChart extends LitElement {
-  static override styles = ChartScss;
+  static override styles = unsafeCSS(ChartScss);
 
   /** Chart title. */
   @property({ type: String })

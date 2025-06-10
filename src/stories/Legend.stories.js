@@ -4,7 +4,7 @@ import { htmlLegendPlugin } from '../common/plugins/htmlLegendPlugin';
 import { renderHTMLLegend } from '../common/legend';
 import argTypes from '../common/config/chartArgTypes';
 import '../components/chart';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 
 Chart.register(htmlLegendPlugin);
 
