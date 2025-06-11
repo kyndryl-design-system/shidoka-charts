@@ -1,7 +1,7 @@
 @use '../../common/scss/global.scss';
 @use '../../common/scss/mixins.scss';
-@use '~@kyndryl-design-system/shidoka-foundation/scss/mixins/typography.scss';
-@use '~@kyndryl-design-system/shidoka-foundation/scss/mixins/elevation.scss';
+@use '@kyndryl-design-system/shidoka-foundation/scss/mixins/typography.scss';
+@use '@kyndryl-design-system/shidoka-foundation/scss/mixins/elevation.scss';
 
 :host {
   display: block;
@@ -45,12 +45,13 @@ figure {
 }
 
 .closed-caption {
-  @include typography.type-ui-03;
   color: var(--kd-color-text-level-secondary);
 
   &:not(:empty) {
     margin-top: 8px;
   }
+
+  @include typography.type-ui-03;
 }
 
 .hidden-visually {
@@ -99,11 +100,11 @@ table {
   }
 
   th {
-    @include typography.type-ui-02;
     text-transform: uppercase;
     text-align: left;
     font-weight: 500;
     background: var(--kd-color-background-table-header);
+    @include typography.type-ui-02;
   }
 
   th:first-child {
@@ -161,13 +162,13 @@ table {
 }
 
 .title {
-  @include typography.type-ui-02;
   font-weight: 500;
+  @include typography.type-ui-02;
 }
 
 .description {
-  @include typography.type-ui-03;
   color: var(--kd-color-text-level-secondary);
+  @include typography.type-ui-03;
 }
 
 .controls {
@@ -227,7 +228,7 @@ table {
     top: calc(100% + 8px);
     background: var(--kd-color-background-container-default);
     border: 1px solid var(--kd-color-border-level-primary);
-    @include elevation.shadow(2);
+
     border-radius: 4px;
     overflow: hidden;
     text-align: left;
@@ -260,6 +261,8 @@ table {
         outline-color: var(--kd-color-border-variants-focus);
       }
     }
+
+    @include elevation.shadow(2);
   }
 }
 

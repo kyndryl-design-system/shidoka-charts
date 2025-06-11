@@ -67,7 +67,6 @@ export const TreeMap = {
         .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        .options=${args.options}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?hideHeader=${args.hideHeader}

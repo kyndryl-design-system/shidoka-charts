@@ -4,7 +4,7 @@ import { htmlLegendPlugin } from '../common/plugins/htmlLegendPlugin';
 import { renderHTMLLegend } from '../common/legend';
 import argTypes from '../common/config/chartArgTypes';
 import '../components/chart';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 
 Chart.register(htmlLegendPlugin);
 
@@ -330,7 +330,7 @@ export const LegendWithClickHandler = {
   },
   render: (args) => {
     setTimeout(() => {
-      const chart = document.getElementById('clickable-legend-chart').chart;
+      const chart = document.getElementById('clickable-legend-chart')?.chart;
       const container = document.getElementById('clickable-legend-container');
 
       if (chart && container) {
@@ -399,7 +399,7 @@ export const CustomStyledLegend = {
   },
   render: (args) => {
     setTimeout(() => {
-      const chart = document.getElementById('custom-styled-chart').chart;
+      const chart = document.getElementById('custom-styled-chart')?.chart;
       const container = document.getElementById('custom-styled-legend');
       if (chart && container) {
         renderHTMLLegend(chart, container, {
