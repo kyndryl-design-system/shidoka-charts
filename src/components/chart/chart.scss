@@ -175,6 +175,8 @@ table {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  // to prevent extra long title from creeping up against chart controls:
+  padding-right: 8px;
   @include typography.type-ui-02;
 }
 
@@ -195,7 +197,6 @@ table {
 
 .controls {
   display: flex;
-  margin-top: 4px;
   gap: 8px;
   align-items: center;
   margin-left: auto;
