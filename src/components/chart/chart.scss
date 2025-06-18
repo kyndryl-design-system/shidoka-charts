@@ -161,6 +161,18 @@ table {
   }
 }
 
+#titleDesc {
+  flex: 1 1 auto;
+  max-width: 126%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
 .title {
   font-weight: 500;
   @include typography.type-ui-02;
@@ -169,6 +181,8 @@ table {
 .description {
   color: var(--kd-color-text-level-secondary);
   @include typography.type-ui-03;
+  // to prevent extra long description from creeping up against chart controls:
+  padding-right: 8px;
 }
 
 .controls {
