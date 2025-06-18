@@ -151,7 +151,7 @@ table {
 
 .header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 24px;
 
   .widget & {
@@ -162,19 +162,19 @@ table {
 }
 
 #titleDesc {
+  display: flex;
+  flex-direction: column;
   flex: 1 1 auto;
-  max-width: 126%;
   min-width: 0;
-  overflow-wrap: break-word;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
+  align-self: flex-start;
 }
 
 .title {
   font-weight: 500;
+  flex: 0 0 auto;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   @include typography.type-ui-02;
 }
 
@@ -182,11 +182,20 @@ table {
   color: var(--kd-color-text-level-secondary);
   // to prevent extra long description from creeping up against chart controls:
   padding-right: 8px;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow-wrap: break-word;
   @include typography.type-ui-03;
 }
 
 .controls {
   display: flex;
+  margin-top: 4px;
   gap: 8px;
   align-items: center;
   margin-left: auto;
