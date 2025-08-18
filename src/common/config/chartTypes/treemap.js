@@ -53,11 +53,38 @@ export const options = (ctx) => {
 };
 
 export const datasetOptions = (ctx, index) => {
+  const palette = getComputedColorPalette(
+    ctx.options?.colorPalette || 'categorical'
+  );
+
   return {
     backgroundColor: function (context) {
-      return getComputedColorPalette(ctx.options.colorPalette || 'categorical')[
-        getGroupColorIndex(context)
-      ]; // + '80'
+      const Dataset = context.dataset;
+      const dataIndex =
+        typeof context.dataIndex === 'number' ? context.dataIndex : 0;
+      const paletteLen = (palette && palette.length) || 1;
+
+      if (Dataset && Dataset.groups !== undefined) {
+        const groupIndex = getGroupColorIndex(context);
+        return palette[groupIndex % paletteLen];
+      }
+
+      const nested =
+        typeof (Dataset && Dataset.tree) === 'object' &&
+        !Array.isArray(Dataset && Dataset.tree);
+      if (
+        nested &&
+        context.raw &&
+        context.raw._data &&
+        typeof context.raw._data.path === 'string'
+      ) {
+        const parent = String(context.raw._data.path).split('.')[0];
+        const groups = Object.keys(Dataset.tree || {});
+        const idx = Math.max(0, groups.indexOf(parent));
+        return palette[idx % paletteLen];
+      }
+
+      return palette[dataIndex % paletteLen];
     },
   };
 };
