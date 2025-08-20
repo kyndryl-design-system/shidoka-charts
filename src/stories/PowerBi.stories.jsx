@@ -7,6 +7,8 @@ import {
   Stories,
 } from '@storybook/addon-docs/blocks';
 
+import downloadIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/download.svg';
+
 const HIDDEN_PROPS = [
   'title',
   'downloadUrl',
@@ -83,24 +85,28 @@ export const PrimaryExample = () => `
     <style>
       .download-btn {
         border: 1px solid transparent;
-        background-color: #2f808c;
+        background-color: #29707a;
         color: white;
         cursor: pointer;
         font-size: 16px;
         padding: 8px 16px;
         border-radius: 4px;
         margin-top: 16px;
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         text-decoration: none;
         transition: background-color .2s ease;
       }
       .download-btn:hover { background-color: #3797a4; }
+      .download-btn svg { width: 16px; height: 16px; display: inline-block; }
     </style>
     <h2 style="margin: 0 0 8px 0; font-size: 18px;">Shidoka Power BI Themes</h2>
     <p style="margin: 0 0 12px 0; color: gray">
       See the documentation above for installation and usage. Download the ZIP directly:<br/>
       <a href="/pbi-themes/Shidoka-Themes.zip" download class="download-btn">
-        <span style="font-weight: bold; margin-right: 4px;">[ ↓ ]</span> Download Shidoka Power BI Themes
+        ${downloadIcon}
+        <span>Shidoka-Themes.zip</span>
       </a>
     </p>
   </div>
