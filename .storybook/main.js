@@ -27,7 +27,7 @@ export default {
   core: {
     disableTelemetry: true,
   },
-  staticDirs: ['./static'],
+  staticDirs: ['./static', { from: '../dist/powerbi', to: '/pbi-themes' }],
   viteFinal: async (config) => {
     const { mergeConfig } = await import('vite');
     // Merge custom configuration into the default config
