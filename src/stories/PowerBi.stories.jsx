@@ -42,7 +42,7 @@ Each palette is provided as separate Light & Dark \`*.pbitheme.json\` files and 
 
 ### Quick install
 1. **Download** all themes as a ZIP by clicking the button below.
-2. Open **Power BI Desktop** → **View → Themes → **Browse for themes** and select a \`*.pbitheme.json\`.
+2. Open **Power BI Desktop** → **View** → **Themes** → **Browse for themes** and select a \`*.pbitheme.json\`.
 3. Pick **Light/Dark** variants as needed.
 
 > **Notes**
@@ -164,13 +164,13 @@ export const Examples = (args) => {
       title.innerHTML = `<strong style="font-size:.95rem;">${palette} — ${mode}</strong><div style="font-size:12px;color:#6b7280;">Preview</div>`;
       header.appendChild(title);
 
-      const dl = document.createElement('a');
-      dl.href = args.downloadUrl || '/pbi-themes/Shidoka-Themes.zip';
-      dl.download = '';
-      dl.innerHTML = `Full Shidoka Power BI Themes [↓]`;
-      dl.style.fontSize = '13px';
-      dl.style.color = '#0366d6';
-      header.appendChild(dl);
+      // const dl = document.createElement('a');
+      // dl.href = args.downloadUrl || '/pbi-themes/Shidoka-Themes.zip';
+      // dl.download = '';
+      // dl.innerHTML = `Download All Themes [↓]`;
+      // dl.style.fontSize = '13px';
+      // dl.style.color = '#0366d6';
+      // header.appendChild(dl);
 
       card.appendChild(header);
 
