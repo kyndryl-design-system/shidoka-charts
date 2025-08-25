@@ -197,6 +197,18 @@ function rag3(all, mode) {
   return out;
 }
 
+function rag3Cycled(all, mode, cycles = 20) {
+  const success = resolveVar('kd-color-data-viz-rag-3-success', mode, all);
+  const warning = resolveVar('kd-color-data-viz-rag-3-warning', mode, all);
+  const error = resolveVar('kd-color-data-viz-rag-3-error', mode, all);
+
+  const triplet = [error, warning, success].map(normalizeColor).filter(Boolean);
+
+  const out = [];
+  for (let i = 0; i < cycles; i++) out.push(...triplet);
+  return out;
+}
+
 function rag8(all, mode) {
   const names = [
     'kd-color-data-viz-rag-8-success',
@@ -611,7 +623,7 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
     { key: 'Sequential05', builder: (mode) => sequential(all, mode, '05') },
     { key: 'Divergent01', builder: (mode) => divergentMerged(all, mode, '01') },
     { key: 'Divergent02', builder: (mode) => divergentMerged(all, mode, '02') },
-    { key: 'RAG03', builder: (mode) => rag3(all, mode) },
+    { key: 'RAG03', builder: (mode) => rag3Cycled(all, mode, 20) },
     { key: 'RAG08', builder: (mode) => rag8(all, mode) },
   ];
 
