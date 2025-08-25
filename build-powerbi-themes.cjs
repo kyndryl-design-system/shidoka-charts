@@ -242,12 +242,33 @@ function buildLabelsBlock(color, show) {
 function buildPerVisualStyles(fg, axis, grid, firstDataColor) {
   const base = {
     title: [{ show: true, fontColor: { solid: { color: fg } } }],
-    legend: [buildLegendBlock(fg, 'Bottom', false)],
-    labels: [buildLabelsBlock(fg, false)],
+    legend: [
+      {
+        show: false,
+        position: 'Bottom',
+        titleColor: { solid: { color: fg } },
+        labelColor: { solid: { color: fg } },
+      },
+    ],
+    labels: [{ show: false, color: { solid: { color: fg } } }],
   };
   const axes = {
-    categoryAxis: [buildAxisBlock(fg, axis, grid)],
-    valueAxis: [buildAxisBlock(fg, axis, grid)],
+    categoryAxis: [
+      {
+        show: true,
+        labelColor: { solid: { color: fg } },
+        axisColor: { solid: { color: axis } },
+        gridlineColor: { solid: { color: grid } },
+      },
+    ],
+    valueAxis: [
+      {
+        show: true,
+        labelColor: { solid: { color: fg } },
+        axisColor: { solid: { color: axis } },
+        gridlineColor: { solid: { color: grid } },
+      },
+    ],
   };
 
   const withDataPoint = firstDataColor
@@ -285,15 +306,31 @@ function buildPerVisualStyles(fg, axis, grid, firstDataColor) {
     pieChart: {
       '*': {
         ...base,
-        legend: [buildLegendBlock(fg, 'Bottom', true)],
-        labels: [buildLabelsBlock(fg, false)],
+        legend: [
+          {
+            show: true,
+            position: 'Bottom',
+            titleColor: { solid: { color: fg } },
+            labelColor: { solid: { color: fg } },
+          },
+        ],
+        labels: [{ show: true, color: { solid: { color: fg } } }],
+        ...withDataPoint,
       },
     },
     donutChart: {
       '*': {
         ...base,
-        legend: [buildLegendBlock(fg, 'Bottom', true)],
-        labels: [buildLabelsBlock(fg, false)],
+        legend: [
+          {
+            show: true,
+            position: 'Bottom',
+            titleColor: { solid: { color: fg } },
+            labelColor: { solid: { color: fg } },
+          },
+        ],
+        labels: [{ show: true, color: { solid: { color: fg } } }],
+        ...withDataPoint,
       },
     },
     funnelChart: {
@@ -336,18 +373,22 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
   const INCLUDE_STRUCTURAL_LEVELS =
     process.env.PBI_INCLUDE_STRUCTURAL_LEVELS === '1' ||
     process.env.PBI_INCLUDE_STRUCTURAL_LEVELS === 'true';
+  const ENABLE_PER_VISUAL =
+    process.env.PBI_ENABLE_PER_VISUAL === '1' ||
+    process.env.PBI_ENABLE_PER_VISUAL === 'true';
 
+  // ---- colors ----
   const bg = resolveColorVar(
     'kd-color-background-page-default',
     mode,
     all,
-    mode === 'dark' ? '#0f0f0f' : '#ffffff'
+    mode === 'dark' ? '#1d2125' : '#ffffff'
   );
   const fg = resolveColorVar(
     'kd-color-text-level-primary',
     mode,
     all,
-    mode === 'dark' ? '#e6e6e6' : '#1f1f1f'
+    mode === 'dark' ? '#f9f9f9' : '#1f1f1f'
   );
   const grid = resolveColorVar(
     'kd-color-border-variants-light',
@@ -356,112 +397,93 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
     mode === 'dark' ? '#2a2a2a' : '#d4d4d8'
   );
   const axisLine = grid;
-  const fontFamily = fontFamilyToken
-    ? resolveExpr(all[fontFamilyToken], mode, all)
-    : null;
-
-  function makeFontFace(primaryFamily, semibold, preferRoboto) {
-    let families = primaryFamily
-      ? String(primaryFamily)
-          .split(',')
-          .map((s) => s.trim())
-          .filter(Boolean)
-      : [];
-
-    const hasSegoe = (f) => f.replace(/^['"]|['"]$/g, '') === 'Segoe UI';
-
-    const twk = 'TWK Everett';
-    if (!families.some((f) => f.toLowerCase().includes('twk') || f === twk)) {
-      families.push(twk);
-    }
-
-    if (!families.includes('Roboto')) families.push('Roboto');
-
-    if (!families.some((f) => hasSegoe(f))) families.push("'Segoe UI'");
-
-    const unique = [];
-    for (const f of families) {
-      const norm = hasSegoe(f) ? "'Segoe UI'" : f;
-      if (!unique.includes(norm)) unique.push(norm);
-    }
-
-    let ordered = [];
-    if (preferRoboto) {
-      ordered.push('Roboto');
-      if (!unique.includes(twk)) ordered.push(twk);
-      for (const f of unique) {
-        if (f !== 'Roboto' && f !== twk && f !== "'Segoe UI'") ordered.push(f);
-      }
-      if (unique.includes("'Segoe UI'")) ordered.push("'Segoe UI'");
-      else ordered.push("'Segoe UI'");
-    } else {
-      ordered.push(twk);
-      if (!ordered.includes('Roboto')) ordered.push('Roboto');
-      for (const f of unique) {
-        if (f !== twk && f !== 'Roboto' && f !== "'Segoe UI'") ordered.push(f);
-      }
-      if (unique.includes("'Segoe UI'")) ordered.push("'Segoe UI'");
-      else ordered.push("'Segoe UI'");
-    }
-
-    if (semibold) ordered[0] = `${ordered[0]} Semibold`;
-
-    return ordered.join(',');
-  }
-
   const firstData =
     Array.isArray(dataColors) && dataColors.length ? dataColors[0] : null;
 
-  const rag = rag3(all, mode)
-    .map((c) => normalizeColor(c))
-    .filter(Boolean);
+  // ---- pick single PBI-safe font from token ----
+  const PBI_ALLOWED = new Set([
+    'Segoe UI',
+    'Arial',
+    'Calibri',
+    'Verdana',
+    'Tahoma',
+    'Trebuchet MS',
+    'Times New Roman',
+    'Georgia',
+    'Gadugi',
+    'Comic Sans MS',
+    'Courier New',
+  ]);
+  const ALIASES = {
+    inter: 'Segoe UI',
+    helvetica: 'Arial',
+    'helvetica neue': 'Arial',
+    'system ui': 'Segoe UI',
+    'ui-sans-serif': 'Segoe UI',
+    'twk everett': 'Segoe UI',
+    roboto: 'Segoe UI',
+    'sf pro text': 'Segoe UI',
+    'sf pro display': 'Segoe UI',
+  };
+  function pickPbiFontFromToken(tokenExpr) {
+    const raw = tokenExpr
+      ? String(resolveExpr(tokenExpr, mode, all) || '')
+      : '';
+    const families = raw
+      .split(',')
+      .map((s) => s.trim().replace(/^['"]|['"]$/g, ''))
+      .map((s) =>
+        s.replace(
+          /\s+(Thin|Extra\s*Light|Light|Regular|Book|Text|Medium|Semi\s*Bold|Semibold|Demi\s*Bold|Bold|Extra\s*Bold|Black)$/i,
+          ''
+        )
+      )
+      .filter(Boolean);
+    for (const f of families) if (PBI_ALLOWED.has(f)) return f;
+    for (const f of families) {
+      const k = f.toLowerCase();
+      if (ALIASES[k]) return ALIASES[k];
+    }
+    return 'Segoe UI';
+  }
+  const pbiFont = pickPbiFontFromToken(
+    fontFamilyToken ? all[fontFamilyToken] : null
+  );
+
+  // ---- status ----
+  const rag = rag3(all, mode).map(normalizeColor).filter(Boolean);
   const good = rag[0] || null;
   const neutral = rag[1] || null;
   const bad = rag[2] || null;
-
   const secondaryBackground =
     resolveColorVar('kd-color-background-surface', mode, all) || bg;
-  const firstLevelElements = fg;
-  const secondLevelElements =
-    resolveColorVar('kd-color-text-level-secondary', mode, all) || fg;
-  const thirdLevelElements =
-    resolveColorVar('kd-color-text-level-tertiary', mode, all) ||
-    firstData ||
-    fg;
-  const fourthLevelElements =
-    resolveColorVar('kd-color-text-level-quaternary', mode, all) || grid;
 
+  // ---- text classes ----
   const textClasses = {
     callout: {
       fontSize: Number(resolveVar('kd-font-size-callout', mode, all)) || 45,
-      fontFace: "Roboto,'Segoe UI'",
-      color: firstLevelElements,
+      fontFace: pbiFont,
+      color: fg,
     },
     title: {
       fontSize: Number(resolveVar('kd-font-size-title', mode, all)) || 18,
-      fontFace: "Roboto,'Segoe UI'",
-      color: firstLevelElements,
+      fontFace: pbiFont,
+      color: fg,
     },
     header: {
       fontSize: Number(resolveVar('kd-font-size-header', mode, all)) || 12,
-      fontFace: makeFontFace(fontFamily, true),
-      color: firstLevelElements,
+      fontFace: pbiFont,
+      color: fg,
     },
     label: {
       fontSize: Number(resolveVar('kd-font-size-label', mode, all)) || 10,
-      fontFace: "Roboto,'Segoe UI'",
-      color: firstLevelElements,
+      fontFace: pbiFont,
+      color: fg,
     },
   };
 
-  const globalBlock = {
-    general: [
-      {
-        background: { solid: { color: bg } },
-        foreground: { solid: { color: fg } },
-        tableAccent: { solid: { color: fg } },
-      },
-    ],
+  // ---- base visuals ----
+  const baseVisual = {
     title: [{ show: true, fontColor: { solid: { color: fg } } }],
     legend: [
       {
@@ -472,15 +494,60 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
       },
     ],
     labels: [{ show: false, color: { solid: { color: fg } } }],
+    general: [
+      {
+        background: { solid: { color: bg } },
+        foreground: { solid: { color: fg } },
+        tableAccent: { solid: { color: fg } },
+      },
+    ],
   };
 
-  // will remain undefined until .env is set up -- will allow for per-visual theming in the future
-  const ENABLE_PER_VISUAL =
-    process.env.PBI_ENABLE_PER_VISUAL === '1' ||
-    process.env.PBI_ENABLE_PER_VISUAL === 'true';
-  const perVisual = ENABLE_PER_VISUAL
-    ? buildPerVisualStyles(fg, axisLine, grid, firstData)
-    : {};
+  // ---- dark background enforcement ----
+  const globalAxes = {
+    categoryAxis: [
+      {
+        show: true,
+        labelColor: { solid: { color: fg } },
+        axisColor: { solid: { color: axisLine } },
+        gridlineColor: { solid: { color: grid } },
+        titleColor: { solid: { color: fg } },
+      },
+    ],
+    valueAxis: [
+      {
+        show: true,
+        labelColor: { solid: { color: fg } },
+        axisColor: { solid: { color: axisLine } },
+        gridlineColor: { solid: { color: grid } },
+        titleColor: { solid: { color: fg } },
+      },
+    ],
+  };
+  const visualStyles = {
+    '*': {
+      '*': {
+        ...baseVisual,
+        ...globalAxes,
+        ...(mode === 'dark'
+          ? {
+              background: [
+                { color: { solid: { color: bg } }, transparency: 0 },
+              ],
+              plotArea: [{ color: { solid: { color: bg } }, transparency: 0 }],
+            }
+          : {}),
+      },
+    },
+    page: {
+      '*': {
+        background: [{ color: { solid: { color: bg } }, transparency: 0 }],
+      },
+    },
+    ...(ENABLE_PER_VISUAL
+      ? buildPerVisualStyles(fg, axisLine, grid, firstData)
+      : {}),
+  };
 
   return {
     name,
@@ -490,19 +557,21 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
     foreground: fg,
     tableAccent: fg,
     ...(INCLUDE_STRUCTURAL_LEVELS && {
-      firstLevelElements,
-      secondLevelElements,
-      thirdLevelElements,
-      fourthLevelElements,
+      firstLevelElements: fg,
+      secondLevelElements:
+        resolveColorVar('kd-color-text-level-secondary', mode, all) || fg,
+      thirdLevelElements:
+        resolveColorVar('kd-color-text-level-tertiary', mode, all) ||
+        firstData ||
+        fg,
+      fourthLevelElements:
+        resolveColorVar('kd-color-text-level-quaternary', mode, all) || grid,
     }),
     good,
     neutral,
     bad,
     textClasses,
-    visualStyles: {
-      '*': { '*': globalBlock },
-      ...perVisual,
-    },
+    visualStyles,
   };
 }
 
