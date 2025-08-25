@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 /*
- * Maps through available palettes (10) and generates separate Light/Dark Power BI themes files from shidoka-foundation CSS custom properties.
+ * Maps through available palettes (10) and generates separate Light/Dark Power BI themes files
+ * from shidoka-foundation CSS custom properties, then zips them together.
+ * If font files are found (e.g., powerbi/assets/fonts/*.ttf), they’re added to the ZIP under /fonts.
  */
 
 const fs = require('fs');
@@ -16,6 +18,14 @@ function readText(p) {
 }
 function ensureDir(p) {
   fs.mkdirSync(p, { recursive: true });
+}
+function firstExistingDir(paths) {
+  for (const p of paths) {
+    try {
+      if (p && fs.existsSync(p) && fs.statSync(p).isDirectory()) return p;
+    } catch {}
+  }
+  return null;
 }
 
 // ---------------- CSS parsing ----------------
@@ -229,17 +239,12 @@ function buildLabelsBlock(color, show) {
     color: { solid: { color } },
   };
 }
-function buildPerVisualStyles(fg, axis, grid, firstDataColor, fontFamily) {
+function buildPerVisualStyles(fg, axis, grid, firstDataColor) {
   const base = {
     title: [{ show: true, fontColor: { solid: { color: fg } } }],
     legend: [buildLegendBlock(fg, 'Bottom', false)],
     labels: [buildLabelsBlock(fg, false)],
   };
-  if (fontFamily) {
-    base.title[0].fontFamily = fontFamily;
-    base.legend[0].fontFamily = fontFamily;
-    base.labels[0].fontFamily = fontFamily;
-  }
   const axes = {
     categoryAxis: [buildAxisBlock(fg, axis, grid)],
     valueAxis: [buildAxisBlock(fg, axis, grid)],
@@ -328,6 +333,10 @@ function buildPerVisualStyles(fg, axis, grid, firstDataColor, fontFamily) {
 
 // ---------------- themes ----------------
 function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
+  const INCLUDE_STRUCTURAL_LEVELS =
+    process.env.PBI_INCLUDE_STRUCTURAL_LEVELS === '1' ||
+    process.env.PBI_INCLUDE_STRUCTURAL_LEVELS === 'true';
+
   const bg = resolveColorVar(
     'kd-color-background-page-default',
     mode,
@@ -350,8 +359,6 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
   const fontFamily = fontFamilyToken
     ? resolveExpr(all[fontFamilyToken], mode, all)
     : null;
-
-  // ---------------- fonts ----------------
 
   function makeFontFace(primaryFamily, semibold, preferRoboto) {
     let families = primaryFamily
@@ -455,7 +462,6 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
         tableAccent: { solid: { color: fg } },
       },
     ],
-    colorPalette: dataColors.map((c) => ({ solid: { color: c } })),
     title: [{ show: true, fontColor: { solid: { color: fg } } }],
     legend: [
       {
@@ -468,19 +474,13 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
     labels: [{ show: false, color: { solid: { color: fg } } }],
   };
 
-  if (fontFamily) {
-    globalBlock.title[0].fontFamily = fontFamily;
-    globalBlock.legend[0].fontFamily = fontFamily;
-    globalBlock.labels[0].fontFamily = fontFamily;
-  }
-
-  const perVisual = buildPerVisualStyles(
-    fg,
-    axisLine,
-    grid,
-    firstData,
-    fontFamily
-  );
+  // will remain undefined until .env is set up -- will allow for per-visual theming in the future
+  const ENABLE_PER_VISUAL =
+    process.env.PBI_ENABLE_PER_VISUAL === '1' ||
+    process.env.PBI_ENABLE_PER_VISUAL === 'true';
+  const perVisual = ENABLE_PER_VISUAL
+    ? buildPerVisualStyles(fg, axisLine, grid, firstData)
+    : {};
 
   return {
     name,
@@ -489,10 +489,12 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
     secondaryBackground,
     foreground: fg,
     tableAccent: fg,
-    firstLevelElements,
-    secondLevelElements,
-    thirdLevelElements,
-    fourthLevelElements,
+    ...(INCLUDE_STRUCTURAL_LEVELS && {
+      firstLevelElements,
+      secondLevelElements,
+      thirdLevelElements,
+      fourthLevelElements,
+    }),
     good,
     neutral,
     bad,
@@ -584,7 +586,7 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
     };
 
     const outPath = path.join(outDir, `Shidoka-${p.key}.json`);
-    fs.writeFileSync(outPath, JSON.stringify(file, null, 2));
+    fs.writeFileSync(outPath, JSON.stringify(file, null, '\t'));
     console.log('[pbi-theme] wrote', outPath);
 
     const flatLight = path.join(
@@ -592,25 +594,46 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
       `Shidoka-${p.key}-Light.pbitheme.json`
     );
     const flatDark = path.join(flatDir, `Shidoka-${p.key}-Dark.pbitheme.json`);
-    fs.writeFileSync(flatLight, JSON.stringify(file.themes.light, null, 2));
-    fs.writeFileSync(flatDark, JSON.stringify(file.themes.dark, null, 2));
+    fs.writeFileSync(flatLight, JSON.stringify(file.themes.light, null, '\t'));
+    fs.writeFileSync(flatDark, JSON.stringify(file.themes.dark, null, '\t'));
     console.log('[pbi-theme] wrote', flatLight);
     console.log('[pbi-theme] wrote', flatDark);
   }
 
+  // --------- Create ZIP with themes (+ optional fonts) ----------
   try {
     const archiver = require('archiver');
     const zipPath = path.join(outDir, 'Shidoka-Themes.zip');
+
+    const projectRoot = process.cwd();
+    const fontsDir = firstExistingDir([
+      path.join(projectRoot, 'powerbi', 'assets', 'fonts'),
+      path.join(projectRoot, 'src', 'powerbi', 'assets', 'fonts'),
+      path.join(projectRoot, 'assets', 'fonts'),
+    ]);
+
     await new Promise((resolve, reject) => {
       const output = fs.createWriteStream(zipPath);
       const archive = archiver('zip', { zlib: { level: 9 } });
+
       output.on('close', resolve);
       archive.on('error', reject);
+
       archive.pipe(output);
+
       archive.directory(flatDir + '/', 'themes');
+
+      if (fontsDir) {
+        archive.directory(fontsDir + '/', 'fonts');
+        console.log('[pbi-theme] bundled fonts from', fontsDir);
+      } else {
+        console.log('[pbi-theme] no fonts directory found; skipping fonts.');
+      }
+
       archive.finalize();
     });
-    console.log('[pbi-theme] wrote', path.join(outDir, 'Shidoka-Themes.zip'));
+
+    console.log('[pbi-theme] wrote', zipPath);
   } catch (e) {
     console.log('[pbi-theme] archiver not installed; skipping zip.');
   }

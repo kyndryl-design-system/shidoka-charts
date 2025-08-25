@@ -6,7 +6,6 @@ import {
   Primary,
   Stories,
 } from '@storybook/addon-docs/blocks';
-
 import downloadIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/download.svg';
 
 const HIDDEN_PROPS = [
@@ -18,7 +17,6 @@ const HIDDEN_PROPS = [
   'modes',
   'exampleTypes',
 ];
-
 const hiddenArgTypes = Object.fromEntries(
   HIDDEN_PROPS.map((k) => [k, { table: { disable: true }, control: false }])
 );
@@ -61,8 +59,14 @@ Each palette is provided as separate Light & Dark \`*.pbitheme.json\` files and 
   args: {
     title: 'Power BI/Themes (Docs)',
     downloadUrl: '/pbi-themes/Shidoka-Themes.zip',
+
+    // 🔑 Put your publish-to-web URLs here (NOT /reportEmbed)
     publicIframeBase: '',
-    publicIframeMap: {},
+    publicIframeMap: {
+      Categorical01:
+        'https://app.powerbi.com/reportEmbed?reportId=6b3df929-5031-476b-882b-e7af47d6c26c&autoAuth=true&ctid=f260df36-bc43-424c-8f44-c85226657b01',
+    },
+
     palettes: [
       'Categorical01',
       'Sequential01',
@@ -76,33 +80,19 @@ Each palette is provided as separate Light & Dark \`*.pbitheme.json\` files and 
       'RAG08',
     ],
     modes: ['light', 'dark'],
-    exampleTypes: ['Bar', 'Line', 'Map'],
+    exampleTypes: ['Donut'],
   },
 };
 
 export const PrimaryExample = () => `
   <div style="font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; padding: 12px; text-align: center;">
     <style>
-      .download-btn {
-        border: 1px solid transparent;
-        background-color: #29707a;
-        color: white;
-        cursor: pointer;
-        font-size: 16px;
-        padding: 8px 16px;
-        border-radius: 4px;
-        margin-top: 16px;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        text-decoration: none;
-        transition: background-color .2s ease;
-      }
-      .download-btn:hover { background-color: #3797a4; }
-      .download-btn svg { width: 16px; height: 16px; display: inline-block; }
+      .download-btn{border:1px solid transparent;background-color:#29707a;color:#fff;cursor:pointer;font-size:16px;padding:8px 16px;border-radius:4px;margin-top:16px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;transition:background-color .2s ease}
+      .download-btn:hover{background-color:#3797a4}
+      .download-btn svg{width:16px;height:16px;display:inline-block}
     </style>
-    <h2 style="margin: 0 0 8px 0; font-size: 18px;">Shidoka Power BI Themes</h2>
-    <p style="margin: 0 0 12px 0; color: gray">
+    <h2 style="margin:0 0 8px 0;font-size:18px;">Shidoka Power BI Themes</h2>
+    <p style="margin:0 0 12px 0;color:gray">
       See the documentation above for installation and usage. Download the ZIP directly:<br/>
       <a href="/pbi-themes/Shidoka-Themes.zip" download class="download-btn">
         ${downloadIcon}
@@ -111,18 +101,21 @@ export const PrimaryExample = () => `
     </p>
   </div>
 `;
-
 PrimaryExample.parameters = { docs: { source: { code: '' } } };
+
+// Optional guard to avoid accidental internal embed URLs
+function isPublicPbiUrl(url) {
+  return /^https:\/\/app\.powerbi\.com\/view\?r=/i.test(String(url || ''));
+}
 
 function buildIframeSrc(args, palette, mode, exampleType, idx) {
   try {
     const key = `${palette}-${mode}-${exampleType}`;
-    if (args?.publicIframeMap && typeof args.publicIframeMap === 'object') {
-      if (args.publicIframeMap[key]) return args.publicIframeMap[key];
-      if (args.publicIframeMap[`${palette}-${mode}`])
-        return args.publicIframeMap[`${palette}-${mode}`];
-      if (args.publicIframeMap[palette]) return args.publicIframeMap[palette];
-    }
+    const map = args?.publicIframeMap || {};
+    const candidate = map[key] || map[`${palette}-${mode}`] || map[palette];
+
+    if (candidate) return candidate; // assumes you gave a /view?r= link
+
     if (args?.publicIframeBase) {
       const base = String(args.publicIframeBase).replace(/\/$/, '');
       const q = `?palette=${encodeURIComponent(
@@ -132,6 +125,8 @@ function buildIframeSrc(args, palette, mode, exampleType, idx) {
       )}&idx=${encodeURIComponent(String(idx))}`;
       return `${base}${q}`;
     }
+
+    // Fallback to a local static preview file if you have them
     const file = `${palette}-${mode}-${exampleType}-${idx}.html`.toLowerCase();
     return `/pbi-themes/previews/${encodeURIComponent(file)}`;
   } catch {
@@ -144,6 +139,18 @@ export const Examples = (args) => {
   container.style.maxWidth = '980px';
   container.style.fontFamily =
     "Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial";
+
+  const warn = (msg) => {
+    const w = document.createElement('div');
+    w.style.background = '#fff7ed';
+    w.style.border = '1px solid #fdba74';
+    w.style.color = '#9a3412';
+    w.style.padding = '8px 12px';
+    w.style.borderRadius = '6px';
+    w.style.margin = '0 0 12px 0';
+    w.textContent = msg;
+    return w;
+  };
 
   const grid = document.createElement('div');
   grid.style.display = 'grid';
@@ -169,15 +176,6 @@ export const Examples = (args) => {
       const title = document.createElement('div');
       title.innerHTML = `<strong style="font-size:.95rem;">${palette} — ${mode}</strong><div style="font-size:12px;color:#6b7280;">Preview</div>`;
       header.appendChild(title);
-
-      // const dl = document.createElement('a');
-      // dl.href = args.downloadUrl || '/pbi-themes/Shidoka-Themes.zip';
-      // dl.download = '';
-      // dl.innerHTML = `Download All Themes [↓]`;
-      // dl.style.fontSize = '13px';
-      // dl.style.color = '#0366d6';
-      // header.appendChild(dl);
-
       card.appendChild(header);
 
       const body = document.createElement('div');
@@ -193,7 +191,7 @@ export const Examples = (args) => {
         ex.style.border = '1px solid #f3f4f6';
         ex.style.borderRadius = '6px';
         ex.style.overflow = 'hidden';
-        ex.style.height = '200px';
+        ex.style.height = '220px';
         ex.style.display = 'flex';
         ex.style.flexDirection = 'column';
 
@@ -208,15 +206,21 @@ export const Examples = (args) => {
         const wrap = document.createElement('div');
         wrap.style.flex = '1 1 auto';
 
-        const iframe = document.createElement('iframe');
-        iframe.src = src;
-        iframe.style.width = '100%';
-        iframe.style.height = '100%';
-        iframe.style.border = '0';
-        iframe.title = `${palette} ${mode} ${exampleType}`;
-        iframe.loading = 'lazy';
-        iframe.allowFullscreen = true;
-        wrap.appendChild(iframe);
+        if (src && isPublicPbiUrl(src)) {
+          const iframe = document.createElement('iframe');
+          iframe.src = src;
+          iframe.style.width = '100%';
+          iframe.style.height = '100%';
+          iframe.style.border = '0';
+          iframe.title = `${palette} ${mode} ${exampleType}`;
+          iframe.loading = 'lazy';
+          iframe.allowFullscreen = true;
+          wrap.appendChild(iframe);
+        } else {
+          wrap.appendChild(
+            warn('No public Publish-to-web URL configured for this preview.')
+          );
+        }
 
         ex.appendChild(wrap);
         body.appendChild(ex);
