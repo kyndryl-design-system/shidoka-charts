@@ -536,6 +536,7 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
       },
     ],
   };
+
   const visualStyles = {
     '*': {
       '*': {
@@ -554,6 +555,21 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
     page: {
       '*': {
         background: [{ color: { solid: { color: bg } }, transparency: 0 }],
+        wallpaper: [{ color: { solid: { color: bg } }, transparency: 0 }],
+      },
+    },
+    filterPane: {
+      '*': {
+        background: [{ color: { solid: { color: bg } }, transparency: 0 }],
+        title: [{ color: { solid: { color: fg } } }],
+        text: [{ color: { solid: { color: fg } } }],
+      },
+    },
+    filterCard: {
+      '*': {
+        background: [{ color: { solid: { color: bg } }, transparency: 0 }],
+        border: [{ color: { solid: { color: bg } } }],
+        text: [{ color: { solid: { color: fg } } }],
       },
     },
     ...(ENABLE_PER_VISUAL
