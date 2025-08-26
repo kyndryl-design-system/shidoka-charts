@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 /*
- * Maps through available palettes (10) and generates separate Light/Dark Power BI themes files
+ * Iterates through available palettes (10) and generates separate Light/Dark Power BI themes files
  * from shidoka-foundation CSS custom properties, then zips them together.
- * If font files are found (e.g., powerbi/assets/fonts/*.ttf), they’re added to the ZIP under /fonts.
  */
 
 const fs = require('fs');
@@ -18,14 +17,6 @@ function readText(p) {
 }
 function ensureDir(p) {
   fs.mkdirSync(p, { recursive: true });
-}
-function firstExistingDir(paths) {
-  for (const p of paths) {
-    try {
-      if (p && fs.existsSync(p) && fs.statSync(p).isDirectory()) return p;
-    } catch {}
-  }
-  return null;
 }
 
 // ---------------- CSS parsing ----------------
@@ -697,17 +688,10 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
     console.log('[pbi-theme] wrote', flatDark);
   }
 
-  // --------- Create ZIP with themes (+ optional fonts) ----------
+  // --------- Create ZIP with themes only ----------
   try {
     const archiver = require('archiver');
     const zipPath = path.join(outDir, 'Shidoka-Themes.zip');
-
-    const projectRoot = process.cwd();
-    const fontsDir = firstExistingDir([
-      path.join(projectRoot, 'powerbi', 'assets', 'fonts'),
-      path.join(projectRoot, 'src', 'powerbi', 'assets', 'fonts'),
-      path.join(projectRoot, 'assets', 'fonts'),
-    ]);
 
     await new Promise((resolve, reject) => {
       const output = fs.createWriteStream(zipPath);
@@ -717,16 +701,7 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
       archive.on('error', reject);
 
       archive.pipe(output);
-
       archive.directory(flatDir + '/', 'themes');
-
-      if (fontsDir) {
-        archive.directory(fontsDir + '/', 'fonts');
-        console.log('[pbi-theme] bundled fonts from', fontsDir);
-      } else {
-        console.log('[pbi-theme] no fonts directory found; skipping fonts.');
-      }
-
       archive.finalize();
     });
 

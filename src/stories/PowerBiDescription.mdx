@@ -20,9 +20,12 @@ Each palette is provided as separate Light & Dark `*.pbitheme.json` files and bu
 
 <Stories />
 
-### Development Goal
+### Development Goals
 
-Create a framework that leverages Shidoka's existing color token system and applies it in a format and structure that Power BI expects, understands, and is apply it in JSON format as multiple custom theme files.
+- provide a structure for a custom Shidoka Design theme to be applied in Power BI reports across the org via uploaded JSON theme files
+- make the burden on consuming devs as light as possible
+- keep backend and auth out of Shidoka/shidoka-charts
+- leverage existing Shidoka color token system and incorporate theme generation into larger build process
 
 ### Implementation Details
 
@@ -45,7 +48,7 @@ Create a framework that leverages Shidoka's existing color token system and appl
 
 ### Current Limitations
 
-1. **Dark/Light Mode theming**: there is no toggle between light and dark mode theming available in Power BI. The dev or Power BI theme implementor has to select one or the other (light or dark). There can’t just be one, simple, unified JSON file that covers every use case and that we can programmatically switch as we can currently in Chart.js
+1. **Light/Dark Mode theming**: there is no toggle between light and dark mode theming available in Power BI. The dev or Power BI theme implementor has to select one or the other (light or dark). There can’t just be one, simple, unified JSON file that covers every use case and that we can programmatically switch as we can currently in Chart.js
 2. **Applying a theme**: the Power BI user has to select a specific theme to be applied at either the report level (a report being a collection of data visualizations) or at the individual chart/visualization level.
 3. **Typography limitations**: for Power BI visualizations, you can only pick from Power BI’s built-in fonts. This excludes both of our primary fonts, Roboto and TWK Everett, from being applied. I tried to hardcode them into the font-family values and it just gets overridden.
 4. **Desktop App vs. Power BI Service (Web App)**: custom JSON themes can only be applied within Power BI’s desktop application and that desktop application is only made available to Windows machines.
