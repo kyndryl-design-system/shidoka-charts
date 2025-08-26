@@ -91,7 +91,7 @@ export const DownloadZIP = () => `
       .download-btn svg{width:16px;height:16px;display:inline-block}
     </style>
     <h2 style="margin:0 0 8px 0;font-size:18px;">Shidoka Power BI Themes</h2>
-    <p style="margin:0 0 12px 0;color:gray">
+    <p style="margin:0 0 12px 0;color:#6d6d6d;">
       See the documentation above for installation and usage. Download the ZIP directly:<br/>
       <a href="/pbi-themes/Shidoka-Themes.zip" download class="download-btn">
         ${downloadIcon}
@@ -100,7 +100,7 @@ export const DownloadZIP = () => `
     </p>
   </div>
 `;
-PrimaryExample.parameters = { docs: { source: { code: '' } } };
+DownloadZIP.parameters = { docs: { source: { code: '' } } };
 
 // Optional guard to avoid accidental internal embed URLs
 function isPublicPbiUrl(url) {
