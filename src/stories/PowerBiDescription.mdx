@@ -1,0 +1,55 @@
+import {
+  Meta,
+  Story,
+  Canvas,
+  Controls,
+  Stories,
+} from '@storybook/addon-docs/blocks';
+import * as PowerBiStories from './PowerBi.stories';
+
+<Meta title="Grid" of={PowerBiStories} />
+
+Power BI–compatible themes generated from Shidoka tokens.  
+Each palette is provided as separate Light & Dark `*.pbitheme.json` files and bundled in a ZIP for easy install.
+
+### Quick install
+
+1. **Download** all themes as a ZIP by clicking the button below.
+2. Open **Power BI Desktop** → **View** → **Themes** → **Browse for themes** and select a `*.pbitheme.json`.
+3. Pick **Light/Dark** variants as needed.
+
+<Stories />
+
+### Development Goal
+
+Create a framework that leverages Shidoka's existing color token system and applies it in a format and structure that Power BI expects, understands, and is apply it in JSON format as multiple custom theme files.
+
+### Implementation Details
+
+<a
+  href="/src/stories/assets/powerbi-theme-structure.png"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <img
+    src="/src/stories/assets/powerbi-theme-structure.png"
+    alt="Power BI Theme Structure"
+    style={{
+      maxWidth: '1200px',
+      width: '100%',
+      height: 'auto',
+      marginBottom: '1rem',
+    }}
+  />
+</a>
+
+### Current Limitations
+
+1. **Dark/Light Mode theming**: there is no toggle between light and dark mode theming available in Power BI. The dev or Power BI theme implementor has to select one or the other (light or dark). There can’t just be one, simple, unified JSON file that covers every use case and that we can programmatically switch as we can currently in Chart.js
+2. **Applying a theme**: the Power BI user has to select a specific theme to be applied at either the report level (a report being a collection of data visualizations) or at the individual chart/visualization level.
+3. **Typography limitations**: for Power BI visualizations, you can only pick from Power BI’s built-in fonts. This excludes both of our primary fonts, Roboto and TWK Everett, from being applied. I tried to hardcode them into the font-family values and it just gets overridden.
+4. **Desktop App vs. Power BI Service (Web App)**: custom JSON themes can only be applied within Power BI’s desktop application and that desktop application is only made available to Windows machines.
+
+### Important Info for Mac Users
+
+As stated above, Power BI Desktop is only available for Windows machines. Mac users must request access to Windows VDI from IT via a ServiceNow ticket. Once you have access to Windows VDI, you can install Power BI Desktop and the .zip file available on this page into that environment, apply custom themes, and publish reports or individual visualizations for consumption on Power BI Service.
