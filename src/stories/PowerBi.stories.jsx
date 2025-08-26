@@ -60,7 +60,6 @@ Each palette is provided as separate Light & Dark \`*.pbitheme.json\` files and 
     title: 'Power BI/Themes (Docs)',
     downloadUrl: '/pbi-themes/Shidoka-Themes.zip',
 
-    // 🔑 Put your publish-to-web URLs here (NOT /reportEmbed)
     publicIframeBase: '',
     publicIframeMap: {
       Categorical01:
@@ -84,7 +83,7 @@ Each palette is provided as separate Light & Dark \`*.pbitheme.json\` files and 
   },
 };
 
-export const PrimaryExample = () => `
+export const DownloadZIP = () => `
   <div style="font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; padding: 12px; text-align: center;">
     <style>
       .download-btn{border:1px solid transparent;background-color:#29707a;color:#fff;cursor:pointer;font-size:16px;padding:8px 16px;border-radius:4px;margin-top:16px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;transition:background-color .2s ease}
@@ -114,7 +113,7 @@ function buildIframeSrc(args, palette, mode, exampleType, idx) {
     const map = args?.publicIframeMap || {};
     const candidate = map[key] || map[`${palette}-${mode}`] || map[palette];
 
-    if (candidate) return candidate; // assumes you gave a /view?r= link
+    if (candidate) return candidate;
 
     if (args?.publicIframeBase) {
       const base = String(args.publicIframeBase).replace(/\/$/, '');
@@ -126,7 +125,6 @@ function buildIframeSrc(args, palette, mode, exampleType, idx) {
       return `${base}${q}`;
     }
 
-    // Fallback to a local static preview file if you have them
     const file = `${palette}-${mode}-${exampleType}-${idx}.html`.toLowerCase();
     return `/pbi-themes/previews/${encodeURIComponent(file)}`;
   } catch {
