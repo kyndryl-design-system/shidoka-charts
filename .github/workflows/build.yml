@@ -41,6 +41,9 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
+      - name: Build PowerBI themes
+        run: npm run build-powerbi
+
       - name: Build component bundles
         run: npm run build
 
