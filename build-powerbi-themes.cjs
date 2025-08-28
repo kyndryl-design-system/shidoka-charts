@@ -571,7 +571,12 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
 
   const generatedAt = new Date().toISOString();
 
-  const version = process.env.VERSION || 'dev';
+  const rawVersion = process.env.VERSION || 'dev';
+  const version =
+    String(rawVersion)
+      .replace(/[^A-Za-z0-9._-]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 64) || 'dev';
 
   const palettes = [
     { key: 'Categorical01', builder: (mode) => categorical01(all, mode) },
@@ -602,8 +607,6 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
       .filter(Boolean)
       .map(normalizeColor)
       .filter(Boolean);
-
-    const version = process.env.VERSION || 'dev';
 
     const file = {
       version,
