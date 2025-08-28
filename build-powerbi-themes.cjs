@@ -192,9 +192,7 @@ function rag3Cycled(all, mode, cycles = 20) {
   const success = resolveVar('kd-color-data-viz-rag-3-success', mode, all);
   const warning = resolveVar('kd-color-data-viz-rag-3-warning', mode, all);
   const error = resolveVar('kd-color-data-viz-rag-3-error', mode, all);
-
   const triplet = [error, warning, success].map(normalizeColor).filter(Boolean);
-
   const out = [];
   for (let i = 0; i < cycles; i++) out.push(...triplet);
   return out;
@@ -219,13 +217,27 @@ function rag8(all, mode) {
   return out;
 }
 
-// ---------------- parse styles ----------------
-function buildAxisBlock(labelColor, axisColor, gridColor) {
+// ---------------- per-visual styles ----------------
+function axesBlock(fg, axis, grid) {
   return {
-    show: true,
-    labelColor: { solid: { color: labelColor } },
-    axisColor: { solid: { color: axisColor } },
-    gridlineColor: { solid: { color: gridColor } },
+    categoryAxis: [
+      {
+        show: true,
+        labelColor: { solid: { color: fg } },
+        axisColor: { solid: { color: axis } },
+        gridlineColor: { solid: { color: grid } },
+        titleColor: { solid: { color: fg } },
+      },
+    ],
+    valueAxis: [
+      {
+        show: true,
+        labelColor: { solid: { color: fg } },
+        axisColor: { solid: { color: axis } },
+        gridlineColor: { solid: { color: grid } },
+        titleColor: { solid: { color: fg } },
+      },
+    ],
   };
 }
 function buildLegendBlock(color, position, show) {
@@ -237,10 +249,7 @@ function buildLegendBlock(color, position, show) {
   };
 }
 function buildLabelsBlock(color, show) {
-  return {
-    show: !!show,
-    color: { solid: { color } },
-  };
+  return { show: !!show, color: { solid: { color } } };
 }
 function buildPerVisualStyles(fg, axis, grid, firstDataColor) {
   const base = {
@@ -255,25 +264,7 @@ function buildPerVisualStyles(fg, axis, grid, firstDataColor) {
     ],
     labels: [{ show: false, color: { solid: { color: fg } } }],
   };
-  const axes = {
-    categoryAxis: [
-      {
-        show: true,
-        labelColor: { solid: { color: fg } },
-        axisColor: { solid: { color: axis } },
-        gridlineColor: { solid: { color: grid } },
-      },
-    ],
-    valueAxis: [
-      {
-        show: true,
-        labelColor: { solid: { color: fg } },
-        axisColor: { solid: { color: axis } },
-        gridlineColor: { solid: { color: grid } },
-      },
-    ],
-  };
-
+  const axes = axesBlock(fg, axis, grid);
   const withDataPoint = firstDataColor
     ? { dataPoint: [{ defaultColor: { solid: { color: firstDataColor } } }] }
     : {};
@@ -309,30 +300,16 @@ function buildPerVisualStyles(fg, axis, grid, firstDataColor) {
     pieChart: {
       '*': {
         ...base,
-        legend: [
-          {
-            show: true,
-            position: 'Bottom',
-            titleColor: { solid: { color: fg } },
-            labelColor: { solid: { color: fg } },
-          },
-        ],
-        labels: [{ show: true, color: { solid: { color: fg } } }],
+        legend: [buildLegendBlock(fg, 'Bottom', true)],
+        labels: [buildLabelsBlock(fg, true)],
         ...withDataPoint,
       },
     },
     donutChart: {
       '*': {
         ...base,
-        legend: [
-          {
-            show: true,
-            position: 'Bottom',
-            titleColor: { solid: { color: fg } },
-            labelColor: { solid: { color: fg } },
-          },
-        ],
-        labels: [{ show: true, color: { solid: { color: fg } } }],
+        legend: [buildLegendBlock(fg, 'Bottom', true)],
+        labels: [buildLabelsBlock(fg, true)],
         ...withDataPoint,
       },
     },
@@ -380,7 +357,6 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
     process.env.PBI_ENABLE_PER_VISUAL === '1' ||
     process.env.PBI_ENABLE_PER_VISUAL === 'true';
 
-  // ---- colors ----
   const bg = resolveColorVar(
     'kd-color-background-page-default',
     mode,
@@ -399,11 +375,10 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
     all,
     mode === 'dark' ? '#2a2a2a' : '#d4d4d8'
   );
-  const axisLine = grid;
   const firstData =
     Array.isArray(dataColors) && dataColors.length ? dataColors[0] : null;
 
-  // ---- pick single PBI-safe font from token ----
+  // choose a PBI-safe font from token
   const PBI_ALLOWED = new Set([
     'Segoe UI',
     'Arial',
@@ -453,7 +428,6 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
     fontFamilyToken ? all[fontFamilyToken] : null
   );
 
-  // ---- status ----
   const rag = rag3(all, mode).map(normalizeColor).filter(Boolean);
   const good = rag[0] || null;
   const neutral = rag[1] || null;
@@ -461,7 +435,6 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
   const secondaryBackground =
     resolveColorVar('kd-color-background-surface', mode, all) || bg;
 
-  // ---- text classes ----
   const textClasses = {
     callout: {
       fontSize: Number(resolveVar('kd-font-size-callout', mode, all)) || 45,
@@ -485,7 +458,6 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
     },
   };
 
-  // ---- base visuals ----
   const baseVisual = {
     title: [{ show: true, fontColor: { solid: { color: fg } } }],
     legend: [
@@ -506,33 +478,11 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
     ],
   };
 
-  // ---- dark background enforcement ----
-  const globalAxes = {
-    categoryAxis: [
-      {
-        show: true,
-        labelColor: { solid: { color: fg } },
-        axisColor: { solid: { color: axisLine } },
-        gridlineColor: { solid: { color: grid } },
-        titleColor: { solid: { color: fg } },
-      },
-    ],
-    valueAxis: [
-      {
-        show: true,
-        labelColor: { solid: { color: fg } },
-        axisColor: { solid: { color: axisLine } },
-        gridlineColor: { solid: { color: grid } },
-        titleColor: { solid: { color: fg } },
-      },
-    ],
-  };
-
   const visualStyles = {
     '*': {
       '*': {
         ...baseVisual,
-        ...globalAxes,
+        ...axesBlock(fg, grid, grid),
         ...(mode === 'dark'
           ? {
               background: [
@@ -564,7 +514,7 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
       },
     },
     ...(ENABLE_PER_VISUAL
-      ? buildPerVisualStyles(fg, axisLine, grid, firstData)
+      ? buildPerVisualStyles(fg, grid, grid, firstData)
       : {}),
   };
 
@@ -621,6 +571,8 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
 
   const generatedAt = new Date().toISOString();
 
+  const version = process.env.VERSION || 'dev';
+
   const palettes = [
     { key: 'Categorical01', builder: (mode) => categorical01(all, mode) },
     { key: 'Sequential01', builder: (mode) => sequential(all, mode, '01') },
@@ -651,7 +603,10 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
       .map(normalizeColor)
       .filter(Boolean);
 
+    const version = process.env.VERSION || 'dev';
+
     const file = {
+      version,
       generatedAt,
       source: 'shidoka-foundation',
       palette: p.key,
@@ -679,9 +634,12 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
 
     const flatLight = path.join(
       flatDir,
-      `Shidoka-${p.key}-Light.pbitheme.json`
+      `Shidoka-${p.key}-Light-${version}.pbitheme.json`
     );
-    const flatDark = path.join(flatDir, `Shidoka-${p.key}-Dark.pbitheme.json`);
+    const flatDark = path.join(
+      flatDir,
+      `Shidoka-${p.key}-Dark-${version}.pbitheme.json`
+    );
     fs.writeFileSync(flatLight, JSON.stringify(file.themes.light, null, '\t'));
     fs.writeFileSync(flatDark, JSON.stringify(file.themes.dark, null, '\t'));
     console.log('[pbi-theme] wrote', flatLight);
@@ -691,7 +649,8 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
   // --------- Create ZIP with themes only ----------
   try {
     const archiver = require('archiver');
-    const zipPath = path.join(outDir, 'Shidoka-Themes.zip');
+    const zipName = `Shidoka-Themes-${version}.zip`;
+    const zipPath = path.join(outDir, zipName);
 
     await new Promise((resolve, reject) => {
       const output = fs.createWriteStream(zipPath);
@@ -709,6 +668,4 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
   } catch (e) {
     console.log('[pbi-theme] archiver not installed; skipping zip.');
   }
-
-  console.log('[pbi-theme] done.');
 })();
