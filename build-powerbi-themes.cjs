@@ -121,6 +121,25 @@ function normalizeColor(input) {
   return v;
 }
 
+function computeVersion(raw) {
+  let v = String(raw || '').trim();
+
+  if (!v) return 'dev';
+
+  const semver = v.match(/v?(\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)/);
+  if (semver) v = semver[1];
+
+  if (v.includes('/')) v = v.split('/')[0];
+
+  v = v.replace(/-merge$/i, '');
+
+  v = v.replace(/[^A-Za-z0-9._-]+/g, '-').replace(/^-+|-+$/g, '');
+
+  v = v.slice(0, 64);
+
+  return v || 'dev';
+}
+
 // ---------------- extract the palette ----------------
 function resolveVar(name, mode, all) {
   const raw = all[name];
@@ -571,12 +590,7 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
 
   const generatedAt = new Date().toISOString();
 
-  const rawVersion = process.env.VERSION || 'dev';
-  const version =
-    String(rawVersion)
-      .replace(/[^A-Za-z0-9._-]+/g, '-')
-      .replace(/^-+|-+$/g, '')
-      .slice(0, 64) || 'dev';
+  const version = computeVersion(process.env.VERSION);
 
   const palettes = [
     { key: 'Categorical01', builder: (mode) => categorical01(all, mode) },
