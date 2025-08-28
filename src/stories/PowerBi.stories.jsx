@@ -1,11 +1,6 @@
 import '../components/powerbi/pbi-embed.js';
 import React from 'react';
-import {
-  Title,
-  Description,
-  Primary,
-  Stories,
-} from '@storybook/addon-docs/blocks';
+import { Title, Primary, Stories } from '@storybook/addon-docs/blocks';
 import downloadIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/download.svg';
 import PowerBiDescription from './PowerBiDescription.mdx';
 
@@ -69,53 +64,58 @@ export default {
   },
 };
 
-export const DownloadZIP = () => `
-  <div style="font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; padding: 12px; text-align: center;">
-    <style>
-      .download-btn{border:1px solid transparent;background-color:#29707a;color:#fff;cursor:pointer;font-size:16px;padding:8px 16px;border-radius:4px;margin-top:16px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;transition:background-color .2s ease}
-      .download-btn:hover{background-color:#3797a4}
-      .download-btn svg{width:16px;height:16px;display:inline-block}
-    </style>
-    <h2 style="margin:0 0 8px 0;font-size:18px;">Shidoka Power BI Themes</h2>
-    <p style="margin:0 0 12px 0;color:#6d6d6d;">
-      See the documentation above for installation and usage. Download the ZIP directly:<br/>
-      <a href="/pbi-themes/Shidoka-Themes.zip" download class="download-btn">
-        ${downloadIcon}
-        <span>Shidoka-Themes.zip</span>
-      </a>
-    </p>
-  </div>
-`;
+export const DownloadZIP = (args) => {
+  const url = String(args?.downloadUrl || '/pbi-themes/Shidoka-Themes.zip');
+  const fileLabel = url.split('/').pop() || 'Shidoka-Themes.zip';
+
+  return `
+    <div style="font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; padding: 12px; text-align: center;">
+      <style>
+        .download-btn{border:1px solid transparent;background-color:#29707a;color:#fff;cursor:pointer;font-size:16px;padding:8px 16px;border-radius:4px;margin-top:16px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;transition:background-color .2s ease}
+        .download-btn:hover{background-color:#3797a4}
+        .download-btn svg{width:16px;height:16px;display:inline-block}
+      </style>
+      <h2 style="margin:0 0 8px 0;font-size:18px;">Shidoka Power BI Themes</h2>
+      <p style="margin:0 0 12px 0;color:#6d6d6d;">
+        See the documentation above for installation and usage. Download the ZIP directly:<br/>
+        <a href="${url}" download class="download-btn">
+          ${downloadIcon}
+          <span>${fileLabel}</span>
+        </a>
+      </p>
+    </div>
+  `;
+};
 DownloadZIP.parameters = { docs: { source: { code: '' } } };
 
-function isPublicPbiUrl(url) {
-  return /^https:\/\/app\.powerbi\.com\/view\?r=/i.test(String(url || ''));
-}
+// function isPublicPbiUrl(url) {
+//   return /^https:\/\/app\.powerbi\.com\/view\?r=/i.test(String(url || ''));
+// }
 
-function buildIframeSrc(args, palette, mode, exampleType, idx) {
-  try {
-    const key = `${palette}-${mode}-${exampleType}`;
-    const map = args?.publicIframeMap || {};
-    const candidate = map[key] || map[`${palette}-${mode}`] || map[palette];
+// function buildIframeSrc(args, palette, mode, exampleType, idx) {
+//   try {
+//     const key = `${palette}-${mode}-${exampleType}`;
+//     const map = args?.publicIframeMap || {};
+//     const candidate = map[key] || map[`${palette}-${mode}`] || map[palette];
 
-    if (candidate) return candidate;
+//     if (candidate) return candidate;
 
-    if (args?.publicIframeBase) {
-      const base = String(args.publicIframeBase).replace(/\/$/, '');
-      const q = `?palette=${encodeURIComponent(
-        palette
-      )}&mode=${encodeURIComponent(mode)}&type=${encodeURIComponent(
-        exampleType
-      )}&idx=${encodeURIComponent(String(idx))}`;
-      return `${base}${q}`;
-    }
+//     if (args?.publicIframeBase) {
+//       const base = String(args.publicIframeBase).replace(/\/$/, '');
+//       const q = `?palette=${encodeURIComponent(
+//         palette
+//       )}&mode=${encodeURIComponent(mode)}&type=${encodeURIComponent(
+//         exampleType
+//       )}&idx=${encodeURIComponent(String(idx))}`;
+//       return `${base}${q}`;
+//     }
 
-    const file = `${palette}-${mode}-${exampleType}-${idx}.html`.toLowerCase();
-    return `/pbi-themes/previews/${encodeURIComponent(file)}`;
-  } catch {
-    return '';
-  }
-}
+//     const file = `${palette}-${mode}-${exampleType}-${idx}.html`.toLowerCase();
+//     return `/pbi-themes/previews/${encodeURIComponent(file)}`;
+//   } catch {
+//     return '';
+//   }
+// }
 
 // export const Examples = (args) => {
 //   const container = document.createElement('div');

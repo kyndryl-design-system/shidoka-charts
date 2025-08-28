@@ -1,29 +1,51 @@
-{
-  'branches': [
+module.exports = {
+  branches: [
     'main',
     'v+([0-9])',
-    {
-      name: 'beta',
-      prerelease: true,
-    },
-    {
-      name: 'next',
-      prerelease: true,
-    },
+    { name: 'beta', prerelease: true },
+    { name: 'next', prerelease: true },
   ],
-  'plugins': [
+  plugins: [
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
-    ['@semantic-release/npm', {
-      "pkgRoot": "dist",
-    }],
-    '@semantic-release/github',
+
+    [
+      '@semantic-release/exec',
+      {
+        prepareCmd: 'VERSION=${nextRelease.version} npm run powerbi:all',
+      },
+    ],
+
+    [
+      '@semantic-release/npm',
+      {
+        pkgRoot: 'dist',
+      },
+    ],
+
+    [
+      '@semantic-release/github',
+      {
+        assets: [
+          {
+            path: 'dist/powerbi/Shidoka-Themes-*.zip',
+            label: 'Power BI Themes (ZIP)',
+          },
+          { path: 'dist/powerbi/manifest.json', label: 'Manifest' },
+          {
+            path: 'dist/powerbi/flat/*.pbitheme.json',
+            label: 'Flat .pbitheme.json files',
+          },
+        ],
+      },
+    ],
+
     [
       '@semantic-release/git',
       {
         message:
-          'chore(release): set `package.json` to ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}',
+          'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}',
       },
     ],
   ],
-}
+};

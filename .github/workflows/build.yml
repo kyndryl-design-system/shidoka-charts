@@ -42,7 +42,7 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: Build PowerBI themes
-        run: VERSION=${{ github.ref_name }} npm run build-powerbi
+        run: npm run build-powerbi
 
       - name: Validate PowerBI themes
         run: npm run validate-powerbi

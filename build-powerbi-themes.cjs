@@ -682,6 +682,10 @@ function makeTheme(name, mode, dataColors, all, fontFamilyToken) {
     });
 
     console.log('[pbi-theme] wrote', zipPath);
+
+    const stableZip = path.join(outDir, 'Shidoka-Themes.zip');
+    fs.copyFileSync(zipPath, stableZip);
+    console.log('[pbi-theme] wrote', stableZip);
   } catch (e) {
     console.log('[pbi-theme] archiver not installed; skipping zip.');
   }
