@@ -1,8 +1,8 @@
-import '../components/powerbi/pbi-embed.js';
 import React from 'react';
 import { Title, Primary, Stories } from '@storybook/addon-docs/blocks';
 import downloadIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/download.svg';
 import PowerBiDescription from './PowerBiDescription.mdx';
+// import '../components/powerbi/pbi-embed.js'; // for later use in embedding chart examples
 
 const HIDDEN_PROPS = [
   'title',
