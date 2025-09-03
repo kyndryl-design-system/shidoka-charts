@@ -15,9 +15,9 @@
   "scripts": {
     "dev": "npm run storybook",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "npm run build-powerbi && storybook build",
+    "build-storybook": "npm run powerbi:build && storybook build",
     "build": "rollup -c",
-    "powerbi:build": "node build-powerbi-themes.cjs",
+    "powerbi:build": "node powerbi:build-themes.cjs",
     "powerbi:validate": "node src/powerbi/scripts/validate-powerbi-themes.ci.cjs dist/powerbi/flat",
     "powerbi:manifest": "node src/powerbi/scripts/write-theme-manifest.cjs dist/powerbi/flat dist/powerbi/manifest.json",
     "powerbi:clean": "rm -rf dist/powerbi && mkdir -p dist/powerbi",
