@@ -40,7 +40,8 @@
     "chartjs-plugin-datalabels": "^2.2.0",
     "date-fns": "^2.30.0",
     "deepmerge-ts": "^5.1.0",
-    "lit": "^3.3.0"
+    "lit": "^3.3.0",
+    "tslib": "^2.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
