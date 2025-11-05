@@ -47,7 +47,10 @@ export const options = (ctx) => {
               sum += Horizontal ? tooltipItem.parsed.x : tooltipItem.parsed.y;
             });
 
-            return Stacked ? 'Total: ' + sum : null;
+            // Fix floating point rounding issues, show up to 2 decimals max
+            const formattedSum = Math.round((sum + Number.EPSILON) * 100) / 100;
+
+            return Stacked ? 'Total: ' + formattedSum : null;
           },
         },
       },

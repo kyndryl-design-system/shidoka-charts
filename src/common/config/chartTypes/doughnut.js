@@ -2,7 +2,7 @@ import { getComputedColorPalette } from '../colorPalettes';
 
 export const type = 'doughnut';
 
-export const options = (ctx) => {
+export const options = () => {
   return {
     radius: '80%',
     plugins: {
@@ -17,7 +17,7 @@ export const options = (ctx) => {
           const total = context.chart.data.datasets[0].data
             .filter(
               (dataPoint, index) =>
-                !context.chart.legend.legendItems[index].hidden
+                !context.chart.legend.legendItems[index]?.hidden
             )
             .reduce((a, b) => a + b, 0);
 
@@ -31,7 +31,7 @@ export const options = (ctx) => {
   };
 };
 
-export const datasetOptions = (ctx, index) => {
+export const datasetOptions = (ctx) => {
   return {
     backgroundColor: getComputedColorPalette(
       ctx.options.colorPalette || 'categorical'

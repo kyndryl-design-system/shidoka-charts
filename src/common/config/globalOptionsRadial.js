@@ -2,40 +2,47 @@ import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/comm
 
 const defaultConfig = (ctx) => {
   const ArcColor = getTokenThemeVal('--kd-color-background-page-default');
+  const AxisTextColor = getTokenThemeVal('--kd-color-text-level-primary');
+
+  const scales = {
+    x: {
+      title: { text: 'X Axis', color: AxisTextColor },
+      grid: { display: false },
+      ticks: { display: false, color: AxisTextColor },
+      border: { display: false },
+    },
+    y: {
+      title: { text: 'Y Axis', color: AxisTextColor },
+      grid: { display: false },
+      ticks: { display: false, color: AxisTextColor },
+      border: { display: false },
+    },
+  };
+
+  const chartType = ctx.type || ctx.chart?.config.type;
+  if (chartType === 'radar' || chartType === 'polarArea') {
+    scales.r = {
+      grid: { display: true },
+      angleLines: { display: true },
+      ticks: { color: AxisTextColor },
+      pointLabels: { color: AxisTextColor },
+    };
+  }
 
   return {
     elements: {
-      arc: {
-        borderColor: ArcColor,
-      },
+      arc: { borderColor: ArcColor },
     },
-    scales: {
-      x: {
-        title: { text: 'X Axis ' },
-        grid: { display: false },
-        ticks: { display: false },
-        border: { display: false },
-      },
-      y: {
-        title: { text: 'Y Axis ' },
-        grid: { display: false },
-        ticks: { display: false },
-        border: { display: false },
-      },
-    },
+    scales,
     plugins: {
       tooltip: {
         callbacks: {
-          labelColor: function (context) {
-            const PerDatapointColors = Array.isArray(
-              context.dataset.backgroundColor
-            );
-
+          labelColor(context) {
+            const bg = context.dataset.backgroundColor;
+            const perPoint = Array.isArray(bg);
             return {
               borderColor: context.dataset.borderColor,
-              backgroundColor: PerDatapointColors
-                ? context.dataset.backgroundColor[context.dataIndex]
-                : context.dataset.backgroundColor,
+              backgroundColor: perPoint ? bg[context.dataIndex] : bg,
               borderRadius: 2,
             };
           },

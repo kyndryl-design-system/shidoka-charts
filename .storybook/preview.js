@@ -1,11 +1,12 @@
 import DocumentationTemplate from './DocumentationTemplate.mdx';
-import { setCustomElementsManifest } from '@storybook/web-components';
+import { setCustomElementsManifest } from '@storybook/web-components-vite';
 import { withThemeByDataAttribute } from '@storybook/addon-themes';
 import customElements from '../custom-elements.json';
-import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
+import { INITIAL_VIEWPORTS } from 'storybook/viewport';
 import { BREAKPOINT_VIEWPORTS } from '@kyndryl-design-system/shidoka-foundation/common/helpers/breakpoints';
 
-import './global.scss?global';
+import '@kyndryl-design-system/shidoka-foundation/css/root.css';
+import '@kyndryl-design-system/shidoka-foundation/css/index.css';
 
 export default {
   parameters: {
@@ -18,6 +19,11 @@ export default {
     },
     docs: {
       page: DocumentationTemplate,
+      codePanel: true,
+      source: {
+        // excludeDecorators: true,
+        type: 'code',
+      },
     },
     options: {
       storySort: {
@@ -46,6 +52,11 @@ export default {
           },
         ],
       },
+
+      // 'todo' - show a11y violations in the test UI only
+      // 'error' - fail CI on a11y violations
+      // 'off' - skip a11y checks entirely
+      test: 'error',
     },
   },
 

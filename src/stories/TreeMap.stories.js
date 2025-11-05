@@ -67,7 +67,6 @@ export const TreeMap = {
         .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        .options=${args.options}
         ?hideDescription=${args.hideDescription}
         ?hideCaptions=${args.hideCaptions}
         ?hideHeader=${args.hideHeader}
@@ -148,6 +147,60 @@ export const NestedData = {
         x: {
           title: {
             text: 'Category',
+          },
+        },
+      },
+    },
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="treemap"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        ?hideDescription=${args.hideDescription}
+        ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
+      ></kd-chart>
+    `;
+  },
+};
+
+export const PaletteDemo = {
+  args: {
+    ...args,
+    chartTitle: 'Tree Map — Palette demo',
+    datasets: [
+      {
+        label: 'Population',
+        tree: statsByState,
+        key: 'population',
+        labelKey: 'state',
+
+        labels: {
+          formatter(ctx) {
+            if (ctx.type !== 'data') {
+              return;
+            }
+            return [ctx.raw._data.state];
+          },
+        },
+      },
+    ],
+
+    colorPalette: 'sequential03',
+    options: {
+      scales: {
+        x: {
+          title: {
+            text: 'State',
           },
         },
       },

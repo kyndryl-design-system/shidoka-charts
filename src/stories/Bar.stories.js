@@ -1,7 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
 import argTypes from '../common/config/chartArgTypes';
-import { getRandomData } from '../common/helpers/helpers';
 
 export default {
   title: 'Charts/Bar',
@@ -15,7 +14,14 @@ export default {
       url: 'https://www.figma.com/file/9NrpK3rmbOk0lhlFkEPSaO/Data-Viz-Component-Library?node-id=1%3A4&mode=dev',
     },
   },
-  argTypes: argTypes,
+  argTypes: {
+    ...argTypes,
+    useHtmlLegend: {
+      table: {
+        disable: true,
+      },
+    },
+  },
 };
 
 const args = {

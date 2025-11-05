@@ -46,6 +46,6 @@ export const options = (ctx) => {
   };
 };
 
-export const datasetOptions = (ctx, index) => {
+export const datasetOptions = () => {
   return {};
 };

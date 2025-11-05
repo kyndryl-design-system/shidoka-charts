@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit';
+import { LitElement, html, unsafeCSS } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { deepmerge, deepmergeCustom } from 'deepmerge-ts';
@@ -13,14 +13,25 @@ import {
   ProjectionScale,
 } from 'chartjs-chart-geo';
 import { TreemapController, TreemapElement } from 'chartjs-chart-treemap';
+import { MatrixController, MatrixElement } from 'chartjs-chart-matrix';
+import {
+  BoxPlotController,
+  BoxAndWiskers,
+  ViolinController,
+  Violin,
+} from '@sgratzl/chartjs-chart-boxplot';
 import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
+import gradientLegendPlugin from '../../common/plugins/gradientLegend';
+import { renderHTMLLegend } from '../../common/legend';
+import { htmlLegendPlugin } from '../../common/plugins/htmlLegendPlugin';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import datalabelsPlugin from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { convertChartDataToCSV, debounce } from '../../common/helpers/helpers';
-import ChartScss from './chart.scss';
+import { renderBoxplotViolinTable } from '../../common/helpers/boxplotViolinTableRenderer';
+import ChartScss from './chart.scss?inline';
 import globalOptions from '../../common/config/globalOptions';
 import globalOptionsNonRadial from '../../common/config/globalOptionsNonRadial';
 import globalOptionsRadial from '../../common/config/globalOptionsRadial';
@@ -41,9 +52,48 @@ Chart.register(
   ProjectionScale,
   TreemapController,
   TreemapElement,
+  MatrixController,
+  MatrixElement,
+  BoxPlotController,
+  BoxAndWiskers,
+  ViolinController,
+  Violin,
   annotationPlugin,
   datalabelsPlugin
 );
+
+export interface LegendClickInfo {
+  item: any;
+  chart: Chart;
+  isHidden: boolean;
+  label: string;
+  dataIndex?: number;
+  datasetIndex?: number;
+  element: HTMLElement;
+  event?: MouseEvent;
+}
+
+export interface HtmlLegendOptions {
+  boxWidth?: number;
+  boxHeight?: number;
+  borderRadius?: number;
+  className?: string;
+  itemClassName?: string;
+  layout?: 'horizontal' | 'vertical';
+  fontSize?: number;
+  boxMargin?: number;
+  adjustChartHeight?: boolean;
+  reservedLegendHeight?: number;
+  /**
+   * Callback fired when a legend item is clicked.
+   * This handler receives comprehensive information and can interact with external APIs.
+   */
+  onItemClick?: (info: LegendClickInfo) => void;
+  columns?: number;
+  labelFormatter?: (label: string, item: any) => string;
+  itemClassResolver?: (item: any) => string | null;
+  position?: 'top' | 'bottom' | 'left' | 'right';
+}
 
 /**
  * Chart.js wrapper component.
@@ -54,67 +104,67 @@ Chart.register(
  */
 @customElement('kd-chart')
 export class KDChart extends LitElement {
-  static override styles = ChartScss;
+  static override styles = unsafeCSS(ChartScss);
 
   /** Chart title. */
   @property({ type: String })
-  chartTitle = '';
+  accessor chartTitle = '';
 
   /** Chart description. */
   @property({ type: String })
-  description = '';
+  accessor description = '';
 
   /** Chart.js chart type. */
   @property({ type: String })
-  type: any = '';
+  accessor type: any = '';
 
   /** Chart.js data.labels. */
   @property({ type: Array })
-  labels!: Array<string>;
+  accessor labels!: Array<string>;
 
   /** Chart.js data.datasets. */
   @property({ type: Array })
-  datasets!: Array<any>;
+  accessor datasets!: Array<any>;
 
   /** Chart.js options. Can override Shidoka defaults. */
   @property({ type: Object })
-  options: any = {};
+  accessor options: any = {};
 
   /** Chart.js additional plugins. Must be registerable inline via Chart.plugins array, not globally via Chart.register. */
   @property({ type: Array })
-  plugins: any = [];
+  accessor plugins: any = [];
 
   /** Chart.js canvas height (px). Disables maintainAspectRatio option. */
   @property({ type: Number })
-  height: any = null;
+  accessor height: any = null;
 
   /** Chart.js canvas width (px). Disables maintainAspectRatio option. */
   @property({ type: Number })
-  width: any = null;
+  accessor width: any = null;
 
   /** Hides the description visually. */
   @property({ type: Boolean })
-  hideDescription = false;
+  accessor hideDescription = false;
 
   /** Hides the closed captions visually. */
   @property({ type: Boolean })
-  hideCaptions = false;
+  accessor hideCaptions = false;
 
   /** Hides the title & description. */
   @property({ type: Boolean })
-  hideHeader = false;
+  accessor hideHeader = false;
 
   /** Hides the controls. */
   @property({ type: Boolean })
-  hideControls = false;
+  accessor hideControls = false;
 
   /** Removes the outer border and padding. */
   @property({ type: Boolean })
-  noBorder = false;
+  accessor noBorder = false;
 
   /** Customizable text labels. */
   @property({ type: Object })
-  customLabels = {
+  accessor customLabels = {
     toggleView: 'Toggle View Mode',
     toggleFullscreen: 'Toggle Fullscreen',
     downloadMenu: 'Download Menu',
@@ -127,64 +177,78 @@ export class KDChart extends LitElement {
    * @ignore
    */
   @state()
-  fullscreen = false;
+  accessor fullscreen = false;
+
+  /** Use HTML legend instead of Chart.js built-in canvas legend.
+   * @public
+   */
+  @property({ type: Boolean })
+  accessor useHtmlLegend = false;
+
+  /** Max height for HTML legend scroll container (px). */
+  @property({ type: Number, reflect: true })
+  accessor htmlLegendMaxHeight = 100;
+
+  /** Full set of legend customization options */
+  @property({ type: Object })
+  accessor htmlLegendOptions: HtmlLegendOptions = {};
 
   /**
    * Queries the container element.
    * @ignore
    */
   @query('.container')
-  container!: HTMLCanvasElement;
+  accessor container!: HTMLCanvasElement;
 
   /**
    * Queries the canvas element.
    * @ignore
    */
   @query('canvas')
-  canvas!: HTMLCanvasElement;
+  accessor canvas!: HTMLCanvasElement;
 
   /**
    * Queries the closed caption div.
    * @ignore
    */
   @query('.closed-caption')
-  ccDiv!: HTMLDivElement;
+  accessor ccDiv!: HTMLDivElement;
 
   /** The chart instance.
    * @ignore
    */
   @state()
-  chart: any = null;
+  accessor chart: any = null;
 
   /** Table view mode.
    * @ignore
    */
   @state()
-  tableView = false;
+  accessor tableView = false;
 
   /** Disable table view feature.
    * @ignore
    */
   @state()
-  tableDisabled = false;
+  accessor tableDisabled = false;
 
   /** Merged options.
    * @ignore
    */
   @state()
-  mergedOptions: any = {};
+  accessor mergedOptions: any = {};
 
   /** Merged datasets.
    * @ignore
    */
   @state()
-  mergedDatasets: any = {};
+  accessor mergedDatasets: any = {};
 
   /** Is Widget. Inherited from kyn-widget.
    * @internal
    */
   @state()
-  _widget = false;
+  accessor _widget = false;
 
   /** ResizeObserver for canvas-container.
    * @internal
@@ -273,6 +337,7 @@ export class KDChart extends LitElement {
 
                         <div class="download">
                           <button
+                            tabindex="0"
                             class="control-button"
                             aria-label=${this.customLabels.downloadMenu}
                             title=${this.customLabels.downloadMenu}
@@ -286,6 +351,7 @@ export class KDChart extends LitElement {
                             ${!this.tableDisabled
                               ? html`
                                   <button
+                                    tabindex="0"
                                     @click=${(e: Event) =>
                                       this.handleDownloadCsv(e)}
                                   >
@@ -294,12 +360,14 @@ export class KDChart extends LitElement {
                                 `
                               : null}
                             <button
+                              tabindex="0"
                               @click=${(e: Event) =>
                                 this.handleDownloadImage(e, false)}
                             >
                               ${this.customLabels.downloadPng}
                             </button>
                             <button
+                              tabindex="0"
                               @click=${(e: Event) =>
                                 this.handleDownloadImage(e, true)}
                             >
@@ -324,7 +392,7 @@ export class KDChart extends LitElement {
           <div
             class="canvas-container"
             style="${this.width ? `width: ${this.width}px;` : ''}
-              ${this.height ? `height: ${this.height}px;` : ''}"
+            ${this.height ? `height: ${this.height}px;` : ''}"
           >
             <canvas role="img" aria-labelledby="titleDesc"></canvas>
           </div>
@@ -335,156 +403,248 @@ export class KDChart extends LitElement {
                 : ''}"
             ></div>
           </figcaption>
+
+          <div
+            class="html-legend-container"
+            ?hidden=${!this.useHtmlLegend}
+          ></div>
         </figure>
 
         ${!this.tableDisabled && this.tableView
           ? html`
               <div class="table">
                 <table>
-                  <thead>
-                    <tr>
-                      ${this.labels?.length || this.type === 'treemap'
-                        ? html`<th>${this.getTableAxisLabel()}</th>`
-                        : null}
-                      ${this.datasets.map((dataset) => {
-                        return html`<th>${dataset.label}</th>`;
-                      })}
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    ${this.type === 'treemap'
-                      ? Array.isArray(this.datasets[0].tree)
-                        ? this.datasets[0].tree.map((_value: any) => {
+                  ${['pie', 'doughnut', 'polarArea'].includes(this.type)
+                    ? html`
+                        <thead>
+                          <tr>
+                            <th>Label</th>
+                            <th>Value</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          ${this.labels.map(
+                            (label, i) => html`
+                              <tr>
+                                <td>${label}</td>
+                                <td>${this.datasets[0].data[i]}</td>
+                              </tr>
+                            `
+                          )}
+                        </tbody>
+                      `
+                    : this.type === 'matrix'
+                    ? html`
+                        <thead>
+                          <tr>
+                            <th>
+                              ${this.options?.scales?.y?.title?.text ||
+                              'Y Axis'}
+                            </th>
+                            <th>
+                              ${this.options?.scales?.x?.title?.text ||
+                              'X Axis'}
+                            </th>
+                            ${this.datasets.map(
+                              (dataset) => html`<th>${dataset.label}</th>`
+                            )}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          ${this.datasets[0].data.map((cell: any) => {
+                            const xLabel = Array.isArray(this.labels)
+                              ? this.labels[cell.x - 1] || ''
+                              : (this.labels as any).x?.[cell.x - 1] || '';
+                            const yLabel = Array.isArray(this.labels)
+                              ? this.labels[cell.y - 1] || ''
+                              : (this.labels as any).y?.[cell.y - 1] || '';
                             return html`
                               <tr>
-                                <td>${_value[this.datasets[0].labelKey]}</td>
-                                <td>${_value[this.datasets[0].key]}</td>
+                                <td>${yLabel}</td>
+                                <td>${xLabel}</td>
+                                ${this.datasets.map(
+                                  () => html`<td>${cell.value}</td>`
+                                )}
                               </tr>
                             `;
-                          })
-                        : Object.entries(this.datasets[0].tree).map(
-                            (_value: any) => {
-                              const HtmlStrings = [];
-
-                              if (_value[1].value) {
-                                HtmlStrings.push(html`
-                                  <tr>
-                                    <td>${_value[0]}</td>
-                                    <td>${_value[1].value}</td>
-                                  </tr>
-                                `);
-                              } else {
-                                Object.entries(_value[1]).map(
-                                  (_subValue: any) => {
-                                    if (_subValue[1].value) {
+                          })}
+                        </tbody>
+                      `
+                    : ['boxplot', 'violin'].includes(this.type)
+                    ? renderBoxplotViolinTable(
+                        this.labels,
+                        this.datasets,
+                        this.getTableAxisLabel()
+                      )
+                    : html`
+                        <thead>
+                          <tr>
+                            ${this.labels?.length || this.type === 'treemap'
+                              ? html`<th>${this.getTableAxisLabel()}</th>`
+                              : null}
+                            ${this.datasets.map(
+                              (dataset) => html`<th>${dataset.label}</th>`
+                            )}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          ${this.type === 'treemap'
+                            ? Array.isArray(this.datasets[0].tree)
+                              ? this.datasets[0].tree.map(
+                                  (_value: any) => html`
+                                    <tr>
+                                      <td>
+                                        ${_value[this.datasets[0].labelKey]}
+                                      </td>
+                                      <td>${_value[this.datasets[0].key]}</td>
+                                    </tr>
+                                  `
+                                )
+                              : Object.entries(this.datasets[0].tree).map(
+                                  (_value: any) => {
+                                    const HtmlStrings = [];
+                                    if (_value[1].value) {
                                       HtmlStrings.push(html`
                                         <tr>
-                                          <td>${_subValue[0]}</td>
-                                          <td>${_subValue[1].value}</td>
+                                          <td>${_value[0]}</td>
+                                          <td>${_value[1].value}</td>
                                         </tr>
                                       `);
                                     } else {
-                                      Object.entries(_subValue[1]).map(
-                                        (_subSubValue: any) => {
-                                          HtmlStrings.push(html`
-                                            <tr>
-                                              <td>${_subSubValue[0]}</td>
-                                              <td>${_subSubValue[1].value}</td>
-                                            </tr>
-                                          `);
+                                      Object.entries(_value[1]).map(
+                                        (_subValue: any) => {
+                                          if (_subValue[1].value) {
+                                            HtmlStrings.push(html`
+                                              <tr>
+                                                <td>${_subValue[0]}</td>
+                                                <td>${_subValue[1].value}</td>
+                                              </tr>
+                                            `);
+                                          } else {
+                                            Object.entries(_subValue[1]).map(
+                                              (_subSubValue: any) => {
+                                                HtmlStrings.push(html`
+                                                  <tr>
+                                                    <td>${_subSubValue[0]}</td>
+                                                    <td>
+                                                      ${_subSubValue[1].value}
+                                                    </td>
+                                                  </tr>
+                                                `);
+                                              }
+                                            );
+                                          }
                                         }
                                       );
                                     }
+                                    return HtmlStrings;
                                   }
-                                );
-                              }
-
-                              return HtmlStrings;
-                            }
-                          )
-                      : this.datasets[0].data.map((_value: any, i: number) => {
-                          const IndexAxis = this.options.indexAxis || 'x';
-                          const NonIndexAxis = IndexAxis === 'x' ? 'y' : 'x';
-
-                          return html`
-                            <tr>
-                              ${this.labels.length
-                                ? html`
-                                    ${this.options?.scales[IndexAxis]?.type ===
-                                    'time'
-                                      ? html`
-                                          <td>
-                                            ${new Date(
-                                              this.labels[i]
-                                            ).toLocaleString()}
-                                          </td>
-                                        `
-                                      : html`<td>${this.labels[i]}</td>`}
-                                  `
-                                : null}
-                              ${this.datasets.map((dataset) => {
-                                const dataPoint = dataset.data[i];
-
-                                if (
-                                  this.type === 'bubbleMap' ||
-                                  this.type === 'choropleth'
-                                ) {
+                                )
+                            : this.datasets[0].data.map(
+                                (_value: any, i: number) => {
+                                  const IndexAxis =
+                                    this.options.indexAxis || 'x';
+                                  const NonIndexAxis =
+                                    IndexAxis === 'x' ? 'y' : 'x';
                                   return html`
-                                    <td>${dataset.data[i].value}</td>
-                                  `;
-                                } else if (
-                                  this.options?.scales[NonIndexAxis]?.type ===
-                                  'time'
-                                ) {
-                                  return html`
-                                    <td>
-                                      ${new Date(dataPoint).toLocaleString()}
-                                    </td>
-                                  `;
-                                } else if (Array.isArray(dataPoint)) {
-                                  // handle data in array format
-                                  return html`
-                                    <td>${dataPoint[0]}, ${dataPoint[1]}</td>
-                                  `;
-                                } else if (
-                                  typeof dataPoint === 'object' &&
-                                  !Array.isArray(dataPoint) &&
-                                  dataPoint !== null
-                                ) {
-                                  // handle data in object format
-                                  return html`
-                                    <td>
-                                      ${Object.keys(dataPoint).map((key) => {
-                                        const Label =
-                                          this.options.scales[key]?.title
-                                            .text || key;
-                                        const DisplayData =
-                                          this.options.scales[key]?.type ===
-                                          'time'
-                                            ? new Date(
-                                                dataPoint[key]
-                                              ).toLocaleString()
-                                            : dataPoint[key];
+                                    <tr>
+                                      ${this.labels?.length
+                                        ? html`
+                                            ${this.options?.scales?.[IndexAxis]
+                                              ?.type === 'time'
+                                              ? html`
+                                                  <td>
+                                                    ${new Date(
+                                                      this.labels[i]
+                                                    ).toLocaleString()}
+                                                  </td>
+                                                `
+                                              : html`
+                                                  <td>${this.labels[i]}</td>
+                                                `}
+                                          `
+                                        : null}
+                                      ${this.datasets.map((dataset) => {
+                                        if (i >= dataset.data.length)
+                                          return html`<td></td>`;
 
-                                        return html`
-                                          <div>
-                                            <strong>${Label}:</strong>
-                                            ${DisplayData}
-                                          </div>
-                                        `;
+                                        const dataPoint = dataset.data[i];
+                                        if (
+                                          this.type === 'bubbleMap' ||
+                                          this.type === 'choropleth'
+                                        ) {
+                                          return html`
+                                            <td>${dataset.data[i].value}</td>
+                                          `;
+                                        } else if (
+                                          this.options?.scales[NonIndexAxis]
+                                            ?.type === 'time'
+                                        ) {
+                                          return html`
+                                            <td>
+                                              ${new Date(
+                                                dataPoint
+                                              ).toLocaleString()}
+                                            </td>
+                                          `;
+                                        } else if (Array.isArray(dataPoint)) {
+                                          return html`
+                                            <td>
+                                              ${dataPoint[0]}, ${dataPoint[1]}
+                                            </td>
+                                          `;
+                                        } else if (
+                                          [
+                                            'pie',
+                                            'doughnut',
+                                            'polarArea',
+                                          ].includes(this.type)
+                                        ) {
+                                          return html` <td>${dataPoint}</td> `;
+                                        } else if (
+                                          typeof dataPoint === 'object' &&
+                                          !Array.isArray(dataPoint) &&
+                                          dataPoint !== null
+                                        ) {
+                                          return html`
+                                            <td>
+                                              ${Object.keys(dataPoint).map(
+                                                (key) => {
+                                                  const Label =
+                                                    this.options?.scales?.[key]
+                                                      ?.title?.text || key;
+                                                  const DisplayData =
+                                                    this.options?.scales?.[key]
+                                                      ?.type === 'time' &&
+                                                    dataPoint[key]
+                                                      ? new Date(
+                                                          dataPoint[key]
+                                                        ).toLocaleString()
+                                                      : dataPoint[key];
+                                                  return html`
+                                                    <div>
+                                                      <strong>
+                                                        ${Label}:
+                                                      </strong>
+                                                      ${DisplayData}
+                                                    </div>
+                                                  `;
+                                                }
+                                              )}
+                                            </td>
+                                          `;
+                                        } else {
+                                          return html`
+                                            <td>${dataset.data[i]}</td>
+                                          `;
+                                        }
                                       })}
-                                    </td>
+                                    </tr>
                                   `;
-                                } else {
-                                  // handle data in number/basic format
-                                  return html`<td>${dataset.data[i]}</td>`;
                                 }
-                              })}
-                            </tr>
-                          `;
-                        })}
-                  </tbody>
+                              )}
+                        </tbody>
+                      `}
                 </table>
               </div>
             `
@@ -501,11 +661,14 @@ export class KDChart extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback();
-
-    this._themeObserver.observe(
-      document.querySelector('meta[name="color-scheme"]'),
-      { attributes: true }
-    );
+    try {
+      const meta = document.querySelector('meta[name="color-scheme"]');
+      if (meta instanceof Node) {
+        this._themeObserver.observe(meta, { attributes: true });
+      }
+    } catch (error) {
+      console.warn('Failed to set up theme observer:', error);
+    }
   }
 
   override disconnectedCallback() {
@@ -520,8 +683,36 @@ export class KDChart extends LitElement {
     this._resizeObserver.observe(el);
   }
 
+  private generateScrollableLegend(): void {
+    if (!this.chart || !this.useHtmlLegend) return;
+
+    const legendContainer = this.shadowRoot!.querySelector<HTMLElement>(
+      '.html-legend-container'
+    )!;
+    legendContainer.innerHTML = '';
+
+    const opts = {
+      maxHeight: this.htmlLegendMaxHeight,
+      ...this.htmlLegendOptions,
+      onItemClick: (info: LegendClickInfo) => {
+        if (this.htmlLegendOptions.onItemClick) {
+          this.htmlLegendOptions.onItemClick(info);
+        }
+
+        this.dispatchEvent(
+          new CustomEvent('on-click', {
+            detail: info,
+            bubbles: true,
+            composed: true,
+          })
+        );
+      },
+    };
+
+    renderHTMLLegend(this.chart, legendContainer, opts);
+  }
+
   override updated(changedProps: any) {
-    // Update chart instance when data changes.
     if (
       this.chart &&
       (changedProps.has('labels') ||
@@ -532,36 +723,33 @@ export class KDChart extends LitElement {
         this.chart.data.labels = this.labels;
         this.chart.options = this.mergedOptions;
 
-        // remove datasets not in mergedDatasets
         this.chart.data.datasets.forEach((dataset: any, index: number) => {
           const NewDataset = this.mergedDatasets.find(
             (newDataset: any) => newDataset.label === dataset.label
           );
 
           if (!NewDataset) {
-            // remove
             this.chart.data.datasets.splice(index, 1);
           }
         });
 
-        // update datasets, add new ones
         this.mergedDatasets.forEach((dataset: any) => {
-          const OldDataset = this.chart.data.datasets.find(
-            (oldDataset: any) => oldDataset.label === dataset.label
+          const prevDataset = this.chart.data.datasets.find(
+            (prevDataset: any) => prevDataset.label === dataset.label
           );
 
-          if (!OldDataset) {
-            // add new dataset
+          if (!prevDataset) {
             this.chart.data.datasets.push(dataset);
           } else {
-            // update each key/entry in the dataset object
             Object.keys(dataset).forEach((key) => {
-              OldDataset[key] = dataset[key];
+              prevDataset[key] = dataset[key];
             });
           }
         });
 
         this.chart.update();
+
+        this.generateScrollableLegend();
       });
     }
 
@@ -569,12 +757,17 @@ export class KDChart extends LitElement {
     // check to make sure initial datasets + data have been provided
     let hasData = false;
     if (this.datasets && this.datasets.length) {
-      this.datasets.forEach((dataset) => {
+      for (const dataset of this.datasets) {
         hasData =
-          dataset.data?.length ||
-          dataset.tree?.length ||
-          Object.keys(dataset.tree).length;
-      });
+          dataset.data?.length > 0 ||
+          dataset.tree?.length > 0 ||
+          (dataset.tree && Object.keys(dataset.tree).length > 0);
+
+        if (!hasData) {
+          console.error('Missing data for one or more chart datasets.');
+          break;
+        }
+      }
     }
 
     if (!this.chart && this.type && changedProps.has('datasets') && hasData) {
@@ -585,13 +778,14 @@ export class KDChart extends LitElement {
       this.checkType();
     }
 
-    // Re-init chart instance when type, plugins, colorPalette, width, or height change.
+    // Re-init chart instance when type, plugins, colorPalette, width, height, or useHtmlLegend change.
     if (
       this.chart &&
       (changedProps.has('type') ||
         changedProps.has('plugins') ||
         changedProps.has('width') ||
-        changedProps.has('height'))
+        changedProps.has('height') ||
+        changedProps.has('useHtmlLegend'))
     ) {
       this.mergeOptions().then(() => {
         this.initChart();
@@ -610,50 +804,31 @@ export class KDChart extends LitElement {
    * and options.
    */
   private initChart() {
-    const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
-
-    // Chart.defaults.font.family = getComputedStyle(
-    //   document.documentElement
-    // ).getPropertyValue('--kd-font-family-secondary');
-    Chart.defaults.color = getTokenThemeVal('--kd-color-text-level-primary');
-
-    // let plugins = [
-    //   canvasBackgroundPlugin,
-    //   doughnutLabelPlugin,
-    //   meterGaugePlugin,
-    //   ...this.plugins,
-    // ];
-
-    // Select plugin when type='meter'. Otherwise both plugins (meterGaugePlugin & doughnutLabelPlugin) are called
-    const pluginSelectForDoghnutMeter =
+    const pluginSelect =
       this.type === 'meter' ? meterGaugePlugin : doughnutLabelPlugin;
 
-    let plugins = [
+    const chartPlugins = [
       canvasBackgroundPlugin,
-      pluginSelectForDoghnutMeter,
+      pluginSelect,
+      gradientLegendPlugin,
       ...this.plugins,
+      a11yPlugin,
     ];
 
-    // only add certain plugins for standard chart types
-    if (!ignoredTypes.includes(this.type)) {
-      // plugins = [...plugins, a11yPlugin, musicPlugin];
-      plugins = [...plugins, a11yPlugin];
+    // add htmlLegendPlugin if useHtmlLegend is enabled
+    if (this.useHtmlLegend) {
+      chartPlugins.push(htmlLegendPlugin);
     }
 
-    if (this.chart) {
-      this.chart.destroy();
-    }
-
+    if (this.chart) this.chart.destroy();
     this.chart = new Chart(this.canvas, {
-      //type: this.type,
       type: this.type === 'meter' ? 'doughnut' : this.type,
-      data: {
-        labels: this.labels,
-        datasets: this.mergedDatasets,
-      },
+      data: { labels: this.labels, datasets: this.mergedDatasets },
       options: this.mergedOptions,
-      plugins: plugins,
+      plugins: chartPlugins,
     });
+
+    this.generateScrollableLegend();
   }
 
   /**
@@ -664,66 +839,58 @@ export class KDChart extends LitElement {
     const radialTypes = ['pie', 'doughnut', 'radar', 'polarArea', 'meter'];
     const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
 
-    const additionalTypeImports: any = [];
+    // dynamically import type-specific configs
+    const additionalTypeImports: any[] = [];
     this.datasets.forEach((dataset) => {
-      // get chart types from datasets so we can import additional configs
       if (dataset.type) {
         additionalTypeImports.push(
           import(`../../common/config/chartTypes/${dataset.type}.js`)
         );
       }
     });
-
-    // import main and additional chart type configs
     const chartTypeConfigs = await Promise.all([
       import(`../../common/config/chartTypes/${this.type}.js`),
       ...additionalTypeImports,
     ]);
 
-    // start with global options
     let mergedOptions: any = globalOptions(this);
+    mergedOptions.plugins = mergedOptions.plugins || {};
 
-    // merge global type options
+    if (this.useHtmlLegend) {
+      mergedOptions.plugins.legend = { display: false };
+      mergedOptions.plugins.htmlLegend = mergedOptions.plugins.htmlLegend || {};
+    } else {
+      mergedOptions.plugins.legend = mergedOptions.plugins.legend || {};
+      mergedOptions.plugins.legend.display = true;
+    }
+
+    // merge radial vs non-radial defaults
     if (radialTypes.includes(this.type)) {
       mergedOptions = deepmerge(mergedOptions, globalOptionsRadial(this));
     } else if (!ignoredTypes.includes(this.type)) {
       mergedOptions = deepmerge(mergedOptions, globalOptionsNonRadial(this));
     }
 
-    const mergedDatasets: any = JSON.parse(JSON.stringify(this.datasets));
+    const mergedDatasets: any[] = JSON.parse(JSON.stringify(this.datasets));
 
-    chartTypeConfigs.forEach((chartTypeConfig: any) => {
-      // merge all of the imported chart type options with the global options
-      mergedOptions = deepmerge(mergedOptions, chartTypeConfig.options(this));
-
-      // merge all of the imported chart type dataset options
-      mergedDatasets.forEach((dataset: any, index: number) => {
-        if (
-          (!dataset.type && chartTypeConfig.type === this.type) ||
-          dataset.type === chartTypeConfig.type
-        ) {
-          mergedDatasets[index] = deepmerge(
-            dataset,
-            chartTypeConfig.datasetOptions(this, index)
-          );
+    chartTypeConfigs.forEach((cfg: any) => {
+      mergedOptions = deepmerge(mergedOptions, cfg.options(this));
+      mergedDatasets.forEach((ds: any, i: number) => {
+        if ((!ds.type && cfg.type === this.type) || ds.type === cfg.type) {
+          mergedDatasets[i] = deepmerge(ds, cfg.datasetOptions(this, i));
         }
       });
     });
 
     if (this.options) {
-      // merge any consumer supplied options with defaults
       mergedOptions = deepmerge(mergedOptions, this.options);
     }
     this.mergedOptions = mergedOptions;
 
-    // merge default chart type dataset options with consumer supplied datasets
-    mergedDatasets.forEach((dataset: object, index: number) => {
-      const customDeepmerge = deepmergeCustom({
-        mergeArrays: false,
-      });
-      mergedDatasets[index] = customDeepmerge(dataset, this.datasets[index]);
+    mergedDatasets.forEach((ds: object, i: number) => {
+      const customDeep = deepmergeCustom({ mergeArrays: false });
+      mergedDatasets[i] = customDeep(ds, this.datasets[i]);
     });
-
     this.mergedDatasets = mergedDatasets;
   }
 
@@ -762,13 +929,169 @@ export class KDChart extends LitElement {
 
     const imgFormat = jpeg ? 'image/jpeg' : 'image/png';
     const fileExt = jpeg ? 'jpg' : 'png';
-    const a = document.createElement('a');
 
+    if (this.useHtmlLegend && this.chart) {
+      if (['doughnut', 'pie'].includes(this.type)) {
+        this.exportSimpleCanvasOnly(imgFormat, fileExt);
+        return;
+      }
+
+      const originalConfig = {
+        options: JSON.parse(JSON.stringify(this.chart.options)),
+        data: JSON.parse(JSON.stringify(this.chart.data)),
+        type: this.chart.config.type,
+      };
+
+      const originalHidden = this.chart.data.datasets.map(
+        (_: unknown, i: number) => this.chart.getDatasetMeta(i).hidden
+      );
+
+      try {
+        if (!this.chart.options.plugins) {
+          this.chart.options.plugins = {};
+        }
+
+        if (!this.chart.options.plugins.legend) {
+          this.chart.options.plugins.legend = {};
+        }
+
+        this.chart.options.plugins.legend.display = true;
+        this.chart.options.plugins.legend.position = 'bottom';
+        this.chart.options.plugins.legend.labels = {
+          boxWidth: 12,
+          boxHeight: 12,
+          padding: 10,
+          font: {
+            size: 12,
+          },
+        };
+
+        if (!this.chart.options.layout) {
+          this.chart.options.layout = { padding: { bottom: 40 } };
+        } else if (!this.chart.options.layout.padding) {
+          this.chart.options.layout.padding = { bottom: 40 };
+        } else if (typeof this.chart.options.layout.padding === 'number') {
+          this.chart.options.layout.padding = {
+            top: this.chart.options.layout.padding,
+            right: this.chart.options.layout.padding,
+            bottom: Math.max(this.chart.options.layout.padding, 40),
+            left: this.chart.options.layout.padding,
+          };
+        } else if (this.chart.options.layout.padding) {
+          this.chart.options.layout.padding.bottom = Math.max(
+            this.chart.options.layout.padding.bottom || 0,
+            40
+          );
+        }
+
+        this.chart.update('none');
+
+        const context = this.canvas.getContext('2d');
+        if (!context) throw new Error('Could not get canvas context');
+
+        const color = getTokenThemeVal('--kd-color-background-page-default');
+        context.save();
+        context.globalCompositeOperation = 'destination-over';
+        context.fillStyle = color;
+        context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        const imgData = this.chart.toBase64Image(imgFormat, 1);
+
+        const a = document.createElement('a');
+        a.href = imgData;
+        a.download = this.chartTitle + '.' + fileExt;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        context.restore();
+        this.chart.options = originalConfig.options;
+        originalHidden.forEach((hidden: boolean, i: number) => {
+          this.chart.getDatasetMeta(i).hidden = hidden;
+        });
+        this.chart.update();
+      } catch (error) {
+        console.error('Error exporting chart with legend:', error);
+        this.exportCanvasOnly(imgFormat, fileExt);
+      }
+    } else {
+      this.exportCanvasOnly(imgFormat, fileExt);
+    }
+  }
+
+  private exportCanvasOnly(imgFormat: string, fileExt: string) {
+    const context = this.canvas.getContext('2d');
+    if (!context || !this.chart) return;
+
+    const color = getTokenThemeVal('--kd-color-background-page-default');
+    context.save();
+    context.globalCompositeOperation = 'destination-over';
+    context.fillStyle = color;
+    context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    const a = document.createElement('a');
     a.href = this.chart.toBase64Image(imgFormat, 1);
     a.download = this.chartTitle + '.' + fileExt;
-
-    // trigger the download
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
+
+    context.restore();
+  }
+
+  private exportSimpleCanvasOnly(imgFormat: string, fileExt: string) {
+    const context = this.canvas.getContext('2d');
+    if (!context || !this.chart) return;
+
+    try {
+      const originalOptions = JSON.parse(JSON.stringify(this.chart.options));
+
+      context.save();
+      const color = getTokenThemeVal('--kd-color-background-page-default');
+      context.globalCompositeOperation = 'destination-over';
+      context.fillStyle = color;
+      context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+      this.chart.options = {
+        ...this.chart.options,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'bottom',
+            labels: {
+              boxWidth: 12,
+              boxHeight: 12,
+              padding: 10,
+              font: { size: 12 },
+            },
+          },
+          datalabels: { display: false, formatter: null },
+          tooltip: { enabled: false },
+          doughnutLabel: { enabled: false },
+        },
+        layout: {
+          padding: { bottom: 40 },
+        },
+      };
+
+      this.chart.update('none');
+
+      const imgData = this.chart.toBase64Image(imgFormat, 1);
+
+      const a = document.createElement('a');
+      a.href = imgData;
+      a.download = this.chartTitle + '.' + fileExt;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      context.restore();
+      this.chart.options = originalOptions;
+      this.chart.update();
+    } catch (error) {
+      console.error('Error in exportSimpleCanvasOnly:', error);
+      this.exportCanvasOnly(imgFormat, fileExt);
+    }
   }
 
   private handleDownloadCsv(e: Event) {

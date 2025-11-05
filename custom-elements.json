@@ -19,6 +19,84 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/common/helpers/boxplotViolinTableRenderer.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "renderBoxplotViolinTableHeader"
+        },
+        {
+          "kind": "function",
+          "name": "renderBoxplotViolinTableRow",
+          "parameters": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "values",
+              "type": {
+                "text": "number[]"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "renderBoxplotViolinTable",
+          "parameters": [
+            {
+              "name": "labels",
+              "type": {
+                "text": "string[]"
+              }
+            },
+            {
+              "name": "datasets",
+              "type": {
+                "text": "any[]"
+              }
+            },
+            {
+              "name": "axisLabel",
+              "type": {
+                "text": "string"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "renderBoxplotViolinTableHeader",
+          "declaration": {
+            "name": "renderBoxplotViolinTableHeader",
+            "module": "src/common/helpers/boxplotViolinTableRenderer.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "renderBoxplotViolinTableRow",
+          "declaration": {
+            "name": "renderBoxplotViolinTableRow",
+            "module": "src/common/helpers/boxplotViolinTableRenderer.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "renderBoxplotViolinTable",
+          "declaration": {
+            "name": "renderBoxplotViolinTable",
+            "module": "src/common/helpers/boxplotViolinTableRenderer.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/common/helpers/helpers.ts",
       "declarations": [
         {
@@ -161,6 +239,30 @@
           "declaration": {
             "name": "getTextColor",
             "module": "src/common/helpers/helpers.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/common/plugins/htmlLegendPlugin.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "htmlLegendPlugin",
+          "type": {
+            "text": "object"
+          },
+          "default": "{\n  id: 'htmlLegend',\n  afterUpdate(chart: Chart, _: any, options: HtmlLegendPluginOptions) {\n    const container = document.getElementById(options.containerId);\n    if (!container) return;\n    renderHTMLLegend(chart, container, options);\n  },\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "htmlLegendPlugin",
+          "declaration": {
+            "name": "htmlLegendPlugin",
+            "module": "src/common/plugins/htmlLegendPlugin.ts"
           }
         }
       ]
@@ -341,9 +443,59 @@
               "attribute": "customLabels"
             },
             {
+              "kind": "field",
+              "name": "useHtmlLegend",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Use HTML legend instead of Chart.js built-in canvas legend.",
+              "privacy": "public",
+              "attribute": "useHtmlLegend"
+            },
+            {
+              "kind": "field",
+              "name": "htmlLegendMaxHeight",
+              "type": {
+                "text": "number"
+              },
+              "default": "100",
+              "description": "Max height for HTML legend scroll container (px).",
+              "attribute": "htmlLegendMaxHeight",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "htmlLegendOptions",
+              "type": {
+                "text": "HtmlLegendOptions"
+              },
+              "default": "{}",
+              "description": "Full set of legend customization options",
+              "attribute": "htmlLegendOptions"
+            },
+            {
+              "kind": "field",
+              "name": "_themeObserver",
+              "type": {
+                "text": "any"
+              },
+              "default": "new MutationObserver(() => {\n    if (this.chart) {\n      this.mergeOptions().then(() => {\n        this.initChart();\n      });\n    }\n  })"
+            },
+            {
               "kind": "method",
               "name": "_resizeChart",
               "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "generateScrollableLegend",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              }
             },
             {
               "kind": "method",
@@ -393,6 +545,44 @@
             },
             {
               "kind": "method",
+              "name": "exportCanvasOnly",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "imgFormat",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "fileExt",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "exportSimpleCanvasOnly",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "imgFormat",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "fileExt",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
               "name": "handleDownloadCsv",
               "privacy": "private",
               "parameters": [
@@ -413,6 +603,14 @@
               "kind": "method",
               "name": "handleFullscreenChange",
               "privacy": "private"
+            }
+          ],
+          "events": [
+            {
+              "name": "on-click",
+              "type": {
+                "text": "CustomEvent"
+              }
             }
           ],
           "attributes": [
@@ -548,6 +746,33 @@
               "default": "{\n    toggleView: 'Toggle View Mode',\n    toggleFullscreen: 'Toggle Fullscreen',\n    downloadMenu: 'Download Menu',\n    downloadCsv: 'Download as CSV',\n    downloadPng: 'Download as PNG',\n    downloadJpg: 'Download as JPG',\n  }",
               "description": "Customizable text labels.",
               "fieldName": "customLabels"
+            },
+            {
+              "name": "useHtmlLegend",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Use HTML legend instead of Chart.js built-in canvas legend.",
+              "fieldName": "useHtmlLegend"
+            },
+            {
+              "name": "htmlLegendMaxHeight",
+              "type": {
+                "text": "number"
+              },
+              "default": "100",
+              "description": "Max height for HTML legend scroll container (px).",
+              "fieldName": "htmlLegendMaxHeight"
+            },
+            {
+              "name": "htmlLegendOptions",
+              "type": {
+                "text": "HtmlLegendOptions"
+              },
+              "default": "{}",
+              "description": "Full set of legend customization options",
+              "fieldName": "htmlLegendOptions"
             }
           ],
           "superclass": {

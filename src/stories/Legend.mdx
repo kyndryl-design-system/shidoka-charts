@@ -1,0 +1,529 @@
+import { Meta, Canvas, Stories } from '@storybook/addon-docs/blocks';
+import * as LegendStories from './Legend.stories.js';
+
+<Meta title="Guidelines/Legend" id="guidelines-legend" />
+
+# Legend
+
+Legends help users identify the data series displayed in a chart. The Shidoka Charts library offers several example options for legends:
+
+## Legend Types
+
+1. **Canvas Legend** - The native Chart.js canvas-based legend
+2. **Built-in HTML Legend** - An enhanced HTML legend with better styling and scrollability
+3. **External HTML Legends** - Custom legends rendered outside the chart component
+
+### Canvas Legend
+
+This uses the default Chart.js canvas-rendered legend:
+
+```html
+<kd-chart
+  type="bar"
+  useHtmlLegend="false"
+  .options=${{
+    plugins: {
+      legend: {
+        position: 'bottom'
+      }
+    }
+  }}
+></kd-chart>
+```
+
+### HTML Legend
+
+The HTML legend utilizes the [chartjs HTML Legend](https://www.chartjs.org/docs/latest/samples/legend/html.html) and is enabled by setting the `useHtmlLegend` attribute to `true`. This renders the legend as a separate HTML element outside the canvas, allowing for more customization and styling options.
+
+> ⚠️ **Warning:** Implementing the HTML legend should be done with caution. Depending on your implementation approach, it may lead to breakages or inconsistencies in your chart's appearance or behavior. Always test thoroughly across different browsers and with various data configurations to ensure reliability.
+
+> **PNG/JPG Considerations:** Only the `<canvas>` itself is captured in PNG/JPG exports. Any HTML legend rendered outside the `<canvas>` will not appear in the exported image.
+>
+> **Layout Considerations:** Using the HTML legend changes the overall chart aspect ratio since it exists separate from the canvas. The library now includes automatic adjustments to maintain consistent chart dimensions between HTML and canvas legends. This behavior can be controlled with the following options:
+
+```javascript
+plugins: {
+  htmlLegend: {
+    adjustChartHeight: true,  // enable/disable automatic height adjustment
+    reservedLegendHeight: 40, // base height reserved for legend (px)
+  }
+}
+```
+
+This uses an enhanced HTML-based legend with better styling and scrollability:
+
+```html
+<kd-chart
+  type="bar"
+  useHtmlLegend
+  htmlLegendMaxHeight="200"
+  .options=${{
+    plugins: {
+      legend: { position: 'bottom' },
+      customLegend: {
+        boxWidth: 16,
+        boxHeight: 16,
+        borderRadius: 2
+      }
+    }
+  }}
+></kd-chart>
+```
+
+The HTML legend can be configured using the `plugins.htmlLegend` options in the chart configuration:
+
+| Option                 | Description                                            | Default               |
+| ---------------------- | ------------------------------------------------------ | --------------------- |
+| `maxHeight`            | Maximum height before scrolling begins                 | 100px                 |
+| `className`            | CSS class for the legend container                     | 'shidoka-legend'      |
+| `itemClassName`        | CSS class for the legend items                         | 'shidoka-legend-item' |
+| `layout`               | Legend layout orientation ('horizontal' or 'vertical') | 'horizontal'          |
+| `onItemClick`          | Callback when a legend item is clicked                 | null                  |
+| `adjustChartHeight`    | Auto-adjust chart height for consistency               | true                  |
+| `reservedLegendHeight` | Base space to reserve for legend (px)                  | 40                    |
+| `columns`              | Number of columns for grid layout (0 for auto flow)    | 0                     |
+| `labelFormatter`       | Function to format labels: (label, item) => string     | null                  |
+| `itemClassResolver`    | Function to add custom classes: (item) => string       | null                  |
+| `position`             | Position of legend ('top', 'bottom', 'left', 'right')  | 'bottom'              |
+
+## External Custom Legends
+
+For more customized legends, you can create external legends using provided helper functions.
+
+### Standard HTML Legend
+
+```javascript
+import { renderHTMLLegend } from 'shidoka-charts/common/legend';
+
+const chart = document.querySelector('kd-chart').chart;
+const container = document.getElementById('legend-container');
+
+renderHTMLLegend(chart, container, {
+  maxHeight: 100, // Max height before scrolling begins
+  boxWidth: 16, // Width of color box
+  boxHeight: 16, // Height of color box
+  borderRadius: 2, // Border radius of color box
+  className: 'shidoka-legend', // CSS class for legend
+  itemClassName: 'shidoka-legend-item', // CSS class for legend items
+  layout: 'horizontal', // Legend layout orientation ('horizontal' or 'vertical')
+  columns: 3, // Optional: Use grid layout with 3 columns
+  position: 'right', // Optional: Position the legend ('top', 'bottom', 'left', 'right')
+  labelFormatter: (label, item) => `${label} (${item.color})`, // Optional: Format labels
+  itemClassResolver: (item) => (item.isHidden ? 'hidden-item' : null), // Optional: Add custom classes
+});
+```
+
+### Custom Styled Legend
+
+```javascript
+import { renderCustomLegend } from 'shidoka-charts/common/legend';
+
+const chart = document.querySelector('kd-chart').chart;
+const container = document.getElementById('legend-container');
+
+renderCustomLegend(chart, container, {
+  maxHeight: 100,
+  boxWidth: 16,
+  boxHeight: 16,
+  className: 'custom-legend',
+  itemClassName: 'custom-legend-item',
+});
+```
+
+### Boxed Legend Style
+
+```javascript
+import { renderBoxedLegend } from 'shidoka-charts/common/legend';
+
+const chart = document.querySelector('kd-chart').chart;
+const container = document.getElementById('legend-container');
+
+renderBoxedLegend(chart, container, {
+  maxHeight: 100,
+});
+```
+
+## Handling Large Legends
+
+For charts with many data points, legends can become large. The HTML legend offers several ways to manage large datasets:
+
+1. **Scrollable Container**: Automatically adds scrolling when items exceed the container size
+2. **Grid Layout**: Organize items in multi-column grids for better use of space
+3. **Custom Positioning**: Position the legend on any side of the chart
+
+### Customizing Scrollable Legends
+
+You can customize the scrollable behavior by setting the `maxHeight` option and adding custom styles:
+
+```html
+<kd-chart
+  type="pie"
+  useHtmlLegend
+  .options=${{
+    plugins: {
+      htmlLegend: {
+        containerClass: 'overflow-legend-container',
+        maxHeight: 200, // Controls scrolling threshold
+      }
+    }
+  }}
+></kd-chart>
+
+<style>
+  /* Custom CSS to enhance scrollable legends */
+  .overflow-legend-container .shidoka-legend-scroll-content {
+    max-height: 100px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 8px;
+  }
+</style>
+```
+
+## Keyboard Accessibility
+
+The HTML Legend is fully keyboard accessible, providing an equivalent experience for keyboard users:
+
+- legend container is focusable via Tab key and supports scrolling with arrow keys, Page Up/Down, Home, and End
+- each legend item is focusable and can be toggled with `Enter` or `Space` keys
+- Arrow keys can be used to navigate between legend items without having to Tab through each one
+
+## Integrating Legend with External Systems
+
+The HTML legend can interact with external systems like APIs, state management solutions, or analytics platforms.
+
+### Using the onItemClick Handler
+
+The `onItemClick` handler provides comprehensive data about the clicked legend item:
+
+```javascript
+<kd-chart
+  type="bar"
+  useHtmlLegend
+  .htmlLegendOptions=${{
+    onItemClick: (info) => {
+      // Access to full chart instance
+      const chart = info.chart;
+
+      // Get detailed information about the clicked item
+      const { label, isHidden, datasetIndex, dataIndex } = info;
+
+      // Update external data source
+      externalDataStore.updateVisibility(datasetIndex, !isHidden);
+
+      // Log to analytics
+      analyticsService.track('chart_interaction', {
+        label,
+        isHidden,
+        chartType: chart.config.type
+      });
+
+      // Update other UI components
+      notifyOtherComponents({
+        type: 'LEGEND_CLICK',
+        payload: info
+      });
+    }
+  }}
+></kd-chart>
+```
+
+### Coordinating Multiple Charts
+
+When you have multiple chart instances on a page, you can synchronize them using the legend click events:
+
+```html
+<div class="dashboard-container">
+  <kd-chart
+    id="bar-chart"
+    type="bar"
+    useHtmlLegend
+    .datasets=${datasets}
+    @on-click=${(e) => syncAllCharts(e.detail, 'bar-chart')}
+  ></kd-chart>
+
+  <kd-chart
+    id="line-chart"
+    type="line"
+    useHtmlLegend
+    .datasets=${datasets}
+    @on-click=${(e) => syncAllCharts(e.detail, 'line-chart')}
+  ></kd-chart>
+</div>
+```
+
+```javascript
+/**
+ * Synchronizes legend item visibility across all charts
+ * @param {Object} info - The legend click info object
+ * @param {string} sourceChartId - ID of the chart that triggered the event
+ */
+function syncAllCharts(info, sourceChartId) {
+  const { datasetIndex, isHidden, label } = info;
+
+  console.log(`Legend item "${label}" clicked on ${sourceChartId}`);
+
+  // Update all other charts with the same dataset structure
+  document.querySelectorAll('kd-chart').forEach((chartElement) => {
+    if (chartElement.id !== sourceChartId) {
+      // Get the Chart.js instance from the element
+      const chartInstance = chartElement.chart;
+
+      if (!chartInstance) return;
+
+      // Different chart types use different methods to set visibility
+      if (
+        chartInstance.data &&
+        chartInstance.data.datasets &&
+        datasetIndex !== undefined
+      ) {
+        // For dataset-based charts (bar, line, etc.)
+        const meta = chartInstance.getDatasetMeta(datasetIndex);
+        if (meta) {
+          meta.hidden = isHidden;
+          chartInstance.update();
+        }
+      } else if (datasetIndex !== undefined) {
+        // For pie/doughnut charts that use dataIndex instead
+        chartInstance.toggleDataVisibility(datasetIndex);
+        chartInstance.update();
+      }
+
+      // If you've implemented custom methods on kd-chart:
+      // chartElement.updateDatasetVisibility(datasetIndex, isHidden);
+    }
+  });
+
+  // Optionally update any related UI elements
+  updateLegendHighlighting(label, isHidden);
+
+  // You could also sync with external data storage
+  saveUserPreferences({
+    hiddenDatasets: collectHiddenDatasets(),
+  });
+}
+
+/**
+ * Collects currently hidden datasets across all charts
+ * @returns {Array} - Array of hidden dataset indices
+ */
+function collectHiddenDatasets() {
+  const hiddenDatasets = new Set();
+
+  document.querySelectorAll('kd-chart').forEach((chartElement) => {
+    const chart = chartElement.chart;
+    if (!chart) return;
+
+    chart.data.datasets.forEach((dataset, index) => {
+      const meta = chart.getDatasetMeta(index);
+      if (meta && meta.hidden) {
+        hiddenDatasets.add(index);
+      }
+    });
+  });
+
+  return Array.from(hiddenDatasets);
+}
+```
+
+### Debugging With Storybook Actions
+
+To debug legend interactions in Storybook, the event listener approach is recommended:
+
+```javascript
+// In your Storybook story
+export const WithLegendDebugging = () => {
+  const container = document.createElement('div');
+  container.innerHTML = `
+    <kd-chart
+      id="debug-chart"
+      type="bar"
+      useHtmlLegend
+      .datasets=${sampleData.datasets}
+      .labels=${sampleData.labels}
+    ></kd-chart>
+  `;
+
+  // Listen for legend click events at the container level
+  container.addEventListener('on-click', (event) => {
+    action('legend-clicked')(event.detail);
+  });
+
+  return container;
+};
+
+WithLegendDebugging.parameters = {
+  docs: {
+    description: {
+      story:
+        'This example shows how to debug legend interactions using Storybook actions.',
+    },
+  },
+};
+```
+
+Alternatively, you can use the `htmlLegendOptions` to set up debugging:
+
+```javascript
+export const LegendWithStorybook = {
+  render: () => html`
+    <kd-chart
+      type="bar"
+      .datasets=${sampleData.datasets}
+      .labels=${sampleData.labels}
+      useHtmlLegend
+      .htmlLegendOptions=${{
+        onItemClick: (info) => {
+          action('legend-click')({
+            label: info.label,
+            isHidden: info.isHidden,
+            datasetIndex: info.datasetIndex,
+            dataIndex: info.dataIndex,
+          });
+        },
+      }}
+    ></kd-chart>
+  `,
+};
+```
+
+### Callback Information
+
+The `info` object passed to the callback contains:
+
+- `item`: The original legend item data
+- `chart`: Reference to the Chart.js chart instance
+- `isHidden`: Boolean indicating if the item is now hidden
+- `label`: Text label of the clicked item
+- `dataIndex` or `datasetIndex`: Index of the data or dataset (depending on chart type)
+- `element`: Reference to the DOM element that was clicked
+
+### Angular Integration Example
+
+When using the chart in an Angular application, you can capture the legend click events to filter your data:
+
+```typescript
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { DataService } from '../services/data.service';
+
+@Component({
+  selector: 'app-sales-dashboard',
+  template: `
+    <kd-chart
+      #salesChart
+      type="bar"
+      [useHtmlLegend]="true"
+      [chartTitle]="'Sales Data'"
+      [labels]="chartLabels"
+      [datasets]="chartDatasets"
+    >
+    </kd-chart>
+  `,
+})
+export class SalesDashboardComponent implements AfterViewInit {
+  @ViewChild('salesChart') chartRef!: ElementRef;
+  chartLabels: string[] = [];
+  chartDatasets: any[] = [];
+
+  constructor(private dataService: DataService) {
+    this.loadInitialData();
+  }
+
+  ngAfterViewInit(): void {
+    // Add event listener for legend clicks
+    this.chartRef.nativeElement.addEventListener('on-click', (e: CustomEvent) =>
+      this.handleLegendClick(e)
+    );
+  }
+
+  handleLegendClick(event: CustomEvent): void {
+    const { label, isHidden, datasetIndex } = event.detail;
+
+    console.log(`Dataset '${label}' is now ${isHidden ? 'hidden' : 'visible'}`);
+
+    // call API with filtered categories
+    const hiddenCategories = this.getHiddenCategories();
+
+    this.dataService.getFilteredData(hiddenCategories).subscribe((data) => {
+      // update other components with filtered data
+      this.updateRelatedComponents(data);
+    });
+  }
+
+  getHiddenCategories(): string[] {
+    const chart = this.chartRef.nativeElement.chart;
+    const hidden: string[] = [];
+
+    if (chart) {
+      chart.data.datasets.forEach((dataset: any, index: number) => {
+        if (chart.getDatasetMeta(index).hidden) {
+          hidden.push(dataset.label);
+        }
+      });
+    }
+
+    return hidden;
+  }
+
+  loadInitialData(): void {
+    this.dataService.getData().subscribe((data) => {
+      this.chartLabels = data.labels;
+      this.chartDatasets = data.datasets;
+    });
+  }
+
+  updateRelatedComponents(data: any): void {
+    // update tables, metrics, or other visualizations
+  }
+}
+```
+
+### Grid Layout Example
+
+```html
+<kd-chart
+  type="bar"
+  useHtmlLegend
+  .htmlLegendOptions=${{
+    columns: 3,
+    maxHeight: 200
+  }}
+></kd-chart>
+```
+
+### Custom Positioning Example
+
+```html
+<kd-chart
+  type="bar"
+  useHtmlLegend
+  .htmlLegendOptions=${{
+    position: 'right',
+    layout: 'vertical'
+  }}
+></kd-chart>
+```
+
+The HTML legend renders with the following structural elements that you can target for styling:
+
+```
+div.shidoka-legend-container
+  └── div.shidoka-legend
+       └── ul.shidoka-legend-items
+            └── li.shidoka-legend-item
+                 └── button.shidoka-legend-item-button
+                      ├── span.shidoka-legend-item-color
+                      └── span.shidoka-legend-item-label
+                           └── span.shidoka-legend-item-value (for pie/doughnut charts)
+```
+
+<style>
+  {`
+    .sbdocs-content {
+      max-width: none !important;
+    }
+  `}
+</style>
+
+<Stories />

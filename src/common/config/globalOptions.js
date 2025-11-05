@@ -1,6 +1,7 @@
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 const defaultConfig = (ctx) => {
+  const PrimaryTextColor = getTokenThemeVal('--kd-color-text-level-primary');
   const SecondaryTextColor = getTokenThemeVal(
     '--kd-color-text-level-secondary'
   );
@@ -18,16 +19,16 @@ const defaultConfig = (ctx) => {
         color: 'transparent',
       },
       legend: {
+        display: false,
         position: 'bottom',
         labels: {
+          color: PrimaryTextColor,
           boxWidth: 16,
           boxHeight: 16,
           borderRadius: 2,
           useBorderRadius: true,
           padding: 8,
         },
-        // onHover: handleLegendHover, // doesn't work with transparent or gradient bgs
-        // onLeave: handleLegendLeave,
       },
       tooltip: {
         bodyColor: TooltipTextColor,
@@ -74,7 +75,7 @@ export default defaultConfig;
  * @param legend - The `legend` parameter is the legend object of a chart. It contains information
  * about the chart's legend, such as the labels and colors of the legend items.
  */
-const handleLegendHover = (e, item, legend) => {
+export const handleLegendHover = (e, item, legend) => {
   const DatasetIndex = item.datasetIndex || 0;
   const Datasets = legend.chart.data.datasets;
   const Dataset = Datasets[DatasetIndex];
@@ -121,7 +122,7 @@ const handleLegendHover = (e, item, legend) => {
  * @param legend - The `legend` parameter is the legend object of a chart. It contains information
  * about the chart's legend, such as the labels and colors of the legend items.
  */
-const handleLegendLeave = (e, item, legend) => {
+export const handleLegendLeave = (e, item, legend) => {
   const DatasetIndex = item.datasetIndex || 0;
   const Datasets = legend.chart.data.datasets;
   const Dataset = Datasets[DatasetIndex];
