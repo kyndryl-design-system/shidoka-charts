@@ -20,6 +20,7 @@ import {
   ViolinController,
   Violin,
 } from '@sgratzl/chartjs-chart-boxplot';
+import { SankeyController, Flow } from 'chartjs-chart-sankey';
 import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
@@ -50,6 +51,8 @@ Chart.register(
   ColorScale,
   SizeScale,
   ProjectionScale,
+  SankeyController,
+  Flow,
   TreemapController,
   TreemapElement,
   MatrixController,
