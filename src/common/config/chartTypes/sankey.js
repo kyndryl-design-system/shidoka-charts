@@ -3,7 +3,12 @@ import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/comm
 
 export const type = 'sankey';
 
-export const options = () => {
+export const options = (ctx) => {
+  console.log('Sankey.options ctx labels/datasets:', {
+    labels: ctx?.labels,
+    datasets: ctx?.datasets,
+  });
+
   const BorderColor = getTokenThemeVal('--kd-color-background-page-default');
 
   return {
@@ -16,7 +21,7 @@ export const options = () => {
   };
 };
 
-export const datasetOptions = (ctx, index) => {
+export const datasetOptions = (ctx) => {
   const unsafeKey = ctx && ctx.options && ctx.options.colorPalette;
   const paletteKey =
     unsafeKey && getColorPalette(unsafeKey) ? unsafeKey : 'categorical';
@@ -45,6 +50,7 @@ export const datasetOptions = (ctx, index) => {
   const getNodeColor = (dataset, key) => {
     if (!dataset) return palette[0];
     const map = buildNodeColorMap(dataset);
+
     return key !== undefined && map[key] ? map[key] : palette[0];
   };
 

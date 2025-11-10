@@ -482,16 +482,51 @@ export class KDChart extends LitElement {
                     : html`
                         <thead>
                           <tr>
-                            ${this.labels?.length || this.type === 'treemap'
+                            ${this.type === 'sankey'
+                              ? html`
+                                  <th>From</th>
+                                  <th>To</th>
+                                  <th>
+                                    ${this.datasets && this.datasets[0]
+                                      ? this.datasets[0].label
+                                      : 'Value'}
+                                  </th>
+                                `
+                              : this.labels?.length || this.type === 'treemap'
                               ? html`<th>${this.getTableAxisLabel()}</th>`
                               : null}
-                            ${this.datasets.map(
-                              (dataset) => html`<th>${dataset.label}</th>`
-                            )}
+                            ${this.type === 'sankey'
+                              ? null
+                              : this.datasets.map(
+                                  (dataset) => html`<th>${dataset.label}</th>`
+                                )}
                           </tr>
                         </thead>
                         <tbody>
-                          ${this.type === 'treemap'
+                          ${this.type === 'sankey'
+                            ? (() => {
+                                const ds = this.datasets && this.datasets[0];
+                                if (!ds || !Array.isArray(ds.data)) return [];
+                                return ds.data.map(
+                                  (link: any) =>
+                                    html`
+                                      <tr>
+                                        <td>
+                                          ${ds.labels && ds.labels[link.from]
+                                            ? ds.labels[link.from]
+                                            : link.from ?? ''}
+                                        </td>
+                                        <td>
+                                          ${ds.labels && ds.labels[link.to]
+                                            ? ds.labels[link.to]
+                                            : link.to ?? ''}
+                                        </td>
+                                        <td>${link.flow ?? ''}</td>
+                                      </tr>
+                                    `
+                                );
+                              })()
+                            : this.type === 'treemap'
                             ? Array.isArray(this.datasets[0].tree)
                               ? this.datasets[0].tree.map(
                                   (_value: any) => html`

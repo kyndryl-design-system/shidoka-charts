@@ -29,33 +29,35 @@ export default {
 const args = {
   chartTitle: 'Sankey Chart',
   description: 'Sankey chart showing flows between nodes.',
-  datasets: [
-    {
-      label: 'Sankey',
-      data: [
-        { from: 'a', to: 'b', flow: 10 },
-        { from: 'a', to: 'c', flow: 5 },
-        { from: 'b', to: 'c', flow: 10 },
-        { from: 'd', to: 'c', flow: 7 },
-      ],
-      colorMode: 'gradient',
-      alpha: 1,
-      labels: {
-        a: 'Label A',
-        b: 'Label B',
-        c: 'Label C',
-        d: 'Label D',
+  data: {
+    datasets: [
+      {
+        label: 'Values',
+        data: [
+          { from: 'a', to: 'b', flow: 10 },
+          { from: 'a', to: 'c', flow: 5 },
+          { from: 'b', to: 'c', flow: 10 },
+          { from: 'd', to: 'c', flow: 7 },
+        ],
+        colorMode: 'gradient',
+        alpha: 1,
+        labels: {
+          a: 'Label A',
+          b: 'Label B',
+          c: 'Label C',
+          d: 'Label D',
+        },
+        priority: {
+          b: 1,
+          d: 0,
+        },
+        column: {
+          d: 1,
+        },
+        size: 'max',
       },
-      priority: {
-        b: 1,
-        d: 0,
-      },
-      column: {
-        d: 1,
-      },
-      size: 'max',
-    },
-  ],
+    ],
+  },
   options: {},
   hideDescription: false,
   hideCaptions: false,
@@ -73,14 +75,36 @@ export const Sankey = {
     const paletteKey =
       args.colorPalette === 'default' ? 'categorical' : args.colorPalette;
     const palette = getComputedColorPalette(paletteKey);
-    const datasets = args.datasets.map((ds) => ({
+    const datasetsSource =
+      (args.datasets && args.datasets.length && args.datasets) ||
+      (args.data && args.data.datasets);
+    const datasets = (datasetsSource || []).map((ds) => ({
       ...ds,
       _colorPalette: palette,
     }));
 
+    const nodeLabels =
+      datasets && datasets[0] && Array.isArray(datasets[0].data)
+        ? (() => {
+            const nodes = [];
+            const ds = datasets[0];
+            ds.data.forEach((link) => {
+              if (!link) return;
+              if (link.from !== undefined && !nodes.includes(link.from))
+                nodes.push(link.from);
+              if (link.to !== undefined && !nodes.includes(link.to))
+                nodes.push(link.to);
+            });
+            return nodes.map((n) =>
+              ds.labels && ds.labels[n] ? ds.labels[n] : String(n)
+            );
+          })()
+        : [];
+
     return html`
       <kd-chart
         type="sankey"
+        .labels=${nodeLabels}
         .chartTitle=${args.chartTitle}
         .description=${args.description}
         .datasets=${datasets}
