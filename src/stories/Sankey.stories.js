@@ -1,7 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
 import argTypes from '../common/config/chartArgTypes';
-import { getComputedColorPalette } from '../common/config/colorPalettes';
 
 /**
  * Sankey chart type is available through the integration of the
@@ -13,17 +12,10 @@ export default {
   title: 'Third Party Charts/Sankey',
   component: 'kd-chart',
   decorators: [
-    (story) => html` <div style="max-width: 800px;">${story()}</div> `,
+    (story) => html`<div style="max-width: 800px;">${story()}</div>`,
   ],
-  argTypes: {
-    ...argTypes,
-    parameters: {
-      design: {
-        type: 'figma',
-        url: '',
-      },
-    },
-  },
+  argTypes,
+  parameters: { design: { type: 'figma', url: '' } },
 };
 
 const args = {
@@ -32,7 +24,7 @@ const args = {
   data: {
     datasets: [
       {
-        label: 'Values',
+        label: 'Flow',
         data: [
           { from: 'a', to: 'b', flow: 10 },
           { from: 'a', to: 'c', flow: 5 },
@@ -41,19 +33,9 @@ const args = {
         ],
         colorMode: 'gradient',
         alpha: 1,
-        labels: {
-          a: 'Label A',
-          b: 'Label B',
-          c: 'Label C',
-          d: 'Label D',
-        },
-        priority: {
-          b: 1,
-          d: 0,
-        },
-        column: {
-          d: 1,
-        },
+        labels: { a: 'Label A', b: 'Label B', c: 'Label C', d: 'Label D' },
+        priority: { b: 1, d: 0 },
+        column: { d: 1 },
         size: 'max',
       },
     ],
@@ -71,58 +53,56 @@ const args = {
 
 export const Sankey = {
   args,
-  render: (args) => {
-    const paletteKey =
-      args.colorPalette === 'default' ? 'categorical' : args.colorPalette;
-    const palette = getComputedColorPalette(paletteKey);
+  render: (a) => {
     const datasetsSource =
-      (args.datasets && args.datasets.length && args.datasets) ||
-      (args.data && args.data.datasets);
-    const datasets = (datasetsSource || []).map((ds) => ({
-      ...ds,
-      _colorPalette: palette,
-    }));
+      (a.datasets && a.datasets.length && a.datasets) || a.data?.datasets;
 
-    const nodeLabels =
-      datasets && datasets[0] && Array.isArray(datasets[0].data)
-        ? (() => {
-            const nodes = [];
-            const ds = datasets[0];
-            ds.data.forEach((link) => {
-              if (!link) return;
-              if (link.from !== undefined && !nodes.includes(link.from))
-                nodes.push(link.from);
-              if (link.to !== undefined && !nodes.includes(link.to))
-                nodes.push(link.to);
-            });
-            return nodes.map((n) =>
-              ds.labels && ds.labels[n] ? ds.labels[n] : String(n)
-            );
-          })()
-        : [];
+    const datasets = (datasetsSource || []).map((ds) => ({ ...ds }));
+
+    const nodeLabels = (() => {
+      if (!datasets?.[0]?.data?.length) return [];
+      const ds = datasets[0];
+      const nodes = [];
+      ds.data.forEach((link) => {
+        if (!link) return;
+        const from = link.from ?? link.source;
+        const to = link.to ?? link.target;
+        if (from !== undefined && !nodes.includes(from)) nodes.push(from);
+        if (to !== undefined && !nodes.includes(to)) nodes.push(to);
+      });
+      return nodes.map((n) => (ds.labels?.[n] ? ds.labels[n] : String(n)));
+    })();
 
     return html`
       <kd-chart
         type="sankey"
+        .chartTitle=${a.chartTitle}
+        .description=${a.description}
         .labels=${nodeLabels}
-        .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .datasets=${datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
+        ?hideDescription=${a.hideDescription}
+        ?hideCaptions=${a.hideCaptions}
+        ?hideHeader=${a.hideHeader}
+        ?hideControls=${a.hideControls}
+        ?noBorder=${a.noBorder}
         .options=${{
-          colorPalette: args.colorPalette,
-          ...args.options,
+          colorPalette: a.colorPalette,
+          ...a.options,
           plugins: {
             legend: { display: false },
             tooltip: { enabled: true },
+            ...(a.options?.plugins || {}),
+          },
+          sankey: {
+            tableHeaders: {
+              source: 'Source',
+              target: 'Target',
+              value: 'Weight',
+            },
           },
         }}
-        .width=${args.width}
-        .height=${args.height}
+        .width=${a.width}
+        .height=${a.height}
       ></kd-chart>
     `;
   },

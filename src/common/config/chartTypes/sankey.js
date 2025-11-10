@@ -1,32 +1,31 @@
-import { getComputedColorPalette, getColorPalette } from '../colorPalettes';
+import { getComputedColorPalette } from '../colorPalettes';
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 export const type = 'sankey';
 
-export const options = (ctx) => {
-  console.log('Sankey.options ctx labels/datasets:', {
-    labels: ctx?.labels,
-    datasets: ctx?.datasets,
-  });
-
+export const options = () => {
   const BorderColor = getTokenThemeVal('--kd-color-background-page-default');
-
   return {
-    plugins: {
-      legend: {
-        display: true,
-      },
-    },
+    plugins: { legend: { display: true } },
     borderColor: BorderColor,
   };
 };
 
-export const datasetOptions = (ctx) => {
-  const unsafeKey = ctx && ctx.options && ctx.options.colorPalette;
-  const paletteKey =
-    unsafeKey && getColorPalette(unsafeKey) ? unsafeKey : 'categorical';
+const getFrom = (d) => d?.from ?? d?.source;
+const getTo = (d) => d?.to ?? d?.target;
 
-  const palette = getComputedColorPalette(paletteKey);
+export const datasetOptions = (ctx) => {
+  const rawKey = ctx?.options?.colorPalette || 'categorical';
+  const key = rawKey === 'default' ? 'categorical' : rawKey;
+
+  let palette =
+    getComputedColorPalette(key) ||
+    getComputedColorPalette('categorical') ||
+    [];
+  // absolute last resort
+  if (!Array.isArray(palette) || palette.length === 0) {
+    palette = ['#6b7280', '#4b5563', '#374151', '#9ca3af']; // neutral fallback
+  }
 
   const buildNodeColorMap = (dataset) => {
     if (dataset._nodeColorMap) return dataset._nodeColorMap;
@@ -34,8 +33,10 @@ export const datasetOptions = (ctx) => {
     const nodes = [];
     (dataset.data || []).forEach((d) => {
       if (!d) return;
-      if (d.from !== undefined && !nodes.includes(d.from)) nodes.push(d.from);
-      if (d.to !== undefined && !nodes.includes(d.to)) nodes.push(d.to);
+      const f = getFrom(d);
+      const t = getTo(d);
+      if (f !== undefined && !nodes.includes(f)) nodes.push(f);
+      if (t !== undefined && !nodes.includes(t)) nodes.push(t);
     });
 
     const map = {};
@@ -50,39 +51,23 @@ export const datasetOptions = (ctx) => {
   const getNodeColor = (dataset, key) => {
     if (!dataset) return palette[0];
     const map = buildNodeColorMap(dataset);
-
     return key !== undefined && map[key] ? map[key] : palette[0];
   };
 
+  const colorForIndex = (context, which /* 'from' | 'to' */) => {
+    const ds = context?.dataset;
+    const idx = typeof context?.dataIndex === 'number' ? context.dataIndex : 0;
+    const link = ds?.data?.[idx];
+    if (!link) return palette[0];
+    const k = which === 'from' ? getFrom(link) : getTo(link);
+    return getNodeColor(ds, k);
+  };
+
   return {
-    colorFrom: function (context) {
-      const ds = context.dataset;
-      const dataIndex =
-        typeof context.dataIndex === 'number' ? context.dataIndex : 0;
-      const key = ds?.data?.[dataIndex]?.from;
-      return getNodeColor(ds, key);
-    },
-    colorTo: function (context) {
-      const ds = context.dataset;
-      const dataIndex =
-        typeof context.dataIndex === 'number' ? context.dataIndex : 0;
-      const key = ds?.data?.[dataIndex]?.to;
-      return getNodeColor(ds, key);
-    },
-    hoverColorFrom: function (context) {
-      const ds = context.dataset;
-      const dataIndex =
-        typeof context.dataIndex === 'number' ? context.dataIndex : 0;
-      const key = ds?.data?.[dataIndex]?.from;
-      return getNodeColor(ds, key);
-    },
-    hoverColorTo: function (context) {
-      const ds = context.dataset;
-      const dataIndex =
-        typeof context.dataIndex === 'number' ? context.dataIndex : 0;
-      const key = ds?.data?.[dataIndex]?.to;
-      return getNodeColor(ds, key);
-    },
+    colorFrom: (ctx2) => colorForIndex(ctx2, 'from'),
+    colorTo: (ctx2) => colorForIndex(ctx2, 'to'),
+    hoverColorFrom: (ctx2) => colorForIndex(ctx2, 'from'),
+    hoverColorTo: (ctx2) => colorForIndex(ctx2, 'to'),
     colorMode: 'gradient',
     alpha: 1,
   };

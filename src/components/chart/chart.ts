@@ -278,6 +278,22 @@ export class KDChart extends LitElement {
       widget: this._widget,
     };
 
+    const sKey = (link: any, which: 'from' | 'to') =>
+      which === 'from' ? link?.from ?? link?.source : link?.to ?? link?.target;
+    const sValue = (link: any) => link?.flow ?? link?.value ?? '';
+    const sLabel = (ds: any, key: any) =>
+      ds?.labels && ds.labels[key] ? ds.labels[key] : key ?? '';
+
+    const sankeyHeaders = (() => {
+      const ds = this.datasets?.[0];
+      const h = (this.options as any)?.sankey?.tableHeaders || {};
+      return {
+        source: h.source ?? 'Source',
+        target: h.target ?? 'Target',
+        value: h.value ?? ds?.label ?? 'Value',
+      };
+    })();
+
     return html`
       <div
         class=${classMap(Classes)}
@@ -394,8 +410,9 @@ export class KDChart extends LitElement {
         <figure class="${this.tableView ? 'hidden' : ''}">
           <div
             class="canvas-container"
-            style="${this.width ? `width: ${this.width}px;` : ''}
-            ${this.height ? `height: ${this.height}px;` : ''}"
+            style="${this.width ? `width: ${this.width}px;` : ''} ${this.height
+              ? `height: ${this.height}px;`
+              : ''}"
           >
             <canvas role="img" aria-labelledby="titleDesc"></canvas>
           </div>
@@ -484,13 +501,9 @@ export class KDChart extends LitElement {
                           <tr>
                             ${this.type === 'sankey'
                               ? html`
-                                  <th>From</th>
-                                  <th>To</th>
-                                  <th>
-                                    ${this.datasets && this.datasets[0]
-                                      ? this.datasets[0].label
-                                      : 'Value'}
-                                  </th>
+                                  <th>${sankeyHeaders.source}</th>
+                                  <th>${sankeyHeaders.target}</th>
+                                  <th>${sankeyHeaders.value}</th>
                                 `
                               : this.labels?.length || this.type === 'treemap'
                               ? html`<th>${this.getTableAxisLabel()}</th>`
@@ -507,24 +520,18 @@ export class KDChart extends LitElement {
                             ? (() => {
                                 const ds = this.datasets && this.datasets[0];
                                 if (!ds || !Array.isArray(ds.data)) return [];
-                                return ds.data.map(
-                                  (link: any) =>
-                                    html`
-                                      <tr>
-                                        <td>
-                                          ${ds.labels && ds.labels[link.from]
-                                            ? ds.labels[link.from]
-                                            : link.from ?? ''}
-                                        </td>
-                                        <td>
-                                          ${ds.labels && ds.labels[link.to]
-                                            ? ds.labels[link.to]
-                                            : link.to ?? ''}
-                                        </td>
-                                        <td>${link.flow ?? ''}</td>
-                                      </tr>
-                                    `
-                                );
+                                return ds.data.map((link: any) => {
+                                  const fromKey = sKey(link, 'from');
+                                  const toKey = sKey(link, 'to');
+                                  const val = sValue(link);
+                                  return html`
+                                    <tr>
+                                      <td>${sLabel(ds, fromKey)}</td>
+                                      <td>${sLabel(ds, toKey)}</td>
+                                      <td>${val}</td>
+                                    </tr>
+                                  `;
+                                });
                               })()
                             : this.type === 'treemap'
                             ? Array.isArray(this.datasets[0].tree)
@@ -661,9 +668,7 @@ export class KDChart extends LitElement {
                                                       : dataPoint[key];
                                                   return html`
                                                     <div>
-                                                      <strong>
-                                                        ${Label}:
-                                                      </strong>
+                                                      <strong>${Label}:</strong>
                                                       ${DisplayData}
                                                     </div>
                                                   `;
@@ -718,7 +723,7 @@ export class KDChart extends LitElement {
 
   override firstUpdated() {
     const el = this.shadowRoot?.querySelector('.canvas-container');
-    this._resizeObserver.observe(el);
+    if (el) this._resizeObserver.observe(el);
   }
 
   private generateScrollableLegend(): void {
@@ -761,38 +766,32 @@ export class KDChart extends LitElement {
         this.chart.data.labels = this.labels;
         this.chart.options = this.mergedOptions;
 
-        this.chart.data.datasets.forEach((dataset: any, index: number) => {
-          const NewDataset = this.mergedDatasets.find(
-            (newDataset: any) => newDataset.label === dataset.label
+        const nextByLabel = new Map(
+          (this.mergedDatasets as any[]).map((d: any) => [d.label, d])
+        );
+
+        this.chart.data.datasets = this.chart.data.datasets.filter((d: any) =>
+          nextByLabel.has(d.label)
+        );
+
+        (this.mergedDatasets as any[]).forEach((next: any) => {
+          const existing = this.chart.data.datasets.find(
+            (d: any) => d.label === next.label
           );
-
-          if (!NewDataset) {
-            this.chart.data.datasets.splice(index, 1);
-          }
-        });
-
-        this.mergedDatasets.forEach((dataset: any) => {
-          const prevDataset = this.chart.data.datasets.find(
-            (prevDataset: any) => prevDataset.label === dataset.label
-          );
-
-          if (!prevDataset) {
-            this.chart.data.datasets.push(dataset);
+          if (!existing) {
+            this.chart.data.datasets.push(next);
           } else {
-            Object.keys(dataset).forEach((key) => {
-              prevDataset[key] = dataset[key];
+            Object.keys(next).forEach((k) => {
+              (existing as any)[k] = (next as any)[k];
             });
           }
         });
 
         this.chart.update();
-
         this.generateScrollableLegend();
       });
     }
 
-    // init chart
-    // check to make sure initial datasets + data have been provided
     let hasData = false;
     if (this.datasets && this.datasets.length) {
       for (const dataset of this.datasets) {
@@ -816,7 +815,6 @@ export class KDChart extends LitElement {
       this.checkType();
     }
 
-    // Re-init chart instance when type, plugins, colorPalette, width, height, or useHtmlLegend change.
     if (
       this.chart &&
       (changedProps.has('type') ||
@@ -853,7 +851,6 @@ export class KDChart extends LitElement {
       a11yPlugin,
     ];
 
-    // add htmlLegendPlugin if useHtmlLegend is enabled
     if (this.useHtmlLegend) {
       chartPlugins.push(htmlLegendPlugin);
     }
@@ -877,19 +874,23 @@ export class KDChart extends LitElement {
     const radialTypes = ['pie', 'doughnut', 'radar', 'polarArea', 'meter'];
     const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
 
-    // dynamically import type-specific configs
-    const additionalTypeImports: any[] = [];
-    this.datasets.forEach((dataset) => {
-      if (dataset.type) {
+    const additionalTypeImports: Promise<any>[] = [];
+    (this.datasets || []).forEach((dataset) => {
+      if (dataset?.type) {
         additionalTypeImports.push(
           import(`../../common/config/chartTypes/${dataset.type}.js`)
         );
       }
     });
-    const chartTypeConfigs = await Promise.all([
+
+    const imports = await Promise.all([
       import(`../../common/config/chartTypes/${this.type}.js`),
       ...additionalTypeImports,
     ]);
+
+    const chartTypeConfigs: any[] = imports
+      .map((m) => (m?.default ? m.default : m))
+      .filter(Boolean);
 
     let mergedOptions: any = globalOptions(this);
     mergedOptions.plugins = mergedOptions.plugins || {};
@@ -902,27 +903,46 @@ export class KDChart extends LitElement {
       mergedOptions.plugins.legend.display = true;
     }
 
-    // merge radial vs non-radial defaults
     if (radialTypes.includes(this.type)) {
       mergedOptions = deepmerge(mergedOptions, globalOptionsRadial(this));
     } else if (!ignoredTypes.includes(this.type)) {
       mergedOptions = deepmerge(mergedOptions, globalOptionsNonRadial(this));
     }
 
-    const mergedDatasets: any[] = JSON.parse(JSON.stringify(this.datasets));
+    const mergedDatasets: any[] = JSON.parse(
+      JSON.stringify(this.datasets || [])
+    );
 
     chartTypeConfigs.forEach((cfg: any) => {
-      mergedOptions = deepmerge(mergedOptions, cfg.options(this));
-      mergedDatasets.forEach((ds: any, i: number) => {
-        if ((!ds.type && cfg.type === this.type) || ds.type === cfg.type) {
-          mergedDatasets[i] = deepmerge(ds, cfg.datasetOptions(this, i));
-        }
-      });
+      const optFn =
+        typeof cfg?.options === 'function'
+          ? cfg.options
+          : typeof cfg?.getOptions === 'function'
+          ? cfg.getOptions
+          : null;
+      if (optFn) mergedOptions = deepmerge(mergedOptions, optFn(this));
+
+      const dsFn =
+        typeof cfg?.datasetOptions === 'function'
+          ? cfg.datasetOptions
+          : typeof cfg?.getDatasetOptions === 'function'
+          ? cfg.getDatasetOptions
+          : null;
+
+      const cfgType = cfg?.type ?? this.type;
+
+      if (dsFn) {
+        mergedDatasets.forEach((ds: any, i: number) => {
+          const applies =
+            (ds?.type && ds.type === cfgType) ||
+            (!ds?.type && cfgType === this.type);
+
+          if (applies) mergedDatasets[i] = deepmerge(ds, dsFn(this, i));
+        });
+      }
     });
 
-    if (this.options) {
-      mergedOptions = deepmerge(mergedOptions, this.options);
-    }
+    if (this.options) mergedOptions = deepmerge(mergedOptions, this.options);
     this.mergedOptions = mergedOptions;
 
     mergedDatasets.forEach((ds: object, i: number) => {
@@ -1160,15 +1180,16 @@ export class KDChart extends LitElement {
   }
 
   private handleFullscreen() {
-    if (this.shadowRoot?.fullscreenElement) {
+    const el = this.container;
+    if (document.fullscreenElement) {
       document.exitFullscreen();
     } else {
-      this.container.requestFullscreen();
+      el.requestFullscreen();
     }
   }
 
   private handleFullscreenChange() {
-    this.fullscreen = this.shadowRoot?.fullscreenElement !== null;
+    this.fullscreen = document.fullscreenElement === this.container;
   }
 }
 
