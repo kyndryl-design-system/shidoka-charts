@@ -3,6 +3,12 @@ import '../components/chart';
 import argTypes from '../common/config/chartArgTypes';
 import { getComputedColorPalette } from '../common/config/colorPalettes';
 
+/**
+ * Sankey chart type is available through the integration of the
+ * [chartjs-chart-sankey](https://github.com/kurkle/chartjs-chart-sankey) package.
+ * For detailed documentation on the availble, configurable options, refer to the [plugin's documentation](https://github.com/kurkle/chartjs-chart-sankey/blob/main/README.md).
+ */
+
 export default {
   title: 'Third Party Charts/Sankey',
   component: 'kd-chart',
