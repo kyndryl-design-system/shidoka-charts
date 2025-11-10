@@ -753,18 +753,29 @@ export class KDChart extends LitElement {
   }
 
   override updated(changedProps: any) {
-    // Handling for dendrogram colorPalette changes - requires chart rebuild
-    if (
-      this.chart &&
-      this.type === 'dendrogram' &&
-      changedProps.has('options')
-    ) {
-      // Check if colorPalette specifically changed
-      const oldOptions = changedProps.get('options');
-      const newColorPalette = this.options?.colorPalette;
-      const oldColorPalette = oldOptions?.colorPalette;
+    // Handling for dendrogram chart re-initialization when specific properties change
+    if (this.chart && this.type === 'dendrogram') {
+      // Re-init for colorPalette changes
+      if (changedProps.has('options')) {
+        const oldOptions = changedProps.get('options');
+        const newColorPalette = this.options?.colorPalette;
+        const oldColorPalette = oldOptions?.colorPalette;
 
-      if (newColorPalette !== oldColorPalette) {
+        if (newColorPalette !== oldColorPalette) {
+          this.mergeOptions().then(() => {
+            this.initChart();
+          });
+          return; // Exit early to avoid duplicate processing
+        }
+      }
+
+      if (
+        changedProps.has('hideDescription') ||
+        changedProps.has('hideCaptions') ||
+        changedProps.has('hideHeader') ||
+        changedProps.has('hideControls') ||
+        changedProps.has('noBorder')
+      ) {
         this.mergeOptions().then(() => {
           this.initChart();
         });
