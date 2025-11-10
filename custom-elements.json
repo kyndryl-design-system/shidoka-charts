@@ -106,7 +106,7 @@
             {
               "name": "fn",
               "type": {
-                "text": "Function"
+                "text": "any"
               }
             },
             {
@@ -122,7 +122,7 @@
             {
               "name": "string",
               "type": {
-                "text": "String"
+                "text": "string"
               }
             }
           ]
