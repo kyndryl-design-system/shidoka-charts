@@ -1,28 +1,27 @@
 import { html } from 'lit';
-import '../components/chart/chart.js';
+import '../components/chart';
 import argTypes from '../common/config/chartArgTypes';
 import treeDataJson from './sampleData/graphTree.json';
 
 /**
- * Dendrogram chart type is available through the integration of the
+ * Directed Tree chart type is available through the integration of the
  * [@sgratzl/chartjs-chart-graph
- * ](https://www.sgratzl.com/chartjs-chart-graph/examples/dendrogram.html) package.
+ * ](https://www.sgratzl.com/chartjs-chart-graph/examples/directed.html) package.
  *
- * For detailed documentation on the availble, configurable options, refer to the [plugin's documentation](https://www.sgratzl.com/chartjs-chart-graph/api/classes/DendogramController.html).
+ * For detailed documentation on the availble, configurable options, refer to the [plugin's documentation](https://www.sgratzl.com/chartjs-chart-graph/api/classes/TreeChart.html).
  */
 
 export default {
-  title: 'Third Party Charts/Dendrogram',
+  title: 'Third Party Charts/DirectedTree',
   component: 'kd-chart',
-  argTypes: {
-    ...argTypes,
-  },
+  ...argTypes,
 };
 
 const args = {
   colorPalette: 'categorical',
-  chartTitle: 'Dendrogram Chart',
-  description: 'Hierarchical tree visualization using Chart.js Graph plugin.',
+  chartTitle: 'Directed Tree Chart',
+  description:
+    'Hierarchical directed tree structure using chartjs-chart-graph.',
   hideDescription: false,
   hideCaptions: false,
   hideHeader: false,
@@ -34,13 +33,15 @@ const args = {
     {
       label: 'DataSet',
       data: treeDataJson,
+
+      directed: true,
     },
   ],
   options: {
-    layout: { padding: 50 },
+    layout: { padding: 20 },
     tree: {
-      orientation: 'horizontal',
-      mode: 'dendrogram',
+      orientation: 'horizontal', // Top-down tree layout like the example
+      mode: 'tree',
     },
     plugins: {
       legend: { display: true },
@@ -63,31 +64,19 @@ export const Default = {
       .width=${args.width}
       .height=${args.height}
       .datasets=${args.datasets}
-      .options=${{
-        colorPalette: args.colorPalette,
-        ...args.options,
-      }}
+      .options=${{ colorPalette: args.colorPalette, ...args.options }}
     ></kd-chart>
   `,
 };
 
 export const Vertical = {
-  args: {
-    ...args,
-    options: {
-      ...args.options,
-      tree: {
-        ...args.options.tree,
-        orientation: 'vertical',
-      },
-    },
-  },
+  args,
   render: (args) => html`
     <kd-chart
       type="tree"
       .chartTitle=${args.chartTitle}
-      .description=${args.description}
-      .hideDescription=${args.hideDescription}
+      .description="${args.description}.hideDescription"
+      =${args.hideDescription}
       .hideCaptions=${args.hideCaptions}
       .hideHeader=${args.hideHeader}
       .hideControls=${args.hideControls}
@@ -98,22 +87,14 @@ export const Vertical = {
       .options=${{
         colorPalette: args.colorPalette,
         ...args.options,
+        tree: { ...args.options.tree, orientation: 'vertical' },
       }}
     ></kd-chart>
   `,
 };
 
 export const Radial = {
-  args: {
-    ...args,
-    options: {
-      ...args.options,
-      tree: {
-        ...args.options.tree,
-        orientation: 'radial',
-      },
-    },
-  },
+  args,
   render: (args) => html`
     <kd-chart
       type="tree"
@@ -130,6 +111,7 @@ export const Radial = {
       .options=${{
         colorPalette: args.colorPalette,
         ...args.options,
+        tree: { ...args.options.tree, orientation: 'radial' },
       }}
     ></kd-chart>
   `,

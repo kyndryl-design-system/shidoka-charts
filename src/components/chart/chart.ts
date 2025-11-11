@@ -20,7 +20,11 @@ import {
   ViolinController,
   Violin,
 } from '@sgratzl/chartjs-chart-boxplot';
-import { DendrogramController, EdgeLine } from 'chartjs-chart-graph';
+import {
+  DendrogramController,
+  TreeController,
+  EdgeLine,
+} from 'chartjs-chart-graph';
 import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
@@ -30,7 +34,11 @@ import { htmlLegendPlugin } from '../../common/plugins/htmlLegendPlugin';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import datalabelsPlugin from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import { convertChartDataToCSV, debounce } from '../../common/helpers/helpers';
+import {
+  convertChartDataToCSV,
+  debounce,
+  convertTreeDataToCSV,
+} from '../../common/helpers/helpers';
 import { renderBoxplotViolinTable } from '../../common/helpers/boxplotViolinTableRenderer';
 import ChartScss from './chart.scss?inline';
 import globalOptions from '../../common/config/globalOptions';
@@ -43,6 +51,7 @@ import maximizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16
 import minimizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/shrink.svg';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
+import { renderGraphTreeTable } from '../../common/helpers/graphTreeTableRenderer';
 
 Chart.register(
   ChoroplethController,
@@ -60,6 +69,7 @@ Chart.register(
   ViolinController,
   Violin,
   DendrogramController,
+  TreeController,
   EdgeLine,
   annotationPlugin,
   datalabelsPlugin
@@ -479,43 +489,8 @@ export class KDChart extends LitElement {
                         this.datasets,
                         this.getTableAxisLabel()
                       )
-                    : this.type === 'dendrogram'
-                    ? html`
-                        <thead>
-                          <tr>
-                            <th>Node</th>
-                            <th>Depth</th>
-                            <th>Parent</th>
-                            <th>Children Count</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          ${(
-                            this.mergedDatasets?.[0]?.data ||
-                            this.datasets[0]?.data ||
-                            []
-                          )?.map(
-                            (node: any) => html`
-                              <tr>
-                                <td>
-                                  ${node.data?.name || node.name || 'Unknown'}
-                                </td>
-                                <td>
-                                  ${node.depth !== undefined
-                                    ? node.depth
-                                    : 'N/A'}
-                                </td>
-                                <td>
-                                  ${node.parent?.data?.name ||
-                                  node.parent?.name ||
-                                  (node.depth === 0 ? 'Root' : 'N/A')}
-                                </td>
-                                <td>${node.children?.length || 0}</td>
-                              </tr>
-                            `
-                          )}
-                        </tbody>
-                      `
+                    : this.type === 'tree'
+                    ? renderGraphTreeTable(this.datasets)
                     : html`
                         <thead>
                           <tr>
@@ -753,36 +728,6 @@ export class KDChart extends LitElement {
   }
 
   override updated(changedProps: any) {
-    // Handling for dendrogram chart re-initialization when specific properties change
-    if (this.chart && this.type === 'dendrogram') {
-      // Re-init for colorPalette changes
-      if (changedProps.has('options')) {
-        const oldOptions = changedProps.get('options');
-        const newColorPalette = this.options?.colorPalette;
-        const oldColorPalette = oldOptions?.colorPalette;
-
-        if (newColorPalette !== oldColorPalette) {
-          this.mergeOptions().then(() => {
-            this.initChart();
-          });
-          return; // Exit early to avoid duplicate processing
-        }
-      }
-
-      if (
-        changedProps.has('hideDescription') ||
-        changedProps.has('hideCaptions') ||
-        changedProps.has('hideHeader') ||
-        changedProps.has('hideControls') ||
-        changedProps.has('noBorder')
-      ) {
-        this.mergeOptions().then(() => {
-          this.initChart();
-        });
-        return; // Exit early to avoid duplicate processing
-      }
-    }
-
     if (
       this.chart &&
       (changedProps.has('labels') ||
@@ -907,7 +852,13 @@ export class KDChart extends LitElement {
    */
   private async mergeOptions() {
     const radialTypes = ['pie', 'doughnut', 'radar', 'polarArea', 'meter'];
-    const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap', 'dendrogram'];
+    const ignoredTypes = [
+      'choropleth',
+      'treemap',
+      'bubbleMap',
+      'dendrogram',
+      'tree',
+    ];
 
     // dynamically import type-specific configs
     const additionalTypeImports: any[] = [];
@@ -950,23 +901,6 @@ export class KDChart extends LitElement {
           mergedDatasets[i] = deepmerge(ds, cfg.datasetOptions(this, i));
         }
       });
-
-      // Handle preprocessing for special chart types like dendrogram
-      if (cfg.preprocess && cfg.type === this.type) {
-        try {
-          const preprocessedDatasets = cfg.preprocess(mergedDatasets);
-          preprocessedDatasets.forEach((processedDs: any, idx: number) => {
-            mergedDatasets[idx] = { ...mergedDatasets[idx], ...processedDs };
-          });
-        } catch (error) {
-          console.error(
-            'Error preprocessing datasets for',
-            cfg.type,
-            ':',
-            error
-          );
-        }
-      }
     });
 
     if (this.options) {
@@ -977,41 +911,6 @@ export class KDChart extends LitElement {
     mergedDatasets.forEach((ds: object, i: number) => {
       const customDeep = deepmergeCustom({ mergeArrays: false });
       mergedDatasets[i] = customDeep(ds, this.datasets[i]);
-
-      // Handling for dendrogram charts to ensure proper data structure
-      if (this.type === 'dendrogram' && mergedDatasets[i].tree) {
-        const ensureTreeNodeProperties = (node: any, index = 0) => {
-          if (!node || typeof node !== 'object') return node;
-
-          // Ensure each node has an index property to prevent the chartjs-chart-graph error
-          if (typeof node.index === 'undefined') {
-            node.index = index;
-          }
-
-          // Ensure id exists
-          if (!node.id) {
-            node.id = node.name || `node-${index}`;
-          }
-
-          // Process children if they exist
-          if (node.children && Array.isArray(node.children)) {
-            node.children.forEach((child: any, childIndex: number) => {
-              ensureTreeNodeProperties(child, childIndex);
-            });
-          }
-
-          return node;
-        };
-
-        // Only process if tree exists and isn't already a d3.hierarchy object
-        if (mergedDatasets[i].tree && !mergedDatasets[i].tree.data) {
-          try {
-            ensureTreeNodeProperties(mergedDatasets[i].tree);
-          } catch (error) {
-            console.error('Error ensuring tree node properties:', error);
-          }
-        }
-      }
     });
     this.mergedDatasets = mergedDatasets;
   }
@@ -1220,30 +1119,9 @@ export class KDChart extends LitElement {
     e.preventDefault();
     let csv = '';
 
-    // Handling for dendrogram charts
-    if (this.type === 'dendrogram') {
-      console.log('Handling dendrogram chart export');
-      // CSV header for dendrogram data
-      // csv = 'Node,Depth,Parent,Children Count\n';
-      // const dendrogramData =
-      //   this.mergedDatasets?.[0]?.data || this.datasets[0]?.data || [];
-
-      // // Convert each node to CSV row
-      // dendrogramData.forEach((node: any) => {
-      //   const nodeName = (node.data?.name || node.name || 'Unknown').replace(
-      //     /,/g,
-      //     '\\,'
-      //   );
-      //   const depth = node.depth !== undefined ? node.depth : 'N/A';
-      //   const parentName = (
-      //     node.parent?.data?.name ||
-      //     node.parent?.name ||
-      //     (node.depth === 0 ? 'Root' : 'N/A')
-      //   ).replace(/,/g, '\\,');
-      //   const childrenCount = node.children?.length || 0;
-
-      //   csv += `"${nodeName}",${depth},"${parentName}",${childrenCount}\n`;
-      // });
+    // Special handling for tree and dendrogram charts
+    if (this.type === 'tree' || this.type === 'dendrogram') {
+      csv += convertTreeDataToCSV(this.datasets);
     } else {
       // Standard CSV handling for other chart types
       for (let i = 0; i < this.chart.data.datasets.length; i++) {

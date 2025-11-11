@@ -88,3 +88,43 @@ export function getTextColor(bgHexColor: string) {
 
   return yiq >= 128 ? TextColor : InverseTextColor;
 }
+
+export function convertTreeDataToCSV(datasets: any[]) {
+  if (datasets[0]?.data && Array.isArray(datasets[0].data)) {
+    const data = datasets[0].data;
+    let csv = 'Parent Name,Depth,Children Count\n';
+
+    data.forEach((item: any, index: number) => {
+      const depth = calculateDepth(index, data);
+      const parentName =
+        item.parent !== null && item.parent !== undefined
+          ? data[item.parent]?.name || `Index ${item.parent}`
+          : 'Root';
+      const childrenCount = data.filter(
+        (child: any) => child.parent === index
+      ).length;
+
+      csv += `"${parentName}",${depth},${childrenCount}\n`;
+    });
+
+    return csv;
+  }
+
+  return '';
+}
+
+// Helper function to calculate depth
+function calculateDepth(
+  index: number,
+  data: any[],
+  visited = new Set()
+): number {
+  if (visited.has(index)) return 0; // Prevent circular references
+  visited.add(index);
+
+  const item = data[index];
+  if (!item || item.parent === null || item.parent === undefined) {
+    return 0;
+  }
+  return 1 + calculateDepth(item.parent, data, visited);
+}
