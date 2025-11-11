@@ -33,14 +33,13 @@ const args = {
     {
       label: 'DataSet',
       data: treeDataJson,
-
       directed: true,
     },
   ],
   options: {
     layout: { padding: 20 },
     tree: {
-      orientation: 'horizontal', // Top-down tree layout like the example
+      orientation: 'horizontal',
       mode: 'tree',
     },
     plugins: {
@@ -75,8 +74,8 @@ export const Vertical = {
     <kd-chart
       type="tree"
       .chartTitle=${args.chartTitle}
-      .description="${args.description}.hideDescription"
-      =${args.hideDescription}
+      .description=${args.description}
+      .hideDescription=${args.hideDescription}
       .hideCaptions=${args.hideCaptions}
       .hideHeader=${args.hideHeader}
       .hideControls=${args.hideControls}
