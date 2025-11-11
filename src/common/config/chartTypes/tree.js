@@ -28,7 +28,7 @@ export const options = (ctx) => {
 
   return {
     plugins: {
-      legend: { display: true },
+      legend: { display: false },
       tooltip: {
         enabled: true,
         callbacks: {
