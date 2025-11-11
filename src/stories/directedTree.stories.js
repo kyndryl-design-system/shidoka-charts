@@ -21,7 +21,7 @@ export default {
 
 const args = {
   colorPalette: 'categorical',
-  chartTitle: 'Directed Tree Chart',
+  chartTitle: 'Directed Tree Chart Horizontal Orientation',
   description:
     'Hierarchical directed tree structure using chartjs-chart-graph.',
   hideDescription: false,
@@ -70,7 +70,7 @@ export const Default = {
 };
 
 export const Vertical = {
-  args,
+  args: { ...args, chartTitle: 'Directed Tree Chart Vertical Orientation' },
   render: (args) => html`
     <kd-chart
       type="tree"
@@ -94,7 +94,7 @@ export const Vertical = {
 };
 
 export const Radial = {
-  args,
+  args: { ...args, chartTitle: 'Directed Tree Chart Radial Orientation' },
   render: (args) => html`
     <kd-chart
       type="tree"

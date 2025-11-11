@@ -21,7 +21,7 @@ export default {
 
 const args = {
   colorPalette: 'categorical',
-  chartTitle: 'Tree Chart',
+  chartTitle: 'Tree Chart Horizontal Orientation',
   description: 'Hierarchical tree structure using chartjs-chart-graph.',
   hideDescription: false,
   hideCaptions: false,
@@ -42,7 +42,7 @@ const args = {
   options: {
     layout: { padding: 20 },
     tree: {
-      orientation: 'horizontal', // Top-down tree layout like the example
+      orientation: 'horizontal',
     },
     plugins: {
       legend: { display: true },
@@ -76,6 +76,7 @@ export const Default = {
 export const Vertical = {
   args: {
     ...args,
+    chartTitle: 'Tree Chart Vertical Orientation',
     options: {
       ...args.options,
       tree: {
@@ -108,6 +109,7 @@ export const Vertical = {
 export const Radial = {
   args: {
     ...args,
+    chartTitle: 'Tree Chart Radial Orientation',
     options: {
       ...args.options,
       tree: {
@@ -146,7 +148,7 @@ export const Radial = {
  */
 
 export const RadialWithLabels = {
-  args,
+  args: { ...args, chartTitle: 'Tree Chart Radial Orientation with Labels' },
   render: (args) => html`
     <kd-chart
       type="tree"

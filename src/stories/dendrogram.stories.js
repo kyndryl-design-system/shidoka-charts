@@ -21,7 +21,7 @@ export default {
 
 const args = {
   colorPalette: 'categorical',
-  chartTitle: 'Dendrogram Chart',
+  chartTitle: 'Dendrogram Chart Horizontal Orientation',
   description: 'Hierarchical tree visualization using Chart.js Graph plugin.',
   hideDescription: false,
   hideCaptions: false,
@@ -73,6 +73,7 @@ export const Default = {
 export const Vertical = {
   args: {
     ...args,
+    chartTitle: 'Dendrogram Chart Vertical Orientation',
     options: {
       ...args.options,
       tree: {
@@ -105,6 +106,7 @@ export const Vertical = {
 export const Radial = {
   args: {
     ...args,
+    chartTitle: 'Dendrogram Chart Radial Orientation',
     options: {
       ...args.options,
       tree: {
