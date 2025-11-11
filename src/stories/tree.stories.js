@@ -14,7 +14,9 @@ import treeDataJson from './sampleData/graphTree.json';
 export default {
   title: 'Third Party Charts/Tree',
   component: 'kd-chart',
-  ...argTypes,
+  argTypes: {
+    ...argTypes,
+  },
 };
 
 const args = {
@@ -41,7 +43,6 @@ const args = {
     layout: { padding: 20 },
     tree: {
       orientation: 'horizontal', // Top-down tree layout like the example
-      mode: 'tree',
     },
     plugins: {
       legend: { display: true },
@@ -64,13 +65,25 @@ export const Default = {
       .width=${args.width}
       .height=${args.height}
       .datasets=${args.datasets}
-      .options=${args.options}
+      .options=${{
+        ...args.options,
+        colorPalette: args.colorPalette,
+      }}
     ></kd-chart>
   `,
 };
 
 export const Vertical = {
-  args,
+  args: {
+    ...args,
+    options: {
+      ...args.options,
+      tree: {
+        ...args.options.tree,
+        orientation: 'vertical',
+      },
+    },
+  },
   render: (args) => html`
     <kd-chart
       type="tree"
@@ -86,14 +99,23 @@ export const Vertical = {
       .datasets=${args.datasets}
       .options=${{
         ...args.options,
-        tree: { ...args.options.tree, orientation: 'vertical' },
+        colorPalette: args.colorPalette,
       }}
     ></kd-chart>
   `,
 };
 
 export const Radial = {
-  args,
+  args: {
+    ...args,
+    options: {
+      ...args.options,
+      tree: {
+        ...args.options.tree,
+        orientation: 'radial',
+      },
+    },
+  },
   render: (args) => html`
     <kd-chart
       type="tree"
@@ -109,7 +131,7 @@ export const Radial = {
       .datasets=${args.datasets}
       .options=${{
         ...args.options,
-        tree: { ...args.options.tree, orientation: 'radial' },
+        colorPalette: args.colorPalette,
       }}
     ></kd-chart>
   `,

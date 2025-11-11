@@ -14,7 +14,9 @@ import treeDataJson from './sampleData/graphTree.json';
 export default {
   title: 'Third Party Charts/DirectedTree',
   component: 'kd-chart',
-  ...argTypes,
+  argTypes: {
+    ...argTypes,
+  },
 };
 
 const args = {
@@ -40,7 +42,6 @@ const args = {
     layout: { padding: 20 },
     tree: {
       orientation: 'horizontal',
-      mode: 'tree',
     },
     plugins: {
       legend: { display: true },

@@ -40,7 +40,6 @@ const args = {
     layout: { padding: 50 },
     tree: {
       orientation: 'horizontal',
-      mode: 'dendrogram',
     },
     plugins: {
       legend: { display: true },
