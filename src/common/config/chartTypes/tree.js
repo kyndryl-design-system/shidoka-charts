@@ -64,33 +64,6 @@ export const options = (ctx) => {
         const depth = context?.raw?.depth || 0;
         return depth * 300 + dataIndex * 50;
       },
-      scale: {
-        duration: 100,
-        from: 0,
-        to: 1,
-        easing: 'easeOutBack',
-      },
-      opacity: {
-        duration: 400,
-        from: 0,
-        to: 1,
-        easing: 'easeInQuart',
-      },
-      x: {
-        duration: 500,
-        easing: 'easeInOutQuart',
-      },
-      y: {
-        duration: 500,
-        easing: 'easeInOutQuart',
-      },
-
-      borderWidth: {
-        duration: 800,
-        from: 0,
-        to: 2,
-        easing: 'easeOutQuad',
-      },
     },
   };
 };
