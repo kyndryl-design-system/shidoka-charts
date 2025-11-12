@@ -50,7 +50,7 @@ const args = {
   hideCaptions: false,
   hideHeader: false,
   hideControls: false,
-  colorPalette: 'rag03',
+  colorPalette: 'statusDark',
   noBorder: false,
   width: null,
   height: null,

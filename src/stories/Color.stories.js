@@ -138,11 +138,39 @@ export const Divergent02 = {
   },
 };
 
+export const StatusLight = {
+  args,
+  render: (args) => {
+    return html`
+      statusLight
+      <div class="colors">
+        ${getColorPalette('statusLight').map((color) => {
+          return html`<span style="background-color: var(${color})"></span>`;
+        })}
+      </div>
+    `;
+  },
+};
+
+export const StatusDark = {
+  args,
+  render: (args) => {
+    return html`
+      statusDark
+      <div class="colors">
+        ${getColorPalette('statusDark').map((color) => {
+          return html`<span style="background-color: var(${color})"></span>`;
+        })}
+      </div>
+    `;
+  },
+};
+
 export const RAG03 = {
   args,
   render: (args) => {
     return html`
-      rag03
+      rag03 (Deprecated)
       <div class="colors">
         ${getColorPalette('rag03').map((color) => {
           return html`<span style="background-color: var(${color})"></span>`;
@@ -156,7 +184,7 @@ export const RAG08 = {
   args,
   render: (args) => {
     return html`
-      rag08
+      rag08 (Deprecated)
       <div class="colors">
         ${getColorPalette('rag08').map((color) => {
           return html`<span style="background-color: var(${color})"></span>`;
