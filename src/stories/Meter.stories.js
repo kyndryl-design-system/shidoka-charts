@@ -50,7 +50,7 @@ const args = {
   hideCaptions: false,
   hideHeader: false,
   hideControls: false,
-  colorPalette: 'rag03',
+  colorPalette: 'statusDark',
   noBorder: false,
   width: null,
   height: null,
@@ -58,6 +58,46 @@ const args = {
 
 export const Meter = {
   args,
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="meter"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        ?hideDescription=${args.hideDescription}
+        ?hideCaptions=${args.hideCaptions}
+        ?hideHeader=${args.hideHeader}
+        ?hideControls=${args.hideControls}
+        ?noBorder=${args.noBorder}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
+      ></kd-chart>
+    `;
+  },
+  parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/file/9NrpK3rmbOk0lhlFkEPSaO/Data-Viz-Component-Library?node-id=64%3A4703&mode=dev',
+    },
+  },
+};
+
+export const MeterCritical = {
+  args: {
+    ...args,
+    labels: ['LOW', 'MED', 'HIGH', 'CRITICAL'],
+    datasets: [
+      {
+        label: 'Segment Size',
+        data: [30, 30, 30, 30],
+        // Required needleValue to show needle
+        needleValue: 100,
+      },
+    ],
+  },
   render: (args) => {
     return html`
       <kd-chart
