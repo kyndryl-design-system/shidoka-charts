@@ -154,9 +154,21 @@ export class KDChart extends LitElement {
   @property({ type: Boolean })
   accessor hideHeader = false;
 
-  /** Hides the controls. */
+  /** Hides all the controls. */
   @property({ type: Boolean })
   accessor hideControls = false;
+
+  /** Hides the table view control. */
+  @property({ type: Boolean })
+  accessor hideTableControl = false;
+
+  /** Hides the fullscreen control. */
+  @property({ type: Boolean })
+  accessor hideFullscreenControl = false;
+
+  /** Hides the download control. */
+  @property({ type: Boolean })
+  accessor hideDownloadControl = false;
 
   /** Removes the outer border and padding. */
   @property({ type: Boolean })
@@ -250,7 +262,7 @@ export class KDChart extends LitElement {
   @state()
   accessor _widget = false;
 
-  /** ResizeObserver for canvas-container.
+  /** Resize observer for canvas-container.
    * @internal
    */
   _resizeObserver: any = new ResizeObserver(
@@ -259,6 +271,9 @@ export class KDChart extends LitElement {
     })
   );
 
+  /** Theme observer to watch for meta color-scheme changes.
+   * @internal
+   */
   _themeObserver: any = new MutationObserver(() => {
     if (this.chart) {
       this.mergeOptions().then(() => {
@@ -305,7 +320,7 @@ export class KDChart extends LitElement {
                 ${!this.hideControls
                   ? html`
                       <div class="controls">
-                        ${!this.tableDisabled
+                        ${!this.tableDisabled && !this.hideTableControl
                           ? html`
                               <button
                                 class="control-button"
@@ -321,60 +336,66 @@ export class KDChart extends LitElement {
                               </button>
                             `
                           : null}
+                        ${!this.hideFullscreenControl
+                          ? html`
+                              <button
+                                class="control-button"
+                                @click=${() => this.handleFullscreen()}
+                                aria-label=${this.customLabels.toggleFullscreen}
+                                title=${this.customLabels.toggleFullscreen}
+                              >
+                                <span slot="icon">
+                                  ${this.fullscreen
+                                    ? unsafeSVG(minimizeIcon)
+                                    : unsafeSVG(maximizeIcon)}
+                                </span>
+                              </button>
+                            `
+                          : null}
+                        ${!this.hideDownloadControl
+                          ? html`
+                              <div class="download">
+                                <button
+                                  tabindex="0"
+                                  class="control-button"
+                                  aria-label=${this.customLabels.downloadMenu}
+                                  title=${this.customLabels.downloadMenu}
+                                >
+                                  <span slot="icon">
+                                    ${unsafeSVG(downloadIcon)}
+                                  </span>
+                                </button>
 
-                        <button
-                          class="control-button"
-                          @click=${() => this.handleFullscreen()}
-                          aria-label=${this.customLabels.toggleFullscreen}
-                          title=${this.customLabels.toggleFullscreen}
-                        >
-                          <span slot="icon">
-                            ${this.fullscreen
-                              ? unsafeSVG(minimizeIcon)
-                              : unsafeSVG(maximizeIcon)}
-                          </span>
-                        </button>
-
-                        <div class="download">
-                          <button
-                            tabindex="0"
-                            class="control-button"
-                            aria-label=${this.customLabels.downloadMenu}
-                            title=${this.customLabels.downloadMenu}
-                          >
-                            <span slot="icon">
-                              ${unsafeSVG(downloadIcon)}
-                            </span>
-                          </button>
-
-                          <div class="download-menu">
-                            ${!this.tableDisabled
-                              ? html`
+                                <div class="download-menu">
+                                  ${!this.tableDisabled
+                                    ? html`
+                                        <button
+                                          tabindex="0"
+                                          @click=${(e: Event) =>
+                                            this.handleDownloadCsv(e)}
+                                        >
+                                          ${this.customLabels.downloadCsv}
+                                        </button>
+                                      `
+                                    : null}
                                   <button
                                     tabindex="0"
                                     @click=${(e: Event) =>
-                                      this.handleDownloadCsv(e)}
+                                      this.handleDownloadImage(e, false)}
                                   >
-                                    ${this.customLabels.downloadCsv}
+                                    ${this.customLabels.downloadPng}
                                   </button>
-                                `
-                              : null}
-                            <button
-                              tabindex="0"
-                              @click=${(e: Event) =>
-                                this.handleDownloadImage(e, false)}
-                            >
-                              ${this.customLabels.downloadPng}
-                            </button>
-                            <button
-                              tabindex="0"
-                              @click=${(e: Event) =>
-                                this.handleDownloadImage(e, true)}
-                            >
-                              ${this.customLabels.downloadJpg}
-                            </button>
-                          </div>
-                        </div>
+                                  <button
+                                    tabindex="0"
+                                    @click=${(e: Event) =>
+                                      this.handleDownloadImage(e, true)}
+                                  >
+                                    ${this.customLabels.downloadJpg}
+                                  </button>
+                                </div>
+                              </div>
+                            `
+                          : null}
 
                         <slot name="controls"></slot>
                       </div>
