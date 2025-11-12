@@ -166,7 +166,7 @@ export const StatusDark = {
   },
 };
 
-export const RAG03 = {
+export const RAG03Deprecated = {
   args,
   render: (args) => {
     return html`
@@ -180,7 +180,7 @@ export const RAG03 = {
   },
 };
 
-export const RAG08 = {
+export const RAG08Deprecated = {
   args,
   render: (args) => {
     return html`
