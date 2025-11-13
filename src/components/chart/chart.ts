@@ -1202,16 +1202,15 @@ export class KDChart extends LitElement {
   }
 
   private handleFullscreen() {
-    const el = this.container;
-    if (document.fullscreenElement) {
+    if (this.shadowRoot?.fullscreenElement) {
       document.exitFullscreen();
     } else {
-      el.requestFullscreen();
+      this.container.requestFullscreen();
     }
   }
 
   private handleFullscreenChange() {
-    this.fullscreen = document.fullscreenElement === this.container;
+    this.fullscreen = this.shadowRoot?.fullscreenElement !== null;
   }
 }
 

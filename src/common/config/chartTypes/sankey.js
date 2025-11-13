@@ -3,9 +3,11 @@ import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/comm
 
 export const type = 'sankey';
 
+const getSankeyLabelColor = () =>
+  getTokenThemeVal('--kd-color-text-level-primary');
 export const options = (ctx) => {
   const BorderColor = getTokenThemeVal('--kd-color-background-page-default');
-  const LabelColor = getTokenThemeVal('--kd-color-text-variant-inversed');
+  const LabelColor = getSankeyLabelColor();
   const Colors = getComputedColorPalette(
     ctx?.options?.colorPalette || 'categorical'
   );
@@ -34,7 +36,6 @@ export const options = (ctx) => {
       ...(userOptions.plugins || {}),
     },
     sankey: {
-      // default table headers shown in the story
       dataTableHeaderLabels: {
         source: 'Source',
         target: 'Target',
@@ -52,14 +53,12 @@ const getTo = (d) => d?.to ?? d?.target;
 export const datasetOptions = (ctx) => {
   const rawKey = ctx?.options?.colorPalette || 'categorical';
   const key = rawKey === 'default' ? 'categorical' : rawKey;
+  const LabelColor = getSankeyLabelColor();
 
   let palette =
     getComputedColorPalette(key) ||
     getComputedColorPalette('categorical') ||
     [];
-  if (!Array.isArray(palette) || palette.length === 0) {
-    palette = ['#6b7280', '#4b5563', '#374151', '#9ca3af'];
-  }
 
   const buildNodeColorMap = (dataset) => {
     const cachedKey = dataset._nodeColorMapPaletteKey;
@@ -103,6 +102,7 @@ export const datasetOptions = (ctx) => {
   };
 
   return {
+    color: LabelColor, // node label color
     colorFrom: (ctx2) => colorForIndex(ctx2, 'from'),
     colorTo: (ctx2) => colorForIndex(ctx2, 'to'),
     hoverColorFrom: (ctx2) => colorForIndex(ctx2, 'from'),
