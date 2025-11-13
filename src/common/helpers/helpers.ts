@@ -27,24 +27,84 @@ export function createOptionsArray(options: any = {}) {
 }
 
 export function convertChartDataToCSV(args: any) {
-  const data = args.data.data || null;
+  const data = args.data?.data || null;
   if (data == null || !data.length) {
-    return null;
-  }
-
-  const labels = args.labels || null;
-  if (labels == null || !labels.length) {
     return null;
   }
 
   const columnDelimiter = args.columnDelimiter || ',';
   const lineDelimiter = args.lineDelimiter || '\n';
 
+  const first = data[0];
+
+  // handle Sankey-style data: objects with from/source and to/target
+  if (
+    typeof first === 'object' &&
+    !Array.isArray(first) &&
+    (first.from !== undefined || first.source !== undefined)
+  ) {
+    const options = args.options || {};
+    const sankeyHeaders = (options.sankey && options.sankey.tableHeaders) || {
+      source: 'Source',
+      target: 'Target',
+      value: 'Value',
+    };
+
+    const datasetLabels = args.data?.labels || {};
+    const nodeLabelsArray = args.labels || [];
+
+    const csvEscape = (v: any) => {
+      if (v === null || v === undefined) return '';
+      let s = String(v);
+      if (s.indexOf('"') >= 0) s = s.replace(/"/g, '""');
+      if (
+        s.indexOf(columnDelimiter) >= 0 ||
+        s.indexOf('"') >= 0 ||
+        s.indexOf('\n') >= 0
+      ) {
+        return `"${s}"`;
+      }
+      return s;
+    };
+
+    let result = '';
+    result += `${csvEscape(sankeyHeaders.source)}${columnDelimiter}${csvEscape(
+      sankeyHeaders.target
+    )}${columnDelimiter}${csvEscape(sankeyHeaders.value)}${lineDelimiter}`;
+
+    data.forEach((link: any) => {
+      const fromKey = link.from ?? link.source;
+      const toKey = link.to ?? link.target;
+      const val = link.flow ?? link.value ?? '';
+
+      const fromDisplay =
+        (datasetLabels && datasetLabels[fromKey]) ||
+        (typeof fromKey === 'number' && nodeLabelsArray[fromKey]) ||
+        String(fromKey);
+      const toDisplay =
+        (datasetLabels && datasetLabels[toKey]) ||
+        (typeof toKey === 'number' && nodeLabelsArray[toKey]) ||
+        String(toKey);
+
+      result += `${csvEscape(fromDisplay)}${columnDelimiter}${csvEscape(
+        toDisplay
+      )}${columnDelimiter}${csvEscape(val)}${lineDelimiter}`;
+    });
+
+    return result;
+  }
+
+  // fallback: existing tabular dataset handling (labels across top, dataset values in row)
+  const labels = args.labels || null;
+  if (labels == null || !labels.length) {
+    return null;
+  }
+
   let result = '' + columnDelimiter;
   result += labels.join(columnDelimiter);
   result += lineDelimiter;
 
-  result += args.data.label.toString();
+  result += args.data.label != null ? args.data.label.toString() : '';
 
   for (let i = 0; i < data.length; i++) {
     result += columnDelimiter;

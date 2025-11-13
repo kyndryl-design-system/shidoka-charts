@@ -1,6 +1,7 @@
 import { html } from 'lit';
 import '../components/chart';
 import argTypes from '../common/config/chartArgTypes';
+import { normalizeData } from '../common/config/chartTypes/sankey';
 
 /**
  * Sankey chart type is available through the integration of the
@@ -32,7 +33,7 @@ const args = {
           { from: 'd', to: 'c', flow: 7 },
         ],
         colorMode: 'gradient',
-        alpha: 1,
+        alpha: 0.7,
         labels: { a: 'Label A', b: 'Label B', c: 'Label C', d: 'Label D' },
         priority: { b: 1, d: 0 },
         column: { d: 1 },
@@ -45,40 +46,23 @@ const args = {
   hideCaptions: false,
   hideHeader: false,
   hideControls: false,
-  colorPalette: 'default',
   noBorder: false,
   width: null,
   height: null,
+  colorPalette: 'categorical',
 };
 
-export const Sankey = {
+export const Simple = {
   args,
   render: (a) => {
-    const datasetsSource =
-      (a.datasets && a.datasets.length && a.datasets) || a.data?.datasets;
-
-    const datasets = (datasetsSource || []).map((ds) => ({ ...ds }));
-
-    const nodeLabels = (() => {
-      if (!datasets?.[0]?.data?.length) return [];
-      const ds = datasets[0];
-      const nodes = [];
-      ds.data.forEach((link) => {
-        if (!link) return;
-        const from = link.from ?? link.source;
-        const to = link.to ?? link.target;
-        if (from !== undefined && !nodes.includes(from)) nodes.push(from);
-        if (to !== undefined && !nodes.includes(to)) nodes.push(to);
-      });
-      return nodes.map((n) => (ds.labels?.[n] ? ds.labels[n] : String(n)));
-    })();
+    const { datasets, labels } = normalizeData(a);
 
     return html`
       <kd-chart
         type="sankey"
         .chartTitle=${a.chartTitle}
         .description=${a.description}
-        .labels=${nodeLabels}
+        .labels=${labels}
         .datasets=${datasets}
         ?hideDescription=${a.hideDescription}
         ?hideCaptions=${a.hideCaptions}
@@ -88,18 +72,92 @@ export const Sankey = {
         .options=${{
           colorPalette: a.colorPalette,
           ...a.options,
-          plugins: {
-            legend: { display: false },
-            tooltip: { enabled: true },
-            ...(a.options?.plugins || {}),
+        }}
+        .width=${a.width}
+        .height=${a.height}
+      ></kd-chart>
+    `;
+  },
+};
+
+export const Complex = {
+  args: {
+    ...args,
+    data: {
+      datasets: [
+        {
+          label: 'Dataset 1',
+          data: [
+            { from: 'leftA', to: 'mid1', flow: 40 },
+            { from: 'leftA', to: 'mid2', flow: 20 },
+            { from: 'leftB', to: 'mid1', flow: 30 },
+            { from: 'leftB', to: 'mid3', flow: 10 },
+            { from: 'leftC', to: 'mid2', flow: 15 },
+            { from: 'leftC', to: 'mid4', flow: 25 },
+            { from: 'mid1', to: 'right1', flow: 35 },
+            { from: 'mid1', to: 'right2', flow: 35 },
+            { from: 'mid2', to: 'right2', flow: 10 },
+            { from: 'mid2', to: 'right3', flow: 25 },
+            { from: 'mid3', to: 'right3', flow: 10 },
+            { from: 'mid4', to: 'right4', flow: 25 },
+            { from: 'mid2', to: 'right5', flow: 5 },
+          ],
+          labels: {
+            leftA: 'Label A',
+            leftB: 'Label B',
+            leftC: 'Label C',
+            mid1: 'Label',
+            mid2: 'Label',
+            mid3: 'Label',
+            mid4: 'Label',
+            right1: 'Label',
+            right2: 'Label',
+            right3: 'Label',
+            right4: 'Label',
+            right5: 'Label',
+            right6: 'Label',
           },
-          sankey: {
-            tableHeaders: {
-              source: 'Source',
-              target: 'Target',
-              value: 'Weight',
-            },
+          priority: { mid1: 1, leftA: 1 },
+          column: {
+            leftA: 0,
+            leftB: 0,
+            leftC: 0,
+            mid1: 1,
+            mid2: 1,
+            mid3: 1,
+            mid4: 1,
+            right1: 2,
+            right2: 2,
+            right3: 2,
+            right4: 2,
+            right5: 2,
           },
+          alpha: 0.7,
+          size: 'max',
+          colorMode: 'gradient',
+        },
+      ],
+    },
+    colorPalette: 'categorical',
+  },
+  render: (a) => {
+    const { datasets, labels } = normalizeData(a);
+
+    return html`
+      <kd-chart
+        type="sankey"
+        .chartTitle=${a.chartTitle}
+        .description=${a.description}
+        .labels=${labels}
+        .datasets=${datasets}
+        ?hideDescription=${a.hideDescription}
+        ?hideCaptions=${a.hideCaptions}
+        ?hideHeader=${a.hideHeader}
+        ?hideControls=${a.hideControls}
+        ?noBorder=${a.noBorder}
+        .options=${{
+          colorPalette: a.colorPalette,
+          ...a.options,
         }}
         .width=${a.width}
         .height=${a.height}

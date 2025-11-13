@@ -3,10 +3,46 @@ import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/comm
 
 export const type = 'sankey';
 
-export const options = () => {
+export const options = (ctx) => {
   const BorderColor = getTokenThemeVal('--kd-color-background-page-default');
+  const LabelColor = getTokenThemeVal('--kd-color-text-variant-inversed');
+  const Colors = getComputedColorPalette(
+    ctx?.options?.colorPalette || 'categorical'
+  );
+  const SankeyBackground = getTokenThemeVal(
+    '--kd-color-data-viz-level-secondary'
+  );
+  const LegendTicksColor = getTokenThemeVal('--kd-color-border-variants-light');
+
+  const userOptions = ctx?.options || {};
+
   return {
-    plugins: { legend: { display: true } },
+    outlineBorderWidth: 0.5,
+    outlineBorderColor: BorderColor,
+    outlineBackgroundColor: SankeyBackground,
+    backgroundColor: Colors[0],
+    ...userOptions,
+    plugins: {
+      legend: { display: false },
+      tooltip: { enabled: true },
+      datalabels: {
+        font: {
+          size: 12,
+          weight: 'bold',
+        },
+        color: LabelColor,
+      },
+      ...(userOptions.plugins || {}),
+    },
+    sankey: {
+      // default table headers shown in the story
+      tableHeaders: {
+        source: 'Source',
+        target: 'Target',
+        value: 'Weight',
+      },
+      ...(userOptions.sankey || {}),
+    },
     borderColor: BorderColor,
   };
 };
@@ -22,13 +58,14 @@ export const datasetOptions = (ctx) => {
     getComputedColorPalette(key) ||
     getComputedColorPalette('categorical') ||
     [];
-  // absolute last resort
   if (!Array.isArray(palette) || palette.length === 0) {
-    palette = ['#6b7280', '#4b5563', '#374151', '#9ca3af']; // neutral fallback
+    palette = ['#6b7280', '#4b5563', '#374151', '#9ca3af'];
   }
 
   const buildNodeColorMap = (dataset) => {
-    if (dataset._nodeColorMap) return dataset._nodeColorMap;
+    const cachedKey = dataset._nodeColorMapPaletteKey;
+    if (dataset._nodeColorMap && cachedKey === key)
+      return dataset._nodeColorMap;
 
     const nodes = [];
     (dataset.data || []).forEach((d) => {
@@ -45,6 +82,9 @@ export const datasetOptions = (ctx) => {
     });
 
     dataset._nodeColorMap = map;
+    dataset._nodeColorMapPaletteKey = key;
+
+    dataset._colorPalette = palette;
     return map;
   };
 
@@ -69,6 +109,28 @@ export const datasetOptions = (ctx) => {
     hoverColorFrom: (ctx2) => colorForIndex(ctx2, 'from'),
     hoverColorTo: (ctx2) => colorForIndex(ctx2, 'to'),
     colorMode: 'gradient',
-    alpha: 1,
   };
+};
+
+export const normalizeData = (a) => {
+  const datasetsSource =
+    (a.datasets && a.datasets.length && a.datasets) || a.data?.datasets;
+
+  const datasets = (datasetsSource || []).map((ds) => ({ ...ds }));
+
+  const nodeLabels = (() => {
+    if (!datasets?.[0]?.data?.length) return [];
+    const ds = datasets[0];
+    const nodes = [];
+    ds.data.forEach((link) => {
+      if (!link) return;
+      const from = link.from ?? link.source;
+      const to = link.to ?? link.target;
+      if (from !== undefined && !nodes.includes(from)) nodes.push(from);
+      if (to !== undefined && !nodes.includes(to)) nodes.push(to);
+    });
+    return nodes.map((n) => (ds.labels?.[n] ? ds.labels[n] : String(n)));
+  })();
+
+  return { datasets, labels: nodeLabels };
 };

@@ -1,7 +1,9 @@
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 export const getComputedColorPalette = (key) => {
-  return getColorPalette(key).map((color) => {
+  const raw = getColorPalette(key);
+  if (!Array.isArray(raw)) return [];
+  return raw.map((color) => {
     return color.startsWith('--') ? getTokenThemeVal(color) : color;
   });
 };
