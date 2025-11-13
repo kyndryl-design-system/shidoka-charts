@@ -128,11 +128,25 @@ export const getColorPalette = (key) => {
       '--kd-color-data-viz-divergent-02-positive-90',
       '--kd-color-data-viz-divergent-02-positive-100',
     ],
+    statusLight: [
+      '--kd-color-data-viz-rag-8-success-light',
+      '--kd-color-data-viz-rag-8-warning-light',
+      '--kd-color-data-viz-rag-8-error-light',
+      '--kd-color-status-error-critical-light',
+    ],
+    statusDark: [
+      '--kd-color-data-viz-rag-8-success',
+      '--kd-color-data-viz-rag-8-warning',
+      '--kd-color-data-viz-rag-8-error',
+      '--kd-color-status-error-critical-dark',
+    ],
+    // deprecated
     rag03: [
       '--kd-color-data-viz-rag-3-success',
       '--kd-color-data-viz-rag-3-warning',
       '--kd-color-data-viz-rag-3-error',
     ],
+    // deprecated
     rag08: [
       '--kd-color-data-viz-rag-8-success',
       '--kd-color-data-viz-rag-8-success-light',

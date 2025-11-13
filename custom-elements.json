@@ -106,7 +106,7 @@
             {
               "name": "fn",
               "type": {
-                "text": "Function"
+                "text": "any"
               }
             },
             {
@@ -122,7 +122,7 @@
             {
               "name": "string",
               "type": {
-                "text": "String"
+                "text": "string"
               }
             }
           ]
@@ -419,8 +419,38 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Hides the controls.",
+              "description": "Hides all the controls.",
               "attribute": "hideControls"
+            },
+            {
+              "kind": "field",
+              "name": "hideTableControl",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the table view control.",
+              "attribute": "hideTableControl"
+            },
+            {
+              "kind": "field",
+              "name": "hideFullscreenControl",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the fullscreen control.",
+              "attribute": "hideFullscreenControl"
+            },
+            {
+              "kind": "field",
+              "name": "hideDownloadControl",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the download control.",
+              "attribute": "hideDownloadControl"
             },
             {
               "kind": "field",
@@ -438,7 +468,7 @@
               "type": {
                 "text": "object"
               },
-              "default": "{\n    toggleView: 'Toggle View Mode',\n    toggleFullscreen: 'Toggle Fullscreen',\n    downloadMenu: 'Download Menu',\n    downloadCsv: 'Download as CSV',\n    downloadPng: 'Download as PNG',\n    downloadJpg: 'Download as JPG',\n  }",
+              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadMenu: 'Download Menu',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
               "description": "Customizable text labels.",
               "attribute": "customLabels"
             },
@@ -475,14 +505,6 @@
               "attribute": "htmlLegendOptions"
             },
             {
-              "kind": "field",
-              "name": "_themeObserver",
-              "type": {
-                "text": "any"
-              },
-              "default": "new MutationObserver(() => {\n    if (this.chart) {\n      this.mergeOptions().then(() => {\n        this.initChart();\n      });\n    }\n  })"
-            },
-            {
               "kind": "method",
               "name": "_resizeChart",
               "privacy": "private"
@@ -501,13 +523,13 @@
               "kind": "method",
               "name": "initChart",
               "privacy": "private",
-              "description": "Initializes a bar chart using the Chart.js library with provided labels, datasets,\nand options."
+              "description": "Initializes a bar chart using the Chart.js library with provided labels, datasets,\r\nand options."
             },
             {
               "kind": "method",
               "name": "mergeOptions",
               "privacy": "private",
-              "description": "Merges various chart type options and dataset options to create a\nfinal set of options for a chart."
+              "description": "Merges various chart type options and dataset options to create a\r\nfinal set of options for a chart."
             },
             {
               "kind": "method",
@@ -726,8 +748,35 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Hides the controls.",
+              "description": "Hides all the controls.",
               "fieldName": "hideControls"
+            },
+            {
+              "name": "hideTableControl",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the table view control.",
+              "fieldName": "hideTableControl"
+            },
+            {
+              "name": "hideFullscreenControl",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the fullscreen control.",
+              "fieldName": "hideFullscreenControl"
+            },
+            {
+              "name": "hideDownloadControl",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the download control.",
+              "fieldName": "hideDownloadControl"
             },
             {
               "name": "noBorder",
@@ -743,7 +792,7 @@
               "type": {
                 "text": "object"
               },
-              "default": "{\n    toggleView: 'Toggle View Mode',\n    toggleFullscreen: 'Toggle Fullscreen',\n    downloadMenu: 'Download Menu',\n    downloadCsv: 'Download as CSV',\n    downloadPng: 'Download as PNG',\n    downloadJpg: 'Download as JPG',\n  }",
+              "default": "{\r\n    toggleView: 'Toggle View Mode',\r\n    toggleFullscreen: 'Toggle Fullscreen',\r\n    downloadMenu: 'Download Menu',\r\n    downloadCsv: 'Download as CSV',\r\n    downloadPng: 'Download as PNG',\r\n    downloadJpg: 'Download as JPG',\r\n  }",
               "description": "Customizable text labels.",
               "fieldName": "customLabels"
             },
