@@ -6,7 +6,6 @@ import capitals from './sampleData/us-capitals.json';
 import nationCapitals from './sampleData/nation-capitals.json';
 import usData from './sampleData/states-10m.json';
 import worldData from './sampleData/countries-50m.json';
-import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 export default {
   title: 'Third Party Charts/Geo',
