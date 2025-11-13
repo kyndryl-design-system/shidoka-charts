@@ -12,7 +12,6 @@ export const options = (ctx) => {
   const SankeyBackground = getTokenThemeVal(
     '--kd-color-data-viz-level-secondary'
   );
-  const LegendTicksColor = getTokenThemeVal('--kd-color-border-variants-light');
 
   const userOptions = ctx?.options || {};
 
@@ -36,7 +35,7 @@ export const options = (ctx) => {
     },
     sankey: {
       // default table headers shown in the story
-      tableHeaders: {
+      dataTableHeaderLabels: {
         source: 'Source',
         target: 'Target',
         value: 'Weight',
@@ -117,6 +116,10 @@ export const normalizeData = (a) => {
     (a.datasets && a.datasets.length && a.datasets) || a.data?.datasets;
 
   const datasets = (datasetsSource || []).map((ds) => ({ ...ds }));
+
+  if (Array.isArray(a.labels) && a.labels.length) {
+    return { datasets, labels: a.labels };
+  }
 
   const nodeLabels = (() => {
     if (!datasets?.[0]?.data?.length) return [];

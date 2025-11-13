@@ -15,32 +15,36 @@ export default {
   decorators: [
     (story) => html`<div style="max-width: 800px;">${story()}</div>`,
   ],
-  argTypes,
+  argTypes: {
+    ...argTypes,
+    labels: { control: { type: 'object' } },
+    datasets: { control: { type: 'object' } },
+    dataTableHeaderLabels: { control: { type: 'object' } },
+  },
   parameters: { design: { type: 'figma', url: '' } },
 };
 
 const args = {
   chartTitle: 'Sankey Chart',
   description: 'Sankey chart showing flows between nodes.',
-  data: {
-    datasets: [
-      {
-        label: 'Flow',
-        data: [
-          { from: 'a', to: 'b', flow: 10 },
-          { from: 'a', to: 'c', flow: 5 },
-          { from: 'b', to: 'c', flow: 10 },
-          { from: 'd', to: 'c', flow: 7 },
-        ],
-        colorMode: 'gradient',
-        alpha: 0.7,
-        labels: { a: 'Label A', b: 'Label B', c: 'Label C', d: 'Label D' },
-        priority: { b: 1, d: 0 },
-        column: { d: 1 },
-        size: 'max',
-      },
-    ],
-  },
+  datasets: [
+    {
+      label: 'Flow',
+      data: [
+        { from: 'a', to: 'b', flow: 10 },
+        { from: 'a', to: 'c', flow: 5 },
+        { from: 'b', to: 'c', flow: 10 },
+        { from: 'd', to: 'c', flow: 7 },
+      ],
+      colorMode: 'gradient',
+      alpha: 0.7,
+      labels: { a: 'Label A', b: 'Label B', c: 'Label C', d: 'Label D' },
+      priority: { b: 1, d: 0 },
+      column: { d: 1 },
+      size: 'max',
+    },
+  ],
+  labels: ['Label A', 'Label B', 'Label C', 'Label D'],
   options: {},
   hideDescription: false,
   hideCaptions: false,
@@ -50,6 +54,11 @@ const args = {
   width: null,
   height: null,
   colorPalette: 'categorical',
+  dataTableHeaderLabels: {
+    source: 'Source',
+    target: 'Target',
+    value: 'Weight',
+  },
 };
 
 export const Simple = {
@@ -71,6 +80,10 @@ export const Simple = {
         ?noBorder=${a.noBorder}
         .options=${{
           colorPalette: a.colorPalette,
+          sankey: {
+            dataTableHeaderLabels: a.dataTableHeaderLabels,
+            ...(a.options?.sankey || {}),
+          },
           ...a.options,
         }}
         .width=${a.width}
@@ -83,61 +96,75 @@ export const Simple = {
 export const Complex = {
   args: {
     ...args,
-    data: {
-      datasets: [
-        {
-          label: 'Dataset 1',
-          data: [
-            { from: 'leftA', to: 'mid1', flow: 40 },
-            { from: 'leftA', to: 'mid2', flow: 20 },
-            { from: 'leftB', to: 'mid1', flow: 30 },
-            { from: 'leftB', to: 'mid3', flow: 10 },
-            { from: 'leftC', to: 'mid2', flow: 15 },
-            { from: 'leftC', to: 'mid4', flow: 25 },
-            { from: 'mid1', to: 'right1', flow: 35 },
-            { from: 'mid1', to: 'right2', flow: 35 },
-            { from: 'mid2', to: 'right2', flow: 10 },
-            { from: 'mid2', to: 'right3', flow: 25 },
-            { from: 'mid3', to: 'right3', flow: 10 },
-            { from: 'mid4', to: 'right4', flow: 25 },
-            { from: 'mid2', to: 'right5', flow: 5 },
-          ],
-          labels: {
-            leftA: 'Label A',
-            leftB: 'Label B',
-            leftC: 'Label C',
-            mid1: 'Label',
-            mid2: 'Label',
-            mid3: 'Label',
-            mid4: 'Label',
-            right1: 'Label',
-            right2: 'Label',
-            right3: 'Label',
-            right4: 'Label',
-            right5: 'Label',
-            right6: 'Label',
-          },
-          priority: { mid1: 1, leftA: 1 },
-          column: {
-            leftA: 0,
-            leftB: 0,
-            leftC: 0,
-            mid1: 1,
-            mid2: 1,
-            mid3: 1,
-            mid4: 1,
-            right1: 2,
-            right2: 2,
-            right3: 2,
-            right4: 2,
-            right5: 2,
-          },
-          alpha: 0.7,
-          size: 'max',
-          colorMode: 'gradient',
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: [
+          { from: 'leftA', to: 'mid1', flow: 40 },
+          { from: 'leftA', to: 'mid2', flow: 20 },
+          { from: 'leftB', to: 'mid1', flow: 30 },
+          { from: 'leftB', to: 'mid3', flow: 10 },
+          { from: 'leftC', to: 'mid2', flow: 15 },
+          { from: 'leftC', to: 'mid4', flow: 25 },
+          { from: 'mid1', to: 'right1', flow: 35 },
+          { from: 'mid1', to: 'right2', flow: 35 },
+          { from: 'mid2', to: 'right2', flow: 10 },
+          { from: 'mid2', to: 'right3', flow: 25 },
+          { from: 'mid3', to: 'right3', flow: 10 },
+          { from: 'mid4', to: 'right4', flow: 25 },
+          { from: 'mid2', to: 'right5', flow: 5 },
+        ],
+        labels: {
+          leftA: 'Label A',
+          leftB: 'Label B',
+          leftC: 'Label C',
+          mid1: 'Label',
+          mid2: 'Label',
+          mid3: 'Label',
+          mid4: 'Label',
+          right1: 'Label',
+          right2: 'Label',
+          right3: 'Label',
+          right4: 'Label',
+          right5: 'Label',
+          right6: 'Label',
         },
-      ],
-    },
+        priority: { mid1: 1, leftA: 1 },
+        column: {
+          leftA: 0,
+          leftB: 0,
+          leftC: 0,
+          mid1: 1,
+          mid2: 1,
+          mid3: 1,
+          mid4: 1,
+          right1: 2,
+          right2: 2,
+          right3: 2,
+          right4: 2,
+          right5: 2,
+        },
+        alpha: 0.7,
+        size: 'max',
+        colorMode: 'gradient',
+      },
+    ],
+    // provide a default labels array so Storybook exposes editable labels
+    labels: [
+      'Label A',
+      'Label B',
+      'Label C',
+      'Label',
+      'Label',
+      'Label',
+      'Label',
+      'Label',
+      'Label',
+      'Label',
+      'Label',
+      'Label',
+      'Label',
+    ],
     colorPalette: 'categorical',
   },
   render: (a) => {
@@ -157,6 +184,10 @@ export const Complex = {
         ?noBorder=${a.noBorder}
         .options=${{
           colorPalette: a.colorPalette,
+          sankey: {
+            dataTableHeaderLabels: a.dataTableHeaderLabels,
+            ...(a.options?.sankey || {}),
+          },
           ...a.options,
         }}
         .width=${a.width}

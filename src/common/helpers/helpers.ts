@@ -44,7 +44,8 @@ export function convertChartDataToCSV(args: any) {
     (first.from !== undefined || first.source !== undefined)
   ) {
     const options = args.options || {};
-    const sankeyHeaders = (options.sankey && options.sankey.tableHeaders) || {
+    const sankeyHeaders = (options.sankey &&
+      options.sankey.dataTableHeaderLabels) || {
       source: 'Source',
       target: 'Target',
       value: 'Value',

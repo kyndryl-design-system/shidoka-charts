@@ -301,7 +301,7 @@ export class KDChart extends LitElement {
 
     const sankeyHeaders = (() => {
       const ds = this.datasets?.[0];
-      const h = (this.options as any)?.sankey?.tableHeaders || {};
+      const h = (this.options as any)?.sankey?.dataTableHeaderLabels || {};
       return {
         source: h.source ?? 'Source',
         target: h.target ?? 'Target',
@@ -1181,6 +1181,7 @@ export class KDChart extends LitElement {
       csv += convertChartDataToCSV({
         data: this.chart.data.datasets[i],
         labels: this.labels,
+        options: this.mergedOptions || {},
       });
     }
     if (csv == null) return;
