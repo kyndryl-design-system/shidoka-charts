@@ -115,9 +115,6 @@ export interface HtmlLegendOptions {
   position?: 'top' | 'bottom' | 'left' | 'right';
 }
 
-// chart types that can't have a data table view
-const TABLE_VIEW_BLACKLIST: string[] = [];
-
 /**
  * Chart.js wrapper component.
  * @slot unnamed - Slot for custom content between header and chart.
