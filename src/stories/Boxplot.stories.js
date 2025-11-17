@@ -314,7 +314,6 @@ export const WithoutLegend = {
     ...baseArgs,
     chartTitle: 'Boxplot Without Legend',
     description: 'Boxplot chart with legend hidden',
-    colorPalette: 'rag03',
   },
   render: (args) => {
     return html`
