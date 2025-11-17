@@ -23,6 +23,8 @@ import {
 import {
   DendrogramController,
   TreeController,
+  GraphController,
+  ForceDirectedGraphController,
   EdgeLine,
 } from 'chartjs-chart-graph';
 import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
@@ -70,6 +72,8 @@ Chart.register(
   Violin,
   DendrogramController,
   TreeController,
+  GraphController,
+  ForceDirectedGraphController,
   EdgeLine,
   annotationPlugin,
   datalabelsPlugin
@@ -962,7 +966,7 @@ export class KDChart extends LitElement {
 
   private checkType() {
     // chart types that can't have a data table view
-    const blacklist: any = [];
+    const blacklist: any = ['dendrogram', 'forceDirectedGraph'];
     this.tableDisabled = blacklist.includes(this.type);
   }
 

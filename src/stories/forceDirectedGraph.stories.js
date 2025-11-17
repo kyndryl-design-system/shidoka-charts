@@ -1,18 +1,18 @@
 import { html } from 'lit';
 import '../components/chart/chart.js';
 import argTypes from '../common/config/chartArgTypes';
-import treeDataJson from './sampleData/graphTree.json';
+import graphDataJson from './sampleData/miserables.json';
 
 /**
- * Dendrogram chart type is available through the integration of the
+ * Force Directed Graph chart type is available through the integration of the
  * [@sgratzl/chartjs-chart-graph
- * ](https://www.sgratzl.com/chartjs-chart-graph/examples/dendrogram.html) package.
+ * ](https://www.sgratzl.com/chartjs-chart-graph/examples/force.html) package.
  *
- * For detailed documentation on the available, configurable options, refer to the [plugin's documentation](https://www.sgratzl.com/chartjs-chart-graph/api/classes/DendogramController.html).
+ * For detailed documentation on the available, configurable options, refer to the [plugin's documentation](https://www.sgratzl.com/chartjs-chart-graph/api/classes/ForceDirectedGraphController.html).
  */
 
 export default {
-  title: 'Third Party Charts/Graph/Dendrogram',
+  title: 'Third Party Charts/Graph/Force Directed Graph',
   component: 'kd-chart',
   argTypes: {
     ...argTypes,
@@ -21,13 +21,14 @@ export default {
 
 const args = {
   colorPalette: 'categorical',
-  chartTitle: 'Dendrogram Chart',
+  chartTitle: 'Force Directed Graph Chart',
   description: 'Hierarchical tree visualization using Chart.js Graph plugin.',
-  labels: treeDataJson.map((d) => d.name),
+  labels: graphDataJson.nodes.map((d) => d.id),
   datasets: [
     {
       label: 'DataSet',
-      data: treeDataJson.map((d) => Object.assign({}, d)),
+      data: graphDataJson.nodes,
+      edges: graphDataJson.links,
     },
   ],
   options: {},
@@ -37,7 +38,7 @@ export const Default = {
   args,
   render: (args) => html`
     <kd-chart
-      type="dendrogram"
+      type="forceDirectedGraph"
       .chartTitle=${args.chartTitle}
       .description=${args.description}
       .labels=${args.labels}

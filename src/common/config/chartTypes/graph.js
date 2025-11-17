@@ -4,16 +4,14 @@ import {
   graphCommonDatasetOptions,
 } from './graphCommon.js';
 
-export const type = 'tree';
+export const type = 'graph';
 
 export const options = (ctx) => {
-  return deepmerge(graphCommonOptions(ctx), {
-    edgeLineBorderWidth: (ctx) => {
-      return ctx.dataIndex;
-    },
-  });
+  // return {};
+  return deepmerge(graphCommonOptions(ctx), {});
 };
 
 export const datasetOptions = (ctx, index) => {
+  // return {};
   return deepmerge(graphCommonDatasetOptions(ctx, index), {});
 };
