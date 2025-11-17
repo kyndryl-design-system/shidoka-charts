@@ -1,6 +1,6 @@
 import { getComputedColorPalette } from '../colorPalettes';
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
-import { createSankeyTooltipHandler } from '../../helpers/sankeyTooltip';
+import { createSankeyTooltipHandler } from '../../plugins/sankeyTooltip';
 
 export const type = 'sankey';
 
