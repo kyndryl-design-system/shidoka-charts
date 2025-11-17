@@ -31,7 +31,7 @@ export default {
   },
   plugins: [
     del({ targets: 'dist/*' }),
-    multiInput.default(),
+    multiInput(),
     resolve(),
     renameNodeModules(),
     copy({
