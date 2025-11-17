@@ -930,13 +930,28 @@ export class KDChart extends LitElement {
       }
     });
 
-    const imports = await Promise.all([
-      import(`../../common/config/chartTypes/${this.type}.js`),
-      ...additionalTypeImports,
-    ]);
+    let imports: unknown[] = [];
 
-    const chartTypeConfigs: any[] = imports
-      .map((m) => (m?.default ? m.default : m))
+    try {
+      const results = await Promise.allSettled([
+        import(`../../common/config/chartTypes/${this.type}.js`),
+        ...additionalTypeImports,
+      ]);
+
+      imports = results
+        .filter(
+          (r): r is PromiseFulfilledResult<unknown> =>
+            r.status === 'fulfilled' && r.value != null
+        )
+        .map((r) => r.value);
+    } catch {
+      imports = [];
+    }
+
+    const chartTypeConfigs = imports
+      .map((m) =>
+        m && (m as Record<string, unknown>).default ? (m as any).default : m
+      )
       .filter(Boolean);
 
     let mergedOptions: any = globalOptions(this);
@@ -1201,30 +1216,39 @@ export class KDChart extends LitElement {
 
   private handleDownloadCsv(e: Event) {
     e.preventDefault();
-    let csv = '';
 
-    // Special handling for tree and dendrogram charts
+    const chunks: string[] = [];
+
     if (this.type === 'tree' || this.type === 'dendrogram') {
-      csv += convertTreeDataToCSV(this.datasets);
+      const treeCsv = convertTreeDataToCSV(this.datasets);
+      if (treeCsv) {
+        chunks.push(treeCsv);
+      }
     } else {
-      // Standard CSV handling for other chart types
       for (let i = 0; i < this.chart.data.datasets.length; i++) {
-        csv += convertChartDataToCSV({
+        const chunk = convertChartDataToCSV({
           data: this.chart.data.datasets[i],
           labels: this.labels,
         });
+
+        if (chunk) {
+          chunks.push(chunk);
+        }
       }
     }
 
-    if (csv == null || csv === '') return;
+    const csv = chunks.join('');
 
-    const filename = this.chartTitle + '.csv';
-    if (!csv.match(/^data:text\/csv/i)) {
-      csv = 'data:text/csv;charset=utf-8,' + csv;
+    if (!csv) return;
+
+    const filename = `${this.chartTitle}.csv`;
+    let payload = csv;
+
+    if (!/^data:text\/csv/i.test(payload)) {
+      payload = `data:text/csv;charset=utf-8,${payload}`;
     }
 
-    // not sure if anything below this comment works
-    const data = encodeURI(csv);
+    const data = encodeURI(payload);
     const link = document.createElement('a');
     link.setAttribute('href', data);
     link.setAttribute('download', filename);

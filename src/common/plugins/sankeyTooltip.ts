@@ -105,18 +105,55 @@ export const createSankeyTooltipHandler =
     inner.style.boxShadow = '0 2px 6px rgba(0,0,0,0.25)';
     inner.style.whiteSpace = 'nowrap';
 
-    inner.innerHTML = `
-      <span style="display:inline-flex;align-items:center;gap:4px;margin-right:6px;">
-        <span style="width:8px;height:8px;border-radius:2px;background:${fromColor};display:inline-block;"></span>
-        <span>${fromLabel}</span>
-      </span>
-      <span style="margin-right:6px;">→</span>
-      <span style="display:inline-flex;align-items:center;gap:4px;margin-right:4px;">
-        <span style="width:8px;height:8px;border-radius:2px;background:${toColor};display:inline-block;"></span>
-        <span>${toLabel}</span>
-      </span>
-      <span>: ${value}</span>
-    `;
+    const fromWrapper = document.createElement('span');
+    fromWrapper.style.display = 'inline-flex';
+    fromWrapper.style.alignItems = 'center';
+    fromWrapper.style.gap = '4px';
+    fromWrapper.style.marginRight = '6px';
+
+    const fromSwatch = document.createElement('span');
+    fromSwatch.style.width = '8px';
+    fromSwatch.style.height = '8px';
+    fromSwatch.style.borderRadius = '2px';
+    fromSwatch.style.display = 'inline-block';
+    fromSwatch.style.background = fromColor;
+
+    const fromText = document.createElement('span');
+    fromText.textContent = fromLabel;
+
+    fromWrapper.appendChild(fromSwatch);
+    fromWrapper.appendChild(fromText);
+
+    const arrowSpan = document.createElement('span');
+    arrowSpan.style.marginRight = '6px';
+    arrowSpan.textContent = '→';
+
+    const toWrapper = document.createElement('span');
+    toWrapper.style.display = 'inline-flex';
+    toWrapper.style.alignItems = 'center';
+    toWrapper.style.gap = '4px';
+    toWrapper.style.marginRight = '4px';
+
+    const toSwatch = document.createElement('span');
+    toSwatch.style.width = '8px';
+    toSwatch.style.height = '8px';
+    toSwatch.style.borderRadius = '2px';
+    toSwatch.style.display = 'inline-block';
+    toSwatch.style.background = toColor;
+
+    const toText = document.createElement('span');
+    toText.textContent = toLabel;
+
+    toWrapper.appendChild(toSwatch);
+    toWrapper.appendChild(toText);
+
+    const valueSpan = document.createElement('span');
+    valueSpan.textContent = `: ${String(value)}`;
+
+    inner.appendChild(fromWrapper);
+    inner.appendChild(arrowSpan);
+    inner.appendChild(toWrapper);
+    inner.appendChild(valueSpan);
 
     const caret = document.createElement('div');
     caret.style.position = 'absolute';
@@ -132,9 +169,10 @@ export const createSankeyTooltipHandler =
     inner.appendChild(caret);
     tooltipEl.appendChild(inner);
 
-    const { offsetLeft, offsetTop } = chart.canvas;
+    const rect = chart.canvas.getBoundingClientRect();
+
     tooltipEl.style.opacity = '1';
-    tooltipEl.style.left = `${offsetLeft + tooltip.caretX}px`;
-    tooltipEl.style.top = `${offsetTop + tooltip.caretY}px`;
-    tooltipEl.style.transform = `translate(-50%, calc(-100% - 10px))`;
+    tooltipEl.style.left = `${rect.left + window.scrollX + tooltip.caretX}px`;
+    tooltipEl.style.top = `${rect.top + window.scrollY + tooltip.caretY}px`;
+    tooltipEl.style.transform = 'translate(-50%, calc(-100% - 10px))';
   };

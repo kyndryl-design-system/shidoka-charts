@@ -30,6 +30,41 @@ export const options = (ctx) => {
     ...userOptions,
   };
 
+  const defaultAnimation = {
+    duration: 450,
+    easing: 'easeOutCubic',
+    loop: false,
+  };
+
+  baseOptions.animation =
+    userOptions.animation === false
+      ? false
+      : {
+          ...defaultAnimation,
+          ...(typeof userOptions.animation === 'object'
+            ? userOptions.animation
+            : {}),
+        };
+
+  baseOptions.responsiveAnimationDuration =
+    typeof userOptions.responsiveAnimationDuration === 'number'
+      ? userOptions.responsiveAnimationDuration
+      : 0;
+
+  baseOptions.animations = {
+    colors: { duration: 0 },
+    active: { duration: 0 },
+    x: {
+      duration: 450,
+      easing: 'easeOutCubic',
+    },
+    y: {
+      duration: 450,
+      easing: 'easeOutCubic',
+    },
+    ...(userOptions.animations || {}),
+  };
+
   const basePlugins = {
     legend: { display: false },
     datalabels: {
@@ -127,13 +162,16 @@ export const datasetOptions = (ctx) => {
     return getNodeColor(ds, k);
   };
 
+  // Key change: drop 'gradient' in favor of a solid mode by default
+  const colorMode = ctx?.options?.colorMode || 'from';
+
   return {
     color: LabelColor,
     colorFrom: (ctx2) => colorForIndex(ctx2, 'from'),
     colorTo: (ctx2) => colorForIndex(ctx2, 'to'),
     hoverColorFrom: (ctx2) => colorForIndex(ctx2, 'from'),
     hoverColorTo: (ctx2) => colorForIndex(ctx2, 'to'),
-    colorMode: 'gradient',
+    colorMode,
   };
 };
 

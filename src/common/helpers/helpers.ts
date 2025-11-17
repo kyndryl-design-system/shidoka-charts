@@ -163,10 +163,37 @@ export function getRandomData(
   });
 }
 
+function normalizeHexColor(input: string): string | null {
+  if (!input) return null;
+
+  let hex = input.trim().toLowerCase();
+
+  if (!hex.startsWith('#')) {
+    if (/^[0-9a-f]{3}$/.test(hex) || /^[0-9a-f]{6}$/.test(hex)) {
+      hex = `#${hex}`;
+    } else {
+      return null;
+    }
+  }
+
+  hex = hex.slice(1);
+
+  if (hex.length === 3 && /^[0-9a-f]{3}$/.test(hex)) {
+    hex = hex
+      .split('')
+      .map((ch) => ch + ch)
+      .join('');
+  } else if (hex.length !== 6 || !/^[0-9a-f]{6}$/.test(hex)) {
+    return null;
+  }
+
+  return `#${hex}`;
+}
+
 /**
  * Takes a background hex color as input and returns the appropriate text
  * color (either primary or inversed) based on the brightness of the background color.
- *  * @param {string} bgHexColor - The `bgHexColor` parameter is a string representing a hexadecimal color
+ * @param {string} bgHexColor - The `bgHexColor` parameter is a string representing a hexadecimal color
  * code for the background color.
  * @returns the color value for the text based on the background color provided. If the calculated YIQ
  * value is greater than or equal to 128, it returns the primary text color (TextColor), otherwise it
@@ -176,9 +203,16 @@ export function getTextColor(bgHexColor: string): string {
   const TextColor = '#3d3c3c';
   const InverseTextColor = '#f9f9f9';
 
-  const r = parseInt(bgHexColor.substring(1, 3), 16);
-  const g = parseInt(bgHexColor.substring(3, 5), 16);
-  const b = parseInt(bgHexColor.substring(5, 7), 16);
+  const normalized = normalizeHexColor(bgHexColor) ?? '#ffffff';
+
+  const r = parseInt(normalized.substring(1, 3), 16);
+  const g = parseInt(normalized.substring(3, 5), 16);
+  const b = parseInt(normalized.substring(5, 7), 16);
+
+  if (Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) {
+    return TextColor;
+  }
+
   const yiq = (r * 299 + g * 587 + b * 114) / 1000;
 
   return yiq >= 128 ? TextColor : InverseTextColor;
