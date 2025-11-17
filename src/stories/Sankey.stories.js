@@ -8,7 +8,6 @@ import { normalizeData } from '../common/config/chartTypes/sankey';
  * [chartjs-chart-sankey](https://github.com/kurkle/chartjs-chart-sankey) package.
  * For detailed documentation on the availble, configurable options, refer to the [plugin's documentation](https://github.com/kurkle/chartjs-chart-sankey/blob/main/README.md).
  */
-
 export default {
   title: 'Third Party Charts/Sankey',
   component: 'kd-chart',
@@ -24,7 +23,7 @@ export default {
   parameters: { design: { type: 'figma', url: '' } },
 };
 
-const args = {
+const baseArgs = {
   chartTitle: 'Sankey Chart',
   description: 'Sankey chart showing flows between nodes.',
   datasets: [
@@ -61,41 +60,43 @@ const args = {
   },
 };
 
-export const Simple = {
-  args,
-  render: (a) => {
-    const { datasets, labels } = normalizeData(a);
+const renderSankey = (a) => {
+  const { datasets, labels } = normalizeData(a);
 
-    return html`
-      <kd-chart
-        type="sankey"
-        .chartTitle=${a.chartTitle}
-        .description=${a.description}
-        .labels=${labels}
-        .datasets=${datasets}
-        ?hideDescription=${a.hideDescription}
-        ?hideCaptions=${a.hideCaptions}
-        ?hideHeader=${a.hideHeader}
-        ?hideControls=${a.hideControls}
-        ?noBorder=${a.noBorder}
-        .options=${{
-          colorPalette: a.colorPalette,
-          sankey: {
-            dataTableHeaderLabels: a.dataTableHeaderLabels,
-            ...(a.options?.sankey || {}),
-          },
-          ...a.options,
-        }}
-        .width=${a.width}
-        .height=${a.height}
-      ></kd-chart>
-    `;
-  },
+  return html`
+    <kd-chart
+      type="sankey"
+      .chartTitle=${a.chartTitle}
+      .description=${a.description}
+      .labels=${labels}
+      .datasets=${datasets}
+      ?hideDescription=${a.hideDescription}
+      ?hideCaptions=${a.hideCaptions}
+      ?hideHeader=${a.hideHeader}
+      ?hideControls=${a.hideControls}
+      ?noBorder=${a.noBorder}
+      .options=${{
+        colorPalette: a.colorPalette,
+        sankey: {
+          dataTableHeaderLabels: a.dataTableHeaderLabels,
+          ...(a.options?.sankey || {}),
+        },
+        ...(a.options || {}),
+      }}
+      .width=${a.width}
+      .height=${a.height}
+    ></kd-chart>
+  `;
+};
+
+export const Simple = {
+  args: baseArgs,
+  render: renderSankey,
 };
 
 export const Complex = {
   args: {
-    ...args,
+    ...baseArgs,
     datasets: [
       {
         label: 'Dataset 1',
@@ -118,16 +119,16 @@ export const Complex = {
           leftA: 'Label A',
           leftB: 'Label B',
           leftC: 'Label C',
-          mid1: 'Label',
-          mid2: 'Label',
-          mid3: 'Label',
-          mid4: 'Label',
-          right1: 'Label',
-          right2: 'Label',
-          right3: 'Label',
-          right4: 'Label',
-          right5: 'Label',
-          right6: 'Label',
+          mid1: 'Label D',
+          mid2: 'Label E',
+          mid3: 'Label F',
+          mid4: 'Label G',
+          right1: 'Label H',
+          right2: 'Label I',
+          right3: 'Label J',
+          right4: 'Label K',
+          right5: 'Label L',
+          right6: 'Label M',
         },
         priority: { mid1: 1, leftA: 1 },
         column: {
@@ -149,50 +150,22 @@ export const Complex = {
         colorMode: 'gradient',
       },
     ],
-    // provide a default labels array so Storybook exposes editable labels
     labels: [
       'Label A',
       'Label B',
       'Label C',
-      'Label',
-      'Label',
-      'Label',
-      'Label',
-      'Label',
-      'Label',
-      'Label',
-      'Label',
-      'Label',
-      'Label',
+      'Label D',
+      'Label E',
+      'Label F',
+      'Label G',
+      'Label H',
+      'Label I',
+      'Label J',
+      'Label K',
+      'Label L',
+      'Label M',
     ],
     colorPalette: 'categorical',
   },
-  render: (a) => {
-    const { datasets, labels } = normalizeData(a);
-
-    return html`
-      <kd-chart
-        type="sankey"
-        .chartTitle=${a.chartTitle}
-        .description=${a.description}
-        .labels=${labels}
-        .datasets=${datasets}
-        ?hideDescription=${a.hideDescription}
-        ?hideCaptions=${a.hideCaptions}
-        ?hideHeader=${a.hideHeader}
-        ?hideControls=${a.hideControls}
-        ?noBorder=${a.noBorder}
-        .options=${{
-          colorPalette: a.colorPalette,
-          sankey: {
-            dataTableHeaderLabels: a.dataTableHeaderLabels,
-            ...(a.options?.sankey || {}),
-          },
-          ...a.options,
-        }}
-        .width=${a.width}
-        .height=${a.height}
-      ></kd-chart>
-    `;
-  },
+  render: renderSankey,
 };

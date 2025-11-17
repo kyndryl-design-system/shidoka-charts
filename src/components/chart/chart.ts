@@ -98,6 +98,9 @@ export interface HtmlLegendOptions {
   position?: 'top' | 'bottom' | 'left' | 'right';
 }
 
+// chart types that can't have a data table view
+const TABLE_VIEW_BLACKLIST: string[] = [];
+
 /**
  * Chart.js wrapper component.
  * @slot unnamed - Slot for custom content between header and chart.
@@ -268,7 +271,7 @@ export class KDChart extends LitElement {
   /** Resize observer for canvas-container.
    * @internal
    */
-  _resizeObserver: any = new ResizeObserver(
+  _resizeObserver: ResizeObserver = new ResizeObserver(
     debounce(() => {
       this._resizeChart();
     })
@@ -277,7 +280,7 @@ export class KDChart extends LitElement {
   /** Theme observer to watch for meta color-scheme changes.
    * @internal
    */
-  _themeObserver: any = new MutationObserver(() => {
+  _themeObserver: MutationObserver = new MutationObserver(() => {
     if (this.chart) {
       this.mergeOptions().then(() => {
         this.initChart();
@@ -784,23 +787,23 @@ export class KDChart extends LitElement {
         changedProps.has('options'))
     ) {
       this.mergeOptions().then(() => {
-        this.chart.data.labels = this.labels;
-        this.chart.options = this.mergedOptions;
+        this.chart!.data.labels = this.labels;
+        this.chart!.options = this.mergedOptions;
 
         const nextByLabel = new Map(
           (this.mergedDatasets as any[]).map((d: any) => [d.label, d])
         );
 
-        this.chart.data.datasets = this.chart.data.datasets.filter((d: any) =>
+        this.chart!.data.datasets = this.chart!.data.datasets.filter((d: any) =>
           nextByLabel.has(d.label)
         );
 
         (this.mergedDatasets as any[]).forEach((next: any) => {
-          const existing = this.chart.data.datasets.find(
+          const existing = this.chart!.data.datasets.find(
             (d: any) => d.label === next.label
           );
           if (!existing) {
-            this.chart.data.datasets.push(next);
+            this.chart!.data.datasets.push(next);
           } else {
             Object.keys(next).forEach((k) => {
               (existing as any)[k] = (next as any)[k];
@@ -808,7 +811,7 @@ export class KDChart extends LitElement {
           }
         });
 
-        this.chart.update();
+        this.chart!.update();
         this.generateScrollableLegend();
       });
     }
@@ -999,7 +1002,7 @@ export class KDChart extends LitElement {
 
   private checkType() {
     // chart types that can't have a data table view
-    const blacklist: any = [];
+    const blacklist = TABLE_VIEW_BLACKLIST;
     this.tableDisabled = blacklist.includes(this.type);
   }
 
@@ -1022,7 +1025,7 @@ export class KDChart extends LitElement {
       };
 
       const originalHidden = this.chart.data.datasets.map(
-        (_: unknown, i: number) => this.chart.getDatasetMeta(i).hidden
+        (_: unknown, i: number) => this.chart!.getDatasetMeta(i).hidden
       );
 
       try {
@@ -1086,7 +1089,7 @@ export class KDChart extends LitElement {
         context.restore();
         this.chart.options = originalConfig.options;
         originalHidden.forEach((hidden: boolean, i: number) => {
-          this.chart.getDatasetMeta(i).hidden = hidden;
+          this.chart!.getDatasetMeta(i).hidden = hidden;
         });
         this.chart.update();
       } catch (error) {
@@ -1177,9 +1180,9 @@ export class KDChart extends LitElement {
     e.preventDefault();
     let csv = '';
 
-    for (let i = 0; i < this.chart.data.datasets.length; i++) {
+    for (let i = 0; i < this.chart!.data.datasets.length; i++) {
       csv += convertChartDataToCSV({
-        data: this.chart.data.datasets[i],
+        data: this.chart!.data.datasets[i],
         labels: this.labels,
         options: this.mergedOptions || {},
       });
