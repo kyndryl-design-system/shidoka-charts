@@ -1025,7 +1025,7 @@ export class KDChart extends LitElement {
 
   private checkType() {
     // chart types that can't have a data table view
-    const blacklist: any = ['dendrogram', 'forceDirectedGraph'];
+    const blacklist: any = ['dendrogram', 'forceDirectedGraph', 'tree'];
     this.tableDisabled = blacklist.includes(this.type);
   }
 
