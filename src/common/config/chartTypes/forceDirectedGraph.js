@@ -8,7 +8,9 @@ export const type = 'forceDirectedGraph';
 
 export const options = (ctx) => {
   // return {};
-  return deepmerge(graphCommonOptions(ctx), {});
+  return deepmerge(graphCommonOptions(ctx), {
+    animation: false,
+  });
 };
 
 export const datasetOptions = (ctx, index) => {
