@@ -45,6 +45,13 @@ const baseArgs = {
   ],
   labels: ['Label A', 'Label B', 'Label C', 'Label D'],
   options: {},
+  hideDescription: false,
+  hideCaptions: false,
+  hideHeader: false,
+  hideControls: false,
+  noBorder: false,
+  width: null,
+  height: null,
   colorPalette: 'categorical',
   dataTableHeaderLabels: {
     source: 'Source',
@@ -53,38 +60,36 @@ const baseArgs = {
   },
 };
 
-const renderSankey = (a) => {
-  const { datasets, labels } = normalizeData(a);
-
-  return html`
-    <kd-chart
-      type="sankey"
-      .chartTitle=${a.chartTitle}
-      .description=${a.description}
-      .labels=${labels}
-      .datasets=${datasets}
-      ?hideDescription=${a.hideDescription}
-      ?hideCaptions=${a.hideCaptions}
-      ?hideHeader=${a.hideHeader}
-      ?hideControls=${a.hideControls}
-      ?noBorder=${a.noBorder}
-      .options=${{
-        colorPalette: a.colorPalette,
-        sankey: {
-          dataTableHeaderLabels: a.dataTableHeaderLabels,
-          ...(a.options?.sankey || {}),
-        },
-        ...(a.options || {}),
-      }}
-      .width=${a.width}
-      .height=${a.height}
-    ></kd-chart>
-  `;
-};
-
 export const Simple = {
   args: baseArgs,
-  render: renderSankey,
+  render: (a) => {
+    const { datasets, labels } = normalizeData(a);
+
+    return html`
+      <kd-chart
+        type="sankey"
+        .chartTitle=${a.chartTitle}
+        .description=${a.description}
+        .labels=${labels}
+        .datasets=${datasets}
+        ?hideDescription=${a.hideDescription}
+        ?hideCaptions=${a.hideCaptions}
+        ?hideHeader=${a.hideHeader}
+        ?hideControls=${a.hideControls}
+        ?noBorder=${a.noBorder}
+        .options=${{
+          colorPalette: a.colorPalette,
+          sankey: {
+            dataTableHeaderLabels: a.dataTableHeaderLabels,
+            ...(a.options?.sankey || {}),
+          },
+          ...(a.options || {}),
+        }}
+        .width=${a.width}
+        .height=${a.height}
+      ></kd-chart>
+    `;
+  },
 };
 
 export const Complex = {
@@ -160,5 +165,32 @@ export const Complex = {
     ],
     colorPalette: 'categorical',
   },
-  render: renderSankey,
+  render: (a) => {
+    const { datasets, labels } = normalizeData(a);
+
+    return html`
+      <kd-chart
+        type="sankey"
+        .chartTitle=${a.chartTitle}
+        .description=${a.description}
+        .labels=${labels}
+        .datasets=${datasets}
+        ?hideDescription=${a.hideDescription}
+        ?hideCaptions=${a.hideCaptions}
+        ?hideHeader=${a.hideHeader}
+        ?hideControls=${a.hideControls}
+        ?noBorder=${a.noBorder}
+        .options=${{
+          colorPalette: a.colorPalette,
+          sankey: {
+            dataTableHeaderLabels: a.dataTableHeaderLabels,
+            ...(a.options?.sankey || {}),
+          },
+          ...(a.options || {}),
+        }}
+        .width=${a.width}
+        .height=${a.height}
+      ></kd-chart>
+    `;
+  },
 };

@@ -30,27 +30,6 @@ export const options = (ctx) => {
     ...userOptions,
   };
 
-  const defaultAnimation = {
-    duration: 450,
-    easing: 'easeOutCubic',
-    loop: false,
-  };
-
-  baseOptions.animation =
-    userOptions.animation === false
-      ? false
-      : {
-          ...defaultAnimation,
-          ...(typeof userOptions.animation === 'object'
-            ? userOptions.animation
-            : {}),
-        };
-
-  baseOptions.responsiveAnimationDuration =
-    typeof userOptions.responsiveAnimationDuration === 'number'
-      ? userOptions.responsiveAnimationDuration
-      : 0;
-
   baseOptions.animations = {
     colors: { duration: 0 },
     active: { duration: 0 },
