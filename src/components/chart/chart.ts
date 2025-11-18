@@ -1216,39 +1216,30 @@ export class KDChart extends LitElement {
 
   private handleDownloadCsv(e: Event) {
     e.preventDefault();
+    let csv = '';
 
-    const chunks: string[] = [];
-
+    // Special handling for tree and dendrogram charts
     if (this.type === 'tree' || this.type === 'dendrogram') {
-      const treeCsv = convertTreeDataToCSV(this.datasets);
-      if (treeCsv) {
-        chunks.push(treeCsv);
-      }
+      csv += convertTreeDataToCSV(this.datasets);
     } else {
+      // Standard CSV handling for other chart types
       for (let i = 0; i < this.chart.data.datasets.length; i++) {
-        const chunk = convertChartDataToCSV({
+        csv += convertChartDataToCSV({
           data: this.chart.data.datasets[i],
           labels: this.labels,
         });
-
-        if (chunk) {
-          chunks.push(chunk);
-        }
       }
     }
 
-    const csv = chunks.join('');
+    if (csv == null || csv === '') return;
 
-    if (!csv) return;
-
-    const filename = `${this.chartTitle}.csv`;
-    let payload = csv;
-
-    if (!/^data:text\/csv/i.test(payload)) {
-      payload = `data:text/csv;charset=utf-8,${payload}`;
+    const filename = this.chartTitle + '.csv';
+    if (!csv.match(/^data:text\/csv/i)) {
+      csv = 'data:text/csv;charset=utf-8,' + csv;
     }
 
-    const data = encodeURI(payload);
+    // not sure if anything below this comment works
+    const data = encodeURI(csv);
     const link = document.createElement('a');
     link.setAttribute('href', data);
     link.setAttribute('download', filename);

@@ -225,7 +225,7 @@
           "name": "getTextColor",
           "return": {
             "type": {
-              "text": "string"
+              "text": ""
             }
           },
           "parameters": [
@@ -234,7 +234,7 @@
               "type": {
                 "text": "string"
               },
-              "description": "Hex color string, accepts #rgb or #rrggbb, with or without '#'."
+              "description": "The `bgHexColor` parameter is a string representing a hexadecimal color\ncode for the background color."
             }
           ],
           "description": "Takes a background hex color as input and returns the appropriate text\ncolor (either primary or inversed) based on the brightness of the background color."
