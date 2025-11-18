@@ -448,9 +448,8 @@ export class KDChart extends LitElement {
         <figure class="${this.tableView ? 'hidden' : ''}">
           <div
             class="canvas-container"
-            style="${this.width ? `width: ${this.width}px;` : ''} ${this.height
-              ? `height: ${this.height}px;`
-              : ''}"
+            style="${this.width ? `width: ${this.width}px;` : ''}
+            ${this.height ? `height: ${this.height}px;` : ''}"
           >
             <canvas role="img" aria-labelledby="titleDesc"></canvas>
           </div>
@@ -892,6 +891,7 @@ export class KDChart extends LitElement {
       a11yPlugin,
     ];
 
+    // add htmlLegendPlugin if useHtmlLegend is enabled
     if (this.useHtmlLegend) {
       chartPlugins.push(htmlLegendPlugin);
     }
@@ -921,6 +921,7 @@ export class KDChart extends LitElement {
       'tree',
     ];
 
+    // dynamically import type-specific configs
     const additionalTypeImports: Promise<any>[] = [];
     (this.datasets || []).forEach((dataset) => {
       if (dataset?.type) {
@@ -965,6 +966,7 @@ export class KDChart extends LitElement {
       mergedOptions.plugins.legend.display = true;
     }
 
+    // merge radial vs non-radial defaults
     if (radialTypes.includes(this.type)) {
       mergedOptions = deepmerge(mergedOptions, globalOptionsRadial(this));
     } else if (!ignoredTypes.includes(this.type)) {
