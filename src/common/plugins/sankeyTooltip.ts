@@ -97,10 +97,13 @@ export const createSankeyTooltipHandler =
 
     const inner = document.createElement('div');
     inner.style.position = 'relative';
-    inner.style.display = 'inline-block';
+    inner.style.display = 'inline-flex';
+    inner.style.alignItems = 'center';
+    inner.style.gap = '6px';
+    inner.style.lineHeight = '1';
     inner.style.background = TooltipBackground;
     inner.style.color = TooltipFontColor;
-    inner.style.borderRadius = '6px';
+    inner.style.borderRadius = '4px';
     inner.style.padding = '6px 10px';
     inner.style.boxShadow = '0 2px 6px rgba(0,0,0,0.25)';
     inner.style.whiteSpace = 'nowrap';
@@ -109,11 +112,11 @@ export const createSankeyTooltipHandler =
     fromWrapper.style.display = 'inline-flex';
     fromWrapper.style.alignItems = 'center';
     fromWrapper.style.gap = '4px';
-    fromWrapper.style.marginRight = '6px';
 
     const fromSwatch = document.createElement('span');
-    fromSwatch.style.width = '8px';
-    fromSwatch.style.height = '8px';
+    fromSwatch.style.width = '14px';
+    fromSwatch.style.height = '14px';
+    fromSwatch.style.marginRight = '2px';
     fromSwatch.style.borderRadius = '2px';
     fromSwatch.style.display = 'inline-block';
     fromSwatch.style.background = fromColor;
@@ -125,18 +128,20 @@ export const createSankeyTooltipHandler =
     fromWrapper.appendChild(fromText);
 
     const arrowSpan = document.createElement('span');
-    arrowSpan.style.marginRight = '6px';
+    arrowSpan.style.display = 'inline-flex';
+    arrowSpan.style.alignItems = 'center';
+    arrowSpan.style.lineHeight = '1';
     arrowSpan.textContent = '→';
 
     const toWrapper = document.createElement('span');
     toWrapper.style.display = 'inline-flex';
     toWrapper.style.alignItems = 'center';
     toWrapper.style.gap = '4px';
-    toWrapper.style.marginRight = '4px';
 
     const toSwatch = document.createElement('span');
-    toSwatch.style.width = '8px';
-    toSwatch.style.height = '8px';
+    toSwatch.style.width = '14px';
+    toSwatch.style.height = '14px';
+    toSwatch.style.marginRight = '2px';
     toSwatch.style.borderRadius = '2px';
     toSwatch.style.display = 'inline-block';
     toSwatch.style.background = toColor;
@@ -148,6 +153,9 @@ export const createSankeyTooltipHandler =
     toWrapper.appendChild(toText);
 
     const valueSpan = document.createElement('span');
+    valueSpan.style.display = 'inline-flex';
+    valueSpan.style.alignItems = 'center';
+    valueSpan.style.lineHeight = '1';
     valueSpan.textContent = `: ${String(value)}`;
 
     inner.appendChild(fromWrapper);
@@ -158,7 +166,7 @@ export const createSankeyTooltipHandler =
     const caret = document.createElement('div');
     caret.style.position = 'absolute';
     caret.style.left = '50%';
-    caret.style.bottom = '-4px';
+    caret.style.bottom = '-6px';
     caret.style.transform = 'translateX(-50%)';
     caret.style.width = '0';
     caret.style.height = '0';
