@@ -1,8 +1,6 @@
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 import { getComputedColorPalette } from '../colorPalettes';
 
-export const type = 'tree';
-
 export const graphCommonOptions = (ctx) => {
   const labelBgColor = getTokenThemeVal(
     '--kd-color-background-container-secondary'
@@ -31,15 +29,15 @@ export const graphCommonOptions = (ctx) => {
         },
       },
     },
-    animation: {
-      duration: 100,
-      easing: 'easeInOutQuart',
-      delay: (context) => {
-        const dataIndex = context?.dataIndex || 0;
-        const depth = context?.raw?.depth || 0;
-        return depth * 300 + dataIndex * 50;
-      },
-    },
+    // animation: {
+    //   duration: 100,
+    //   easing: 'easeInOutQuart',
+    //   delay: (context) => {
+    //     const dataIndex = context?.dataIndex || 0;
+    //     const depth = context?.raw?.depth || 0;
+    //     return depth * 300 + dataIndex * 50;
+    //   },
+    // },
   };
 };
 
@@ -57,8 +55,6 @@ export const graphCommonDatasetOptions = (ctx, index) => {
 
   return {
     borderColor: borderColor,
-    // pointBorderColor: Colors[Index],
     backgroundColor: Colors[Index],
-    // pointBackgroundColor: Colors[Index] + '99', // 60% opacity
   };
 };
