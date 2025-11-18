@@ -20,6 +20,13 @@ import {
   ViolinController,
   Violin,
 } from '@sgratzl/chartjs-chart-boxplot';
+import {
+  DendrogramController,
+  TreeController,
+  GraphController,
+  ForceDirectedGraphController,
+  EdgeLine,
+} from 'chartjs-chart-graph';
 import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
@@ -29,7 +36,11 @@ import { htmlLegendPlugin } from '../../common/plugins/htmlLegendPlugin';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import datalabelsPlugin from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import { convertChartDataToCSV, debounce } from '../../common/helpers/helpers';
+import {
+  convertChartDataToCSV,
+  debounce,
+  convertTreeDataToCSV,
+} from '../../common/helpers/helpers';
 import { renderBoxplotViolinTable } from '../../common/helpers/boxplotViolinTableRenderer';
 import ChartScss from './chart.scss?inline';
 import globalOptions from '../../common/config/globalOptions';
@@ -42,6 +53,7 @@ import maximizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16
 import minimizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/shrink.svg';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
+import { renderGraphTreeTable } from '../../common/helpers/graphTreeTableRenderer';
 
 Chart.register(
   ChoroplethController,
@@ -58,6 +70,11 @@ Chart.register(
   BoxAndWiskers,
   ViolinController,
   Violin,
+  DendrogramController,
+  TreeController,
+  GraphController,
+  ForceDirectedGraphController,
+  EdgeLine,
   annotationPlugin,
   datalabelsPlugin
 );
@@ -497,6 +514,8 @@ export class KDChart extends LitElement {
                         this.datasets,
                         this.getTableAxisLabel()
                       )
+                    : this.type === 'tree'
+                    ? renderGraphTreeTable(this.datasets)
                     : html`
                         <thead>
                           <tr>
@@ -799,7 +818,7 @@ export class KDChart extends LitElement {
       this.checkType();
     }
 
-    // Re-init chart instance when type, plugins, colorPalette, width, height, or useHtmlLegend change.
+    // Re-init chart instance when type, plugins, width, height, or useHtmlLegend change.
     if (
       this.chart &&
       (changedProps.has('type') ||
@@ -858,7 +877,13 @@ export class KDChart extends LitElement {
    */
   private async mergeOptions() {
     const radialTypes = ['pie', 'doughnut', 'radar', 'polarArea', 'meter'];
-    const ignoredTypes = ['choropleth', 'treemap', 'bubbleMap'];
+    const ignoredTypes = [
+      'choropleth',
+      'treemap',
+      'bubbleMap',
+      'dendrogram',
+      'tree',
+    ];
 
     // dynamically import type-specific configs
     const additionalTypeImports: any[] = [];
@@ -941,7 +966,7 @@ export class KDChart extends LitElement {
 
   private checkType() {
     // chart types that can't have a data table view
-    const blacklist: any = [];
+    const blacklist: any = ['dendrogram', 'forceDirectedGraph', 'tree'];
     this.tableDisabled = blacklist.includes(this.type);
   }
 
@@ -1119,13 +1144,20 @@ export class KDChart extends LitElement {
     e.preventDefault();
     let csv = '';
 
-    for (let i = 0; i < this.chart.data.datasets.length; i++) {
-      csv += convertChartDataToCSV({
-        data: this.chart.data.datasets[i],
-        labels: this.labels,
-      });
+    // Special handling for tree and dendrogram charts
+    if (this.type === 'tree' || this.type === 'dendrogram') {
+      csv += convertTreeDataToCSV(this.datasets);
+    } else {
+      // Standard CSV handling for other chart types
+      for (let i = 0; i < this.chart.data.datasets.length; i++) {
+        csv += convertChartDataToCSV({
+          data: this.chart.data.datasets[i],
+          labels: this.labels,
+        });
+      }
     }
-    if (csv == null) return;
+
+    if (csv == null || csv === '') return;
 
     const filename = this.chartTitle + '.csv';
     if (!csv.match(/^data:text\/csv/i)) {

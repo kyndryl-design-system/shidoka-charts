@@ -97,6 +97,34 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/common/helpers/graphTreeTableRenderer.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "renderGraphTreeTable",
+          "parameters": [
+            {
+              "name": "datasets",
+              "type": {
+                "text": "any[]"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "renderGraphTreeTable",
+          "declaration": {
+            "name": "renderGraphTreeTable",
+            "module": "src/common/helpers/graphTreeTableRenderer.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/common/helpers/helpers.ts",
       "declarations": [
         {
@@ -190,6 +218,18 @@
               "text": ""
             }
           }
+        },
+        {
+          "kind": "function",
+          "name": "convertTreeDataToCSV",
+          "parameters": [
+            {
+              "name": "datasets",
+              "type": {
+                "text": "any[]"
+              }
+            }
+          ]
         }
       ],
       "exports": [
@@ -238,6 +278,14 @@
           "name": "getTextColor",
           "declaration": {
             "name": "getTextColor",
+            "module": "src/common/helpers/helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "convertTreeDataToCSV",
+          "declaration": {
+            "name": "convertTreeDataToCSV",
             "module": "src/common/helpers/helpers.ts"
           }
         }
