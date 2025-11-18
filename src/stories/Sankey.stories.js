@@ -45,13 +45,6 @@ const baseArgs = {
   ],
   labels: ['Label A', 'Label B', 'Label C', 'Label D'],
   options: {},
-  hideDescription: false,
-  hideCaptions: false,
-  hideHeader: false,
-  hideControls: false,
-  noBorder: false,
-  width: null,
-  height: null,
   colorPalette: 'categorical',
   dataTableHeaderLabels: {
     source: 'Source',
