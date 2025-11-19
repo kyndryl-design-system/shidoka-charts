@@ -27,6 +27,7 @@ import {
   ForceDirectedGraphController,
   EdgeLine,
 } from 'chartjs-chart-graph';
+import { SankeyController, Flow } from 'chartjs-chart-sankey';
 import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
@@ -75,6 +76,8 @@ Chart.register(
   GraphController,
   ForceDirectedGraphController,
   EdgeLine,
+  SankeyController,
+  Flow,
   annotationPlugin,
   datalabelsPlugin
 );

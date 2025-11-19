@@ -1,14 +1,18 @@
-export const debounce: any = (fn: any, ms = 100) => {
-  let timer: ReturnType<typeof setTimeout>;
-  return function (e: Event) {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn.apply(e), ms);
-  };
-};
+export function debounce<Fn extends (...args: unknown[]) => void>(
+  fn: Fn,
+  ms = 100
+) {
+  let timer: ReturnType<typeof setTimeout> | undefined;
 
-export const stringToReactHtml = (string: string) => {
-  return { __html: string };
-};
+  return function (this: ThisParameterType<Fn>, ...args: Parameters<Fn>) {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), ms);
+  };
+}
+
+export function stringToReactHtml(value: string): { __html: string } {
+  return { __html: value };
+}
 
 /**
  * Convert an object to an array of only its values.
@@ -16,56 +20,174 @@ export const stringToReactHtml = (string: string) => {
  * @param {*} options
  *  imported enums object
  */
-export function createOptionsArray(options: any = {}) {
-  const optionsArray: any = [];
-
-  Object.keys(options).map((key) => {
-    optionsArray.push(options[key]);
-  });
-
-  return optionsArray;
+export function createOptionsArray<T>(options: Record<string, T> = {}): T[] {
+  return Object.values(options);
 }
 
-export function convertChartDataToCSV(args: any) {
-  const data = args.data.data || null;
-  if (data == null || !data.length) {
-    return null;
+type SankeyHeaders = {
+  source: string;
+  target: string;
+  value: string;
+};
+
+type SankeyLinkKey = string | number;
+
+interface SankeyLink {
+  from?: SankeyLinkKey;
+  to?: SankeyLinkKey;
+  source?: SankeyLinkKey;
+  target?: SankeyLinkKey;
+  flow?: string | number;
+  value?: string | number;
+}
+
+interface SankeyOptions {
+  sankey?: {
+    dataTableHeaderLabels?: Partial<SankeyHeaders>;
+  };
+}
+
+interface ChartData {
+  data?: (SankeyLink | number | string)[];
+  label?: string | number;
+  labels?: Record<SankeyLinkKey, string>;
+}
+
+interface CsvArgs {
+  data?: ChartData;
+  labels?: (string | number)[];
+  options?: SankeyOptions;
+  columnDelimiter?: string;
+  lineDelimiter?: string;
+}
+
+function csvEscape(value: unknown, columnDelimiter: string): string {
+  if (value === null || value === undefined) return '';
+  let s = String(value);
+  if (s.includes('"')) s = s.replace(/"/g, '""');
+  if (s.includes(columnDelimiter) || s.includes('"') || s.includes('\n')) {
+    return `"${s}"`;
+  }
+  return s;
+}
+
+export function convertChartDataToCSV(args: CsvArgs): string | null {
+  const data = args.data?.data || null;
+  if (!data || !data.length) return null;
+
+  const columnDelimiter = args.columnDelimiter ?? ',';
+  const lineDelimiter = args.lineDelimiter ?? '\n';
+
+  const first = data[0];
+
+  if (
+    typeof first === 'object' &&
+    first !== null &&
+    !Array.isArray(first) &&
+    ('from' in first || 'source' in first)
+  ) {
+    const options = args.options ?? {};
+    const sankeyHeaders: SankeyHeaders = {
+      source: 'Source',
+      target: 'Target',
+      value: 'Value',
+      ...(options.sankey?.dataTableHeaderLabels ?? {}),
+    };
+
+    const datasetLabels = args.data?.labels ?? {};
+    const nodeLabelsArray = args.labels ?? [];
+
+    let result = '';
+    result += [
+      csvEscape(sankeyHeaders.source, columnDelimiter),
+      csvEscape(sankeyHeaders.target, columnDelimiter),
+      csvEscape(sankeyHeaders.value, columnDelimiter),
+    ].join(columnDelimiter);
+    result += lineDelimiter;
+
+    (data as SankeyLink[]).forEach((link) => {
+      const fromKey = link.from ?? link.source;
+      const toKey = link.to ?? link.target;
+      const val = link.flow ?? link.value ?? '';
+
+      const fromDisplay =
+        (datasetLabels && datasetLabels[fromKey as SankeyLinkKey]) ??
+        (typeof fromKey === 'number' && nodeLabelsArray[fromKey]) ??
+        String(fromKey ?? '');
+
+      const toDisplay =
+        (datasetLabels && datasetLabels[toKey as SankeyLinkKey]) ??
+        (typeof toKey === 'number' && nodeLabelsArray[toKey]) ??
+        String(toKey ?? '');
+
+      result += [
+        csvEscape(fromDisplay, columnDelimiter),
+        csvEscape(toDisplay, columnDelimiter),
+        csvEscape(val, columnDelimiter),
+      ].join(columnDelimiter);
+      result += lineDelimiter;
+    });
+
+    return result;
   }
 
-  const labels = args.labels || null;
-  if (labels == null || !labels.length) {
-    return null;
+  const labels = args.labels;
+  if (!labels || !labels.length) return null;
+
+  let result = columnDelimiter + labels.join(columnDelimiter) + lineDelimiter;
+
+  if (args.data?.label != null) {
+    result += String(args.data.label);
   }
 
-  const columnDelimiter = args.columnDelimiter || ',';
-  const lineDelimiter = args.lineDelimiter || '\n';
-
-  let result = '' + columnDelimiter;
-  result += labels.join(columnDelimiter);
-  result += lineDelimiter;
-
-  result += args.data.label.toString();
-
-  for (let i = 0; i < data.length; i++) {
+  for (let i = 0; i < data.length; i += 1) {
     result += columnDelimiter;
-    result += data[i];
+    result += String(data[i] ?? '');
   }
   result += lineDelimiter;
 
   return result;
 }
 
-export function getRandomData(arrayLength = 6, min = -100, max = 100) {
-  const data = [];
+export function getRandomData(
+  arrayLength = 6,
+  min = -100,
+  max = 100
+): number[] {
+  const minCeil = Math.ceil(min);
+  const maxFloor = Math.floor(max);
+  const range = maxFloor - minCeil + 1;
 
-  for (let i = 0; i < arrayLength; i++) {
-    data.push(
-      Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1)) +
-        Math.ceil(min)
-    );
+  return Array.from({ length: arrayLength }, () => {
+    return Math.floor(Math.random() * range) + minCeil;
+  });
+}
+
+function normalizeHexColor(input: string): string | null {
+  if (!input) return null;
+
+  let hex = input.trim().toLowerCase();
+
+  if (!hex.startsWith('#')) {
+    if (/^[0-9a-f]{3}$/.test(hex) || /^[0-9a-f]{6}$/.test(hex)) {
+      hex = `#${hex}`;
+    } else {
+      return null;
+    }
   }
 
-  return data;
+  hex = hex.slice(1);
+
+  if (hex.length === 3 && /^[0-9a-f]{3}$/.test(hex)) {
+    hex = hex
+      .split('')
+      .map((ch) => ch + ch)
+      .join('');
+  } else if (hex.length !== 6 || !/^[0-9a-f]{6}$/.test(hex)) {
+    return null;
+  }
+
+  return `#${hex}`;
 }
 
 /**
@@ -77,13 +199,20 @@ export function getRandomData(arrayLength = 6, min = -100, max = 100) {
  * value is greater than or equal to 128, it returns the primary text color (TextColor), otherwise it
  * returns the inversed text color (InverseTextColor).
  */
-export function getTextColor(bgHexColor: string) {
+export function getTextColor(bgHexColor: string): string {
   const TextColor = '#3d3c3c';
   const InverseTextColor = '#f9f9f9';
 
-  const r = parseInt(bgHexColor.substring(1, 3), 16);
-  const g = parseInt(bgHexColor.substring(3, 5), 16);
-  const b = parseInt(bgHexColor.substring(5, 7), 16);
+  const normalized = normalizeHexColor(bgHexColor) ?? '#ffffff';
+
+  const r = parseInt(normalized.substring(1, 3), 16);
+  const g = parseInt(normalized.substring(3, 5), 16);
+  const b = parseInt(normalized.substring(5, 7), 16);
+
+  if (Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) {
+    return TextColor;
+  }
+
   const yiq = (r * 299 + g * 587 + b * 114) / 1000;
 
   return yiq >= 128 ? TextColor : InverseTextColor;
