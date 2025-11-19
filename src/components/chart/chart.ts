@@ -27,6 +27,7 @@ import {
   ForceDirectedGraphController,
   EdgeLine,
 } from 'chartjs-chart-graph';
+import { SankeyController, Flow } from 'chartjs-chart-sankey';
 import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
@@ -54,7 +55,6 @@ import minimizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 import { renderGraphTreeTable } from '../../common/helpers/graphTreeTableRenderer';
-import { SankeyController, Flow } from 'chartjs-chart-sankey';
 
 Chart.register(
   ChoroplethController,
@@ -63,8 +63,6 @@ Chart.register(
   ColorScale,
   SizeScale,
   ProjectionScale,
-  SankeyController,
-  Flow,
   TreemapController,
   TreemapElement,
   MatrixController,
@@ -78,6 +76,8 @@ Chart.register(
   GraphController,
   ForceDirectedGraphController,
   EdgeLine,
+  SankeyController,
+  Flow,
   annotationPlugin,
   datalabelsPlugin
 );
@@ -285,7 +285,7 @@ export class KDChart extends LitElement {
   /** Resize observer for canvas-container.
    * @internal
    */
-  _resizeObserver: ResizeObserver = new ResizeObserver(
+  _resizeObserver: any = new ResizeObserver(
     debounce(() => {
       this._resizeChart();
     })
@@ -294,7 +294,7 @@ export class KDChart extends LitElement {
   /** Theme observer to watch for meta color-scheme changes.
    * @internal
    */
-  _themeObserver: MutationObserver = new MutationObserver(() => {
+  _themeObserver: any = new MutationObserver(() => {
     if (this.chart) {
       this.mergeOptions().then(() => {
         this.initChart();
@@ -309,22 +309,6 @@ export class KDChart extends LitElement {
       'no-border': this.noBorder || this._widget,
       widget: this._widget,
     };
-
-    const sKey = (link: any, which: 'from' | 'to') =>
-      which === 'from' ? link?.from ?? link?.source : link?.to ?? link?.target;
-    const sValue = (link: any) => link?.flow ?? link?.value ?? '';
-    const sLabel = (ds: any, key: any) =>
-      ds?.labels && ds.labels[key] ? ds.labels[key] : key ?? '';
-
-    const sankeyHeaders = (() => {
-      const ds = this.datasets?.[0];
-      const h = (this.options as any)?.sankey?.dataTableHeaderLabels || {};
-      return {
-        source: h.source ?? 'Source',
-        target: h.target ?? 'Target',
-        value: h.value ?? ds?.label ?? 'Value',
-      };
-    })();
 
     return html`
       <div
@@ -538,41 +522,16 @@ export class KDChart extends LitElement {
                     : html`
                         <thead>
                           <tr>
-                            ${this.type === 'sankey'
-                              ? html`
-                                  <th>${sankeyHeaders.source}</th>
-                                  <th>${sankeyHeaders.target}</th>
-                                  <th>${sankeyHeaders.value}</th>
-                                `
-                              : this.labels?.length || this.type === 'treemap'
+                            ${this.labels?.length || this.type === 'treemap'
                               ? html`<th>${this.getTableAxisLabel()}</th>`
                               : null}
-                            ${this.type === 'sankey'
-                              ? null
-                              : this.datasets.map(
-                                  (dataset) => html`<th>${dataset.label}</th>`
-                                )}
+                            ${this.datasets.map(
+                              (dataset) => html`<th>${dataset.label}</th>`
+                            )}
                           </tr>
                         </thead>
                         <tbody>
-                          ${this.type === 'sankey'
-                            ? (() => {
-                                const ds = this.datasets && this.datasets[0];
-                                if (!ds || !Array.isArray(ds.data)) return [];
-                                return ds.data.map((link: any) => {
-                                  const fromKey = sKey(link, 'from');
-                                  const toKey = sKey(link, 'to');
-                                  const val = sValue(link);
-                                  return html`
-                                    <tr>
-                                      <td>${sLabel(ds, fromKey)}</td>
-                                      <td>${sLabel(ds, toKey)}</td>
-                                      <td>${val}</td>
-                                    </tr>
-                                  `;
-                                });
-                              })()
-                            : this.type === 'treemap'
+                          ${this.type === 'treemap'
                             ? Array.isArray(this.datasets[0].tree)
                               ? this.datasets[0].tree.map(
                                   (_value: any) => html`
@@ -707,7 +666,9 @@ export class KDChart extends LitElement {
                                                       : dataPoint[key];
                                                   return html`
                                                     <div>
-                                                      <strong>${Label}:</strong>
+                                                      <strong>
+                                                        ${Label}:
+                                                      </strong>
                                                       ${DisplayData}
                                                     </div>
                                                   `;
@@ -762,7 +723,7 @@ export class KDChart extends LitElement {
 
   override firstUpdated() {
     const el = this.shadowRoot?.querySelector('.canvas-container');
-    if (el) this._resizeObserver.observe(el);
+    this._resizeObserver.observe(el);
   }
 
   private generateScrollableLegend(): void {
@@ -802,35 +763,41 @@ export class KDChart extends LitElement {
         changedProps.has('options'))
     ) {
       this.mergeOptions().then(() => {
-        this.chart!.data.labels = this.labels;
-        this.chart!.options = this.mergedOptions;
+        this.chart.data.labels = this.labels;
+        this.chart.options = this.mergedOptions;
 
-        const nextByLabel = new Map(
-          (this.mergedDatasets as any[]).map((d: any) => [d.label, d])
-        );
-
-        this.chart!.data.datasets = this.chart!.data.datasets.filter((d: any) =>
-          nextByLabel.has(d.label)
-        );
-
-        (this.mergedDatasets as any[]).forEach((next: any) => {
-          const existing = this.chart!.data.datasets.find(
-            (d: any) => d.label === next.label
+        this.chart.data.datasets.forEach((dataset: any, index: number) => {
+          const NewDataset = this.mergedDatasets.find(
+            (newDataset: any) => newDataset.label === dataset.label
           );
-          if (!existing) {
-            this.chart!.data.datasets.push(next);
+
+          if (!NewDataset) {
+            this.chart.data.datasets.splice(index, 1);
+          }
+        });
+
+        this.mergedDatasets.forEach((dataset: any) => {
+          const prevDataset = this.chart.data.datasets.find(
+            (prevDataset: any) => prevDataset.label === dataset.label
+          );
+
+          if (!prevDataset) {
+            this.chart.data.datasets.push(dataset);
           } else {
-            Object.keys(next).forEach((k) => {
-              (existing as any)[k] = (next as any)[k];
+            Object.keys(dataset).forEach((key) => {
+              prevDataset[key] = dataset[key];
             });
           }
         });
 
-        this.chart!.update();
+        this.chart.update();
+
         this.generateScrollableLegend();
       });
     }
 
+    // init chart
+    // check to make sure initial datasets + data have been provided
     let hasData = false;
     if (this.datasets && this.datasets.length) {
       for (const dataset of this.datasets) {
@@ -922,38 +889,18 @@ export class KDChart extends LitElement {
     ];
 
     // dynamically import type-specific configs
-    const additionalTypeImports: Promise<any>[] = [];
-    (this.datasets || []).forEach((dataset) => {
-      if (dataset?.type) {
+    const additionalTypeImports: any[] = [];
+    this.datasets.forEach((dataset) => {
+      if (dataset.type) {
         additionalTypeImports.push(
           import(`../../common/config/chartTypes/${dataset.type}.js`)
         );
       }
     });
-
-    let imports: unknown[] = [];
-
-    try {
-      const results = await Promise.allSettled([
-        import(`../../common/config/chartTypes/${this.type}.js`),
-        ...additionalTypeImports,
-      ]);
-
-      imports = results
-        .filter(
-          (r): r is PromiseFulfilledResult<unknown> =>
-            r.status === 'fulfilled' && r.value != null
-        )
-        .map((r) => r.value);
-    } catch {
-      imports = [];
-    }
-
-    const chartTypeConfigs = imports
-      .map((m) =>
-        m && (m as Record<string, unknown>).default ? (m as any).default : m
-      )
-      .filter(Boolean);
+    const chartTypeConfigs = await Promise.all([
+      import(`../../common/config/chartTypes/${this.type}.js`),
+      ...additionalTypeImports,
+    ]);
 
     let mergedOptions: any = globalOptions(this);
     mergedOptions.plugins = mergedOptions.plugins || {};
@@ -973,40 +920,20 @@ export class KDChart extends LitElement {
       mergedOptions = deepmerge(mergedOptions, globalOptionsNonRadial(this));
     }
 
-    const mergedDatasets: any[] = JSON.parse(
-      JSON.stringify(this.datasets || [])
-    );
+    const mergedDatasets: any[] = JSON.parse(JSON.stringify(this.datasets));
 
     chartTypeConfigs.forEach((cfg: any) => {
-      const optFn =
-        typeof cfg?.options === 'function'
-          ? cfg.options
-          : typeof cfg?.getOptions === 'function'
-          ? cfg.getOptions
-          : null;
-      if (optFn) mergedOptions = deepmerge(mergedOptions, optFn(this));
-
-      const dsFn =
-        typeof cfg?.datasetOptions === 'function'
-          ? cfg.datasetOptions
-          : typeof cfg?.getDatasetOptions === 'function'
-          ? cfg.getDatasetOptions
-          : null;
-
-      const cfgType = cfg?.type ?? this.type;
-
-      if (dsFn) {
-        mergedDatasets.forEach((ds: any, i: number) => {
-          const applies =
-            (ds?.type && ds.type === cfgType) ||
-            (!ds?.type && cfgType === this.type);
-
-          if (applies) mergedDatasets[i] = deepmerge(ds, dsFn(this, i));
-        });
-      }
+      mergedOptions = deepmerge(mergedOptions, cfg.options(this));
+      mergedDatasets.forEach((ds: any, i: number) => {
+        if ((!ds.type && cfg.type === this.type) || ds.type === cfg.type) {
+          mergedDatasets[i] = deepmerge(ds, cfg.datasetOptions(this, i));
+        }
+      });
     });
 
-    if (this.options) mergedOptions = deepmerge(mergedOptions, this.options);
+    if (this.options) {
+      mergedOptions = deepmerge(mergedOptions, this.options);
+    }
     this.mergedOptions = mergedOptions;
 
     mergedDatasets.forEach((ds: object, i: number) => {
@@ -1065,7 +992,7 @@ export class KDChart extends LitElement {
       };
 
       const originalHidden = this.chart.data.datasets.map(
-        (_: unknown, i: number) => this.chart!.getDatasetMeta(i).hidden
+        (_: unknown, i: number) => this.chart.getDatasetMeta(i).hidden
       );
 
       try {
@@ -1129,7 +1056,7 @@ export class KDChart extends LitElement {
         context.restore();
         this.chart.options = originalConfig.options;
         originalHidden.forEach((hidden: boolean, i: number) => {
-          this.chart!.getDatasetMeta(i).hidden = hidden;
+          this.chart.getDatasetMeta(i).hidden = hidden;
         });
         this.chart.update();
       } catch (error) {

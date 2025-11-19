@@ -1,7 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
 import argTypes from '../common/config/chartArgTypes';
-import { normalizeData } from '../common/config/chartTypes/sankey';
 
 /**
  * Sankey chart type is available through the integration of the
@@ -22,6 +21,8 @@ export default {
   },
   parameters: { design: { type: 'figma', url: '' } },
 };
+
+const DEFAULT_HEIGHT = 360;
 
 const baseArgs = {
   chartTitle: 'Sankey Chart',
@@ -45,43 +46,36 @@ const baseArgs = {
   ],
   labels: ['Label A', 'Label B', 'Label C', 'Label D'],
   options: {},
-  width: null,
-  height: null,
   colorPalette: 'categorical',
   dataTableHeaderLabels: {
     source: 'Source',
     target: 'Target',
     value: 'Weight',
   },
+  height: DEFAULT_HEIGHT,
 };
+
+const buildSankeyOptions = (a) => ({
+  colorPalette: a.colorPalette,
+  sankey: {
+    dataTableHeaderLabels: a.dataTableHeaderLabels,
+    ...(a.options?.sankey || {}),
+  },
+  ...(a.options || {}),
+});
 
 export const Simple = {
   args: baseArgs,
   render: (a) => {
-    const { datasets, labels } = normalizeData(a);
-
     return html`
       <kd-chart
         type="sankey"
         .chartTitle=${a.chartTitle}
         .description=${a.description}
-        .labels=${labels}
-        .datasets=${datasets}
-        ?hideDescription=${a.hideDescription}
-        ?hideCaptions=${a.hideCaptions}
-        ?hideHeader=${a.hideHeader}
-        ?hideControls=${a.hideControls}
-        ?noBorder=${a.noBorder}
-        .options=${{
-          colorPalette: a.colorPalette,
-          sankey: {
-            dataTableHeaderLabels: a.dataTableHeaderLabels,
-            ...(a.options?.sankey || {}),
-          },
-          ...(a.options || {}),
-        }}
-        .width=${a.width}
-        .height=${a.height}
+        .labels=${a.labels}
+        .datasets=${a.datasets}
+        .options=${buildSankeyOptions(a)}
+        .height=${a.height ?? DEFAULT_HEIGHT}
       ></kd-chart>
     `;
   },
@@ -161,30 +155,15 @@ export const Complex = {
     colorPalette: 'categorical',
   },
   render: (a) => {
-    const { datasets, labels } = normalizeData(a);
-
     return html`
       <kd-chart
         type="sankey"
         .chartTitle=${a.chartTitle}
         .description=${a.description}
-        .labels=${labels}
-        .datasets=${datasets}
-        ?hideDescription=${a.hideDescription}
-        ?hideCaptions=${a.hideCaptions}
-        ?hideHeader=${a.hideHeader}
-        ?hideControls=${a.hideControls}
-        ?noBorder=${a.noBorder}
-        .options=${{
-          colorPalette: a.colorPalette,
-          sankey: {
-            dataTableHeaderLabels: a.dataTableHeaderLabels,
-            ...(a.options?.sankey || {}),
-          },
-          ...(a.options || {}),
-        }}
-        .width=${a.width}
-        .height=${a.height}
+        .labels=${a.labels}
+        .datasets=${a.datasets}
+        .options=${buildSankeyOptions(a)}
+        .height=${a.height ?? DEFAULT_HEIGHT}
       ></kd-chart>
     `;
   },
