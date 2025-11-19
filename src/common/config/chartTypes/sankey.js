@@ -153,34 +153,3 @@ export const datasetOptions = (ctx) => {
     colorMode,
   };
 };
-
-export const normalizeData = (a) => {
-  const datasetsSource =
-    (a.datasets && a.datasets.length && a.datasets) || a.data?.datasets;
-
-  const datasets = (datasetsSource || []).map((ds) => ({ ...ds }));
-
-  if (Array.isArray(a.labels) && a.labels.length) {
-    return { datasets, labels: a.labels };
-  }
-
-  const nodeLabels = (() => {
-    const ds = datasets?.[0];
-    if (!ds?.data?.length) return [];
-
-    const nodes = new Set();
-    ds.data.forEach((link) => {
-      if (!link) return;
-      const from = getFrom(link);
-      const to = getTo(link);
-      if (from !== undefined) nodes.add(from);
-      if (to !== undefined) nodes.add(to);
-    });
-
-    return Array.from(nodes).map((n) =>
-      ds.labels?.[n] ? ds.labels[n] : String(n)
-    );
-  })();
-
-  return { datasets, labels: nodeLabels };
-};

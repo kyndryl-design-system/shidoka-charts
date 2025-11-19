@@ -17,7 +17,7 @@ export default {
     ...argTypes,
     labels: { control: { type: 'object' } },
     datasets: { control: { type: 'object' } },
-    dataTableHeaderLabels: { control: { type: 'object' } },
+    options: { control: { type: 'object' } },
   },
   parameters: { design: { type: 'figma', url: '' } },
 };
@@ -45,24 +45,18 @@ const baseArgs = {
     },
   ],
   labels: ['Label A', 'Label B', 'Label C', 'Label D'],
-  options: {},
-  colorPalette: 'categorical',
-  dataTableHeaderLabels: {
-    source: 'Source',
-    target: 'Target',
-    value: 'Weight',
+  options: {
+    colorPalette: 'categorical',
+    sankey: {
+      dataTableHeaderLabels: {
+        source: 'Source',
+        target: 'Target',
+        value: 'Weight',
+      },
+    },
   },
   height: DEFAULT_HEIGHT,
 };
-
-const buildSankeyOptions = (a) => ({
-  colorPalette: a.colorPalette,
-  sankey: {
-    dataTableHeaderLabels: a.dataTableHeaderLabels,
-    ...(a.options?.sankey || {}),
-  },
-  ...(a.options || {}),
-});
 
 export const Simple = {
   args: baseArgs,
@@ -74,7 +68,7 @@ export const Simple = {
         .description=${a.description}
         .labels=${a.labels}
         .datasets=${a.datasets}
-        .options=${buildSankeyOptions(a)}
+        .options=${a.options}
       ></kd-chart>
     `;
   },
@@ -89,7 +83,7 @@ export const Complex = {
         data: [
           { from: 'leftA', to: 'mid1', flow: 40 },
           { from: 'leftA', to: 'mid2', flow: 20 },
-          { from: 'leftB', to: 'mid1', flow: 30 },
+          { from: 'leftleftB', to: 'mid1', flow: 30 },
           { from: 'leftB', to: 'mid3', flow: 10 },
           { from: 'leftC', to: 'mid2', flow: 15 },
           { from: 'leftC', to: 'mid4', flow: 25 },
@@ -151,7 +145,6 @@ export const Complex = {
       'Label L',
       'Label M',
     ],
-    colorPalette: 'categorical',
   },
   render: (a) => {
     return html`
@@ -161,7 +154,7 @@ export const Complex = {
         .description=${a.description}
         .labels=${a.labels}
         .datasets=${a.datasets}
-        .options=${buildSankeyOptions(a)}
+        .options=${a.options}
       ></kd-chart>
     `;
   },
