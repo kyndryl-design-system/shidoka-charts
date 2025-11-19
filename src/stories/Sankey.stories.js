@@ -75,7 +75,6 @@ export const Simple = {
         .labels=${a.labels}
         .datasets=${a.datasets}
         .options=${buildSankeyOptions(a)}
-        .height=${a.height ?? DEFAULT_HEIGHT}
       ></kd-chart>
     `;
   },
@@ -163,7 +162,6 @@ export const Complex = {
         .labels=${a.labels}
         .datasets=${a.datasets}
         .options=${buildSankeyOptions(a)}
-        .height=${a.height ?? DEFAULT_HEIGHT}
       ></kd-chart>
     `;
   },
