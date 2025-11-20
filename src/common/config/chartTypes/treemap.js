@@ -4,7 +4,7 @@ import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/comm
 
 export const type = 'treemap';
 
-export const options = (ctx) => {
+export const options = () => {
   const BorderColor = getTokenThemeVal('--kd-color-background-page-default');
 
   return {
@@ -13,21 +13,21 @@ export const options = (ctx) => {
         display: false,
       },
     },
-    spacing: function (context) {
+    spacing(context) {
       const Dataset = context.dataset;
-      const Grouped = Dataset.groups !== undefined;
+      const Grouped = Dataset && Dataset.groups !== undefined;
 
       return Grouped ? 0 : 1;
     },
-    borderWidth: function (context) {
+    borderWidth(context) {
       const Dataset = context.dataset;
-      return Dataset.groups ? 1 : 0;
+      return Dataset && Dataset.groups ? 1 : 0;
     },
     borderColor: BorderColor,
     labels: {
       align: 'left',
       display: true,
-      color: function (context) {
+      color(context) {
         return getTextColor(context.element.options.backgroundColor);
       },
       font: {
@@ -40,7 +40,7 @@ export const options = (ctx) => {
     captions: {
       align: 'center',
       display: true,
-      color: function (context) {
+      color(context) {
         return getTextColor(context.element.options.backgroundColor);
       },
       font: {
@@ -57,21 +57,27 @@ export const datasetOptions = (ctx, index) => {
     ctx.options?.colorPalette || 'categorical'
   );
 
+  const defaultColor =
+    palette[0] || getTokenThemeVal('--kd-color-data-viz-level-secondary');
+
   return {
-    backgroundColor: function (context) {
+    backgroundColor(context) {
       const Dataset = context.dataset;
-      const dataIndex =
-        typeof context.dataIndex === 'number' ? context.dataIndex : 0;
+
+      if (!Dataset) {
+        return defaultColor;
+      }
+
       const paletteLen = (palette && palette.length) || 1;
 
-      if (Dataset && Dataset.groups !== undefined) {
+      if (Dataset.groups !== undefined) {
         const groupIndex = getGroupColorIndex(context);
-        return palette[groupIndex % paletteLen];
+        return palette[groupIndex % paletteLen] || defaultColor;
       }
 
       const nested =
-        typeof (Dataset && Dataset.tree) === 'object' &&
-        !Array.isArray(Dataset && Dataset.tree);
+        typeof Dataset.tree === 'object' && !Array.isArray(Dataset.tree);
+
       if (
         nested &&
         context.raw &&
@@ -81,10 +87,11 @@ export const datasetOptions = (ctx, index) => {
         const parent = String(context.raw._data.path).split('.')[0];
         const groups = Object.keys(Dataset.tree || {});
         const idx = Math.max(0, groups.indexOf(parent));
-        return palette[idx % paletteLen];
+        return palette[idx % paletteLen] || defaultColor;
       }
 
-      return palette[dataIndex % paletteLen];
+      // simple / ungrouped treemap: one default color similar to bubbleMap Colors[0]
+      return defaultColor;
     },
   };
 };
@@ -101,7 +108,7 @@ const getGroupColorIndex = (context) => {
   const Dataset = context.dataset;
   let index = 0;
 
-  if (Dataset.groups !== undefined) {
+  if (Dataset && Dataset.groups !== undefined) {
     const DataIndex = context.dataIndex;
     const GroupKey = Dataset.groups ? Dataset.groups[0] : null;
     const Nested =
@@ -111,7 +118,7 @@ const getGroupColorIndex = (context) => {
     if (Nested) {
       Groups = Object.keys(Dataset.tree);
 
-      if (context.raw) {
+      if (context.raw && context.raw._data && context.raw._data.path) {
         const Path = context.raw._data.path;
         const Parent = Path.split('.')[0];
 
@@ -124,9 +131,9 @@ const getGroupColorIndex = (context) => {
         }
       });
 
-      const Leaf = Dataset.data[DataIndex];
+      const Leaf = Dataset.data && Dataset.data[DataIndex];
 
-      if (Leaf) {
+      if (Leaf && Leaf._data) {
         index = Groups.indexOf(Leaf._data[GroupKey]);
       }
     }
