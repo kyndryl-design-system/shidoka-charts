@@ -15,13 +15,13 @@ export const options = () => {
     },
     spacing(context) {
       const Dataset = context.dataset;
-      const Grouped = Dataset.groups !== undefined;
+      const Grouped = Dataset && Dataset.groups !== undefined;
 
       return Grouped ? 0 : 1;
     },
     borderWidth(context) {
       const Dataset = context.dataset;
-      return Dataset.groups ? 1 : 0;
+      return Dataset && Dataset.groups ? 1 : 0;
     },
     borderColor: BorderColor,
     labels: {
@@ -63,18 +63,20 @@ export const datasetOptions = (ctx, index) => {
   return {
     backgroundColor(context) {
       const Dataset = context.dataset;
-      const dataIndex =
-        typeof context.dataIndex === 'number' ? context.dataIndex : 0;
+
+      if (!Dataset) {
+        return defaultColor;
+      }
+
       const paletteLen = (palette && palette.length) || 1;
 
-      if (Dataset && Dataset.groups !== undefined) {
+      if (Dataset.groups !== undefined) {
         const groupIndex = getGroupColorIndex(context);
         return palette[groupIndex % paletteLen] || defaultColor;
       }
 
       const nested =
-        typeof (Dataset && Dataset.tree) === 'object' &&
-        !Array.isArray(Dataset && Dataset.tree);
+        typeof Dataset.tree === 'object' && !Array.isArray(Dataset.tree);
 
       if (
         nested &&
@@ -88,11 +90,8 @@ export const datasetOptions = (ctx, index) => {
         return palette[idx % paletteLen] || defaultColor;
       }
 
-      if (!Dataset || Dataset.groups === undefined) {
-        return defaultColor;
-      }
-
-      return palette[dataIndex % paletteLen] || defaultColor;
+      // simple / ungrouped treemap: one default color similar to bubbleMap Colors[0]
+      return defaultColor;
     },
   };
 };
@@ -109,7 +108,7 @@ const getGroupColorIndex = (context) => {
   const Dataset = context.dataset;
   let index = 0;
 
-  if (Dataset.groups !== undefined) {
+  if (Dataset && Dataset.groups !== undefined) {
     const DataIndex = context.dataIndex;
     const GroupKey = Dataset.groups ? Dataset.groups[0] : null;
     const Nested =
@@ -119,7 +118,7 @@ const getGroupColorIndex = (context) => {
     if (Nested) {
       Groups = Object.keys(Dataset.tree);
 
-      if (context.raw) {
+      if (context.raw && context.raw._data && context.raw._data.path) {
         const Path = context.raw._data.path;
         const Parent = Path.split('.')[0];
 
@@ -132,9 +131,9 @@ const getGroupColorIndex = (context) => {
         }
       });
 
-      const Leaf = Dataset.data[DataIndex];
+      const Leaf = Dataset.data && Dataset.data[DataIndex];
 
-      if (Leaf) {
+      if (Leaf && Leaf._data) {
         index = Groups.indexOf(Leaf._data[GroupKey]);
       }
     }
