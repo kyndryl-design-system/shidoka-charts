@@ -519,6 +519,43 @@ export class KDChart extends LitElement {
                       )
                     : this.type === 'tree'
                     ? renderGraphTreeTable(this.datasets)
+                    : this.type === 'sankey'
+                    ? html`
+                        <thead>
+                          <tr>
+                            <th>
+                              ${this.options?.sankey?.dataTableHeaderLabels
+                                ?.source ?? 'Source'}
+                            </th>
+                            <th>
+                              ${this.options?.sankey?.dataTableHeaderLabels
+                                ?.target ?? 'Target'}
+                            </th>
+                            <th>
+                              ${this.options?.sankey?.dataTableHeaderLabels
+                                ?.value ?? 'Weight'}
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          ${(this.datasets?.[0]?.data ?? []).map(
+                            (link: any) => {
+                              const source = link?.from ?? link?.source ?? '';
+                              const target = link?.to ?? link?.target ?? '';
+                              const value =
+                                link?.flow ?? link?.value ?? link?.weight ?? '';
+
+                              return html`
+                                <tr>
+                                  <td>${source}</td>
+                                  <td>${target}</td>
+                                  <td>${value}</td>
+                                </tr>
+                              `;
+                            }
+                          )}
+                        </tbody>
+                      `
                     : html`
                         <thead>
                           <tr>
@@ -608,19 +645,23 @@ export class KDChart extends LitElement {
                                           `
                                         : null}
                                       ${this.datasets.map((dataset) => {
-                                        if (i >= dataset.data.length)
+                                        if (i >= dataset.data.length) {
                                           return html`<td></td>`;
+                                        }
 
                                         const dataPoint = dataset.data[i];
+
                                         if (
                                           this.type === 'bubbleMap' ||
                                           this.type === 'choropleth'
                                         ) {
-                                          return html`
-                                            <td>${dataset.data[i].value}</td>
-                                          `;
-                                        } else if (
-                                          this.options?.scales[NonIndexAxis]
+                                          return html`<td>
+                                            ${dataPoint.value}
+                                          </td>`;
+                                        }
+
+                                        if (
+                                          this.options?.scales?.[NonIndexAxis]
                                             ?.type === 'time'
                                         ) {
                                           return html`
@@ -630,23 +671,28 @@ export class KDChart extends LitElement {
                                               ).toLocaleString()}
                                             </td>
                                           `;
-                                        } else if (Array.isArray(dataPoint)) {
+                                        }
+
+                                        if (Array.isArray(dataPoint)) {
                                           return html`
                                             <td>
                                               ${dataPoint[0]}, ${dataPoint[1]}
                                             </td>
                                           `;
-                                        } else if (
+                                        }
+
+                                        if (
                                           [
                                             'pie',
                                             'doughnut',
                                             'polarArea',
                                           ].includes(this.type)
                                         ) {
-                                          return html` <td>${dataPoint}</td> `;
-                                        } else if (
+                                          return html`<td>${dataPoint}</td>`;
+                                        }
+
+                                        if (
                                           typeof dataPoint === 'object' &&
-                                          !Array.isArray(dataPoint) &&
                                           dataPoint !== null
                                         ) {
                                           return html`
@@ -666,9 +712,7 @@ export class KDChart extends LitElement {
                                                       : dataPoint[key];
                                                   return html`
                                                     <div>
-                                                      <strong>
-                                                        ${Label}:
-                                                      </strong>
+                                                      <strong>${Label}:</strong>
                                                       ${DisplayData}
                                                     </div>
                                                   `;
@@ -676,11 +720,9 @@ export class KDChart extends LitElement {
                                               )}
                                             </td>
                                           `;
-                                        } else {
-                                          return html`
-                                            <td>${dataset.data[i]}</td>
-                                          `;
                                         }
+
+                                        return html`<td>${dataPoint}</td>`;
                                       })}
                                     </tr>
                                   `;
