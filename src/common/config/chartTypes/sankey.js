@@ -8,6 +8,7 @@ const getSankeyLabelColor = () =>
   getTokenThemeVal('--kd-color-text-level-primary');
 
 const getFrom = (d) => d?.from ?? d?.source;
+
 const getTo = (d) => d?.to ?? d?.target;
 
 const sankeyExternalTooltip = createSankeyTooltipHandler();
