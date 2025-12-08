@@ -143,14 +143,14 @@ const palettes = {
     '--kd-color-data-viz-rag-8-success-light',
     '--kd-color-data-viz-rag-8-warning-light',
     '--kd-color-data-viz-rag-8-error-light',
-    '--kd-color-status-error-critical-light',
+    '--kd-color-status-critical-light',
   ],
 
   statusDark: [
     '--kd-color-data-viz-rag-8-success',
     '--kd-color-data-viz-rag-8-warning',
     '--kd-color-data-viz-rag-8-error',
-    '--kd-color-status-error-critical-dark',
+    '--kd-color-status-critical-dark',
   ],
 
   rag03: [
