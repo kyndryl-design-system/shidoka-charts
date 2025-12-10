@@ -328,3 +328,68 @@ export const TimeScale = {
     `;
   },
 };
+
+export const Spark = {
+  args: {
+    chartTitle: 'Spark Line Chart',
+    description: 'Chart description.',
+    colorPalette: 'categorical',
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: [
+          { x: '2025-01-23T06:16:57Z', y: 0 },
+          { x: '2025-01-23T06:17:12Z', y: 10 },
+          { x: '2025-01-23T06:17:27Z', y: 5 },
+          { x: '2025-01-23T06:17:42Z', y: 7 },
+          { x: '2025-01-23T06:17:57Z', y: 13 },
+          { x: '2025-01-23T06:18:12Z', y: 18 },
+          { x: '2025-01-23T06:18:27Z', y: 15 },
+        ],
+      },
+    ],
+    options: {
+      pointStyle: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+        },
+      },
+      scales: {
+        x: {
+          type: 'time',
+          display: false,
+          title: {
+            text: 'Time',
+          },
+        },
+        y: {
+          display: false,
+          title: {
+            text: 'Value',
+          },
+        },
+      },
+    },
+    width: 200,
+    height: 100,
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="line"
+        .chartTitle=${args.chartTitle}
+        .description=${args.description}
+        .datasets=${args.datasets}
+        hideHeader
+        hideControls
+        noBorder
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .width=${args.width}
+        .height=${args.height}
+      ></kd-chart>
+    `;
+  },
+};
