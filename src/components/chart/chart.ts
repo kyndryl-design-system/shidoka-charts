@@ -317,7 +317,7 @@ export class KDChart extends LitElement {
       >
         ${!this.hideHeader || !this.hideControls
           ? html`
-              <div class="header">
+              <div class="header ${this.hideHeader ? 'hidden' : ''}">
                 ${!this.hideHeader
                   ? html`
                       <slot name="draghandle"></slot>
@@ -435,7 +435,13 @@ export class KDChart extends LitElement {
             style="${this.width ? `width: ${this.width}px;` : ''}
             ${this.height ? `height: ${this.height}px;` : ''}"
           >
-            <canvas role="img" aria-labelledby="titleDesc"></canvas>
+            <canvas
+              role="img"
+              aria-labelledby=${!this.hideHeader ? 'titleDesc' : ''}
+              aria-label=${!this.hideHeader
+                ? ''
+                : this.chartTitle + ' ' + this.description}
+            ></canvas>
           </div>
           <figcaption>
             <div
