@@ -70,7 +70,7 @@
     "axe-playwright": "^2.0.1",
     "chromatic": "^11.2.0",
     "eslint": "^8.31.0",
-    "eslint-plugin-storybook": "^10.0.8",
+    "eslint-plugin-storybook": "^10.1.10",
     "html2canvas": "^1.4.1",
     "husky": "^8.0.3",
     "lint-staged": "^13.1.2",
