@@ -1,6 +1,10 @@
 import { getComputedColorPalette } from '../colorPalettes';
 import { getTextColor } from '../../helpers/helpers';
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
+import {
+  getDomainFromValues,
+  getScaledColorIndex,
+} from '../../helpers/colorScaling';
 
 export const type = 'treemap';
 
@@ -60,6 +64,13 @@ export const datasetOptions = (ctx, index) => {
   const defaultColor =
     palette[0] || getTokenThemeVal('--kd-color-data-viz-level-secondary');
 
+  const paletteLen = (palette && palette.length) || 1;
+
+  const enableColorScaling = !!ctx.options?.colorScaling;
+
+  const dataset = ctx?.datasets?.[index];
+  const valueDomain = getTreemapDomain(dataset);
+
   return {
     backgroundColor(context) {
       const Dataset = context.dataset;
@@ -67,8 +78,6 @@ export const datasetOptions = (ctx, index) => {
       if (!Dataset) {
         return defaultColor;
       }
-
-      const paletteLen = (palette && palette.length) || 1;
 
       if (Dataset.groups !== undefined) {
         const groupIndex = getGroupColorIndex(context);
@@ -90,8 +99,14 @@ export const datasetOptions = (ctx, index) => {
         return palette[idx % paletteLen] || defaultColor;
       }
 
-      // simple / ungrouped treemap: one default color similar to bubbleMap Colors[0]
-      return defaultColor;
+      if (!enableColorScaling) {
+        return defaultColor;
+      }
+
+      const value = getTreemapValue(context);
+      const colorIndex = getScaledColorIndex(value, valueDomain, paletteLen);
+
+      return palette[colorIndex] || defaultColor;
     },
   };
 };
@@ -140,4 +155,78 @@ const getGroupColorIndex = (context) => {
   }
 
   return index < 0 ? 0 : index;
+};
+
+const getTreemapDomain = (dataset) => {
+  if (!dataset) {
+    return { min: 0, max: 0 };
+  }
+
+  if (dataset._valueDomain && dataset._valueDomain.min !== undefined) {
+    return dataset._valueDomain;
+  }
+
+  const key = dataset.key || 'value';
+  const values = [];
+
+  const pushValue = (node) => {
+    if (!node) {
+      return;
+    }
+
+    if (typeof node[key] === 'number') {
+      values.push(node[key]);
+    } else if (typeof node.value === 'number') {
+      values.push(node.value);
+    } else if (node._data && typeof node._data[key] === 'number') {
+      values.push(node._data[key]);
+    } else if (typeof node.v === 'number') {
+      values.push(node.v);
+    }
+  };
+
+  if (Array.isArray(dataset.tree)) {
+    dataset.tree.forEach(pushValue);
+  } else if (dataset.tree && typeof dataset.tree === 'object') {
+    Object.keys(dataset.tree).forEach((groupKey) => {
+      const leaves = dataset.tree[groupKey];
+      if (Array.isArray(leaves)) {
+        leaves.forEach(pushValue);
+      }
+    });
+  }
+
+  if (Array.isArray(dataset.data)) {
+    dataset.data.forEach(pushValue);
+  }
+
+  const domain = getDomainFromValues(values, { min: 0, max: 0 });
+
+  dataset._valueDomain = domain;
+
+  return domain;
+};
+
+const getTreemapValue = (context) => {
+  const raw = context.raw;
+  const Dataset = context.dataset;
+  const key = Dataset && Dataset.key ? Dataset.key : 'value';
+
+  if (!raw) {
+    return null;
+  }
+
+  if (typeof raw.v === 'number') {
+    return raw.v;
+  }
+
+  if (typeof raw.value === 'number') {
+    return raw.value;
+  }
+
+  if (raw._data && typeof raw._data[key] === 'number') {
+    return raw._data[key];
+  }
+
+  return null;
 };

@@ -97,6 +97,114 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/common/helpers/colorScaling.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getDomainFromValues",
+          "return": {
+            "type": {
+              "text": "ScaleDomain"
+            }
+          },
+          "parameters": [
+            {
+              "name": "values",
+              "type": {
+                "text": "NumericLike[]"
+              }
+            },
+            {
+              "name": "fallback",
+              "optional": true,
+              "type": {
+                "text": "ScaleDomain"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "normalizeToUnit",
+          "return": {
+            "type": {
+              "text": "number"
+            }
+          },
+          "parameters": [
+            {
+              "name": "value",
+              "type": {
+                "text": "NumericLike"
+              }
+            },
+            {
+              "name": "domain",
+              "type": {
+                "text": "ScaleDomain"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "getScaledColorIndex",
+          "return": {
+            "type": {
+              "text": "number"
+            }
+          },
+          "parameters": [
+            {
+              "name": "value",
+              "type": {
+                "text": "NumericLike"
+              }
+            },
+            {
+              "name": "domain",
+              "type": {
+                "text": "ScaleDomain"
+              }
+            },
+            {
+              "name": "paletteLen",
+              "type": {
+                "text": "number"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getDomainFromValues",
+          "declaration": {
+            "name": "getDomainFromValues",
+            "module": "src/common/helpers/colorScaling.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "normalizeToUnit",
+          "declaration": {
+            "name": "normalizeToUnit",
+            "module": "src/common/helpers/colorScaling.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "getScaledColorIndex",
+          "declaration": {
+            "name": "getScaledColorIndex",
+            "module": "src/common/helpers/colorScaling.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/common/helpers/graphTreeTableRenderer.ts",
       "declarations": [
         {
