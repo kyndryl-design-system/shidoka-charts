@@ -398,20 +398,24 @@ export class KDChart extends LitElement {
                                         </button>
                                       `
                                     : null}
-                                  <button
-                                    tabindex="0"
-                                    @click=${(e: Event) =>
-                                      this.handleDownloadImage(e, false)}
-                                  >
-                                    ${this.customLabels.downloadPng}
-                                  </button>
-                                  <button
-                                    tabindex="0"
-                                    @click=${(e: Event) =>
-                                      this.handleDownloadImage(e, true)}
-                                  >
-                                    ${this.customLabels.downloadJpg}
-                                  </button>
+                                  ${!this.tableView
+                                    ? html`
+                                        <button
+                                          tabindex="0"
+                                          @click=${(e: Event) =>
+                                            this.handleDownloadImage(e, false)}
+                                        >
+                                          ${this.customLabels.downloadPng}
+                                        </button>
+                                        <button
+                                          tabindex="0"
+                                          @click=${(e: Event) =>
+                                            this.handleDownloadImage(e, true)}
+                                        >
+                                          ${this.customLabels.downloadJpg}
+                                        </button>
+                                      `
+                                    : null}
                                 </div>
                               </div>
                             `
