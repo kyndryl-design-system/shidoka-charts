@@ -316,7 +316,7 @@ export function convertTreemapDataToCSV(datasets: any[]) {
           typeof value === 'object' &&
           !Array.isArray(value)
         ) {
-          // Check if it has a 'value' property (child node)
+          // Check if it has a 'value' property (left node)
           if ('value' in value && Object.keys(value).length === 1) {
             const row: any = {};
             currentPath.forEach((p, idx) => {
