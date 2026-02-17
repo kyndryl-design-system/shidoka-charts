@@ -41,6 +41,7 @@ import {
   convertChartDataToCSV,
   debounce,
   convertTreeDataToCSV,
+  convertTreemapDataToCSV,
 } from '../../common/helpers/helpers';
 import { renderBoxplotViolinTable } from '../../common/helpers/boxplotViolinTableRenderer';
 import ChartScss from './chart.scss?inline';
@@ -1202,6 +1203,8 @@ export class KDChart extends LitElement {
     // Special handling for tree and dendrogram charts
     if (this.type === 'tree' || this.type === 'dendrogram') {
       csv += convertTreeDataToCSV(this.datasets);
+    } else if (this.type === 'treemap') {
+      csv += convertTreemapDataToCSV(this.datasets);
     } else {
       // Standard CSV handling for other chart types
       for (let i = 0; i < this.chart.data.datasets.length; i++) {

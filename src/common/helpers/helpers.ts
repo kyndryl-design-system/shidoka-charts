@@ -131,6 +131,34 @@ export function convertChartDataToCSV(args: CsvArgs): string | null {
     return result;
   }
 
+  // Handle Geo data (choropleth and bubbleMap charts)
+  if (
+    typeof first === 'object' &&
+    first !== null &&
+    !Array.isArray(first) &&
+    'value' in first &&
+    ('feature' in first || 'latitude' in first || 'longitude' in first)
+  ) {
+    const labels = args.labels;
+    if (!labels || !labels.length) return null;
+
+    let result = columnDelimiter + labels.join(columnDelimiter) + lineDelimiter;
+
+    if (args.data?.label != null) {
+      result += String(args.data.label);
+    }
+
+    // Get values from geo data objects
+    for (let i = 0; i < data.length; i += 1) {
+      result += columnDelimiter;
+      const item = data[i] as any;
+      result += String(item.value ?? '');
+    }
+    result += lineDelimiter;
+
+    return result;
+  }
+
   const labels = args.labels;
   if (!labels || !labels.length) return null;
 
@@ -256,4 +284,103 @@ function calculateDepth(
     return 0;
   }
   return 1 + calculateDepth(item.parent, data, visited);
+}
+
+// Helper function to convert treemap data to CSV format
+export function convertTreemapDataToCSV(datasets: any[]) {
+  if (!datasets || datasets.length === 0) {
+    return '';
+  }
+
+  const dataset = datasets[0];
+
+  if (!dataset.tree) {
+    return '';
+  }
+
+  const treeData = dataset.tree;
+  let csv = '';
+
+  // Flatten nested structure
+  function flattenTree(obj: any, parentPath: string[] = [], depth: number = 0) {
+    const rows: any[] = [];
+    const headers = new Set<string>();
+
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        const value = obj[key];
+        const currentPath = [...parentPath, key];
+
+        if (
+          value !== null &&
+          typeof value === 'object' &&
+          !Array.isArray(value)
+        ) {
+          // Check if it has a 'value' property (child node)
+          if ('value' in value && Object.keys(value).length === 1) {
+            const row: any = {};
+            currentPath.forEach((p, idx) => {
+              const headerName = `level_${idx}`;
+              row[headerName] = p;
+              headers.add(headerName);
+            });
+            row['value'] = value.value;
+            headers.add('value');
+            rows.push(row);
+          } else {
+            const nestedResult = flattenTree(value, currentPath, depth + 1);
+            rows.push(...nestedResult.rows);
+            nestedResult.headers.forEach((h) => headers.add(h));
+          }
+        }
+      }
+    }
+
+    return { rows, headers };
+  }
+
+  // Handle flat array structure
+  if (Array.isArray(treeData)) {
+    // Build CSV header based on properties available in first item object
+    const firstItem = treeData[0];
+    const headers = Object.keys(firstItem);
+    csv = headers.map((h) => `"${h}"`).join(',') + '\n';
+
+    // Add data rows
+    treeData.forEach((item: any) => {
+      const row = headers.map((header) => {
+        const value = item[header];
+        if (value === null || value === undefined) {
+          return '';
+        }
+
+        const stringValue = String(value).replace(/"/g, '""');
+        return `"${stringValue}"`;
+      });
+      csv += row.join(',') + '\n';
+    });
+  } else if (typeof treeData === 'object') {
+    // Handle nested hierarchical object structure
+    const result = flattenTree(treeData);
+    const { rows, headers } = result;
+
+    if (rows.length > 0 && headers.size > 0) {
+      const sortedHeaders = Array.from(headers).sort();
+      csv = sortedHeaders.map((h) => `"${h}"`).join(',') + '\n';
+
+      rows.forEach((row) => {
+        const csvRow = sortedHeaders.map((header) => {
+          const value = row[header];
+          if (value === null || value === undefined) {
+            return '';
+          }
+          const stringValue = String(value).replace(/"/g, '""');
+          return `"${stringValue}"`;
+        });
+        csv += csvRow.join(',') + '\n';
+      });
+    }
+  }
+
+  return csv;
 }
