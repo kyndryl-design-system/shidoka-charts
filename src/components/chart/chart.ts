@@ -771,7 +771,6 @@ export class KDChart extends LitElement {
   private _resizeChart() {
     if (this.chart) {
       this.chart.resize();
-      console.log('resize');
     }
   }
 
@@ -962,7 +961,6 @@ export class KDChart extends LitElement {
    * final set of options for a chart.
    */
   private async mergeOptions() {
-    console.log('merge');
     const radialTypes = ['pie', 'doughnut', 'radar', 'polarArea', 'meter'];
     const ignoredTypes = [
       'choropleth',
