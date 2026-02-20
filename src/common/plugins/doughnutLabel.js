@@ -11,6 +11,8 @@ export default {
     ) {
       const { ctx } = chart;
 
+      if (!chart.chartArea) return;
+
       // get sum of all visible data points
       const total = chart.config.data.datasets[0].data
         .filter((dataPoint, index) => !chart.legend.legendItems[index]?.hidden)
