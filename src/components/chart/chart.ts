@@ -41,6 +41,7 @@ import {
   convertChartDataToCSV,
   debounce,
   convertTreeDataToCSV,
+  convertTreemapDataToCSV,
 } from '../../common/helpers/helpers';
 import { renderBoxplotViolinTable } from '../../common/helpers/boxplotViolinTableRenderer';
 import ChartScss from './chart.scss?inline';
@@ -78,7 +79,6 @@ Chart.register(
   EdgeLine,
   SankeyController,
   Flow,
-  annotationPlugin,
   datalabelsPlugin
 );
 
@@ -287,18 +287,38 @@ export class KDChart extends LitElement {
    */
   _resizeObserver: any = new ResizeObserver(
     debounce(() => {
+      if (!this._resizeObserverInitialized) {
+        this._resizeObserverInitialized = true;
+        return;
+      }
       this._resizeChart();
     })
   );
 
+  /** Tracks whether the chart has been initialized to prevent resize observer firing on initial load.
+   * @internal
+   */
+  _resizeObserverInitialized = false;
+
   /** Theme observer to watch for meta color-scheme changes.
    * @internal
    */
-  _themeObserver: any = new MutationObserver(() => {
-    if (this.chart) {
-      this.mergeOptions().then(() => {
-        this.initChart();
-      });
+  _themeObserver: any = new MutationObserver((mutations: MutationRecord[]) => {
+    for (const mutation of mutations) {
+      if (
+        mutation.type === 'attributes' &&
+        mutation.attributeName === 'content'
+      ) {
+        const newValue = (mutation.target as HTMLMetaElement).content;
+        const oldValue = mutation.oldValue;
+
+        if (newValue !== oldValue && this.chart) {
+          this.mergeOptions().then(() => {
+            this.initChart();
+          });
+          break;
+        }
+      }
     }
   });
 
@@ -398,20 +418,24 @@ export class KDChart extends LitElement {
                                         </button>
                                       `
                                     : null}
-                                  <button
-                                    tabindex="0"
-                                    @click=${(e: Event) =>
-                                      this.handleDownloadImage(e, false)}
-                                  >
-                                    ${this.customLabels.downloadPng}
-                                  </button>
-                                  <button
-                                    tabindex="0"
-                                    @click=${(e: Event) =>
-                                      this.handleDownloadImage(e, true)}
-                                  >
-                                    ${this.customLabels.downloadJpg}
-                                  </button>
+                                  ${!this.tableView
+                                    ? html`
+                                        <button
+                                          tabindex="0"
+                                          @click=${(e: Event) =>
+                                            this.handleDownloadImage(e, false)}
+                                        >
+                                          ${this.customLabels.downloadPng}
+                                        </button>
+                                        <button
+                                          tabindex="0"
+                                          @click=${(e: Event) =>
+                                            this.handleDownloadImage(e, true)}
+                                        >
+                                          ${this.customLabels.downloadJpg}
+                                        </button>
+                                      `
+                                    : null}
                                 </div>
                               </div>
                             `
@@ -755,7 +779,11 @@ export class KDChart extends LitElement {
     try {
       const meta = document.querySelector('meta[name="color-scheme"]');
       if (meta instanceof Node) {
-        this._themeObserver.observe(meta, { attributes: true });
+        this._themeObserver.observe(meta, {
+          attributes: true,
+          attributeFilter: ['content'], // only watch the content attribute
+          attributeOldValue: true, // enables mutation.oldValue
+        });
       }
     } catch (error) {
       console.warn('Failed to set up theme observer:', error);
@@ -765,6 +793,7 @@ export class KDChart extends LitElement {
   override disconnectedCallback() {
     this._resizeObserver.disconnect();
     this._themeObserver.disconnect();
+    this._resizeObserverInitialized = false;
 
     super.disconnectedCallback();
   }
@@ -905,6 +934,11 @@ export class KDChart extends LitElement {
       ...this.plugins,
       a11yPlugin,
     ];
+
+    // add annotation plugin only when annotations are configured
+    if (this.mergedOptions?.plugins?.annotation) {
+      chartPlugins.push(annotationPlugin);
+    }
 
     // add htmlLegendPlugin if useHtmlLegend is enabled
     if (this.useHtmlLegend) {
@@ -1198,6 +1232,8 @@ export class KDChart extends LitElement {
     // Special handling for tree and dendrogram charts
     if (this.type === 'tree' || this.type === 'dendrogram') {
       csv += convertTreeDataToCSV(this.datasets);
+    } else if (this.type === 'treemap') {
+      csv += convertTreemapDataToCSV(this.datasets);
     } else {
       // Standard CSV handling for other chart types
       for (let i = 0; i < this.chart.data.datasets.length; i++) {

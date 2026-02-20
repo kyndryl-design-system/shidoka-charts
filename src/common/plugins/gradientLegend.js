@@ -92,6 +92,7 @@ export default {
 
     const ctx = chart.ctx;
     const chartArea = chart.chartArea;
+    if (!chartArea) return;
     const paletteKey = options.paletteKey || '';
     const isDivergentPalette = paletteKey.toLowerCase().includes('divergent');
 
