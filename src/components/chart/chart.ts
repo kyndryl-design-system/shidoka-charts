@@ -79,7 +79,6 @@ Chart.register(
   EdgeLine,
   SankeyController,
   Flow,
-  annotationPlugin,
   datalabelsPlugin
 );
 
@@ -936,6 +935,11 @@ export class KDChart extends LitElement {
       ...this.plugins,
       a11yPlugin,
     ];
+
+    // add annotation plugin only when annotations are configured
+    if (this.mergedOptions?.plugins?.annotation) {
+      chartPlugins.push(annotationPlugin);
+    }
 
     // add htmlLegendPlugin if useHtmlLegend is enabled
     if (this.useHtmlLegend) {
