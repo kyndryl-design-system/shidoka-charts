@@ -295,11 +295,22 @@ export class KDChart extends LitElement {
   /** Theme observer to watch for meta color-scheme changes.
    * @internal
    */
-  _themeObserver: any = new MutationObserver(() => {
-    if (this.chart) {
-      this.mergeOptions().then(() => {
-        this.initChart();
-      });
+  _themeObserver: any = new MutationObserver((mutations: MutationRecord[]) => {
+    for (const mutation of mutations) {
+      if (
+        mutation.type === 'attributes' &&
+        mutation.attributeName === 'content'
+      ) {
+        const newValue = (mutation.target as HTMLMetaElement).content;
+        const oldValue = mutation.oldValue;
+
+        if (newValue !== oldValue && this.chart) {
+          this.mergeOptions().then(() => {
+            this.initChart();
+          });
+          break;
+        }
+      }
     }
   });
 
@@ -760,7 +771,11 @@ export class KDChart extends LitElement {
     try {
       const meta = document.querySelector('meta[name="color-scheme"]');
       if (meta instanceof Node) {
-        this._themeObserver.observe(meta, { attributes: true });
+        this._themeObserver.observe(meta, {
+          attributes: true,
+          attributeFilter: ['content'], // only watch the content attribute
+          attributeOldValue: true, // enables mutation.oldValue
+        });
       }
     } catch (error) {
       console.warn('Failed to set up theme observer:', error);
