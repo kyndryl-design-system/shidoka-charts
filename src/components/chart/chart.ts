@@ -288,9 +288,18 @@ export class KDChart extends LitElement {
    */
   _resizeObserver: any = new ResizeObserver(
     debounce(() => {
+      if (!this._resizeObserverInitialized) {
+        this._resizeObserverInitialized = true;
+        return;
+      }
       this._resizeChart();
     })
   );
+
+  /** Tracks whether the chart has been initialized to prevent resize observer firing on initial load.
+   * @internal
+   */
+  _resizeObserverInitialized = false;
 
   /** Theme observer to watch for meta color-scheme changes.
    * @internal
@@ -763,6 +772,7 @@ export class KDChart extends LitElement {
   private _resizeChart() {
     if (this.chart) {
       this.chart.resize();
+      console.log('resize');
     }
   }
 
@@ -785,6 +795,7 @@ export class KDChart extends LitElement {
   override disconnectedCallback() {
     this._resizeObserver.disconnect();
     this._themeObserver.disconnect();
+    this._resizeObserverInitialized = false;
 
     super.disconnectedCallback();
   }
@@ -947,6 +958,7 @@ export class KDChart extends LitElement {
    * final set of options for a chart.
    */
   private async mergeOptions() {
+    console.log('merge');
     const radialTypes = ['pie', 'doughnut', 'radar', 'polarArea', 'meter'];
     const ignoredTypes = [
       'choropleth',
