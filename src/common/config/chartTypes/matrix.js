@@ -134,6 +134,7 @@ const gradientLegendPlugin = {
 
     const ctx = chart.ctx;
     const chartArea = chart.chartArea;
+    if (!chartArea) return;
     const paletteKey = options.paletteKey || '';
     const isDivergentPalette = paletteKey.toLowerCase().includes('divergent');
     const computedScale = chart.options.colorScale || {};
