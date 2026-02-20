@@ -349,10 +349,9 @@ export const options = (ctx) => {
     scales: {
       x: {
         grid: { display: false },
-        min: 1,
-        max: ctx.labels.x?.length ?? ctx.labels?.length ?? 3,
         offset: true,
         ticks: {
+          stepSize: 1,
           autoSkip: false,
           maxTicksLimit: 15,
           callback: (value) =>
@@ -369,9 +368,9 @@ export const options = (ctx) => {
       },
       y: {
         grid: { display: false },
-        min: 1,
-        max: ctx.labels.y?.length ?? ctx.labels?.length ?? 3,
+        offset: true,
         ticks: {
+          stepSize: 1,
           autoSkip: false,
           maxTicksLimit: 15,
           callback: (value) =>
@@ -401,10 +400,11 @@ export const datasetOptions = (ctx) => {
       return cellWidth > 0 ? cellWidth : 1;
     },
     height({ chart }) {
-      const gap = 0;
+      const gap = 2;
       const totalHeight = chart.chartArea?.height ?? 0;
       const cellHeight = totalHeight / numRows - gap;
-      return isFullScreen() ? totalHeight / 11.75 : Math.min(cellHeight, 60);
+      return cellHeight > 0 ? cellHeight : 1;
+      // return isFullScreen() ? totalHeight / 11.75 : Math.min(cellHeight, 60);
     },
     backgroundColor({ raw }) {
       if (raw?.value !== undefined) {
