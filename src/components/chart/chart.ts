@@ -953,6 +953,10 @@ export class KDChart extends LitElement {
       plugins: chartPlugins,
     });
 
+    // the first ResizeObserver callback is intentionally ignored; force one
+    // layout pass so non-responsive charts (ex: matrix/heatmap) size correctly.
+    requestAnimationFrame(() => this._resizeChart());
+
     this.generateScrollableLegend();
   }
 
