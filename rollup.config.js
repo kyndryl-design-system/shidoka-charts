@@ -2,7 +2,7 @@ import path from 'path';
 import node_path from 'node:path';
 import multiInput from 'rollup-plugin-multi-input';
 import resolve from '@rollup/plugin-node-resolve';
-import { terser } from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 import del from 'rollup-plugin-delete';
 import typescript from 'rollup-plugin-typescript2';
 import renameNodeModules from 'rollup-plugin-rename-node-modules';

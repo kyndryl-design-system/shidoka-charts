@@ -14,6 +14,14 @@
             "name": "KDChart",
             "module": "./components/chart"
           }
+        },
+        {
+          "kind": "js",
+          "name": "MermaidDiagram",
+          "declaration": {
+            "name": "MermaidDiagram",
+            "module": "./components/mermaid"
+          }
         }
       ]
     },
@@ -178,7 +186,7 @@
               "description": " imported enums object"
             }
           ],
-          "description": "Convert an object to an array of only its values.\nUsed when importing enums in component stories for populating argType dropdowns."
+          "description": "Convert an object to an array of only its values.\r\nUsed when importing enums in component stories for populating argType dropdowns."
         },
         {
           "kind": "function",
@@ -234,14 +242,26 @@
               "type": {
                 "text": "string"
               },
-              "description": "The `bgHexColor` parameter is a string representing a hexadecimal color\ncode for the background color."
+              "description": "The `bgHexColor` parameter is a string representing a hexadecimal color\r\ncode for the background color."
             }
           ],
-          "description": "Takes a background hex color as input and returns the appropriate text\ncolor (either primary or inversed) based on the brightness of the background color."
+          "description": "Takes a background hex color as input and returns the appropriate text\r\ncolor (either primary or inversed) based on the brightness of the background color."
         },
         {
           "kind": "function",
           "name": "convertTreeDataToCSV",
+          "parameters": [
+            {
+              "name": "datasets",
+              "type": {
+                "text": "any[]"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "convertTreemapDataToCSV",
           "parameters": [
             {
               "name": "datasets",
@@ -306,6 +326,14 @@
           "name": "convertTreeDataToCSV",
           "declaration": {
             "name": "convertTreeDataToCSV",
+            "module": "src/common/helpers/helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "convertTreemapDataToCSV",
+          "declaration": {
+            "name": "convertTreemapDataToCSV",
             "module": "src/common/helpers/helpers.ts"
           }
         }
@@ -950,6 +978,106 @@
           "declaration": {
             "name": "KDChart",
             "module": "./chart"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/mermaid/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MermaidDiagram",
+          "declaration": {
+            "name": "MermaidDiagram",
+            "module": "./mermaid"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/mermaid/mermaid.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "[Mermaid.js](https://mermaid.js.org) diagram wrapper component.",
+          "name": "MermaidDiagram",
+          "slots": [
+            {
+              "description": "Slot for mermaid markdown/diagram definition.",
+              "name": "unnamed"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "mermaidConfig",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}",
+              "description": "Mermaid configuration object.",
+              "attribute": "mermaidConfig"
+            },
+            {
+              "kind": "method",
+              "name": "_handleSlotChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_getThemeVariables",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Record<\n    string,\n    string | Record<string, string>\n  >"
+                }
+              },
+              "description": "Build mermaid themeVariables from the active Shidoka design tokens.\nUses `theme: 'base'` so every variable is respected.\nAny token that fails to resolve is omitted so mermaid uses its own default."
+            },
+            {
+              "kind": "method",
+              "name": "_renderDiagram",
+              "privacy": "private"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "mermaidConfig",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}",
+              "description": "Mermaid configuration object.",
+              "fieldName": "mermaidConfig"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "kyn-mermaid",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MermaidDiagram",
+          "declaration": {
+            "name": "MermaidDiagram",
+            "module": "src/components/mermaid/mermaid.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "kyn-mermaid",
+          "declaration": {
+            "name": "MermaidDiagram",
+            "module": "src/components/mermaid/mermaid.ts"
           }
         }
       ]
