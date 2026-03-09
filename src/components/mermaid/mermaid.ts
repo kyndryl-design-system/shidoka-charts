@@ -8,6 +8,7 @@ import { monochrome24, duotone64 } from '@kyndryl-design-system/shidoka-icons';
 
 /**
  * [Mermaid.js](https://mermaid.js.org) diagram wrapper component.
+ * Includes a dark/light responsive theme out of the box with fully extensible mermaid.js configuration.
  * @slot unnamed - Slot for mermaid markdown/diagram definition.
  */
 @customElement('kyn-mermaid')
