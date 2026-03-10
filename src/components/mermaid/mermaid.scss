@@ -4,6 +4,16 @@
   display: block;
 }
 
+// tooltip overrides
+.mermaidTooltip {
+  color: var(--kd-color-text-variant-inversed) !important;
+  background: var(--kd-color-background-ui-default-dark) !important;
+  padding: 4px !important;
+  border-radius: 4px !important;
+  border: none !important;
+}
+
+// node shadows
 .node,
 .edgeLabel,
 .actor {
@@ -11,16 +21,32 @@
   filter: drop-shadow(var(--kd-elevation-level-1));
 }
 
+// kanban overrides
 #kyn-mermaid-svg[aria-roledescription='kanban'] .label {
   color: var(--kd-color-text-level-dark);
 }
 
+// packet overrides
 #kyn-mermaid-svg .packetByte.start,
 #kyn-mermaid-svg .packetByte.end,
 #kyn-mermaid-svg .packetTitle {
   fill: var(--kd-color-text-level-primary);
 }
 
+// xy overrides
 #kyn-mermaid-svg[aria-roledescription='xychart'] text {
+  fill: var(--kd-color-text-level-primary);
+}
+
+// entity relationship overrides
+.row-rect-odd path {
+  fill: var(--kd-color-background-table-row);
+}
+.row-rect-even path {
+  fill: var(--kd-color-background-table-alt-row);
+}
+
+// C4 overrides
+#kyn-mermaid-svg[aria-roledescription='c4'] g:not(.person-man) text {
   fill: var(--kd-color-text-level-primary);
 }

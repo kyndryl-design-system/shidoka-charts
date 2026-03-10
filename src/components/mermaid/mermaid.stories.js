@@ -14,14 +14,14 @@ export default {
 };
 
 const args = {
-  unnamed: '',
+  diagramSyntax: '',
   mermaidConfig: {},
 };
 
 export const Flowchart = {
   args: {
     ...args,
-    unnamed: `flowchart TD
+    diagramSyntax: `flowchart TD
     A[Christmas] -->|Get money| B(Go shopping)
     B --> C{Let me think}
     C -->|One| D[Laptop]
@@ -30,9 +30,36 @@ export const Flowchart = {
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
+    `;
+  },
+};
+
+export const FlowchartInteractive = {
+  args: {
+    ...args,
+    diagramSyntax: `flowchart LR
+    A-->B
+    B-->C
+    C-->D
+    click A callback "Tooltip"
+    click B "https://www.github.com" "This is a link"
+    click C call callback() "Tooltip"
+    click D href "https://www.github.com" "This is a link"`,
+  },
+  render: (args) => {
+    window.callback = function () {
+      alert('A callback was triggered');
+    };
+
+    return html`
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -40,7 +67,7 @@ export const Flowchart = {
 export const Sequence = {
   args: {
     ...args,
-    unnamed: `sequenceDiagram
+    diagramSyntax: `sequenceDiagram
     Alice->>+John: Hello John, how are you?
     Alice->>+John: John, can you hear me?
     John-->>-Alice: Hi Alice, I can hear you!
@@ -48,9 +75,10 @@ export const Sequence = {
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -58,7 +86,7 @@ export const Sequence = {
 export const Architecture = {
   args: {
     ...args,
-    unnamed: `architecture-beta
+    diagramSyntax: `architecture-beta
     group api(kd-mono-24:cloud)[API]
 
     service db(kd-mono-24:database-2)[Database] in api
@@ -72,9 +100,10 @@ export const Architecture = {
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -82,7 +111,7 @@ export const Architecture = {
 export const GitGraph = {
   args: {
     ...args,
-    unnamed: `gitGraph
+    diagramSyntax: `gitGraph
     commit
     branch develop
     checkout develop
@@ -100,9 +129,10 @@ export const GitGraph = {
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -110,7 +140,7 @@ export const GitGraph = {
 export const Class = {
   args: {
     ...args,
-    unnamed: `classDiagram
+    diagramSyntax: `classDiagram
     Animal <|-- Duck
     Animal <|-- Fish
     Animal <|-- Zebra
@@ -134,9 +164,10 @@ export const Class = {
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -144,7 +175,7 @@ export const Class = {
 export const EntityRelationship = {
   args: {
     ...args,
-    unnamed: `erDiagram
+    diagramSyntax: `erDiagram
     CUSTOMER ||--o{ ORDER : places
     ORDER ||--|{ ORDER_ITEM : contains
     PRODUCT ||--o{ ORDER_ITEM : includes
@@ -170,9 +201,10 @@ export const EntityRelationship = {
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -180,7 +212,7 @@ export const EntityRelationship = {
 export const State = {
   args: {
     ...args,
-    unnamed: `stateDiagram-v2
+    diagramSyntax: `stateDiagram-v2
     [*] --> Still
     Still --> [*]
     Still --> Moving
@@ -190,9 +222,10 @@ export const State = {
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -200,7 +233,7 @@ export const State = {
 export const Mindmap = {
   args: {
     ...args,
-    unnamed: `mindmap
+    diagramSyntax: `mindmap
   root((mindmap))
     Origins
       Long history
@@ -220,9 +253,10 @@ export const Mindmap = {
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -230,7 +264,7 @@ export const Mindmap = {
 export const Block = {
   args: {
     ...args,
-    unnamed: `block-beta
+    diagramSyntax: `block-beta
 columns 1
   db(("DB"))
   blockArrowId6<["&nbsp;&nbsp;&nbsp;"]>(down)
@@ -247,9 +281,10 @@ columns 1
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -257,7 +292,7 @@ columns 1
 export const C4 = {
   args: {
     ...args,
-    unnamed: `C4Context
+    diagramSyntax: `C4Context
     title System Context diagram for Internet Banking System
     Enterprise_Boundary(b0, "BankBoundary0") {
         Person(customerA, "Banking Customer A", "A customer of the bank, with personal bank accounts.")
@@ -293,9 +328,10 @@ export const C4 = {
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -303,7 +339,7 @@ export const C4 = {
 export const Gantt = {
   args: {
     ...args,
-    unnamed: `gantt
+    diagramSyntax: `gantt
     title A Gantt Diagram
     dateFormat  YYYY-MM-DD
     section Section
@@ -315,9 +351,10 @@ export const Gantt = {
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -325,7 +362,7 @@ export const Gantt = {
 export const Kanban = {
   args: {
     ...args,
-    unnamed: `---
+    diagramSyntax: `---
 config:
   kanban:
     ticketBaseUrl: 'https://github.com/mermaid-js/mermaid/issues/#TICKET#'
@@ -351,9 +388,10 @@ kanban
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -361,7 +399,7 @@ kanban
 export const Packet = {
   args: {
     ...args,
-    unnamed: `---
+    diagramSyntax: `---
 title: "TCP Packet"
 ---
 packet
@@ -385,9 +423,10 @@ packet
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -395,16 +434,17 @@ packet
 export const Pie = {
   args: {
     ...args,
-    unnamed: `pie title Pets adopted by volunteers
+    diagramSyntax: `pie title Pets adopted by volunteers
     "Dogs" : 386
     "Cats" : 85
     "Rats" : 15`,
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -412,7 +452,7 @@ export const Pie = {
 export const Quadrant = {
   args: {
     ...args,
-    unnamed: `quadrantChart
+    diagramSyntax: `quadrantChart
     title Reach and engagement of campaigns
     x-axis Low Reach --> High Reach
     y-axis Low Engagement --> High Engagement
@@ -429,9 +469,10 @@ export const Quadrant = {
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -439,7 +480,7 @@ export const Quadrant = {
 export const Radar = {
   args: {
     ...args,
-    unnamed: `---
+    diagramSyntax: `---
 title: "Grades"
 ---
 radar-beta
@@ -453,9 +494,10 @@ radar-beta
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -463,7 +505,7 @@ radar-beta
 export const Requirement = {
   args: {
     ...args,
-    unnamed: `requirementDiagram
+    diagramSyntax: `requirementDiagram
 
     requirement test_req {
     id: 1
@@ -480,9 +522,10 @@ export const Requirement = {
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -490,7 +533,7 @@ export const Requirement = {
 export const Sankey = {
   args: {
     ...args,
-    unnamed: `---
+    diagramSyntax: `---
 config:
   sankey:
     showValues: false
@@ -568,9 +611,10 @@ Wind,Electricity grid,289.366`,
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -578,7 +622,7 @@ Wind,Electricity grid,289.366`,
 export const Timeline = {
   args: {
     ...args,
-    unnamed: `timeline
+    diagramSyntax: `timeline
     title History of Social Media Platform
     2002 : LinkedIn
     2004 : Facebook
@@ -588,9 +632,10 @@ export const Timeline = {
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -598,7 +643,7 @@ export const Timeline = {
 export const Treemap = {
   args: {
     ...args,
-    unnamed: `treemap-beta
+    diagramSyntax: `treemap-beta
 "Section 1"
     "Leaf 1.1": 12
     "Section 1.2"
@@ -609,9 +654,10 @@ export const Treemap = {
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -619,7 +665,7 @@ export const Treemap = {
 export const Journey = {
   args: {
     ...args,
-    unnamed: `journey
+    diagramSyntax: `journey
     title My working day
     section Go to work
       Make tea: 5: Me
@@ -631,9 +677,10 @@ export const Journey = {
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };
@@ -641,7 +688,7 @@ export const Journey = {
 export const XY = {
   args: {
     ...args,
-    unnamed: `xychart-beta
+    diagramSyntax: `xychart-beta
     title "Sales Revenue"
     x-axis [jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec]
     y-axis "Revenue (in $)" 4000 --> 11000
@@ -650,9 +697,10 @@ export const XY = {
   },
   render: (args) => {
     return html`
-      <kyn-mermaid .mermaidConfig=${args.mermaidConfig}>
-        ${args.unnamed}
-      </kyn-mermaid>
+      <kyn-mermaid
+        .diagramSyntax=${args.diagramSyntax}
+        .mermaidConfig=${args.mermaidConfig}
+      ></kyn-mermaid>
     `;
   },
 };

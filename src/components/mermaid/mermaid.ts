@@ -1,4 +1,4 @@
-import { LitElement, PropertyValues, html, unsafeCSS } from 'lit';
+import { LitElement, PropertyValues, html } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import mermaid from 'mermaid';
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
@@ -9,11 +9,12 @@ import { monochrome24, duotone64 } from '@kyndryl-design-system/shidoka-icons';
 /**
  * [Mermaid.js](https://mermaid.js.org) diagram wrapper component.
  * Includes a dark/light responsive theme out of the box with fully extensible mermaid.js configuration.
- * @slot unnamed - Slot for mermaid markdown/diagram definition.
  */
 @customElement('kyn-mermaid')
 export class MermaidDiagram extends LitElement {
-  static override styles = unsafeCSS(Styles);
+  /** Mermaid configuration object. */
+  @property({ type: String })
+  accessor diagramSyntax = ``;
 
   /** Mermaid configuration object. */
   @property({ type: Object })
@@ -23,11 +24,6 @@ export class MermaidDiagram extends LitElement {
    * @internal */
   @query('#kyn-mermaid-container')
   private accessor _container!: HTMLDivElement;
-
-  /** Observer that re-renders when slotted text content mutates.
-   * @internal
-   */
-  private _slotObserver = new MutationObserver(() => this._renderDiagram());
 
   /** Theme observer to watch for meta color-scheme changes.
    * @internal
@@ -49,15 +45,24 @@ export class MermaidDiagram extends LitElement {
     }
   });
 
+  override createRenderRoot() {
+    return this;
+  }
+
   override render() {
-    return html`
-      <div id="kyn-mermaid-container"></div>
-      <slot @slotchange=${this._handleSlotChange} style="display:none"></slot>
-    `;
+    return html`<div id="kyn-mermaid-container"></div>`;
   }
 
   override connectedCallback() {
     super.connectedCallback();
+
+    // Inject component styles into <head> once (light DOM has no style scoping)
+    if (!document.head.querySelector('style[data-kyn-mermaid]')) {
+      const style = document.createElement('style');
+      style.setAttribute('data-kyn-mermaid', '');
+      style.textContent = Styles;
+      document.head.appendChild(style);
+    }
 
     // connect the theme change observer
     try {
@@ -75,28 +80,9 @@ export class MermaidDiagram extends LitElement {
   }
 
   override disconnectedCallback() {
-    this._slotObserver.disconnect();
     this._themeObserver.disconnect();
 
     super.disconnectedCallback();
-  }
-
-  private _handleSlotChange() {
-    // Re-observe the (possibly new) assigned nodes for text mutations.
-    this._slotObserver.disconnect();
-
-    const slot = this.shadowRoot?.querySelector('slot') as HTMLSlotElement;
-    if (slot) {
-      slot.assignedNodes({ flatten: true }).forEach((node) => {
-        this._slotObserver.observe(node, {
-          characterData: true,
-          childList: true,
-          subtree: true,
-        });
-      });
-    }
-
-    this._renderDiagram();
   }
 
   protected override firstUpdated(_changedProperties: PropertyValues): void {
@@ -114,7 +100,10 @@ export class MermaidDiagram extends LitElement {
 
   override updated(changedProperties: Map<string, unknown>) {
     // re-render diagram when config is changed
-    if (changedProperties.has('mermaidConfig')) {
+    if (
+      changedProperties.has('mermaidConfig') ||
+      changedProperties.has('diagramSyntax')
+    ) {
       this._renderDiagram();
     }
   }
@@ -167,17 +156,11 @@ export class MermaidDiagram extends LitElement {
     return Object.fromEntries(Object.entries(raw).filter(([, v]) => v !== ''));
   }
 
-  // Render the mermaid diagram based on the slotted text content and current theme.
+  // Render the mermaid diagram from the diagramSyntax property.
   private async _renderDiagram() {
-    const slot = this.shadowRoot?.querySelector('slot') as HTMLSlotElement;
-    if (!slot || !this._container) return;
+    if (!this._container) return;
 
-    const text = slot
-      .assignedNodes({ flatten: true })
-      .map((n) => n.textContent)
-      .join('')
-      .trim();
-
+    const text = this.diagramSyntax.trim();
     if (!text) return;
 
     try {
@@ -193,8 +176,9 @@ export class MermaidDiagram extends LitElement {
       });
 
       const id = `kyn-mermaid-svg`;
-      const { svg } = await mermaid.render(id, text);
+      const { svg, bindFunctions } = await mermaid.render(id, text);
       this._container.innerHTML = svg;
+      bindFunctions?.(this._container);
     } catch (e) {
       console.error('[kyn-mermaid] render error:', e);
     }

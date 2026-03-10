@@ -27,50 +27,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/common/plugins/htmlLegendPlugin.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "htmlLegendPlugin",
-          "type": {
-            "text": "object"
-          },
-          "default": "{\n  id: 'htmlLegend',\n  afterUpdate(chart: Chart, _: any, options: HtmlLegendPluginOptions) {\n    const container = document.getElementById(options.containerId);\n    if (!container) return;\n    renderHTMLLegend(chart, container, options);\n  },\n}"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "htmlLegendPlugin",
-          "declaration": {
-            "name": "htmlLegendPlugin",
-            "module": "src/common/plugins/htmlLegendPlugin.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/common/plugins/sankeyTooltip.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "createSankeyTooltipHandler"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "createSankeyTooltipHandler",
-          "declaration": {
-            "name": "createSankeyTooltipHandler",
-            "module": "src/common/plugins/sankeyTooltip.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/common/helpers/boxplotViolinTableRenderer.ts",
       "declarations": [
         {
@@ -379,6 +335,50 @@
           "declaration": {
             "name": "convertTreemapDataToCSV",
             "module": "src/common/helpers/helpers.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/common/plugins/htmlLegendPlugin.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "htmlLegendPlugin",
+          "type": {
+            "text": "object"
+          },
+          "default": "{\n  id: 'htmlLegend',\n  afterUpdate(chart: Chart, _: any, options: HtmlLegendPluginOptions) {\n    const container = document.getElementById(options.containerId);\n    if (!container) return;\n    renderHTMLLegend(chart, container, options);\n  },\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "htmlLegendPlugin",
+          "declaration": {
+            "name": "htmlLegendPlugin",
+            "module": "src/common/plugins/htmlLegendPlugin.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/common/plugins/sankeyTooltip.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "createSankeyTooltipHandler"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "createSankeyTooltipHandler",
+          "declaration": {
+            "name": "createSankeyTooltipHandler",
+            "module": "src/common/plugins/sankeyTooltip.ts"
           }
         }
       ]
@@ -1005,13 +1005,14 @@
           "kind": "class",
           "description": "[Mermaid.js](https://mermaid.js.org) diagram wrapper component.\nIncludes a dark/light responsive theme out of the box with fully extensible mermaid.js configuration.",
           "name": "MermaidDiagram",
-          "slots": [
-            {
-              "description": "Slot for mermaid markdown/diagram definition.",
-              "name": "unnamed"
-            }
-          ],
           "members": [
+            {
+              "kind": "field",
+              "name": "diagramSyntax",
+              "default": "``",
+              "description": "Mermaid configuration object.",
+              "attribute": "diagramSyntax"
+            },
             {
               "kind": "field",
               "name": "mermaidConfig",
@@ -1021,6 +1022,10 @@
               "default": "{}",
               "description": "Mermaid configuration object.",
               "attribute": "mermaidConfig"
+            },
+            {
+              "kind": "method",
+              "name": "createRenderRoot"
             },
             {
               "kind": "method",
@@ -1045,6 +1050,12 @@
             }
           ],
           "attributes": [
+            {
+              "name": "diagramSyntax",
+              "default": "``",
+              "description": "Mermaid configuration object.",
+              "fieldName": "diagramSyntax"
+            },
             {
               "name": "mermaidConfig",
               "type": {
