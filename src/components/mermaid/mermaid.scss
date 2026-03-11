@@ -23,19 +23,23 @@
 
 // kanban overrides
 .kyn-mermaid svg[aria-roledescription='kanban'] .label {
-  color: var(--kd-color-text-level-dark);
+  color: var(--kd-color-text-level-dark) !important;
 }
 
 // packet overrides
 .kyn-mermaid svg .packetByte.start,
 .kyn-mermaid svg .packetByte.end,
 .kyn-mermaid svg .packetTitle {
-  fill: var(--kd-color-text-level-primary);
+  fill: var(--kd-color-text-level-primary) !important;
 }
 
 // xy overrides
 .kyn-mermaid svg[aria-roledescription='xychart'] text {
   fill: var(--kd-color-text-level-primary);
+}
+.kyn-mermaid svg[aria-roledescription='xychart'] .bottom-axis path,
+.kyn-mermaid svg[aria-roledescription='xychart'] .left-axis path {
+  stroke: var(--kd-color-border-forms-default);
 }
 
 // entity relationship overrides
