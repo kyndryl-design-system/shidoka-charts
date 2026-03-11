@@ -14,32 +14,32 @@
 }
 
 // node shadows
-.node,
-.edgeLabel,
-.actor {
+.kyn-mermaid .node,
+.kyn-mermaid .edgeLabel,
+.kyn-mermaid .actor {
   // filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.3));
   filter: drop-shadow(var(--kd-elevation-level-1));
 }
 
 // kanban overrides
-.mermaid svg[aria-roledescription='kanban'] .label {
+.kyn-mermaid svg[aria-roledescription='kanban'] .label {
   color: var(--kd-color-text-level-dark);
 }
 
 // packet overrides
-.mermaid svg .packetByte.start,
-.mermaid svg .packetByte.end,
-.mermaid svg .packetTitle {
+.kyn-mermaid svg .packetByte.start,
+.kyn-mermaid svg .packetByte.end,
+.kyn-mermaid svg .packetTitle {
   fill: var(--kd-color-text-level-primary);
 }
 
 // xy overrides
-.mermaid svg[aria-roledescription='xychart'] text {
+.kyn-mermaid svg[aria-roledescription='xychart'] text {
   fill: var(--kd-color-text-level-primary);
 }
 
 // entity relationship overrides
-.row-rect-odd path {
+.kyn-mermaid .row-rect-odd path {
   fill: var(--kd-color-background-table-row);
 }
 .row-rect-even path {
@@ -47,6 +47,6 @@
 }
 
 // C4 overrides
-.mermaid svg[aria-roledescription='c4'] g:not(.person-man) text {
+.kyn-mermaid svg[aria-roledescription='c4'] g:not(.person-man) text {
   fill: var(--kd-color-text-level-primary);
 }
