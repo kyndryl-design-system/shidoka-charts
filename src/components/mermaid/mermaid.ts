@@ -22,7 +22,7 @@ export class MermaidDiagram extends LitElement {
 
   /** Container element query for rendering the mermaid diagram.
    * @internal */
-  @query('#kyn-mermaid-container')
+  @query('.kyn-mermaid')
   private accessor _container!: HTMLDivElement;
 
   /** Theme observer to watch for meta color-scheme changes.
@@ -50,7 +50,7 @@ export class MermaidDiagram extends LitElement {
   }
 
   override render() {
-    return html`<div id="kyn-mermaid-container"></div>`;
+    return html`<div class="kyn-mermaid"></div>`;
   }
 
   override connectedCallback() {
@@ -175,7 +175,7 @@ export class MermaidDiagram extends LitElement {
         ...this.mermaidConfig,
       });
 
-      const id = `kyn-mermaid-svg`;
+      const id = `kyn-mermaid-svg-${crypto.randomUUID()}`;
       const { svg, bindFunctions } = await mermaid.render(id, text);
       this._container.innerHTML = svg;
       bindFunctions?.(this._container);

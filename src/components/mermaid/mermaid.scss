@@ -22,19 +22,19 @@
 }
 
 // kanban overrides
-#kyn-mermaid-svg[aria-roledescription='kanban'] .label {
+.mermaid svg[aria-roledescription='kanban'] .label {
   color: var(--kd-color-text-level-dark);
 }
 
 // packet overrides
-#kyn-mermaid-svg .packetByte.start,
-#kyn-mermaid-svg .packetByte.end,
-#kyn-mermaid-svg .packetTitle {
+.mermaid svg .packetByte.start,
+.mermaid svg .packetByte.end,
+.mermaid svg .packetTitle {
   fill: var(--kd-color-text-level-primary);
 }
 
 // xy overrides
-#kyn-mermaid-svg[aria-roledescription='xychart'] text {
+.mermaid svg[aria-roledescription='xychart'] text {
   fill: var(--kd-color-text-level-primary);
 }
 
@@ -47,6 +47,6 @@
 }
 
 // C4 overrides
-#kyn-mermaid-svg[aria-roledescription='c4'] g:not(.person-man) text {
+.mermaid svg[aria-roledescription='c4'] g:not(.person-man) text {
   fill: var(--kd-color-text-level-primary);
 }
