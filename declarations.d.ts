@@ -5,6 +5,7 @@ declare module '*.scss' {
 }
 
 declare module '*.svg';
+declare module '@kyndryl-design-system/shidoka-icons';
 
 declare module 'chartjs-plugin-a11y-legend';
 declare module 'chartjs-plugin-chart2music';

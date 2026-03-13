@@ -28,7 +28,13 @@ export default {
     options: {
       storySort: {
         method: 'alphabetical',
-        order: ['Welcome'],
+        order: [
+          'Welcome',
+          'Guidelines',
+          'Charts',
+          'Third Party Charts',
+          'Mermaid',
+        ],
       },
     },
     backgrounds: { disabled: true },
