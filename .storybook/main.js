@@ -7,6 +7,7 @@ export default {
     '@storybook/addon-links',
     '@storybook/addon-designs',
     '@storybook/addon-themes',
+    'storybook-addon-tag-badges',
     {
       name: '@storybook/addon-docs',
       options: {

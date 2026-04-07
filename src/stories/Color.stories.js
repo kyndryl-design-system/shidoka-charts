@@ -30,7 +30,8 @@ export const Categorical = {
   args,
   render: (args) => {
     return html`
-      categorical
+      <h3>Categorical</h3>
+      <br />
       <div class="colors">
         ${getColorPalette('categorical').map((color) => {
           return html`<span style="background-color: var(${color})"></span>`;
@@ -44,7 +45,8 @@ export const Sequential01 = {
   args,
   render: (args) => {
     return html`
-      sequential01
+      <h3>Sequential01</h3>
+      <br />
       <div class="colors">
         ${getColorPalette('sequential01').map((color) => {
           return html`<span style="background-color: var(${color})"></span>`;
@@ -58,7 +60,8 @@ export const Sequential02 = {
   args,
   render: (args) => {
     return html`
-      sequential02
+      <h3>Sequential02</h3>
+      <br />
       <div class="colors">
         ${getColorPalette('sequential02').map((color) => {
           return html`<span style="background-color: var(${color})"></span>`;
@@ -72,7 +75,8 @@ export const Sequential03 = {
   args,
   render: (args) => {
     return html`
-      sequential03
+      <h3>Sequential03</h3>
+      <br />
       <div class="colors">
         ${getColorPalette('sequential03').map((color) => {
           return html`<span style="background-color: var(${color})"></span>`;
@@ -86,7 +90,8 @@ export const Sequential04 = {
   args,
   render: (args) => {
     return html`
-      sequential04
+      <h3>Sequential04</h3>
+      <br />
       <div class="colors">
         ${getColorPalette('sequential04').map((color) => {
           return html`<span style="background-color: var(${color})"></span>`;
@@ -100,7 +105,8 @@ export const Sequential05 = {
   args,
   render: (args) => {
     return html`
-      sequential05
+      <h3>Sequential05</h3>
+      <br />
       <div class="colors">
         ${getColorPalette('sequential05').map((color) => {
           return html`<span style="background-color: var(${color})"></span>`;
@@ -114,7 +120,8 @@ export const Divergent01 = {
   args,
   render: (args) => {
     return html`
-      divergent01
+      <h3>Divergent01</h3>
+      <br />
       <div class="colors">
         ${getColorPalette('divergent01').map((color) => {
           return html`<span style="background-color: var(${color})"></span>`;
@@ -128,7 +135,8 @@ export const Divergent02 = {
   args,
   render: (args) => {
     return html`
-      divergent02
+      <h3>Divergent02</h3>
+      <br />
       <div class="colors">
         ${getColorPalette('divergent02').map((color) => {
           return html`<span style="background-color: var(${color})"></span>`;
@@ -142,7 +150,8 @@ export const StatusLight = {
   args,
   render: (args) => {
     return html`
-      statusLight
+      <h3>StatusLight</h3>
+      <br />
       <div class="colors">
         ${getColorPalette('statusLight').map((color) => {
           return html`<span style="background-color: var(${color})"></span>`;
@@ -156,7 +165,8 @@ export const StatusDark = {
   args,
   render: (args) => {
     return html`
-      statusDark
+      <h3>StatusDark</h3>
+      <br />
       <div class="colors">
         ${getColorPalette('statusDark').map((color) => {
           return html`<span style="background-color: var(${color})"></span>`;
@@ -166,11 +176,13 @@ export const StatusDark = {
   },
 };
 
-export const RAG03Deprecated = {
+export const RAG03 = {
   args,
+  tags: ['deprecated', 'version:v2.6.0'],
   render: (args) => {
     return html`
-      rag03 (Deprecated)
+      <h3>RAG03</h3>
+      <br />
       <div class="colors">
         ${getColorPalette('rag03').map((color) => {
           return html`<span style="background-color: var(${color})"></span>`;
@@ -180,11 +192,13 @@ export const RAG03Deprecated = {
   },
 };
 
-export const RAG08Deprecated = {
+export const RAG08 = {
   args,
+  tags: ['deprecated', 'version:v2.6.0'],
   render: (args) => {
     return html`
-      rag08 (Deprecated)
+      <h3>RAG08</h3>
+      <br />
       <div class="colors">
         ${getColorPalette('rag08').map((color) => {
           return html`<span style="background-color: var(${color})"></span>`;
