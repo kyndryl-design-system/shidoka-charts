@@ -10,6 +10,8 @@ export default {
       type: 'figma',
       url: 'https://www.figma.com/design/wWpIJDfwm1SHkhvpz5WkcI/Cinnamon-2.10?node-id=711-9193&m=dev',
     },
+
+    actions: { disable: true },
   },
 };
 

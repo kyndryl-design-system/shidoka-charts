@@ -74,6 +74,9 @@ const baseArgs = {
   noBorder: false,
   width: null,
   height: null,
+  hideTableControl: false,
+  hideFullscreenControl: false,
+  hideDownloadControl: false,
   options: {
     scales: {
       x: {
@@ -117,6 +120,9 @@ export const Default = {
       ?noBorder=${args.noBorder}
       .width=${args.width}
       .height=${args.height}
+      ?hideDownloadControl=${args.hideDownloadControl}
+      ?hideFullscreenControl=${args.hideFullscreenControl}
+      ?hideTableControl=${args.hideTableControl}
     ></kd-chart>
   `,
 };
@@ -167,6 +173,9 @@ export const Horizontal = {
       ?noBorder=${args.noBorder}
       .width=${args.width}
       .height=${args.height}
+      ?hideDownloadControl=${args.hideDownloadControl}
+      ?hideFullscreenControl=${args.hideFullscreenControl}
+      ?hideTableControl=${args.hideTableControl}
     ></kd-chart>
   `,
 };
@@ -208,6 +217,9 @@ export const VerticalSingleDataset = {
       ?noBorder=${args.noBorder}
       .width=${args.width}
       .height=${args.height}
+      ?hideDownloadControl=${args.hideDownloadControl}
+      ?hideFullscreenControl=${args.hideFullscreenControl}
+      ?hideTableControl=${args.hideTableControl}
     ></kd-chart>
   `,
 };
@@ -248,6 +260,9 @@ export const WithoutLegend = {
       ?noBorder=${args.noBorder}
       .width=${args.width}
       .height=${args.height}
+      ?hideDownloadControl=${args.hideDownloadControl}
+      ?hideFullscreenControl=${args.hideFullscreenControl}
+      ?hideTableControl=${args.hideTableControl}
     ></kd-chart>
   `,
 };

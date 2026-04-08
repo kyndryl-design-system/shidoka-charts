@@ -13,10 +13,21 @@ export default {
       type: 'figma',
       url: 'https://www.figma.com/file/9NrpK3rmbOk0lhlFkEPSaO/Data-Viz-Component-Library?node-id=62%3A2752&mode=dev',
     },
+    actions: { disable: true },
   },
   argTypes: {
     ...argTypes,
     useHtmlLegend: {
+      table: {
+        disable: true,
+      },
+    },
+    htmlLegendMaxHeight: {
+      table: {
+        disable: true,
+      },
+    },
+    htmlLegendOptions: {
       table: {
         disable: true,
       },
@@ -60,6 +71,9 @@ const args = {
   noBorder: false,
   width: null,
   height: null,
+  hideTableControl: false,
+  hideFullscreenControl: false,
+  hideDownloadControl: false,
 };
 
 export const Line = {
@@ -80,6 +94,9 @@ export const Line = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideDownloadControl=${args.hideDownloadControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideTableControl=${args.hideTableControl}
       ></kd-chart>
     `;
   },
@@ -120,6 +137,9 @@ export const WithoutPoints = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideDownloadControl=${args.hideDownloadControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideTableControl=${args.hideTableControl}
       ></kd-chart>
     `;
   },
@@ -160,6 +180,9 @@ export const Curved = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideDownloadControl=${args.hideDownloadControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideTableControl=${args.hideTableControl}
       ></kd-chart>
     `;
   },
@@ -251,6 +274,9 @@ export const Area = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideDownloadControl=${args.hideDownloadControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideTableControl=${args.hideTableControl}
       ></kd-chart>
     `;
   },
@@ -324,12 +350,38 @@ export const TimeScale = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideDownloadControl=${args.hideDownloadControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideTableControl=${args.hideTableControl}
       ></kd-chart>
     `;
   },
 };
 
+const hideControlsArgType = {
+  // for unnecessary args that are not relevant to the story
+  table: {
+    disable: true,
+  },
+};
+
 export const Spark = {
+  argTypes: {
+    chartTitle: hideControlsArgType,
+    description: hideControlsArgType,
+    labels: hideControlsArgType,
+    hideDescription: hideControlsArgType,
+    hideCaptions: hideControlsArgType,
+    hideHeader: hideControlsArgType,
+    hideControls: hideControlsArgType,
+    hideTableControl: hideControlsArgType,
+    hideFullscreenControl: hideControlsArgType,
+    hideDownloadControl: hideControlsArgType,
+    noBorder: hideControlsArgType,
+    customLabels: hideControlsArgType,
+    htmlLegendMaxHeight: hideControlsArgType,
+    htmlLegendOptions: hideControlsArgType,
+  },
   args: {
     chartTitle: 'Spark Line Chart',
     description: 'Chart description.',

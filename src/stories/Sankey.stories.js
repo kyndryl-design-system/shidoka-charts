@@ -56,6 +56,16 @@ const baseArgs = {
     },
   },
   height: DEFAULT_HEIGHT,
+  hideDescription: false,
+  hideCaptions: false,
+  hideHeader: false,
+  hideControls: false,
+  colorPalette: 'categorical',
+  noBorder: false,
+  width: null,
+  hideTableControl: false,
+  hideFullscreenControl: false,
+  hideDownloadControl: false,
 };
 
 export const Simple = {
@@ -69,6 +79,16 @@ export const Simple = {
         .labels=${a.labels}
         .datasets=${a.datasets}
         .options=${a.options}
+        ?hideDescription=${a.hideDescription}
+        ?hideCaptions=${a.hideCaptions}
+        ?hideHeader=${a.hideHeader}
+        ?hideControls=${a.hideControls}
+        ?noBorder=${a.noBorder}
+        .width=${a.width}
+        .height=${a.height}
+        ?hideTableControl=${a.hideTableControl}
+        ?hideFullscreenControl=${a.hideFullscreenControl}
+        ?hideDownloadControl=${a.hideDownloadControl}
       ></kd-chart>
     `;
   },
@@ -155,6 +175,16 @@ export const Complex = {
         .labels=${a.labels}
         .datasets=${a.datasets}
         .options=${a.options}
+        ?hideDescription=${a.hideDescription}
+        ?hideCaptions=${a.hideCaptions}
+        ?hideHeader=${a.hideHeader}
+        ?hideControls=${a.hideControls}
+        ?noBorder=${a.noBorder}
+        .width=${a.width}
+        .height=${a.height}
+        ?hideTableControl=${a.hideTableControl}
+        ?hideFullscreenControl=${a.hideFullscreenControl}
+        ?hideDownloadControl=${a.hideDownloadControl}
       ></kd-chart>
     `;
   },

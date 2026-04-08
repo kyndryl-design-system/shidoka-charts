@@ -32,6 +32,16 @@ const args = {
     },
   ],
   options: {},
+  hideDescription: false,
+  hideCaptions: false,
+  hideHeader: false,
+  hideControls: false,
+  noBorder: false,
+  width: null,
+  height: null,
+  hideTableControl: false,
+  hideFullscreenControl: false,
+  hideDownloadControl: false,
 };
 
 export const Default = {
@@ -47,6 +57,16 @@ export const Default = {
         colorPalette: args.colorPalette,
         ...args.options,
       }}
+      ?hideDescription=${args.hideDescription}
+      ?hideCaptions=${args.hideCaptions}
+      ?hideHeader=${args.hideHeader}
+      ?hideControls=${args.hideControls}
+      ?noBorder=${args.noBorder}
+      .width=${args.width}
+      .height=${args.height}
+      ?hideTableControl=${args.hideTableControl}
+      ?hideFullscreenControl=${args.hideFullscreenControl}
+      ?hideDownloadControl=${args.hideDownloadControl}
     ></kd-chart>
   `,
 };

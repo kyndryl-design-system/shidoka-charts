@@ -21,6 +21,16 @@ export default {
         disable: true,
       },
     },
+    htmlLegendMaxHeight: {
+      table: {
+        disable: true,
+      },
+    },
+    htmlLegendOptions: {
+      table: {
+        disable: true,
+      },
+    },
   },
 };
 
@@ -54,6 +64,9 @@ const args = {
   noBorder: false,
   width: null,
   height: null,
+  hideTableControl: false,
+  hideFullscreenControl: false,
+  hideDownloadControl: false,
 };
 
 export const Meter = {
@@ -74,6 +87,9 @@ export const Meter = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideDownloadControl=${args.hideDownloadControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideTableControl=${args.hideTableControl}
       ></kd-chart>
     `;
   },
@@ -114,6 +130,9 @@ export const MeterCritical = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideDownloadControl=${args.hideDownloadControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideTableControl=${args.hideTableControl}
       ></kd-chart>
     `;
   },

@@ -55,6 +55,9 @@ const args = {
   noBorder: false,
   width: null,
   height: null,
+  hideTableControl: false,
+  hideFullscreenControl: false,
+  hideDownloadControl: false,
 };
 
 export const Simple = {
@@ -75,6 +78,9 @@ export const Simple = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideTableControl=${args.hideTableControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideDownloadControl=${args.hideDownloadControl}
       ></kd-chart>
     `;
   },
@@ -117,6 +123,9 @@ export const Grouped = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideTableControl=${args.hideTableControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideDownloadControl=${args.hideDownloadControl}
       ></kd-chart>
     `;
   },
@@ -168,6 +177,9 @@ export const NestedData = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideTableControl=${args.hideTableControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideDownloadControl=${args.hideDownloadControl}
       ></kd-chart>
     `;
   },

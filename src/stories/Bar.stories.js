@@ -21,6 +21,16 @@ export default {
         disable: true,
       },
     },
+    htmlLegendMaxHeight: {
+      table: {
+        disable: true,
+      },
+    },
+    htmlLegendOptions: {
+      table: {
+        disable: true,
+      },
+    },
   },
 };
 
@@ -60,6 +70,9 @@ const args = {
   noBorder: false,
   width: null,
   height: null,
+  hideTableControl: false,
+  hideFullscreenControl: false,
+  hideDownloadControl: false,
 };
 
 export const Vertical = {
@@ -80,6 +93,9 @@ export const Vertical = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideTableControl=${args.hideTableControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideDownloadControl=${args.hideDownloadControl}
       ></kd-chart>
     `;
   },
@@ -120,6 +136,9 @@ export const Horizontal = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideTableControl=${args.hideTableControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideDownloadControl=${args.hideDownloadControl}
       ></kd-chart>
     `;
   },
@@ -161,6 +180,9 @@ export const Stacked = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideTableControl=${args.hideTableControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideDownloadControl=${args.hideDownloadControl}
       ></kd-chart>
     `;
   },
@@ -203,6 +225,9 @@ export const HorizontalStacked = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideTableControl=${args.hideTableControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideDownloadControl=${args.hideDownloadControl}
       ></kd-chart>
     `;
   },
@@ -252,6 +277,9 @@ export const Floating = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideTableControl=${args.hideTableControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideDownloadControl=${args.hideDownloadControl}
       ></kd-chart>
     `;
   },
@@ -319,6 +347,9 @@ export const SingleLabel = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideTableControl=${args.hideTableControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideDownloadControl=${args.hideDownloadControl}
       ></kd-chart>
     `;
   },

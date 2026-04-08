@@ -39,6 +39,16 @@ const basicData = {
     plugins: { legend: { position: 'bottom' } },
   },
   colorPalette: 'categorical',
+  hideDescription: false,
+  hideCaptions: false,
+  hideHeader: false,
+  hideControls: false,
+  noBorder: false,
+  width: null,
+  height: null,
+  hideTableControl: false,
+  hideFullscreenControl: false,
+  hideDownloadControl: false,
 };
 
 const manyLabels = [
@@ -141,6 +151,16 @@ export const CanvasLegend = {
       ?useHtmlLegend=${args.useHtmlLegend}
       html-legend-max-height=${args.htmlLegendMaxHeight}
       .options=${{ colorPalette: args.colorPalette, ...args.options }}
+      ?hideDescription=${args.hideDescription}
+      ?hideCaptions=${args.hideCaptions}
+      ?hideHeader=${args.hideHeader}
+      ?hideControls=${args.hideControls}
+      ?noBorder=${args.noBorder}
+      .width=${args.width}
+      .height=${args.height}
+      ?hideDownloadControl=${args.hideDownloadControl}
+      ?hideFullscreenControl=${args.hideFullscreenControl}
+      ?hideTableControl=${args.hideTableControl}
     ></kd-chart>
   `,
 };
@@ -473,6 +493,11 @@ export const CustomStyledLegend = {
 
 export const InlineGrid = {
   name: 'Inline side‑by‑side (Canvas vs. HTML Legends)',
+  parameters: {
+    controls: {
+      disable: true,
+    },
+  },
   render: () => html`
     <style>
       .chart-grid {

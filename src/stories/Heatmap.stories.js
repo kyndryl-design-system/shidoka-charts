@@ -67,6 +67,9 @@ const commonArgs = {
   noBorder: false,
   width: null,
   height: null,
+  hideDownloadControl: false,
+  hideFullscreenControl: false,
+  hideTableControl: false,
 };
 
 const defaultDataset = {
@@ -142,6 +145,9 @@ export const Default = {
         ?noBorder=${args.noBorder}
         .width=${args.width}
         .height=${args.height}
+        ?hideTableControl=${args.hideTableControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideDownloadControl=${args.hideDownloadControl}
       ></kd-chart>
     `;
   },
@@ -189,6 +195,9 @@ export const Divergent = {
         ?noBorder=${args.noBorder}
         .width=${args.width}
         .height=${args.height}
+        ?hideTableControl=${args.hideTableControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideDownloadControl=${args.hideDownloadControl}
       ></kd-chart>
     `;
   },
@@ -231,6 +240,9 @@ export const HideLegend = {
         ?noBorder=${args.noBorder}
         .width=${args.width}
         .height=${args.height}
+        ?hideTableControl=${args.hideTableControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideDownloadControl=${args.hideDownloadControl}
       ></kd-chart>
     `;
   },

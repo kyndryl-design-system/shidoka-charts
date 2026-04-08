@@ -21,6 +21,16 @@ export default {
         disable: true,
       },
     },
+    htmlLegendMaxHeight: {
+      table: {
+        disable: true,
+      },
+    },
+    htmlLegendOptions: {
+      table: {
+        disable: true,
+      },
+    },
   },
 };
 
@@ -56,6 +66,9 @@ const args = {
   noBorder: false,
   width: null,
   height: null,
+  hideTableControl: false,
+  hideFullscreenControl: false,
+  hideDownloadControl: false,
 };
 
 export const Pie = {
@@ -76,6 +89,9 @@ export const Pie = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideDownloadControl=${args.hideDownloadControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideTableControl=${args.hideTableControl}
       ></kd-chart>
     `;
   },
@@ -102,6 +118,9 @@ export const Doughnut = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideDownloadControl=${args.hideDownloadControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideTableControl=${args.hideTableControl}
       ></kd-chart>
     `;
   },

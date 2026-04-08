@@ -14,7 +14,24 @@ export default {
       url: '',
     },
   },
-  argTypes: argTypes,
+  argTypes: {
+    ...argTypes,
+    useHtmlLegend: {
+      table: {
+        disable: true,
+      },
+    },
+    htmlLegendMaxHeight: {
+      table: {
+        disable: true,
+      },
+    },
+    htmlLegendOptions: {
+      table: {
+        disable: true,
+      },
+    },
+  },
 };
 
 const args = {
@@ -85,6 +102,9 @@ const args = {
   noBorder: false,
   width: null,
   height: null,
+  hideTableControl: false,
+  hideFullscreenControl: false,
+  hideDownloadControl: false,
 };
 
 export const Bubble = {
@@ -105,6 +125,9 @@ export const Bubble = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideDownloadControl=${args.hideDownloadControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideTableControl=${args.hideTableControl}
       ></kd-chart>
     `;
   },

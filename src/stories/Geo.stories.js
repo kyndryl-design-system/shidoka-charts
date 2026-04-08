@@ -23,6 +23,16 @@ export default {
         disable: true,
       },
     },
+    htmlLegendMaxHeight: {
+      table: {
+        disable: true,
+      },
+    },
+    htmlLegendOptions: {
+      table: {
+        disable: true,
+      },
+    },
   },
 };
 
@@ -45,6 +55,9 @@ const args = {
   width: null,
   height: null,
   unsafeHTML: false,
+  hideDownloadControl: false,
+  hideFullscreenControl: false,
+  hideTableControl: false,
 };
 
 export const WorldChoropleth = {
@@ -86,6 +99,9 @@ export const WorldChoropleth = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideDownloadControl=${args.hideDownloadControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideTableControl=${args.hideTableControl}
       ></kd-chart>
     `;
   },
@@ -137,6 +153,9 @@ export const CountryChoropleth = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideDownloadControl=${args.hideDownloadControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideTableControl=${args.hideTableControl}
       ></kd-chart>
     `;
   },
@@ -182,6 +201,9 @@ export const WorldBubbleMap = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideDownloadControl=${args.hideDownloadControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideTableControl=${args.hideTableControl}
       ></kd-chart>
     `;
   },
@@ -231,6 +253,9 @@ export const CountryBubbleMap = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
         .width=${args.width}
         .height=${args.height}
+        ?hideDownloadControl=${args.hideDownloadControl}
+        ?hideFullscreenControl=${args.hideFullscreenControl}
+        ?hideTableControl=${args.hideTableControl}
       ></kd-chart>
     `;
   },

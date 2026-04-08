@@ -20,15 +20,18 @@ export default {
       ${story()}
     `,
   ],
+  parameters: {
+    actions: { disable: true },
+    controls: { disable: true },
+  },
 };
 
-const args = {
-  colorPalette: 'default',
-};
+// const args = {
+//   colorPalette: 'default',
+// };
 
 export const Categorical = {
-  args,
-  render: (args) => {
+  render: () => {
     return html`
       categorical
       <div class="colors">
@@ -41,8 +44,7 @@ export const Categorical = {
 };
 
 export const Sequential01 = {
-  args,
-  render: (args) => {
+  render: () => {
     return html`
       sequential01
       <div class="colors">
@@ -55,8 +57,7 @@ export const Sequential01 = {
 };
 
 export const Sequential02 = {
-  args,
-  render: (args) => {
+  render: () => {
     return html`
       sequential02
       <div class="colors">
@@ -69,8 +70,7 @@ export const Sequential02 = {
 };
 
 export const Sequential03 = {
-  args,
-  render: (args) => {
+  render: () => {
     return html`
       sequential03
       <div class="colors">
@@ -83,8 +83,7 @@ export const Sequential03 = {
 };
 
 export const Sequential04 = {
-  args,
-  render: (args) => {
+  render: () => {
     return html`
       sequential04
       <div class="colors">
@@ -97,8 +96,7 @@ export const Sequential04 = {
 };
 
 export const Sequential05 = {
-  args,
-  render: (args) => {
+  render: () => {
     return html`
       sequential05
       <div class="colors">
@@ -111,8 +109,7 @@ export const Sequential05 = {
 };
 
 export const Divergent01 = {
-  args,
-  render: (args) => {
+  render: () => {
     return html`
       divergent01
       <div class="colors">
@@ -125,8 +122,7 @@ export const Divergent01 = {
 };
 
 export const Divergent02 = {
-  args,
-  render: (args) => {
+  render: () => {
     return html`
       divergent02
       <div class="colors">
@@ -139,8 +135,7 @@ export const Divergent02 = {
 };
 
 export const StatusLight = {
-  args,
-  render: (args) => {
+  render: () => {
     return html`
       statusLight
       <div class="colors">
@@ -153,8 +148,7 @@ export const StatusLight = {
 };
 
 export const StatusDark = {
-  args,
-  render: (args) => {
+  render: () => {
     return html`
       statusDark
       <div class="colors">
@@ -167,8 +161,7 @@ export const StatusDark = {
 };
 
 export const RAG03Deprecated = {
-  args,
-  render: (args) => {
+  render: () => {
     return html`
       rag03 (Deprecated)
       <div class="colors">
@@ -181,8 +174,7 @@ export const RAG03Deprecated = {
 };
 
 export const RAG08Deprecated = {
-  args,
-  render: (args) => {
+  render: () => {
     return html`
       rag08 (Deprecated)
       <div class="colors">
