@@ -5,6 +5,7 @@ import './index';
 export default {
   title: 'Mermaid/Mermaid Diagrams',
   component: 'kyn-mermaid',
+  tags: ['new', 'version:v2.9.0'],
   parameters: {
     design: {
       type: 'figma',
