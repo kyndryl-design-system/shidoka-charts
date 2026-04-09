@@ -1,3 +1,5 @@
+//const hideUnusedControls = { table: { disable: true } };
+
 export default {
   colorPalette: {
     options: [
@@ -34,4 +36,17 @@ export default {
       disable: true,
     },
   },
+
+  // hideDescription: hideUnusedControls,
+  // hideCaptions: hideUnusedControls,
+  // hideHeader: hideUnusedControls,
+  // hideControls: hideUnusedControls,
+  // noBorder: hideUnusedControls,
+  // hideTableControl: hideUnusedControls,
+  // hideFullscreenControl: hideUnusedControls,
+  // hideDownloadControl: hideUnusedControls,
+  // customLabels: hideUnusedControls,
+  // htmlLegendMaxHeight: hideUnusedControls,
+  // htmlLegendMaxWidth: hideUnusedControls,
+  // htmlLegendOptions: hideUnusedControls,
 };

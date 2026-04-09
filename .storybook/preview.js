@@ -34,6 +34,7 @@ export default {
           'Charts',
           'Third Party Charts',
           'Mermaid',
+          'Playground',
         ],
       },
     },

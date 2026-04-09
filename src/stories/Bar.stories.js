@@ -2,6 +2,8 @@ import { html } from 'lit';
 import '../components/chart';
 import argTypes from '../common/config/chartArgTypes';
 
+const hideUnusedControls = { table: { disable: true } };
+
 export default {
   title: 'Charts/Bar',
   component: 'kd-chart',
@@ -16,11 +18,22 @@ export default {
   },
   argTypes: {
     ...argTypes,
-    useHtmlLegend: {
-      table: {
-        disable: true,
-      },
-    },
+    useHtmlLegend: hideUnusedControls,
+    colorPalette: hideUnusedControls,
+    hideDescription: hideUnusedControls,
+    hideCaptions: hideUnusedControls,
+    hideHeader: hideUnusedControls,
+    hideControls: hideUnusedControls,
+    noBorder: hideUnusedControls,
+    width: hideUnusedControls,
+    height: hideUnusedControls,
+    hideTableControl: hideUnusedControls,
+    hideFullscreenControl: hideUnusedControls,
+    hideDownloadControl: hideUnusedControls,
+    customLabels: hideUnusedControls,
+    htmlLegendMaxHeight: hideUnusedControls,
+    htmlLegendMaxWidth: hideUnusedControls,
+    htmlLegendOptions: hideUnusedControls,
   },
 };
 
@@ -52,14 +65,6 @@ const args = {
       },
     },
   },
-  hideDescription: false,
-  hideCaptions: false,
-  hideHeader: false,
-  hideControls: false,
-  colorPalette: 'categorical',
-  noBorder: false,
-  width: null,
-  height: null,
 };
 
 export const Vertical = {
@@ -72,14 +77,7 @@ export const Vertical = {
         .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -112,14 +110,7 @@ export const Horizontal = {
         .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -153,14 +144,7 @@ export const Stacked = {
         .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -195,14 +179,7 @@ export const HorizontalStacked = {
         .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -244,14 +221,7 @@ export const Floating = {
         .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -311,14 +281,7 @@ export const SingleLabel = {
         .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },
