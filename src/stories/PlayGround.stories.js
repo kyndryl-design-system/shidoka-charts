@@ -3,19 +3,22 @@ import '../components/chart';
 import argTypes from '../common/config/chartArgTypes';
 
 export default {
-  title: 'Playground/Bar Chart',
+  title: 'Playground/Chart',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,
   ],
   argTypes: {
     ...argTypes,
+    type: {
+      control: { type: 'text' },
+    },
   },
 };
 
 const defaultArgs = {
   type: 'bar',
-  chartTitle: 'Bar Chart',
+  chartTitle: 'Chart',
   description: 'Chart description.',
   labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
   datasets: [
@@ -53,9 +56,13 @@ const defaultArgs = {
   hideTableControl: false,
   hideFullscreenControl: false,
   hideDownloadControl: false,
+  customLabels: {},
+  useHtmlLegend: false,
+  htmlLegendMaxHeight: null,
+  htmlLegendOptions: {},
 };
 
-export const Default = {
+export const Chart = {
   args: defaultArgs,
   render: (args) => {
     return html`
@@ -76,6 +83,10 @@ export const Default = {
         ?hideTableControl=${args.hideTableControl}
         ?hideFullscreenControl=${args.hideFullscreenControl}
         ?hideDownloadControl=${args.hideDownloadControl}
+        .customLabels=${args.customLabels}
+        ?useHtmlLegend=${args.useHtmlLegend}
+        .htmlLegendMaxHeight=${args.htmlLegendMaxHeight}
+        .htmlLegendOptions=${args.htmlLegendOptions}
       ></kd-chart>
     `;
   },

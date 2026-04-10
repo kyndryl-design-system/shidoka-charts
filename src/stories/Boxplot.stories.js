@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import { generateRandomData } from '../common/config/chartTypes/boxplot';
-import argTypes from '../common/config/chartArgTypes';
+import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
 
 import '../components/chart';
 
@@ -16,6 +16,8 @@ export default {
   component: 'kd-chart',
   argTypes: {
     ...argTypes,
+    useHtmlLegend: hideUnusedControls,
+    colorPalette: hideUnusedControls,
   },
 };
 
@@ -113,18 +115,10 @@ const quadrupleDataset = [
 ];
 
 const baseArgs = {
-  chartTitle: 'Boxplot Example',
-  description: 'Boxplot chart with two datasets',
+  chartTitle: 'Boxplot with Two Datasets',
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
   datasets: doubleDataset,
-  colorPalette: 'categorical',
-  hideDescription: false,
-  hideCaptions: false,
-  hideHeader: false,
-  hideControls: false,
-  noBorder: false,
-  width: null,
-  height: null,
+
   options: {
     scales: {
       x: {
@@ -144,7 +138,6 @@ export const Default = {
       <kd-chart
         type="boxplot"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
         .options=${{
@@ -162,13 +155,6 @@ export const Default = {
             },
           },
         }}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -177,6 +163,7 @@ export const Default = {
 export const FourDatasetExample = {
   args: {
     ...baseArgs,
+    chartTitle: 'Boxplot with Four Datasets',
     datasets: quadrupleDataset,
   },
   render: (args) => {
@@ -184,7 +171,6 @@ export const FourDatasetExample = {
       <kd-chart
         type="boxplot"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
         .options=${{
@@ -202,13 +188,6 @@ export const FourDatasetExample = {
             },
           },
         }}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -217,8 +196,7 @@ export const FourDatasetExample = {
 export const Horizontal = {
   args: {
     ...baseArgs,
-    chartTitle: 'Horizontal Boxplot Example',
-    description: 'Horizontal boxplot chart with two datasets',
+    chartTitle: 'Horizontal Boxplot with Two Datasets',
     options: {
       scales: {
         x: {
@@ -235,7 +213,6 @@ export const Horizontal = {
       <kd-chart
         type="boxplot"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
         .options=${{
@@ -254,13 +231,6 @@ export const Horizontal = {
             },
           },
         }}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -269,9 +239,7 @@ export const Horizontal = {
 export const VerticalSingleDataset = {
   args: {
     ...baseArgs,
-    chartTitle: 'Vertical Boxplot Single Dataset Example',
-    description: 'Vertical boxplot chart with single dataset',
-    colorPalette: 'sequential01',
+    chartTitle: 'Vertical Boxplot with Single Dataset',
     datasets: singleDataset,
   },
   render: (args) => {
@@ -283,7 +251,7 @@ export const VerticalSingleDataset = {
         .labels=${args.labels}
         .datasets=${args.datasets}
         .options=${{
-          colorPalette: args.colorPalette,
+          colorPalette: 'sequential01',
           plugins: {
             legend: { display: true },
             tooltip: { enabled: true },
@@ -297,13 +265,6 @@ export const VerticalSingleDataset = {
             },
           },
         }}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -313,14 +274,12 @@ export const WithoutLegend = {
   args: {
     ...baseArgs,
     chartTitle: 'Boxplot Without Legend',
-    description: 'Boxplot chart with legend hidden',
   },
   render: (args) => {
     return html`
       <kd-chart
         type="boxplot"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
         .options=${{
@@ -338,13 +297,6 @@ export const WithoutLegend = {
             },
           },
         }}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },

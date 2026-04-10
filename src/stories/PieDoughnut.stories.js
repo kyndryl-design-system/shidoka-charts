@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
-import argTypes from '../common/config/chartArgTypes';
+import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
 
 export default {
   title: 'Charts/Pie & Doughnut',
@@ -16,17 +16,13 @@ export default {
   },
   argTypes: {
     ...argTypes,
-    useHtmlLegend: {
-      table: {
-        disable: true,
-      },
-    },
+    useHtmlLegend: hideUnusedControls,
+    colorPalette: hideUnusedControls,
   },
 };
 
 const args = {
   chartTitle: 'Pie Chart',
-  description: 'Chart description.',
   labels: ['Blue', 'Red', 'Orange', 'Yellow', 'Green', 'Purple'],
   datasets: [
     {
@@ -48,14 +44,6 @@ const args = {
       },
     },
   },
-  hideDescription: false,
-  hideCaptions: false,
-  hideHeader: false,
-  hideControls: false,
-  colorPalette: 'categorical',
-  noBorder: false,
-  width: null,
-  height: null,
 };
 
 export const Pie = {
@@ -65,17 +53,9 @@ export const Pie = {
       <kd-chart
         type="pie"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
-        .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
+        .options=${{ colorPalette: 'categorical', ...args.options }}
       ></kd-chart>
     `;
   },
@@ -91,17 +71,9 @@ export const Doughnut = {
       <kd-chart
         type="doughnut"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
-        .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
+        .options=${{ colorPalette: 'categorical', ...args.options }}
       ></kd-chart>
     `;
   },
@@ -116,8 +88,7 @@ export const Doughnut = {
 export const DoughnutCustomCenterLabel = {
   args: {
     ...args,
-    chartTitle: 'Doughnut Chart',
-    description: 'With custom center labels.',
+    chartTitle: 'Doughnut Chart (With custom center labels)',
     options: {
       doughnutLabel: {
         line1text: function (defaultValue, context) {
@@ -146,17 +117,9 @@ export const DoughnutCustomCenterLabel = {
       <kd-chart
         type="doughnut"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },

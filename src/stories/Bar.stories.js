@@ -1,8 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
-import argTypes from '../common/config/chartArgTypes';
-
-const hideUnusedControls = { table: { disable: true } };
+import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
 
 export default {
   title: 'Charts/Bar',
@@ -20,26 +18,11 @@ export default {
     ...argTypes,
     useHtmlLegend: hideUnusedControls,
     colorPalette: hideUnusedControls,
-    hideDescription: hideUnusedControls,
-    hideCaptions: hideUnusedControls,
-    hideHeader: hideUnusedControls,
-    hideControls: hideUnusedControls,
-    noBorder: hideUnusedControls,
-    width: hideUnusedControls,
-    height: hideUnusedControls,
-    hideTableControl: hideUnusedControls,
-    hideFullscreenControl: hideUnusedControls,
-    hideDownloadControl: hideUnusedControls,
-    customLabels: hideUnusedControls,
-    htmlLegendMaxHeight: hideUnusedControls,
-    htmlLegendMaxWidth: hideUnusedControls,
-    htmlLegendOptions: hideUnusedControls,
   },
 };
 
 const args = {
   chartTitle: 'Bar Chart',
-  description: 'Chart description.',
   labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
   datasets: [
     {
@@ -74,7 +57,6 @@ export const Vertical = {
       <kd-chart
         type="bar"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
@@ -107,7 +89,6 @@ export const Horizontal = {
       <kd-chart
         type="bar"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
@@ -141,7 +122,6 @@ export const Stacked = {
       <kd-chart
         type="bar"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
@@ -176,7 +156,6 @@ export const HorizontalStacked = {
       <kd-chart
         type="bar"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
@@ -218,7 +197,6 @@ export const Floating = {
       <kd-chart
         type="bar"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
@@ -278,7 +256,6 @@ export const SingleLabel = {
       <kd-chart
         type="bar"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}

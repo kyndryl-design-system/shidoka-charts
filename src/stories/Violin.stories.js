@@ -1,7 +1,7 @@
 import { html } from 'lit';
 import '../components/chart';
 import { generateRandomData } from '../common/config/chartTypes/violin';
-import argTypes from '../common/config/chartArgTypes';
+import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
 
 /**
  * Violin plot chart type is available through the integration of the
@@ -16,6 +16,8 @@ export default {
   component: 'kd-chart',
   argTypes: {
     ...argTypes,
+    useHtmlLegend: hideUnusedControls,
+    colorPalette: hideUnusedControls,
   },
 };
 
@@ -62,18 +64,10 @@ const doubleDataset = [
 ];
 
 const baseArgs = {
-  chartTitle: 'Violin Plot Example',
-  description: 'Violin plot chart with two datasets',
+  chartTitle: 'Violin Plot Chart with Two Datasets',
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
   datasets: doubleDataset,
-  colorPalette: 'categorical',
-  hideDescription: false,
-  hideCaptions: false,
-  hideHeader: false,
-  hideControls: false,
-  noBorder: false,
-  width: null,
-  height: null,
+
   options: {
     scales: {
       x: {
@@ -92,7 +86,6 @@ export const Default = {
     <kd-chart
       type="violin"
       .chartTitle=${args.chartTitle}
-      .description=${args.description}
       .labels=${args.labels}
       .datasets=${args.datasets}
       .options=${{
@@ -110,13 +103,6 @@ export const Default = {
           },
         },
       }}
-      ?hideDescription=${args.hideDescription}
-      ?hideCaptions=${args.hideCaptions}
-      ?hideHeader=${args.hideHeader}
-      ?hideControls=${args.hideControls}
-      ?noBorder=${args.noBorder}
-      .width=${args.width}
-      .height=${args.height}
     ></kd-chart>
   `,
 };
@@ -124,8 +110,7 @@ export const Default = {
 export const Horizontal = {
   args: {
     ...baseArgs,
-    chartTitle: 'Horizontal Violin Plot Example',
-    description: 'Horizontal violin plot chart with two datasets',
+    chartTitle: 'Horizontal Violin Plot chart with Two Datasets',
     options: {
       scales: {
         x: {
@@ -141,7 +126,6 @@ export const Horizontal = {
     <kd-chart
       type="violin"
       .chartTitle=${args.chartTitle}
-      .description=${args.description}
       .labels=${args.labels}
       .datasets=${args.datasets}
       .options=${{
@@ -160,13 +144,6 @@ export const Horizontal = {
           },
         },
       }}
-      ?hideDescription=${args.hideDescription}
-      ?hideCaptions=${args.hideCaptions}
-      ?hideHeader=${args.hideHeader}
-      ?hideControls=${args.hideControls}
-      ?noBorder=${args.noBorder}
-      .width=${args.width}
-      .height=${args.height}
     ></kd-chart>
   `,
 };
@@ -174,8 +151,7 @@ export const Horizontal = {
 export const VerticalSingleDataset = {
   args: {
     ...baseArgs,
-    chartTitle: 'Vertical Violin Plot Single Dataset Example',
-    description: 'Vertical violin plot chart with single dataset',
+    chartTitle: 'Vertical Violin Plot with Single Dataset',
     colorPalette: 'sequential04',
     datasets: singleDataset,
   },
@@ -183,7 +159,6 @@ export const VerticalSingleDataset = {
     <kd-chart
       type="violin"
       .chartTitle=${args.chartTitle}
-      .description=${args.description}
       .labels=${args.labels}
       .datasets=${args.datasets}
       .options=${{
@@ -201,13 +176,6 @@ export const VerticalSingleDataset = {
           },
         },
       }}
-      ?hideDescription=${args.hideDescription}
-      ?hideCaptions=${args.hideCaptions}
-      ?hideHeader=${args.hideHeader}
-      ?hideControls=${args.hideControls}
-      ?noBorder=${args.noBorder}
-      .width=${args.width}
-      .height=${args.height}
     ></kd-chart>
   `,
 };
@@ -215,15 +183,13 @@ export const VerticalSingleDataset = {
 export const WithoutLegend = {
   args: {
     ...baseArgs,
-    chartTitle: 'Violin Plot Without Legend',
-    description: 'Violin plot chart with legend hidden',
+    chartTitle: 'Violin Plot without legend',
     colorPalette: 'categorical',
   },
   render: (args) => html`
     <kd-chart
       type="violin"
       .chartTitle=${args.chartTitle}
-      .description=${args.description}
       .labels=${args.labels}
       .datasets=${args.datasets}
       .options=${{
@@ -241,13 +207,6 @@ export const WithoutLegend = {
           },
         },
       }}
-      ?hideDescription=${args.hideDescription}
-      ?hideCaptions=${args.hideCaptions}
-      ?hideHeader=${args.hideHeader}
-      ?hideControls=${args.hideControls}
-      ?noBorder=${args.noBorder}
-      .width=${args.width}
-      .height=${args.height}
     ></kd-chart>
   `,
 };

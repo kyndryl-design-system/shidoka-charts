@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
-import argTypes from '../common/config/chartArgTypes';
+import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
 import statsByState from './sampleData/treemapStates.json';
 import nestedTree from './sampleData/treemapNested.json';
 
@@ -16,12 +16,15 @@ export default {
       url: 'https://www.figma.com/file/9NrpK3rmbOk0lhlFkEPSaO/Data-Viz-Component-Library?node-id=1652%3A7571&mode=dev',
     },
   },
-  argTypes: argTypes,
+  argTypes: {
+    ...argTypes,
+    useHtmlLegend: hideUnusedControls,
+    colorPalette: hideUnusedControls,
+  },
 };
 
 const args = {
   chartTitle: 'Tree Map',
-  description: 'Chart description.',
   datasets: [
     {
       label: 'Population',
@@ -47,14 +50,6 @@ const args = {
       },
     },
   },
-  hideDescription: false,
-  hideCaptions: false,
-  hideHeader: false,
-  hideControls: false,
-  colorPalette: 'categorical',
-  noBorder: false,
-  width: null,
-  height: null,
 };
 
 export const Simple = {
@@ -64,17 +59,9 @@ export const Simple = {
       <kd-chart
         type="treemap"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
-        .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
+        .options=${{ colorPalette: 'categorical', ...args.options }}
       ></kd-chart>
     `;
   },
@@ -106,17 +93,9 @@ export const Grouped = {
       <kd-chart
         type="treemap"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -157,17 +136,9 @@ export const NestedData = {
       <kd-chart
         type="treemap"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },

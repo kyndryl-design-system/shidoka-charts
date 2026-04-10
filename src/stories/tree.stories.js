@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
-import argTypes from '../common/config/chartArgTypes';
+import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
 import treeDataJson from './sampleData/graphTree.json';
 
 /**
@@ -16,13 +16,14 @@ export default {
   component: 'kd-chart',
   argTypes: {
     ...argTypes,
+    useHtmlLegend: hideUnusedControls,
+    colorPalette: hideUnusedControls,
   },
 };
 
 const args = {
   colorPalette: 'categorical',
   chartTitle: 'Tree Chart Horizontal Orientation',
-  description: 'Hierarchical tree structure using chartjs-chart-graph.',
   labels: treeDataJson.map((d) => d.name),
   datasets: [
     {
@@ -39,7 +40,6 @@ export const Default = {
     <kd-chart
       type="tree"
       .chartTitle=${args.chartTitle}
-      .description=${args.description}
       .labels=${args.labels}
       .datasets=${args.datasets}
       .options=${{
@@ -65,7 +65,6 @@ export const Vertical = {
     <kd-chart
       type="tree"
       .chartTitle=${args.chartTitle}
-      .description=${args.description}
       .labels=${args.labels}
       .datasets=${args.datasets}
       .options=${{
@@ -91,7 +90,6 @@ export const Radial = {
     <kd-chart
       type="tree"
       .chartTitle=${args.chartTitle}
-      .description=${args.description}
       .labels=${args.labels}
       .datasets=${args.datasets}
       .options=${{
@@ -121,7 +119,6 @@ export const Directed = {
     <kd-chart
       type="tree"
       .chartTitle=${args.chartTitle}
-      .description=${args.description}
       .labels=${args.labels}
       .datasets=${args.datasets}
       .options=${{
@@ -157,7 +154,6 @@ export const WithLabels = {
     <kd-chart
       type="tree"
       .chartTitle=${args.chartTitle}
-      .description=${args.description}
       .labels=${args.labels}
       .datasets=${args.datasets}
       .options=${{

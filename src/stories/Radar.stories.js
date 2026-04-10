@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
-import argTypes from '../common/config/chartArgTypes';
+import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
 
 export default {
   title: 'Charts/Radar',
@@ -16,11 +16,8 @@ export default {
   },
   argTypes: {
     ...argTypes,
-    useHtmlLegend: {
-      table: {
-        disable: true,
-      },
-    },
+    useHtmlLegend: hideUnusedControls,
+    colorPalette: hideUnusedControls,
   },
 };
 
@@ -52,14 +49,6 @@ const args = {
       },
     },
   },
-  hideDescription: false,
-  hideCaptions: false,
-  hideHeader: false,
-  hideControls: false,
-  colorPalette: 'categorical',
-  noBorder: false,
-  width: null,
-  height: null,
 };
 
 export const Radar = {
@@ -69,17 +58,9 @@ export const Radar = {
       <kd-chart
         type="radar"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },
