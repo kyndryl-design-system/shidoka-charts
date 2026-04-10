@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
-import argTypes from '../common/config/chartArgTypes';
+import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
 import { createMatrixData } from '../common/config/chartTypes/matrix';
 import heatmapData from './sampleData/heatmap';
 import divergentHeatmapData from './sampleData/divergent-heatmap';
@@ -20,6 +20,7 @@ export default {
   argTypes: {
     ...argTypes,
     legendLabels: { control: 'object', defaultValue: undefined },
+    useHtmlLegend: hideUnusedControls,
   },
 };
 
@@ -57,16 +58,8 @@ const divergentMatrixData = createMatrixData(divergentHeatmapData, {
 
 const commonArgs = {
   chartTitle: 'Cost Change by Asset Type and Month',
-  description: 'Monthly cost fluctuations across different asset types',
   labels: { y: months, x: assetTypes },
-  hideDescription: false,
-  hideCaptions: false,
-  hideHeader: false,
-  hideControls: false,
   colorPalette: 'sequential02',
-  noBorder: false,
-  width: null,
-  height: null,
 };
 
 const defaultDataset = {
@@ -131,17 +124,9 @@ export const Default = {
         type="matrix"
         style="min-height: 500px;"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${datasets}
         .options=${options}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -178,17 +163,9 @@ export const Divergent = {
         type="matrix"
         style="min-height: 500px;"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${datasets}
         .options=${options}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -220,17 +197,9 @@ export const HideLegend = {
         type="matrix"
         style="min-height: 500px;"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
         .options=${options}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },

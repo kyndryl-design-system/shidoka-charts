@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
-import argTypes from '../common/config/chartArgTypes';
+import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
 import { topojson } from 'chartjs-chart-geo';
 import capitals from './sampleData/us-capitals.json';
 import nationCapitals from './sampleData/nation-capitals.json';
@@ -18,11 +18,7 @@ export default {
   },
   argTypes: {
     ...argTypes,
-    useHtmlLegend: {
-      table: {
-        disable: true,
-      },
-    },
+    useHtmlLegend: hideUnusedControls,
   },
 };
 
@@ -35,16 +31,7 @@ const states = topojson.feature(usData, usData.objects.states).features;
 
 const args = {
   chartTitle: 'Geo Chart',
-  description: 'Chart description.',
-  hideDescription: false,
-  hideCaptions: false,
-  hideHeader: false,
-  hideControls: false,
   colorPalette: 'sequential01',
-  noBorder: false,
-  width: null,
-  height: null,
-  unsafeHTML: false,
 };
 
 export const WorldChoropleth = {
@@ -75,17 +62,9 @@ export const WorldChoropleth = {
       <kd-chart
         type="choropleth"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -126,17 +105,9 @@ export const CountryChoropleth = {
       <kd-chart
         type="choropleth"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -171,17 +142,9 @@ export const WorldBubbleMap = {
       <kd-chart
         type="bubbleMap"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },
@@ -220,17 +183,9 @@ export const CountryBubbleMap = {
       <kd-chart
         type="bubbleMap"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },

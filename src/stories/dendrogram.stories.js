@@ -22,7 +22,6 @@ export default {
 const args = {
   colorPalette: 'categorical',
   chartTitle: 'Dendrogram Chart',
-  description: 'Hierarchical tree visualization using Chart.js Graph plugin.',
   labels: treeDataJson.map((d) => d.name),
   datasets: [
     {
@@ -39,7 +38,6 @@ export const Default = {
     <kd-chart
       type="dendrogram"
       .chartTitle=${args.chartTitle}
-      .description=${args.description}
       .labels=${args.labels}
       .datasets=${args.datasets}
       .options=${{

@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
-import argTypes from '../common/config/chartArgTypes';
+import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
 
 /**
  * Sankey chart type is available through the integration of the
@@ -15,9 +15,7 @@ export default {
   ],
   argTypes: {
     ...argTypes,
-    labels: { control: { type: 'object' } },
-    datasets: { control: { type: 'object' } },
-    options: { control: { type: 'object' } },
+    useHtmlLegend: hideUnusedControls,
   },
   parameters: { design: { type: 'figma', url: '' } },
 };
@@ -26,7 +24,6 @@ const DEFAULT_HEIGHT = 360;
 
 const baseArgs = {
   chartTitle: 'Sankey Chart',
-  description: 'Sankey chart showing flows between nodes.',
   datasets: [
     {
       label: 'Flow',
@@ -65,7 +62,6 @@ export const Simple = {
       <kd-chart
         type="sankey"
         .chartTitle=${a.chartTitle}
-        .description=${a.description}
         .labels=${a.labels}
         .datasets=${a.datasets}
         .options=${a.options}
@@ -151,7 +147,6 @@ export const Complex = {
       <kd-chart
         type="sankey"
         .chartTitle=${a.chartTitle}
-        .description=${a.description}
         .labels=${a.labels}
         .datasets=${a.datasets}
         .options=${a.options}

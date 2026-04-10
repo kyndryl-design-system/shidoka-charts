@@ -35,3 +35,5 @@ export default {
     },
   },
 };
+
+export const hideUnusedControls = { table: { disable: true } };

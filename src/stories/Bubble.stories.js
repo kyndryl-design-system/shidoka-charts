@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import '../components/chart';
-import argTypes from '../common/config/chartArgTypes';
+import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
 
 export default {
   title: 'Charts/Bubble',
@@ -14,12 +14,14 @@ export default {
       url: '',
     },
   },
-  argTypes: argTypes,
+  argTypes: {
+    ...argTypes,
+    useHtmlLegend: hideUnusedControls,
+  },
 };
 
 const args = {
   chartTitle: 'Bubble Chart',
-  description: 'Chart description.',
   labels: [],
   datasets: [
     {
@@ -77,14 +79,7 @@ const args = {
       },
     },
   },
-  hideDescription: false,
-  hideCaptions: false,
-  hideHeader: false,
-  hideControls: false,
   colorPalette: 'categorical',
-  noBorder: false,
-  width: null,
-  height: null,
 };
 
 export const Bubble = {
@@ -94,17 +89,9 @@ export const Bubble = {
       <kd-chart
         type="bubble"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        ?hideDescription=${args.hideDescription}
-        ?hideCaptions=${args.hideCaptions}
-        ?hideHeader=${args.hideHeader}
-        ?hideControls=${args.hideControls}
-        ?noBorder=${args.noBorder}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
-        .width=${args.width}
-        .height=${args.height}
       ></kd-chart>
     `;
   },

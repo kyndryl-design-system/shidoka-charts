@@ -36,6 +36,7 @@ export default {
         order: [
           'Welcome',
           'Guidelines',
+          'Playground',
           'Charts',
           'Third Party Charts',
           'Mermaid',
