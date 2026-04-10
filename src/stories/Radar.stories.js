@@ -17,7 +17,6 @@ export default {
   argTypes: {
     ...argTypes,
     useHtmlLegend: hideUnusedControls,
-    colorPalette: hideUnusedControls,
   },
 };
 
@@ -49,6 +48,7 @@ const args = {
       },
     },
   },
+  colorPalette: 'categorical',
 };
 
 export const Radar = {

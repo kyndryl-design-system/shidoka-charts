@@ -17,7 +17,6 @@ export default {
   argTypes: {
     ...argTypes,
     useHtmlLegend: hideUnusedControls,
-    colorPalette: hideUnusedControls,
   },
 };
 
@@ -67,7 +66,6 @@ const baseArgs = {
   chartTitle: 'Violin Plot Chart with Two Datasets',
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
   datasets: doubleDataset,
-
   options: {
     scales: {
       x: {
@@ -78,6 +76,7 @@ const baseArgs = {
       },
     },
   },
+  colorPalette: 'categorical',
 };
 
 export const Default = {

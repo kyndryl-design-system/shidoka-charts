@@ -17,7 +17,6 @@ export default {
   argTypes: {
     ...argTypes,
     useHtmlLegend: hideUnusedControls,
-    colorPalette: hideUnusedControls,
   },
 };
 
@@ -44,6 +43,7 @@ const args = {
       },
     },
   },
+  colorPalette: 'categorical',
 };
 
 export const Pie = {
@@ -55,7 +55,7 @@ export const Pie = {
         .chartTitle=${args.chartTitle}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        .options=${{ colorPalette: 'categorical', ...args.options }}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },
@@ -73,7 +73,7 @@ export const Doughnut = {
         .chartTitle=${args.chartTitle}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        .options=${{ colorPalette: 'categorical', ...args.options }}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },

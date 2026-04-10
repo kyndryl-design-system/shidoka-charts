@@ -19,7 +19,6 @@ export default {
   argTypes: {
     ...argTypes,
     useHtmlLegend: hideUnusedControls,
-    colorPalette: hideUnusedControls,
   },
 };
 
@@ -32,6 +31,7 @@ const states = topojson.feature(usData, usData.objects.states).features;
 
 const args = {
   chartTitle: 'Geo Chart',
+  colorPalette: 'sequential01',
 };
 
 export const WorldChoropleth = {
@@ -64,7 +64,7 @@ export const WorldChoropleth = {
         .chartTitle=${args.chartTitle}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        .options=${{ colorPalette: 'sequential01', ...args.options }}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },
@@ -107,7 +107,7 @@ export const CountryChoropleth = {
         .chartTitle=${args.chartTitle}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        .options=${{ colorPalette: 'sequential01', ...args.options }}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },

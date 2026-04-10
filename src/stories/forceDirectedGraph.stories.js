@@ -22,7 +22,6 @@ export default {
 const args = {
   colorPalette: 'categorical',
   chartTitle: 'Force Directed Graph Chart',
-  description: 'Hierarchical tree visualization using Chart.js Graph plugin.',
   labels: graphDataJson.nodes.map((d) => d.id),
   datasets: [
     {
@@ -40,7 +39,6 @@ export const Default = {
     <kd-chart
       type="forceDirectedGraph"
       .chartTitle=${args.chartTitle}
-      .description=${args.description}
       .labels=${args.labels}
       .datasets=${args.datasets}
       .options=${{

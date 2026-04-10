@@ -17,7 +17,6 @@ export default {
   argTypes: {
     ...argTypes,
     useHtmlLegend: hideUnusedControls,
-    colorPalette: hideUnusedControls,
   },
 };
 
@@ -118,7 +117,7 @@ const baseArgs = {
   chartTitle: 'Boxplot with Two Datasets',
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
   datasets: doubleDataset,
-
+  colorPalette: 'categorical',
   options: {
     scales: {
       x: {

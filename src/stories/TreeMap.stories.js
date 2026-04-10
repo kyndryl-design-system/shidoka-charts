@@ -19,7 +19,6 @@ export default {
   argTypes: {
     ...argTypes,
     useHtmlLegend: hideUnusedControls,
-    colorPalette: hideUnusedControls,
   },
 };
 
@@ -50,6 +49,7 @@ const args = {
       },
     },
   },
+  colorPalette: 'categorical',
 };
 
 export const Simple = {
@@ -61,7 +61,7 @@ export const Simple = {
         .chartTitle=${args.chartTitle}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        .options=${{ colorPalette: 'categorical', ...args.options }}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },

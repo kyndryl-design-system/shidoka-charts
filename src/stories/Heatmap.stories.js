@@ -21,7 +21,6 @@ export default {
     ...argTypes,
     legendLabels: { control: 'object', defaultValue: undefined },
     useHtmlLegend: hideUnusedControls,
-    colorPalette: hideUnusedControls,
   },
 };
 
@@ -60,6 +59,7 @@ const divergentMatrixData = createMatrixData(divergentHeatmapData, {
 const commonArgs = {
   chartTitle: 'Cost Change by Asset Type and Month',
   labels: { y: months, x: assetTypes },
+  colorPalette: 'sequential02',
 };
 
 const defaultDataset = {
@@ -97,7 +97,6 @@ const divergentDataset = {
 export const Default = {
   args: {
     ...commonArgs,
-    colorPalette: 'sequential02',
     datasets: [defaultDataset],
   },
   render: (args) => {
@@ -184,7 +183,7 @@ export const HideLegend = {
         gradientLegend: {
           display: false,
           title: '',
-          paletteKey: 'sequential04',
+          paletteKey: '',
         },
       },
       scales: {

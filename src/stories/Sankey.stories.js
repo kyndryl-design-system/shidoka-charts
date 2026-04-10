@@ -16,7 +16,6 @@ export default {
   argTypes: {
     ...argTypes,
     useHtmlLegend: hideUnusedControls,
-    colorPalette: hideUnusedControls,
   },
   parameters: { design: { type: 'figma', url: '' } },
 };

@@ -17,7 +17,6 @@ export default {
   argTypes: {
     ...argTypes,
     useHtmlLegend: hideUnusedControls,
-    colorPalette: hideUnusedControls,
   },
 };
 
@@ -42,6 +41,7 @@ const args = {
       },
     },
   },
+  colorPalette: 'statusDark',
 };
 
 export const Meter = {
@@ -53,7 +53,7 @@ export const Meter = {
         .chartTitle=${args.chartTitle}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        .options=${{ colorPalette: 'statusDark', ...args.options }}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },
@@ -85,7 +85,7 @@ export const MeterCritical = {
         .chartTitle=${args.chartTitle}
         .labels=${args.labels}
         .datasets=${args.datasets}
-        .options=${{ colorPalette: 'statusDark', ...args.options }}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
   },
