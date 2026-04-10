@@ -376,10 +376,6 @@ export class KDChart extends LitElement {
                                     ? unsafeSVG(chartIcon)
                                     : unsafeSVG(tableIcon)}
                                 </span>
-                                <span class="sr-only">
-                                  ${this.customLabels.toggleView ||
-                                  'Toggle View Mode'}
-                                </span>
                               </button>
                             `
                           : null}
@@ -398,10 +394,6 @@ export class KDChart extends LitElement {
                                     ? unsafeSVG(minimizeIcon)
                                     : unsafeSVG(maximizeIcon)}
                                 </span>
-                                <span class="sr-only">
-                                  ${this.customLabels.toggleFullscreen ||
-                                  'Toggle Fullscreen'}
-                                </span>
                               </button>
                             `
                           : null}
@@ -418,10 +410,6 @@ export class KDChart extends LitElement {
                                 >
                                   <span slot="icon">
                                     ${unsafeSVG(downloadIcon)}
-                                  </span>
-                                  <span class="sr-only">
-                                    ${this.customLabels.downloadMenu ||
-                                    'Download Menu'}
                                   </span>
                                 </button>
 
