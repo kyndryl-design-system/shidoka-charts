@@ -366,13 +366,19 @@ export class KDChart extends LitElement {
                               <button
                                 class="control-button"
                                 @click=${() => this.handleViewToggle()}
-                                aria-label=${this.customLabels.toggleView}
-                                title=${this.customLabels.toggleView}
+                                aria-label=${this.customLabels.toggleView ||
+                                'Toggle View Mode'}
+                                title=${this.customLabels.toggleView ||
+                                'Toggle View Mode'}
                               >
                                 <span slot="icon">
                                   ${this.tableView
                                     ? unsafeSVG(chartIcon)
                                     : unsafeSVG(tableIcon)}
+                                </span>
+                                <span class="sr-only">
+                                  ${this.customLabels.toggleView ||
+                                  'Toggle View Mode'}
                                 </span>
                               </button>
                             `
@@ -382,13 +388,19 @@ export class KDChart extends LitElement {
                               <button
                                 class="control-button"
                                 @click=${() => this.handleFullscreen()}
-                                aria-label=${this.customLabels.toggleFullscreen}
-                                title=${this.customLabels.toggleFullscreen}
+                                aria-label=${this.customLabels
+                                  .toggleFullscreen || 'Toggle Fullscreen'}
+                                title=${this.customLabels.toggleFullscreen ||
+                                'Toggle Fullscreen'}
                               >
                                 <span slot="icon">
                                   ${this.fullscreen
                                     ? unsafeSVG(minimizeIcon)
                                     : unsafeSVG(maximizeIcon)}
+                                </span>
+                                <span class="sr-only">
+                                  ${this.customLabels.toggleFullscreen ||
+                                  'Toggle Fullscreen'}
                                 </span>
                               </button>
                             `
@@ -399,11 +411,17 @@ export class KDChart extends LitElement {
                                 <button
                                   tabindex="0"
                                   class="control-button"
-                                  aria-label=${this.customLabels.downloadMenu}
-                                  title=${this.customLabels.downloadMenu}
+                                  aria-label=${this.customLabels.downloadMenu ||
+                                  'Download Menu'}
+                                  title=${this.customLabels.downloadMenu ||
+                                  'Download Menu'}
                                 >
                                   <span slot="icon">
                                     ${unsafeSVG(downloadIcon)}
+                                  </span>
+                                  <span class="sr-only">
+                                    ${this.customLabels.downloadMenu ||
+                                    'Download Menu'}
                                   </span>
                                 </button>
 
