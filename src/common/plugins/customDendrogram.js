@@ -54,7 +54,7 @@ function buildTree(nodes, collapsedSet) {
     children: [],
     depth: 0,
     branch: -1,
-    collapsed: collapsedSet.has(n.id ?? i),
+    collapsed: collapsedSet.has(n.id ?? i) || n.collapsed === true,
   }));
 
   // Build a lookup from id -> index for resolving parent references.
@@ -120,13 +120,14 @@ function visibleNodes(root) {
 /* ------------------------------------------------------------------ */
 
 function layoutCartesian(root, orientation) {
+  // Layout uses ALL children (ignoring collapsed state) so node positions
+  // remain stable when subtrees are collapsed/expanded.
   const leaves = [];
   let maxDepth = 0;
   (function walk(n) {
     maxDepth = Math.max(maxDepth, n.depth);
-    const kids = effectiveChildren(n);
-    if (!kids.length) leaves.push(n);
-    else kids.forEach(walk);
+    if (!n.children.length) leaves.push(n);
+    else n.children.forEach(walk);
   })(root);
 
   // Inset by PAD so outermost nodes aren't clipped by the canvas boundary.
@@ -141,10 +142,10 @@ function layoutCartesian(root, orientation) {
   });
 
   (function walk(n) {
-    const kids = effectiveChildren(n);
-    if (kids.length) {
-      kids.forEach(walk);
-      n._cross = (kids[0]._cross + kids[kids.length - 1]._cross) / 2;
+    if (n.children.length) {
+      n.children.forEach(walk);
+      n._cross =
+        (n.children[0]._cross + n.children[n.children.length - 1]._cross) / 2;
     }
   })(root);
 
@@ -158,18 +159,18 @@ function layoutCartesian(root, orientation) {
       n.dataX = n._cross;
       n.dataY = depthFrac(n.depth);
     }
-    effectiveChildren(n).forEach(place);
+    n.children.forEach(place);
   })(root);
 }
 
 function layoutRadial(root) {
+  // Layout uses ALL children (ignoring collapsed state) so positions are stable.
   const leaves = [];
   let maxDepth = 0;
   (function walk(n) {
     maxDepth = Math.max(maxDepth, n.depth);
-    const kids = effectiveChildren(n);
-    if (!kids.length) leaves.push(n);
-    else kids.forEach(walk);
+    if (!n.children.length) leaves.push(n);
+    else n.children.forEach(walk);
   })(root);
 
   const leafCount = Math.max(leaves.length, 1);
@@ -178,10 +179,9 @@ function layoutRadial(root) {
   });
 
   (function walk(n) {
-    const kids = effectiveChildren(n);
-    if (kids.length) {
-      kids.forEach(walk);
-      const angles = kids.map((c) => c._angle);
+    if (n.children.length) {
+      n.children.forEach(walk);
+      const angles = n.children.map((c) => c._angle);
       n._angle = angles.reduce((a, b) => a + b, 0) / angles.length;
     }
   })(root);
@@ -191,7 +191,7 @@ function layoutRadial(root) {
     const r = maxDepth === 0 ? 0 : n.depth / maxDepth;
     n.dataX = 0.5 + r * 0.42 * Math.cos(n._angle - Math.PI / 2);
     n.dataY = 0.5 + r * 0.42 * Math.sin(n._angle - Math.PI / 2);
-    effectiveChildren(n).forEach(place);
+    n.children.forEach(place);
   })(root);
 }
 
@@ -531,6 +531,18 @@ const customDendrogramPlugin = {
     else if (Array.isArray(opts.tree)) ds._dendroSource = opts.tree;
 
     const s = getState(chart);
+
+    // Seed collapsed set from node data on first pass (respects per-node
+    // `collapsed: true` in the tree definition).
+    if (!s._seeded) {
+      for (const n of tree) {
+        if (n.collapsed === true) {
+          s.collapsed.add(n.id ?? tree.indexOf(n));
+        }
+      }
+      s._seeded = true;
+    }
+
     const orientation = ['vertical', 'horizontal', 'radial'].includes(
       opts.orientation
     )

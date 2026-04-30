@@ -12,12 +12,9 @@ The plugin owns its own layout, edge drawing, and node rendering. Labels are del
 ## Features
 
 - Vertical, horizontal, and radial orientations
-- Solid, palette-colored nodes (no border by default), one color per top-level branch
 - Optional icon (URL or inline SVG markup) rendered inside each node
 - Configurable arrow direction on connecting lines: `none`, `forward`, `reverse`, or `both`
-- Hover scale-up animation
 - Click-to-expand/collapse subtrees with smooth position + opacity tweens
-- Theme-aware datalabels (color/background/font come from `options.plugins.datalabels`)
 
 ## Usage
 
@@ -28,12 +25,12 @@ The plugin owns its own layout, edge drawing, and node rendering. Labels are del
     {
       label: 'Tree',
       data: [
-        { name: 'Root' },
-        { name: 'Child A', parent: 0 },
-        { name: 'Child B', parent: 0 },
+        { name: 'Root', id: 'root' },
+        { name: 'Child A', parent: 'root' },
+        { name: 'Child B', parent: 'root' },
       ],
     },
-  ]}
+  ]}"
   .options=${{
     colorPalette: 'categorical',
     plugins: {
@@ -45,20 +42,6 @@ The plugin owns its own layout, edge drawing, and node rendering. Labels are del
   }}
 ></kd-chart>
 ```
-
-### Tree node shape
-
-Each entry in the dataset's `data` array is a node:
-
-| Field       | Type                                         | Description                                                                                                                                         |
-| ----------- | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`        | `string \| number`                           | Optional. Unique identifier for the node. Defaults to the array index if omitted.                                                                   |
-| `name`      | `string`                                     | Required. Used for the rendered label and tooltip.                                                                                                  |
-| `parent`    | `string \| number`                           | References the `id` of the parent node (or array index for backward compat). Omit for the root.                                                     |
-| `icon`      | `string`                                     | Optional. Either a URL/data URL or an inline `<svg>...</svg>` markup string.                                                                        |
-| `direction` | `'none' \| 'forward' \| 'reverse' \| 'both'` | Optional. Overrides the global `direction` for the edge connecting this node to its parent. Useful for showing mixed arrow styles in a single tree. |
-
-The first entry without a `parent` is treated as the root.
 
 ## Plugin configuration options
 
@@ -86,29 +69,24 @@ All options live under `options.plugins.customDendrogram`. Defaults shown.
 | `badgeStroke`       | `string`                                     | `'#3d3c3c'`     | Border + glyph color of the collapsed "+" badge.                                        |
 | `padding`           | `number` (px)                                | `40`            | Padding around the layout (currently informational; layout uses normalized data space). |
 
-### Label styling
+### Individual node configuration options
 
-Labels are rendered by [chartjs-plugin-datalabels](https://chartjs-plugin-datalabels.netlify.app/). Configure them under `options.plugins.datalabels`:
+Each entry in the dataset's `data` array is a node:
 
-```js
-plugins: {
-  datalabels: {
-    color: 'var(--kd-color-text-level-primary)',
-    backgroundColor: 'var(--kd-color-background-container-secondary)',
-    font: { size: 12, weight: '500' },
-    borderRadius: 2,
-  },
-}
-```
+| Field       | Type                                         | Description                                                                                                                                         |
+| ----------- | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`        | `string \| number`                           | Optional. Unique identifier for the node. Defaults to the array index if omitted.                                                                   |
+| `name`      | `string`                                     | Required. Used for the rendered label and tooltip.                                                                                                  |
+| `parent`    | `string \| number`                           | References the `id` of the parent node (or array index for backward compat). Omit for the root.                                                     |
+| `icon`      | `string`                                     | Optional. Either a URL/data URL or an inline `<svg>...</svg>` markup string.                                                                        |
+| `direction` | `'none' \| 'forward' \| 'reverse' \| 'both'` | Optional. Overrides the global `direction` for the edge connecting this node to its parent. Useful for showing mixed arrow styles in a single tree. |
+| `collapsed` | `boolean`                                    | Optional. If `true`, this node's subtree starts collapsed on initial render. Users can still expand it by clicking.                                 |
 
-The chart-type defaults already pick the appropriate Shidoka tokens, so labels remain legible on light **and** dark backgrounds out of the box.
+The first entry without a `parent` is treated as the root.
 
 ## Interaction
 
-- **Hover** — the hovered node scales to `hoverScale` (animated). Cursor switches to a pointer.
-- **Click** — toggles the collapsed state of a node with children. Disappearing nodes animate toward their nearest visible ancestor and fade out; reappearing nodes start at the ancestor's position and fade in.
-
-Set `expandable: false` to disable click handling.
+- **Click** — toggles the collapsed state of a node with children. Disappearing nodes animate toward their nearest visible ancestor and fade out; reappearing nodes start at the ancestor's position and fade in. Set `expandable: false` to disable click handling.
 
 ## Stories
 
