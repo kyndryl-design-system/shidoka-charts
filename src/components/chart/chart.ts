@@ -32,6 +32,7 @@ import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
 import gradientLegendPlugin from '../../common/plugins/gradientLegend';
+import customDendrogramPlugin from '../../common/plugins/customDendrogram';
 import { renderHTMLLegend } from '../../common/legend';
 import { htmlLegendPlugin } from '../../common/plugins/htmlLegendPlugin';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
@@ -938,6 +939,7 @@ export class KDChart extends LitElement {
       canvasBackgroundPlugin,
       pluginSelect,
       gradientLegendPlugin,
+      customDendrogramPlugin,
       ...this.plugins,
       a11yPlugin,
     ];
@@ -948,8 +950,15 @@ export class KDChart extends LitElement {
     }
 
     if (this.chart) this.chart.destroy();
+    const chartJsType =
+      this.type === 'meter'
+        ? 'doughnut'
+        : this.type === 'customDendrogram'
+        ? 'scatter'
+        : this.type;
+
     this.chart = new Chart(this.canvas, {
-      type: this.type === 'meter' ? 'doughnut' : this.type,
+      type: chartJsType,
       data: { labels: this.labels, datasets: this.mergedDatasets },
       options: this.mergedOptions,
       plugins: chartPlugins,
@@ -974,6 +983,7 @@ export class KDChart extends LitElement {
       'bubbleMap',
       'dendrogram',
       'tree',
+      'customDendrogram',
     ];
 
     // dynamically import type-specific configs
@@ -1057,7 +1067,12 @@ export class KDChart extends LitElement {
 
   private checkType() {
     // chart types that can't have a data table view
-    const blacklist: any = ['dendrogram', 'forceDirectedGraph', 'tree'];
+    const blacklist: any = [
+      'dendrogram',
+      'forceDirectedGraph',
+      'tree',
+      'customDendrogram',
+    ];
     this.tableDisabled = blacklist.includes(this.type);
   }
 
