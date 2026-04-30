@@ -61,6 +61,7 @@ export const Combo = {
         type="bar"
         .chartTitle=${args.chartTitle}
         .labels=${args.labels}
+        .datasets=${args.datasets}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
