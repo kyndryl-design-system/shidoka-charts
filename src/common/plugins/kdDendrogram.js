@@ -1,15 +1,12 @@
 /**
- * customDendrogram — a Chart.js plugin (written from scratch) that renders
+ * kdDendrogram — a Chart.js plugin (written from scratch) that renders
  * dendrogram (tree) diagrams directly onto a Chart.js canvas.
  *
  * Self-contained: no chartjs-chart-graph dependency. Works under a standard
  * Chart.js `scatter` chart whose scales are fixed to [0, 1].
  *
- * Configuration (under `options.plugins.customDendrogram`):
+ * Configuration (under `options.plugins.kdDendrogram`):
  *   - orientation:   'vertical' | 'horizontal' | 'radial' (default 'vertical')
- *   - tree:          [{ name, parent?, icon? }]  flat node list. The first
- *                    entry without a `parent` is the root. Alternatively,
- *                    pass the same array via the first dataset's `data`.
  *   - direction:     'none' | 'forward' | 'reverse' | 'both' (default 'none')
  *                      forward = parent→child arrow
  *                      reverse = child→parent arrow
@@ -19,13 +16,10 @@
  *   - animationDuration: number ms for layout transitions (default 350)
  *   - hoverScale:    number multiplier on hover (default 1.2)
  *   - nodeRadius:    base node radius in px (default 14)
- *   - nodeFill:      override node fill (default null = palette per branch)
  *   - nodeStroke / nodeStrokeWidth: optional border (default no border)
  *   - edgeColor / edgeWidth / arrowSize
- *   - iconSize:      px size for icon images (default 18)
+ *   - iconSize:      px size for icon images (default 16)
  *   - palette:       string[] override (default categorical palette)
- *   - paletteKey:    palette key (default 'categorical')
- *   - padding:       px padding around the layout (default 40)
  *
  * Labels are rendered by chartjs-plugin-datalabels — style them via
  * `options.plugins.datalabels` (color, font, backgroundColor, etc).
@@ -33,7 +27,7 @@
 
 import { getComputedColorPalette } from '../config/colorPalettes';
 
-const PLUGIN_ID = 'customDendrogram';
+const PLUGIN_ID = 'kdDendrogram';
 const ICON_CACHE = new WeakMap(); // chart -> Map(key -> {img, ready})
 const STATE = new WeakMap(); // chart -> internal state
 
@@ -218,10 +212,12 @@ function drawArrowHead(ctx, fromX, fromY, toX, toY, size, color) {
   ctx.restore();
 }
 
-function nodeColor(node, palette, opts) {
-  if (opts.nodeFill) return opts.nodeFill;
+function nodeColor(node, palette) {
   if (!palette || !palette.length) return '#3a5cff';
-  const idx = node.branch < 0 ? 0 : node.branch % palette.length;
+  // Root uses palette[0]; child branches start at palette[1] to avoid sharing
+  // the same color as the root.
+  if (node.branch < 0) return palette[0];
+  const idx = (node.branch + 1) % palette.length;
   return palette[idx];
 }
 
@@ -309,7 +305,7 @@ function getIconImage(chart, icon) {
 
 function drawNode(ctx, chart, node, opts, palette, hoverScale, alpha) {
   const r = opts.nodeRadius * (hoverScale || 1);
-  const fill = nodeColor(node, palette, opts);
+  const fill = nodeColor(node, palette);
 
   ctx.save();
   ctx.globalAlpha = alpha;
@@ -476,30 +472,26 @@ function requestRedraw(chart) {
 /* Plugin definition                                                   */
 /* ------------------------------------------------------------------ */
 
-const customDendrogramPlugin = {
+const kdDendrogramPlugin = {
   id: PLUGIN_ID,
 
   defaults: {
     _enabled: false,
     orientation: 'vertical',
-    tree: [],
     direction: 'none',
     expandable: true,
     animationDuration: 350,
     hoverScale: 1.2,
     nodeRadius: 14,
-    nodeFill: null,
     nodeStroke: '#3d3c3c',
     nodeStrokeWidth: 0,
     edgeColor: '#9a9a9a',
     edgeWidth: 1.5,
     arrowSize: 9,
-    iconSize: 18,
+    iconSize: 16,
     palette: null,
-    paletteKey: 'categorical',
     badgeFill: '#ffffff',
     badgeStroke: '#3d3c3c',
-    padding: 40,
   },
 
   /**
@@ -510,7 +502,7 @@ const customDendrogramPlugin = {
   beforeUpdate(chart, _args, opts) {
     if (!opts || !opts._enabled) return;
 
-    // Resolve tree from either options or dataset[0].data.
+    // Resolve tree from dataset[0].data.
     const ds = chart.data?.datasets?.[0];
     const fromDataset =
       Array.isArray(ds?._dendroSource) && ds._dendroSource.length
@@ -522,13 +514,12 @@ const customDendrogramPlugin = {
           typeof ds.data[0].x === 'undefined'
         ? ds.data
         : null;
-    const tree = fromDataset || (Array.isArray(opts.tree) ? opts.tree : []);
+    const tree = fromDataset || [];
     if (!tree.length || !ds) return;
 
     // Stash original tree on the dataset so subsequent updates don't mistake
     // our generated `{x,y,name}` points for source data.
     if (fromDataset) ds._dendroSource = fromDataset;
-    else if (Array.isArray(opts.tree)) ds._dendroSource = opts.tree;
 
     const s = getState(chart);
 
@@ -575,7 +566,23 @@ const customDendrogramPlugin = {
     ds.pointHitRadius = opts.nodeRadius || 14;
     ds.showLine = false;
     ds.borderColor = 'rgba(0,0,0,0)';
-    ds.backgroundColor = 'rgba(0,0,0,0)';
+
+    // Set per-point backgroundColor matching the plugin's palette so that
+    // Chart.js tooltips inherit the correct color swatch automatically.
+    let palette = Array.isArray(opts.palette) ? opts.palette : null;
+    if (!palette || !palette.length) {
+      try {
+        palette = getComputedColorPalette(
+          chart.options.colorPalette || 'categorical'
+        );
+      } catch {
+        palette = ['#3a5cff'];
+      }
+    }
+    ds.backgroundColor = visible.map((n) => {
+      if (n.branch < 0) return palette[0];
+      return palette[(n.branch + 1) % palette.length] || palette[0];
+    });
 
     // Stash the build for beforeDatasetsDraw.
     s.lastBuild = { root: built.root, list: built.list, visible, orientation };
@@ -684,14 +691,13 @@ const customDendrogramPlugin = {
     }
 
     // Resolve palette. Prefer explicit opts.palette array, then fall back to
-    // the kd-chart component-level colorPalette (chart.options.colorPalette),
-    // then opts.paletteKey.
+    // the kd-chart component-level colorPalette (chart.options.colorPalette).
     let palette = Array.isArray(opts.palette) ? opts.palette : null;
     if (!palette || !palette.length) {
-      const key =
-        chart.options.colorPalette || opts.paletteKey || 'categorical';
       try {
-        palette = getComputedColorPalette(key);
+        palette = getComputedColorPalette(
+          chart.options.colorPalette || 'categorical'
+        );
       } catch {
         palette = ['#3a5cff'];
       }
@@ -792,4 +798,4 @@ const customDendrogramPlugin = {
   },
 };
 
-export default customDendrogramPlugin;
+export default kdDendrogramPlugin;

@@ -1,0 +1,89 @@
+import { Meta, Canvas, Stories } from '@storybook/addon-docs/blocks';
+import * as KdDendrogramStories from './kdDendrogram.stories.js';
+
+<Meta of={KdDendrogramStories} name="Docs" />
+
+# Dendrogram
+
+A from-scratch Chart.js plugin (`kdDendrogram`) that renders dendrogram-style trees on a Chart.js canvas. It is registered automatically by `<kd-chart>` and activated via `type="kdDendrogram"`.
+
+The plugin owns its own layout, edge drawing, and node rendering. Labels are delegated to **chartjs-plugin-datalabels** so they pick up theme tokens (and remain readable on dark backgrounds).
+
+## Features
+
+- Vertical, horizontal, and radial orientations
+- Optional icon (URL or inline SVG markup) rendered inside each node
+- Configurable arrow direction on connecting lines: `none`, `forward`, `reverse`, or `both`
+- Click-to-expand/collapse subtrees with smooth position + opacity tweens
+
+## Usage
+
+```html
+<kd-chart
+  type="kdDendrogram"
+  .datasets=${[
+    {
+      label: 'Tree',
+      data: [
+        { name: 'Root', id: 'root' },
+        { name: 'Child A', parent: 'root' },
+        { name: 'Child B', parent: 'root' },
+      ],
+    },
+  ]}"
+  .options=${{
+    colorPalette: 'categorical',
+    plugins: {
+      kdDendrogram: {
+        orientation: 'vertical',
+        direction: 'forward',
+      },
+    },
+  }}
+></kd-chart>
+```
+
+## Plugin configuration options
+
+All options live under `options.plugins.kdDendrogram`. Defaults shown.
+
+| Option              | Type                                         | Default      | Description                                                                             |
+| ------------------- | -------------------------------------------- | ------------ | --------------------------------------------------------------------------------------- |
+| `orientation`       | `'vertical' \| 'horizontal' \| 'radial'`     | `'vertical'` | Layout direction.                                                                       |
+| `direction`         | `'none' \| 'forward' \| 'reverse' \| 'both'` | `'none'`     | Arrowheads on edges. `forward` = parent→child, `reverse` = child→parent, `both` = both. |
+| `expandable`        | `boolean`                                    | `true`       | Enables click-to-toggle subtree collapse.                                               |
+| `animationDuration` | `number` (ms)                                | `350`        | Duration of expand/collapse position + alpha tween.                                     |
+| `hoverScale`        | `number`                                     | `1.2`        | Multiplier applied to node radius on hover.                                             |
+| `nodeRadius`        | `number` (px)                                | `14`         | Base node radius.                                                                       |
+| `nodeStroke`        | `string`                                     | `'#3d3c3c'`  | Border color (only drawn if `nodeStrokeWidth > 0`).                                     |
+| `nodeStrokeWidth`   | `number` (px)                                | `0`          | Border width. Default is borderless.                                                    |
+| `edgeColor`         | `string`                                     | `'#9a9a9a'`  | Color of connecting lines and arrowheads.                                               |
+| `edgeWidth`         | `number` (px)                                | `1.5`        | Line width.                                                                             |
+| `arrowSize`         | `number` (px)                                | `9`          | Arrowhead size when `direction !== 'none'`.                                             |
+| `iconSize`          | `number` (px)                                | `16`         | Rendered size of node icons.                                                            |
+| `palette`           | `string[] \| null`                           | `null`       | Explicit color list. Overrides the inherited `colorPalette`.                            |
+| `badgeFill`         | `string`                                     | `'#ffffff'`  | Fill color of the "+" badge shown on collapsed nodes.                                   |
+| `badgeStroke`       | `string`                                     | `'#3d3c3c'`  | Border + glyph color of the collapsed "+" badge.                                        |
+
+### Individual node configuration options
+
+Each entry in the dataset's `data` array is a node:
+
+| Field       | Type                                         | Description                                                                                                                                         |
+| ----------- | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`        | `string \| number`                           | Optional. Unique identifier for the node. Defaults to the array index if omitted.                                                                   |
+| `name`      | `string`                                     | Required. Used for the rendered label and tooltip.                                                                                                  |
+| `parent`    | `string \| number`                           | References the `id` of the parent node (or array index for backward compat). Omit for the root.                                                     |
+| `icon`      | `string`                                     | Optional. Either a URL/data URL or an inline `<svg>...</svg>` markup string.                                                                        |
+| `direction` | `'none' \| 'forward' \| 'reverse' \| 'both'` | Optional. Overrides the global `direction` for the edge connecting this node to its parent. Useful for showing mixed arrow styles in a single tree. |
+| `collapsed` | `boolean`                                    | Optional. If `true`, this node's subtree starts collapsed on initial render. Users can still expand it by clicking.                                 |
+
+The first entry without a `parent` is treated as the root.
+
+## Interaction
+
+- **Click** — toggles the collapsed state of a node with children. Disappearing nodes animate toward their nearest visible ancestor and fade out; reappearing nodes start at the ancestor's position and fade in. Set `expandable: false` to disable click handling.
+
+## Stories
+
+<Stories />

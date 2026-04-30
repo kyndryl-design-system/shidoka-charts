@@ -1,13 +1,11 @@
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
-import { getComputedColorPalette } from '../colorPalettes';
 
-export const type = 'customDendrogram';
+export const type = 'kdDendrogram';
 
 /**
- * Configuration for the custom (from-scratch) dendrogram plugin used by
- * `<kd-chart type="customDendrogram">`. Tree node data is sourced from the
- * first dataset's `data` array — `[{ name, parent?, icon? }]` — or from
- * `options.plugins.customDendrogram.tree`.
+ * Configuration for the kd-dendrogram plugin used by
+ * `<kd-chart type="kdDendrogram">`. Tree node data is sourced from the
+ * first dataset's `data` array — `[{ id?, name, parent?, icon? }]`.
  *
  * Labels are rendered by chartjs-plugin-datalabels using the same theme
  * tokens used everywhere else, so they remain readable on dark backgrounds.
@@ -22,7 +20,7 @@ export const options = () => {
     aspectRatio: 2,
     animation: false, // plugin owns its own animation timeline
     plugins: {
-      customDendrogram: { _enabled: true },
+      kdDendrogram: { _enabled: true },
       legend: { display: false },
       tooltip: {
         enabled: true,
@@ -32,28 +30,6 @@ export const options = () => {
           label: (ctx) => {
             const val = ctx.raw;
             return val && val.name ? ' ' + val.name : '';
-          },
-          labelColor: (ctx) => {
-            const pluginOpts =
-              ctx.chart.options?.plugins?.customDendrogram || {};
-            const key =
-              ctx.chart.options?.colorPalette ||
-              pluginOpts.paletteKey ||
-              'categorical';
-            let colors;
-            try {
-              colors = pluginOpts.palette || getComputedColorPalette(key);
-            } catch {
-              colors = ['#3a5cff'];
-            }
-            const raw = ctx.raw;
-            const branch =
-              raw && typeof raw._branch === 'number' ? raw._branch : 0;
-            const color = colors[branch % colors.length] || colors[0];
-            return {
-              borderColor: color,
-              backgroundColor: color,
-            };
           },
         },
       },
@@ -67,8 +43,7 @@ export const options = () => {
         anchor: 'center',
         align: (ctx) => {
           const ori =
-            ctx.chart.options?.plugins?.customDendrogram?.orientation ||
-            'vertical';
+            ctx.chart.options?.plugins?.kdDendrogram?.orientation || 'vertical';
           return ori === 'horizontal' ? 'right' : 'bottom';
         },
         offset: 14,

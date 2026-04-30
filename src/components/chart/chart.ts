@@ -32,7 +32,7 @@ import canvasBackgroundPlugin from '../../common/plugins/canvasBackground';
 import doughnutLabelPlugin from '../../common/plugins/doughnutLabel';
 import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
 import gradientLegendPlugin from '../../common/plugins/gradientLegend';
-import customDendrogramPlugin from '../../common/plugins/customDendrogram';
+import kdDendrogramPlugin from '../../common/plugins/kdDendrogram';
 import { renderHTMLLegend } from '../../common/legend';
 import { htmlLegendPlugin } from '../../common/plugins/htmlLegendPlugin';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
@@ -939,7 +939,7 @@ export class KDChart extends LitElement {
       canvasBackgroundPlugin,
       pluginSelect,
       gradientLegendPlugin,
-      customDendrogramPlugin,
+      kdDendrogramPlugin,
       ...this.plugins,
       a11yPlugin,
     ];
@@ -953,7 +953,7 @@ export class KDChart extends LitElement {
     const chartJsType =
       this.type === 'meter'
         ? 'doughnut'
-        : this.type === 'customDendrogram'
+        : this.type === 'kdDendrogram'
         ? 'scatter'
         : this.type;
 
@@ -983,7 +983,7 @@ export class KDChart extends LitElement {
       'bubbleMap',
       'dendrogram',
       'tree',
-      'customDendrogram',
+      'kdDendrogram',
     ];
 
     // dynamically import type-specific configs
@@ -1071,7 +1071,7 @@ export class KDChart extends LitElement {
       'dendrogram',
       'forceDirectedGraph',
       'tree',
-      'customDendrogram',
+      'kdDendrogram',
     ];
     this.tableDisabled = blacklist.includes(this.type);
   }

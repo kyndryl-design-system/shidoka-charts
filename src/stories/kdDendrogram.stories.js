@@ -10,8 +10,8 @@ import tableIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/ta
 import downloadIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/download.svg';
 
 /**
- * **Custom Dendrogram** — a from-scratch Chart.js plugin loaded by
- * `<kd-chart type="customDendrogram">`. Click any node to expand or collapse
+ * **KD Dendrogram** — a from-scratch Chart.js plugin loaded by
+ * `<kd-chart type="kdDendrogram">`. Click any node to expand or collapse
  * its subtree (animated). Hover a node for a scale-up effect.
  *
  * See the *Docs* tab for the full plugin configuration reference.
@@ -63,13 +63,13 @@ export const Vertical = {
     datasets: [{ label: 'Tree', data: basicTree }],
     options: {
       plugins: {
-        customDendrogram: { orientation: 'vertical', direction: 'none' },
+        kdDendrogram: { orientation: 'vertical', direction: 'none' },
       },
     },
   },
   render: (args) => html`
     <kd-chart
-      type="customDendrogram"
+      type="kdDendrogram"
       .chartTitle=${args.chartTitle}
       .labels=${args.labels}
       .datasets=${args.datasets}
@@ -86,13 +86,13 @@ export const Horizontal = {
     datasets: [{ label: 'Tree', data: basicTree }],
     options: {
       plugins: {
-        customDendrogram: { orientation: 'horizontal', direction: 'none' },
+        kdDendrogram: { orientation: 'horizontal', direction: 'none' },
       },
     },
   },
   render: (args) => html`
     <kd-chart
-      type="customDendrogram"
+      type="kdDendrogram"
       .chartTitle=${args.chartTitle}
       .labels=${args.labels}
       .datasets=${args.datasets}
@@ -109,13 +109,13 @@ export const Radial = {
     datasets: [{ label: 'Tree', data: basicTree }],
     options: {
       plugins: {
-        customDendrogram: { orientation: 'radial', direction: 'none' },
+        kdDendrogram: { orientation: 'radial', direction: 'none' },
       },
     },
   },
   render: (args) => html`
     <kd-chart
-      type="customDendrogram"
+      type="kdDendrogram"
       .chartTitle=${args.chartTitle}
       .labels=${args.labels}
       .datasets=${args.datasets}
@@ -133,7 +133,7 @@ export const WithIcons = {
     datasets: [{ label: 'Tree', data: iconTree }],
     options: {
       plugins: {
-        customDendrogram: {
+        kdDendrogram: {
           orientation: 'vertical',
           direction: 'none',
           nodeRadius: 18,
@@ -144,7 +144,7 @@ export const WithIcons = {
   },
   render: (args) => html`
     <kd-chart
-      type="customDendrogram"
+      type="kdDendrogram"
       .chartTitle=${args.chartTitle}
       .labels=${args.labels}
       .datasets=${args.datasets}
@@ -162,13 +162,13 @@ export const ForwardArrows = {
     datasets: [{ label: 'Tree', data: basicTree }],
     options: {
       plugins: {
-        customDendrogram: { orientation: 'vertical', direction: 'forward' },
+        kdDendrogram: { orientation: 'vertical', direction: 'forward' },
       },
     },
   },
   render: (args) => html`
     <kd-chart
-      type="customDendrogram"
+      type="kdDendrogram"
       .chartTitle=${args.chartTitle}
       .labels=${args.labels}
       .datasets=${args.datasets}
@@ -186,13 +186,13 @@ export const ReverseArrows = {
     datasets: [{ label: 'Tree', data: basicTree }],
     options: {
       plugins: {
-        customDendrogram: { orientation: 'vertical', direction: 'reverse' },
+        kdDendrogram: { orientation: 'vertical', direction: 'reverse' },
       },
     },
   },
   render: (args) => html`
     <kd-chart
-      type="customDendrogram"
+      type="kdDendrogram"
       .chartTitle=${args.chartTitle}
       .labels=${args.labels}
       .datasets=${args.datasets}
@@ -210,7 +210,7 @@ export const BothArrows = {
     datasets: [{ label: 'Tree', data: iconTree }],
     options: {
       plugins: {
-        customDendrogram: {
+        kdDendrogram: {
           orientation: 'horizontal',
           direction: 'both',
           nodeRadius: 18,
@@ -221,7 +221,7 @@ export const BothArrows = {
   },
   render: (args) => html`
     <kd-chart
-      type="customDendrogram"
+      type="kdDendrogram"
       .chartTitle=${args.chartTitle}
       .labels=${args.labels}
       .datasets=${args.datasets}
@@ -251,13 +251,13 @@ export const PerNodeDirection = {
     datasets: [{ label: 'Tree', data: perNodeDirectionTree }],
     options: {
       plugins: {
-        customDendrogram: { orientation: 'vertical', direction: 'none' },
+        kdDendrogram: { orientation: 'vertical', direction: 'none' },
       },
     },
   },
   render: (args) => html`
     <kd-chart
-      type="customDendrogram"
+      type="kdDendrogram"
       .chartTitle=${args.chartTitle}
       .labels=${args.labels}
       .datasets=${args.datasets}
@@ -274,14 +274,14 @@ export const WithDatalabels = {
     datasets: [{ label: 'Tree', data: basicTree }],
     options: {
       plugins: {
-        customDendrogram: { orientation: 'vertical', direction: 'none' },
+        kdDendrogram: { orientation: 'vertical', direction: 'none' },
         datalabels: { display: true },
       },
     },
   },
   render: (args) => html`
     <kd-chart
-      type="customDendrogram"
+      type="kdDendrogram"
       .chartTitle=${args.chartTitle}
       .labels=${args.labels}
       .datasets=${args.datasets}
