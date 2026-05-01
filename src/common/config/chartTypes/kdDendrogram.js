@@ -18,7 +18,7 @@ export const options = () => {
     responsive: true,
     maintainAspectRatio: true,
     aspectRatio: 2,
-    animation: false, // plugin owns its own animation timeline
+    animation: { duration: 400 }, // used by the plugin for lerp timing
     plugins: {
       kdDendrogram: { _enabled: true },
       legend: { display: false },

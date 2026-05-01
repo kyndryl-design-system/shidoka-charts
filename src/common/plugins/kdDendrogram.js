@@ -13,9 +13,8 @@
  *                      both    = arrowheads on both ends
  *   - expandable:    boolean (default true) — click a node to toggle its
  *                    subtree. Subtree expand/collapse is animated.
- *   - animationDuration: number ms for layout transitions (default 350)
  *   - hoverScale:    number multiplier on hover (default 1.2)
- *   - nodeRadius:    base node radius in px (default 14)
+ *   - nodeSize:      node diameter in px (default 28)
  *   - nodeStroke / nodeStrokeWidth: optional border (default no border)
  *   - edgeColor / edgeWidth / arrowSize
  *   - iconSize:      px size for icon images (default 16)
@@ -222,7 +221,8 @@ function nodeColor(node, palette) {
 }
 
 function drawEdges(ctx, edges, opts) {
-  const { edgeColor, edgeWidth, direction, arrowSize, nodeRadius } = opts;
+  const { edgeColor, edgeWidth, direction, arrowSize, nodeSize } = opts;
+  const nodeRadius = nodeSize / 2;
 
   ctx.save();
   ctx.strokeStyle = edgeColor;
@@ -304,7 +304,7 @@ function getIconImage(chart, icon) {
 }
 
 function drawNode(ctx, chart, node, opts, palette, hoverScale, alpha) {
-  const r = opts.nodeRadius * (hoverScale || 1);
+  const r = (opts.nodeSize / 2) * (hoverScale || 1);
   const fill = nodeColor(node, palette);
 
   ctx.save();
@@ -385,7 +385,7 @@ function getState(chart) {
 
 function pickNode(chart, x, y, opts) {
   const s = getState(chart);
-  const r = opts.nodeRadius * 1.25;
+  const r = (opts.nodeSize / 2) * 1.25;
   for (let i = s.lastVisible.length - 1; i >= 0; i--) {
     const n = s.lastVisible[i];
     const dx = x - n.px;
@@ -433,7 +433,7 @@ function ensureHandlers(chart, opts) {
     if (!node || !node.children.length) return;
     if (s.collapsed.has(node.id)) s.collapsed.delete(node.id);
     else s.collapsed.add(node.id);
-    requestRedraw(chart);
+    requestRedraw(chart, true); // tree structure changed — needs full update
   };
 
   canvas.addEventListener('mousemove', onMove);
@@ -454,14 +454,21 @@ function removeHandlers(chart) {
   s.handlers = null;
 }
 
-function requestRedraw(chart) {
+function requestRedraw(chart, forceUpdate) {
   const s = getState(chart);
+  if (forceUpdate) s._needsUpdate = true;
   if (s.rafPending) return;
   s.rafPending = true;
   requestAnimationFrame(() => {
     s.rafPending = false;
+    const needsUpdate = s._needsUpdate;
+    s._needsUpdate = false;
     try {
-      chart.update('none');
+      // Use chart.update() only when the tree structure changed (collapse/expand).
+      // For animation-only frames (hover scale, position tweens) chart.draw() is
+      // sufficient and avoids re-running the expensive beforeUpdate hook.
+      if (needsUpdate) chart.update('none');
+      else chart.draw();
     } catch {
       /* destroyed */
     }
@@ -480,9 +487,8 @@ const kdDendrogramPlugin = {
     orientation: 'vertical',
     direction: 'none',
     expandable: true,
-    animationDuration: 350,
     hoverScale: 1.2,
-    nodeRadius: 14,
+    nodeSize: 28,
     nodeStroke: '#3d3c3c',
     nodeStrokeWidth: 0,
     edgeColor: '#9a9a9a',
@@ -563,7 +569,7 @@ const kdDendrogramPlugin = {
     // pointHitRadius keeps tooltip detection working despite pointRadius 0.
     ds.pointRadius = 0;
     ds.pointHoverRadius = 0;
-    ds.pointHitRadius = opts.nodeRadius || 14;
+    ds.pointHitRadius = opts.nodeSize / 2 || 14;
     ds.showLine = false;
     ds.borderColor = 'rgba(0,0,0,0)';
 
@@ -612,12 +618,10 @@ const kdDendrogramPlugin = {
       targets.set(n.index, { x: n.px, y: n.py, alpha: 1 });
     }
 
-    // Per-frame lerp factor — converges in ~20-25 frames (~350ms @ 60fps).
-    // Higher = snappier; lower = smoother.
-    const LERP = Math.min(
-      0.5,
-      Math.max(0.08, 16 / Math.max(60, opts.animationDuration ?? 350))
-    );
+    // Per-frame lerp factor derived from chart.options.animation.duration.
+    const animDuration =
+      (chart.options.animation && chart.options.animation.duration) || 400;
+    const LERP = Math.min(0.5, Math.max(0.08, 16 / Math.max(60, animDuration)));
 
     // For nodes that disappeared (in tracked but not visible), animate them
     // toward their parent's target position and fade out.
@@ -788,7 +792,16 @@ const kdDendrogramPlugin = {
 
     // Hide datalabels on exiting nodes (they're not in dataset anyway).
 
-    if (stillAnimating) requestRedraw(chart);
+    // Store animation state — afterDraw will schedule the next frame.
+    s._stillAnimating = stillAnimating;
+  },
+
+  afterDraw(chart) {
+    const s = STATE.get(chart);
+    if (s && s._stillAnimating) {
+      s._stillAnimating = false;
+      requestRedraw(chart);
+    }
   },
 
   afterDestroy(chart) {

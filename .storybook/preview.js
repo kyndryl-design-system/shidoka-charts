@@ -38,6 +38,7 @@ export default {
           'Guidelines',
           'Playground',
           'Charts',
+          'Custom Charts',
           'Third Party Charts',
           'Mermaid',
         ],

@@ -63,7 +63,7 @@ export const Vertical = {
     datasets: [{ label: 'Tree', data: basicTree }],
     options: {
       plugins: {
-        kdDendrogram: { orientation: 'vertical', direction: 'none' },
+        kdDendrogram: { orientation: 'vertical' },
       },
     },
   },
@@ -86,7 +86,7 @@ export const Horizontal = {
     datasets: [{ label: 'Tree', data: basicTree }],
     options: {
       plugins: {
-        kdDendrogram: { orientation: 'horizontal', direction: 'none' },
+        kdDendrogram: { orientation: 'horizontal' },
       },
     },
   },
@@ -109,7 +109,7 @@ export const Radial = {
     datasets: [{ label: 'Tree', data: basicTree }],
     options: {
       plugins: {
-        kdDendrogram: { orientation: 'radial', direction: 'none' },
+        kdDendrogram: { orientation: 'radial' },
       },
     },
   },
@@ -135,9 +135,6 @@ export const WithIcons = {
       plugins: {
         kdDendrogram: {
           orientation: 'vertical',
-          direction: 'none',
-          nodeRadius: 18,
-          iconSize: 20,
         },
       },
     },
@@ -162,7 +159,7 @@ export const ForwardArrows = {
     datasets: [{ label: 'Tree', data: basicTree }],
     options: {
       plugins: {
-        kdDendrogram: { orientation: 'vertical', direction: 'forward' },
+        kdDendrogram: { direction: 'forward' },
       },
     },
   },
@@ -186,7 +183,7 @@ export const ReverseArrows = {
     datasets: [{ label: 'Tree', data: basicTree }],
     options: {
       plugins: {
-        kdDendrogram: { orientation: 'vertical', direction: 'reverse' },
+        kdDendrogram: { direction: 'reverse' },
       },
     },
   },
@@ -207,14 +204,12 @@ export const BothArrows = {
     colorPalette: 'categorical',
     chartTitle: 'Bi-directional Arrows',
     labels: iconTree.map((n) => n.name),
-    datasets: [{ label: 'Tree', data: iconTree }],
+    datasets: [{ label: 'Tree', data: basicTree }],
     options: {
       plugins: {
         kdDendrogram: {
           orientation: 'horizontal',
           direction: 'both',
-          nodeRadius: 18,
-          iconSize: 20,
         },
       },
     },
@@ -251,7 +246,7 @@ export const PerNodeDirection = {
     datasets: [{ label: 'Tree', data: perNodeDirectionTree }],
     options: {
       plugins: {
-        kdDendrogram: { orientation: 'vertical', direction: 'none' },
+        kdDendrogram: { orientation: 'vertical' },
       },
     },
   },
@@ -274,7 +269,7 @@ export const WithDatalabels = {
     datasets: [{ label: 'Tree', data: basicTree }],
     options: {
       plugins: {
-        kdDendrogram: { orientation: 'vertical', direction: 'none' },
+        kdDendrogram: { orientation: 'vertical' },
         datalabels: { display: true },
       },
     },
