@@ -404,8 +404,8 @@ function ensureHandlers(chart, opts) {
   const toCanvas = (e) => {
     const rect = canvas.getBoundingClientRect();
     return {
-      x: ((e.clientX - rect.left) * canvas.width) / rect.width,
-      y: ((e.clientY - rect.top) * canvas.height) / rect.height,
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
     };
   };
 
