@@ -1,6 +1,7 @@
 import { html } from 'lit';
 import '../components/chart';
 import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
+import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 export default {
   title: 'Charts/Bar',
@@ -259,6 +260,107 @@ export const SingleLabel = {
         .labels=${args.labels}
         .datasets=${args.datasets}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
+      ></kd-chart>
+    `;
+  },
+};
+
+export const MeterBar = {
+  args: {
+    colorPalette: 'statusDark',
+    labels: ['Risk Meter'],
+    datasets: [
+      {
+        label: 'Low',
+        data: [25],
+      },
+      {
+        label: 'Medium',
+        data: [25],
+      },
+      {
+        label: 'High',
+        data: [25],
+      },
+      {
+        label: 'Critical',
+        data: [25],
+      },
+    ],
+    options: {
+      barThickness: 20,
+      maintainAspectRatio: false,
+      indexAxis: 'y',
+      scales: {
+        x: {
+          max: 100, // Indicator scale max value
+          title: {
+            text: 'Risk Score',
+          },
+          stacked: true,
+          display: false,
+        },
+        y: {
+          title: {
+            text: 'Risk',
+          },
+          stacked: true,
+          display: false,
+        },
+      },
+      plugins: {
+        annotation: {
+          annotations: {
+            indicator: {
+              type: 'line',
+              xMin: 62, // Indicator value
+              xMax: 62,
+              yMin: -0.065,
+              yMax: 0.065,
+              borderWidth: 2,
+              borderColor: () => {
+                return getTokenThemeVal('--kd-color-text-level-primary');
+              },
+              label: {
+                display: true,
+                content: ['62', '▼'],
+                position: 'start',
+                yAdjust: -14,
+                backgroundColor: 'transparent',
+                color: () => {
+                  return getTokenThemeVal('--kd-color-text-level-primary');
+                },
+                font: { size: 14 },
+              },
+            },
+          },
+        },
+        legend: {
+          display: false,
+        },
+        tooltip: {
+          enabled: false,
+        },
+        datalabels: {
+          display: true,
+          formatter: (value, context) => context.dataset.label,
+          anchor: 'center',
+          align: 'bottom',
+          offset: 12,
+        },
+      },
+    },
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="bar"
+        chartTitle="Stacked Horizontal Bar"
+        description="Risk Meter"
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        hideTableControl
       ></kd-chart>
     `;
   },
