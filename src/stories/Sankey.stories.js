@@ -17,7 +17,6 @@ export default {
     ...argTypes,
     useHtmlLegend: hideUnusedControls,
   },
-  parameters: { design: { type: 'figma', url: '' } },
 };
 
 const DEFAULT_HEIGHT = 360;

@@ -6,12 +6,6 @@ export default {
   title: 'Mermaid/Mermaid Diagrams',
   component: 'kyn-mermaid',
   tags: ['new', 'version:v2.9.0'],
-  parameters: {
-    design: {
-      type: 'figma',
-      url: 'https://www.figma.com/design/wWpIJDfwm1SHkhvpz5WkcI/Cinnamon-2.10?node-id=711-9193&m=dev',
-    },
-  },
 };
 
 const args = {

@@ -8,12 +8,6 @@ export default {
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,
   ],
-  parameters: {
-    design: {
-      type: 'figma',
-      url: '',
-    },
-  },
   argTypes: {
     ...argTypes,
     useHtmlLegend: hideUnusedControls,

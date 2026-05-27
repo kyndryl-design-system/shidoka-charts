@@ -8,12 +8,6 @@ export default {
   decorators: [
     (story) => html` <div style="max-width: 600px;">${story()}</div> `,
   ],
-  parameters: {
-    design: {
-      type: 'figma',
-      url: 'https://www.figma.com/file/9NrpK3rmbOk0lhlFkEPSaO/Data-Viz-Component-Library?node-id=64%3A4378&mode=dev',
-    },
-  },
   argTypes: {
     ...argTypes,
     useHtmlLegend: hideUnusedControls,
@@ -77,12 +71,6 @@ export const Doughnut = {
       ></kd-chart>
     `;
   },
-  parameters: {
-    design: {
-      type: 'figma',
-      url: 'https://www.figma.com/file/9NrpK3rmbOk0lhlFkEPSaO/Data-Viz-Component-Library?node-id=64%3A4703&mode=dev',
-    },
-  },
 };
 
 export const DoughnutCustomCenterLabel = {
@@ -122,12 +110,6 @@ export const DoughnutCustomCenterLabel = {
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
-  },
-  parameters: {
-    design: {
-      type: 'figma',
-      url: 'https://www.figma.com/file/9NrpK3rmbOk0lhlFkEPSaO/Data-Viz-Component-Library?node-id=64%3A4703&mode=dev',
-    },
   },
 };
 
