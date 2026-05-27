@@ -10,12 +10,6 @@ import worldData from './sampleData/countries-50m.json';
 export default {
   title: 'Third Party Charts/Geo',
   component: 'kd-chart',
-  parameters: {
-    design: {
-      type: 'figma',
-      url: 'https://www.figma.com/file/9NrpK3rmbOk0lhlFkEPSaO/Data-Viz-Component-Library?node-id=1652%3A2709&mode=dev',
-    },
-  },
   argTypes: {
     ...argTypes,
     useHtmlLegend: hideUnusedControls,

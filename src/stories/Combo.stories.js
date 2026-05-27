@@ -8,12 +8,6 @@ export default {
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,
   ],
-  parameters: {
-    design: {
-      type: 'figma',
-      url: 'https://www.figma.com/file/9NrpK3rmbOk0lhlFkEPSaO/Data-Viz-Component-Library?node-id=71%3A5439&mode=dev',
-    },
-  },
   argTypes: {
     ...argTypes,
     useHtmlLegend: hideUnusedControls,
