@@ -40,7 +40,7 @@ export default {
       const yPixelNext = nextBand
         ? yScale.getPixelForValue(nextBand.value)
         : chartArea.top;
-      ctx.fillStyle = (nextBand ? nextBand.color : currentBand.color) + '20';
+      ctx.fillStyle = (nextBand ? nextBand.color : currentBand.color) + '18';
       ctx.fillRect(
         chartArea.left,
         Math.min(yPixelCurrent, yPixelNext),
@@ -50,7 +50,7 @@ export default {
 
       // Draw the threshold line
       ctx.strokeStyle = currentBand.color || '#cccccc';
-      ctx.lineWidth = currentBand.width || 2;
+      ctx.lineWidth = currentBand.width || 1;
       ctx.setLineDash(currentBand.line || []);
 
       ctx.beginPath();

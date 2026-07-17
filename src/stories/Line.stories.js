@@ -368,7 +368,7 @@ export const ThresholdBand = {
             { value: 20, color: '#CC1800' },
             { value: 40, color: '#CC1800' },
             { value: 60, color: '#CC1800' },
-            { value: 80, color: '#FFBC48' },
+            { value: 80, color: '#FFD46A' },
             { value: 100, color: '#008D72' },
           ],
         },
