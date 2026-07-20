@@ -365,7 +365,7 @@ export const ThresholdBand = {
       plugins: {
         thresholdBands: {
           bands: [
-            { value: 20, color: '#CC1800' },
+            { value: 20, color: '#CC1800' }, // Supported color formats are Hex : '#90ee90' and shidoka css Shidoka CSS variable: 'var(--kd-color-data-viz-categorical-01-02)'
             { value: 40, color: '#CC1800' },
             { value: 60, color: '#CC1800' },
             { value: 80, color: '#FFD46A' },
