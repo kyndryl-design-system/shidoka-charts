@@ -397,9 +397,9 @@ const fanChartBandDefaults = {
   pointHoverRadius: 0,
 };
 
-export const FanChart = {
+export const ConfidenceBands = {
   args: {
-    chartTitle: 'Predicted net income',
+    chartTitle: 'Forecast Line chart - Confidence Bands',
     description:
       'Shaded areas representing 1, 2, and 3 standard deviation confidence intervals.',
     labels: fanChartLabels,
