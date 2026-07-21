@@ -414,12 +414,12 @@ const getConfidenceBandDatasets = (colorPalette = 'categorical') => {
   const colors = getComputedColorPalette(colorPalette);
   const lineColor = colors[0];
 
-  const createBandDataset = (label, data, order) => ({
+  const createBandDataset = (label, data, order, opacity) => ({
     label,
     data,
     fill: fanChartMedianDatasetIndex,
     borderColor: 'transparent',
-    backgroundColor: colorToRgba('#008D72', fanChartBandOpacities[label]),
+    backgroundColor: colorToRgba('#008D72', opacity),
     borderWidth: 0,
     pointRadius: 0,
     pointHoverRadius: 0,
@@ -437,16 +437,46 @@ const getConfidenceBandDatasets = (colorPalette = 'categorical') => {
       pointHoverRadius: 5,
       order: 0,
     },
-    createBandDataset('1σ', fanChartSigma1High, 3),
-    createBandDataset('2σ', fanChartSigma2High, 2),
-    createBandDataset('3σ', fanChartSigma3High, 1),
-    createBandDataset('1σ', fanChartSigma1Low, 3),
-    createBandDataset('2σ', fanChartSigma2Low, 2),
-    createBandDataset('3σ', fanChartSigma3Low, 1),
+    createBandDataset(
+      '1σ upper',
+      fanChartSigma1High,
+      3,
+      fanChartBandOpacities['1σ']
+    ),
+    createBandDataset(
+      '2σ upper',
+      fanChartSigma2High,
+      2,
+      fanChartBandOpacities['2σ']
+    ),
+    createBandDataset(
+      '3σ upper',
+      fanChartSigma3High,
+      1,
+      fanChartBandOpacities['3σ']
+    ),
+    createBandDataset(
+      '1σ lower',
+      fanChartSigma1Low,
+      3,
+      fanChartBandOpacities['1σ']
+    ),
+    createBandDataset(
+      '2σ lower',
+      fanChartSigma2Low,
+      2,
+      fanChartBandOpacities['2σ']
+    ),
+    createBandDataset(
+      '3σ lower',
+      fanChartSigma3Low,
+      1,
+      fanChartBandOpacities['3σ']
+    ),
   ];
 };
 
-export const ConfidenceBands = {
+export const FanChart = {
   args: {
     chartTitle: 'Forecast Line chart - Confidence Bands',
     description:
