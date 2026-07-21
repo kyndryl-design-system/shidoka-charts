@@ -1,4 +1,5 @@
 import { html } from 'lit';
+import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 import '../components/chart';
 import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
 import { getComputedColorPalette } from '../common/config/colorPalettes';
@@ -383,18 +384,66 @@ const fanChartSigma3Low = [
 
 const fanChartForecastStartIndex = fanChartLabels.indexOf('Q1.2025');
 const fanChartMedianDatasetIndex = 0;
-const fanChartColors = getComputedColorPalette('categorical');
-const fanChartLineColor = fanChartColors[0];
-const fanChartBandOpacity = 1 / 3;
-const fanChartBandColor = `rgba(0, 141, 114, ${fanChartBandOpacity})`;
+const fanChartBandOpacities = {
+  '1σ': 0.4,
+  '2σ': 0.3,
+  '3σ': 0.2,
+};
 
-const fanChartBandDefaults = {
-  fill: fanChartMedianDatasetIndex,
-  borderColor: 'transparent',
-  backgroundColor: fanChartBandColor,
-  borderWidth: 0,
-  pointRadius: 0,
-  pointHoverRadius: 0,
+const colorToRgba = (color, alpha) => {
+  if (!color || typeof color !== 'string') {
+    return color;
+  }
+
+  if (color.startsWith('#') && color.length === 7) {
+    const r = parseInt(color.slice(1, 3), 16);
+    const g = parseInt(color.slice(3, 5), 16);
+    const b = parseInt(color.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+
+  const rgbMatch = color.match(/^rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/);
+  if (rgbMatch) {
+    return `rgba(${rgbMatch[1]}, ${rgbMatch[2]}, ${rgbMatch[3]}, ${alpha})`;
+  }
+
+  return color;
+};
+
+const getConfidenceBandDatasets = (colorPalette = 'categorical') => {
+  const colors = getComputedColorPalette(colorPalette);
+  const lineColor = colors[0];
+
+  const createBandDataset = (label, data, order) => ({
+    label,
+    data,
+    fill: fanChartMedianDatasetIndex,
+    borderColor: 'transparent',
+    backgroundColor: colorToRgba('#008D72', fanChartBandOpacities[label]),
+    borderWidth: 0,
+    pointRadius: 0,
+    pointHoverRadius: 0,
+    order,
+  });
+
+  return [
+    {
+      label: 'Net Income',
+      data: fanChartMedian,
+      fill: false,
+      borderColor: lineColor,
+      borderWidth: 2,
+      pointRadius: 0,
+      pointHoverRadius: 5,
+      order: 0,
+    },
+    createBandDataset('1σ', fanChartSigma1High, 3),
+    createBandDataset('2σ', fanChartSigma2High, 2),
+    createBandDataset('3σ', fanChartSigma3High, 1),
+    createBandDataset('1σ', fanChartSigma1Low, 3),
+    createBandDataset('2σ', fanChartSigma2Low, 2),
+    createBandDataset('3σ', fanChartSigma3Low, 1),
+  ];
 };
 
 export const ConfidenceBands = {
@@ -403,53 +452,6 @@ export const ConfidenceBands = {
     description:
       'Shaded areas representing 1, 2, and 3 standard deviation confidence intervals.',
     labels: fanChartLabels,
-    datasets: [
-      {
-        label: 'Net Income',
-        data: fanChartMedian,
-        borderColor: fanChartLineColor,
-        borderWidth: 2,
-        pointRadius: 0,
-        pointHoverRadius: 5,
-        order: 0,
-      },
-      {
-        label: '1σ',
-        data: fanChartSigma1High,
-        ...fanChartBandDefaults,
-        order: 3,
-      },
-      {
-        label: '2σ',
-        data: fanChartSigma2High,
-        ...fanChartBandDefaults,
-        order: 2,
-      },
-      {
-        label: '3σ',
-        data: fanChartSigma3High,
-        ...fanChartBandDefaults,
-        order: 1,
-      },
-      {
-        label: '1σ',
-        data: fanChartSigma1Low,
-        ...fanChartBandDefaults,
-        order: 3,
-      },
-      {
-        label: '2σ',
-        data: fanChartSigma2Low,
-        ...fanChartBandDefaults,
-        order: 2,
-      },
-      {
-        label: '3σ',
-        data: fanChartSigma3Low,
-        ...fanChartBandDefaults,
-        order: 1,
-      },
-    ],
     options: {
       interaction: {
         mode: 'index',
@@ -484,14 +486,16 @@ export const ConfidenceBands = {
               type: 'box',
               xMin: fanChartForecastStartIndex,
               xMax: fanChartLabels.length - 0.5,
-              backgroundColor: 'rgba(0, 141, 114, 0.1)',
+              backgroundColor:
+                getComputedColorPalette('divergent02')[14] + '10',
+              opacity: 0.1,
               borderWidth: 0,
             },
             forecastDivider: {
               type: 'line',
               xMin: fanChartForecastStartIndex,
               xMax: fanChartForecastStartIndex,
-              borderColor: '#FF4B42',
+              borderColor: getTokenThemeVal('--kd-color-border-variants-focus'),
               borderDash: [10, 10],
               borderWidth: 1,
             },
@@ -501,17 +505,6 @@ export const ConfidenceBands = {
           filter: (tooltipItem) => tooltipItem.dataset.label === 'Net Income',
           callbacks: {
             label: (context) => `Net Income: ${context.parsed.y}M NOK`,
-            afterBody: (items) => {
-              const index = items[0]?.dataIndex;
-
-              if (index >= fanChartForecastStartIndex) {
-                const low = fanChartSigma3Low[index];
-                const high = fanChartSigma3High[index];
-                return `3σ range: ${low}M – ${high}M NOK`;
-              }
-
-              return null;
-            },
           },
         },
       },
@@ -525,7 +518,7 @@ export const ConfidenceBands = {
         .chartTitle=${args.chartTitle}
         .description=${args.description}
         .labels=${args.labels}
-        .datasets=${args.datasets}
+        .datasets=${getConfidenceBandDatasets(args.colorPalette)}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
     `;
