@@ -500,7 +500,6 @@ const getConfidenceBandDatasets = (colorPalette = 'categorical') => {
       borderWidth: 2,
       pointRadius: 0,
       pointHoverRadius: 5,
-      clip: false,
       order: 0,
     },
     createBandDataset(
@@ -555,6 +554,9 @@ export const FanChart = {
       },
       scales: {
         x: {
+          offset: true,
+          min: 1,
+          max: 12,
           title: {
             text: 'Quarter',
           },
@@ -584,7 +586,6 @@ export const FanChart = {
               xMax: fanChartLabels.length - 0.5,
               backgroundColor:
                 getComputedColorPalette('divergent01')[14] + '10',
-              opacity: 0.1,
               borderWidth: 0,
             },
             forecastDivider: {
@@ -603,10 +604,10 @@ export const FanChart = {
             label: (context) => `Net Income: ${context.parsed.y}M`,
           },
         },
-        // pointColumnHighlight: {
-        //   datasetIndex: 0,
-        //   backgroundColor: '--kd-color-background-container-subtle',
-        // },
+        pointColumnHighlight: {
+          datasetIndex: 0,
+          backgroundColor: '--kd-color-background-container-subtle',
+        },
       },
     },
   },
