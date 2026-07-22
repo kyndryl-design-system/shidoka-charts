@@ -327,3 +327,67 @@ export const Spark = {
     `;
   },
 };
+
+export const ThresholdBand = {
+  tags: ['new'],
+  args: {
+    chartTitle: 'Line Chart with Threshold Band',
+    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Current Week'],
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: [52, 88, 40, 75, 89],
+      },
+      {
+        label: 'Dataset 2',
+        data: [33, 70, 65, 90, 83],
+      },
+    ],
+    options: {
+      scales: {
+        x: {
+          title: {
+            text: 'Time Period',
+          },
+          offset: true,
+        },
+        y: {
+          title: {
+            text: 'Value',
+          },
+          min: 20,
+          max: 100,
+          ticks: {
+            stepSize: 20,
+          },
+        },
+      },
+      plugins: {
+        thresholdBands: {
+          bands: [
+            { value: 20, color: '#CC1800' }, // Supported color formats are Hex : '#90ee90' and shidoka css Shidoka CSS variable: 'var(--kd-color-data-viz-categorical-01-02)'
+            { value: 40, color: '#CC1800' },
+            { value: 60, color: '#CC1800' },
+            { value: 80, color: '#FFD46A' },
+            {
+              value: 100,
+              color: 'var(--kd-color-data-viz-divergent-02-positive-60)',
+            },
+          ],
+        },
+      },
+    },
+    colorPalette: 'categorical',
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="line"
+        .chartTitle=${args.chartTitle}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+      ></kd-chart>
+    `;
+  },
+};
