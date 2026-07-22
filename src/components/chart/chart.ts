@@ -34,6 +34,7 @@ import meterGaugePlugin from '../../common/plugins/meterGaugeNeedle';
 import gradientLegendPlugin from '../../common/plugins/gradientLegend';
 import { renderHTMLLegend } from '../../common/legend';
 import { htmlLegendPlugin } from '../../common/plugins/htmlLegendPlugin';
+import thresholdBandPlugin from '../../common/plugins/thresholdBand';
 import a11yPlugin from 'chartjs-plugin-a11y-legend';
 import datalabelsPlugin from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
@@ -938,6 +939,7 @@ export class KDChart extends LitElement {
       canvasBackgroundPlugin,
       pluginSelect,
       gradientLegendPlugin,
+      thresholdBandPlugin,
       ...this.plugins,
       a11yPlugin,
     ];
