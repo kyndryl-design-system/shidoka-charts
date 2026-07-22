@@ -500,6 +500,7 @@ const getConfidenceBandDatasets = (colorPalette = 'categorical') => {
       borderWidth: 2,
       pointRadius: 0,
       pointHoverRadius: 5,
+      clip: false,
       order: 0,
     },
     createBandDataset(
@@ -602,10 +603,10 @@ export const FanChart = {
             label: (context) => `Net Income: ${context.parsed.y}M`,
           },
         },
-        pointColumnHighlight: {
-          datasetIndex: 0,
-          backgroundColor: '--kd-color-background-container-subtle',
-        },
+        // pointColumnHighlight: {
+        //   datasetIndex: 0,
+        //   backgroundColor: '--kd-color-background-container-subtle',
+        // },
       },
     },
   },
