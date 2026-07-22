@@ -851,29 +851,11 @@ export class KDChart extends LitElement {
         this.chart.data.labels = this.labels;
         this.chart.options = this.mergedOptions;
 
-        this.chart.data.datasets.forEach((dataset: any, index: number) => {
-          const NewDataset = this.mergedDatasets.find(
-            (newDataset: any) => newDataset.label === dataset.label
-          );
-
-          if (!NewDataset) {
-            this.chart.data.datasets.splice(index, 1);
-          }
-        });
-
-        this.mergedDatasets.forEach((dataset: any) => {
-          const prevDataset = this.chart.data.datasets.find(
-            (prevDataset: any) => prevDataset.label === dataset.label
-          );
-
-          if (!prevDataset) {
-            this.chart.data.datasets.push(dataset);
-          } else {
-            Object.keys(dataset).forEach((key) => {
-              prevDataset[key] = dataset[key];
-            });
-          }
-        });
+        if (this.hasForecastBandDatasets()) {
+          this.syncChartDatasets();
+        } else {
+          this.mergeChartDatasetsByLabel();
+        }
 
         this.chart.update();
 
@@ -925,6 +907,61 @@ export class KDChart extends LitElement {
     if (this.chart && changedProps.has('noBorder')) {
       this.chart.resize();
     }
+  }
+
+  /**
+   * Line charts with forecast/confidence bands use numeric fill targets
+   * (e.g. fill: 0) across multiple datasets. These must sync by index because
+   * band datasets can share labels or otherwise collide during label merges.
+   */
+  private hasForecastBandDatasets() {
+    if (this.type !== 'line' || !this.mergedDatasets?.length) {
+      return false;
+    }
+
+    return (
+      this.mergedDatasets.filter(
+        (dataset: any) => typeof dataset.fill === 'number'
+      ).length > 1
+    );
+  }
+
+  /**
+   * Replaces chart datasets by index so duplicate labels (e.g. confidence bands)
+   * stay aligned and fill targets are not corrupted on updates.
+   */
+  private syncChartDatasets() {
+    this.chart.data.datasets = this.mergedDatasets.map((dataset: any) => ({
+      ...dataset,
+      data: Array.isArray(dataset.data) ? [...dataset.data] : dataset.data,
+    }));
+  }
+
+  /** Updates chart datasets by matching labels. */
+  private mergeChartDatasetsByLabel() {
+    this.chart.data.datasets.forEach((dataset: any, index: number) => {
+      const NewDataset = this.mergedDatasets.find(
+        (newDataset: any) => newDataset.label === dataset.label
+      );
+
+      if (!NewDataset) {
+        this.chart.data.datasets.splice(index, 1);
+      }
+    });
+
+    this.mergedDatasets.forEach((dataset: any) => {
+      const prevDataset = this.chart.data.datasets.find(
+        (prevDataset: any) => prevDataset.label === dataset.label
+      );
+
+      if (!prevDataset) {
+        this.chart.data.datasets.push(dataset);
+      } else {
+        Object.keys(dataset).forEach((key) => {
+          prevDataset[key] = dataset[key];
+        });
+      }
+    });
   }
 
   /**

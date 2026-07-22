@@ -330,6 +330,70 @@ export const Spark = {
   },
 };
 
+export const ThresholdBand = {
+  tags: ['new'],
+  args: {
+    chartTitle: 'Line Chart with Threshold Band',
+    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Current Week'],
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: [52, 88, 40, 75, 89],
+      },
+      {
+        label: 'Dataset 2',
+        data: [33, 70, 65, 90, 83],
+      },
+    ],
+    options: {
+      scales: {
+        x: {
+          title: {
+            text: 'Time Period',
+          },
+          offset: true,
+        },
+        y: {
+          title: {
+            text: 'Value',
+          },
+          min: 20,
+          max: 100,
+          ticks: {
+            stepSize: 20,
+          },
+        },
+      },
+      plugins: {
+        thresholdBands: {
+          bands: [
+            { value: 20, color: '#CC1800' }, // Supported color formats are Hex : '#90ee90' and shidoka css Shidoka CSS variable: 'var(--kd-color-data-viz-categorical-01-02)'
+            { value: 40, color: '#CC1800' },
+            { value: 60, color: '#CC1800' },
+            { value: 80, color: '#FFD46A' },
+            {
+              value: 100,
+              color: 'var(--kd-color-data-viz-divergent-02-positive-60)',
+            },
+          ],
+        },
+      },
+    },
+    colorPalette: 'categorical',
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="line"
+        .chartTitle=${args.chartTitle}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+      ></kd-chart>
+    `;
+  },
+};
+
 const fanChartLabels = [
   '2023',
   'Q1.2024',
@@ -413,13 +477,14 @@ const colorToRgba = (color, alpha) => {
 const getConfidenceBandDatasets = (colorPalette = 'categorical') => {
   const colors = getComputedColorPalette(colorPalette);
   const lineColor = colors[0];
+  const forecastBandColor = getComputedColorPalette('divergent01')[14];
 
   const createBandDataset = (label, data, order, opacity) => ({
     label,
     data,
     fill: fanChartMedianDatasetIndex,
     borderColor: 'transparent',
-    backgroundColor: colorToRgba('#008D72', opacity),
+    backgroundColor: colorToRgba(forecastBandColor, opacity),
     borderWidth: 0,
     pointRadius: 0,
     pointHoverRadius: 0,
@@ -477,10 +542,11 @@ const getConfidenceBandDatasets = (colorPalette = 'categorical') => {
 };
 
 export const FanChart = {
+  tags: ['new'],
   args: {
+    colorPalette: hideUnusedControls,
     chartTitle: 'Forecast Line chart - Confidence Bands',
-    description:
-      'Shaded areas representing 1, 2, and 3 standard deviation confidence intervals.',
+    description: '',
     labels: fanChartLabels,
     options: {
       interaction: {
@@ -503,37 +569,6 @@ export const FanChart = {
           ticks: {
             stepSize: 10,
             callback: (value) => `${value}M`,
-export const ThresholdBand = {
-  tags: ['new'],
-  args: {
-    chartTitle: 'Line Chart with Threshold Band',
-    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Current Week'],
-    datasets: [
-      {
-        label: 'Dataset 1',
-        data: [52, 88, 40, 75, 89],
-      },
-      {
-        label: 'Dataset 2',
-        data: [33, 70, 65, 90, 83],
-      },
-    ],
-    options: {
-      scales: {
-        x: {
-          title: {
-            text: 'Time Period',
-          },
-          offset: true,
-        },
-        y: {
-          title: {
-            text: 'Value',
-          },
-          min: 20,
-          max: 100,
-          ticks: {
-            stepSize: 20,
           },
         },
       },
@@ -548,7 +583,7 @@ export const ThresholdBand = {
               xMin: fanChartForecastStartIndex,
               xMax: fanChartLabels.length - 0.5,
               backgroundColor:
-                getComputedColorPalette('divergent02')[14] + '10',
+                getComputedColorPalette('divergent01')[14] + '10',
               opacity: 0.1,
               borderWidth: 0,
             },
@@ -565,23 +600,11 @@ export const ThresholdBand = {
         tooltip: {
           filter: (tooltipItem) => tooltipItem.dataset.label === 'Net Income',
           callbacks: {
-            label: (context) => `Net Income: ${context.parsed.y}M NOK`,
+            label: (context) => `Net Income: ${context.parsed.y}M`,
           },
-        thresholdBands: {
-          bands: [
-            { value: 20, color: '#CC1800' }, // Supported color formats are Hex : '#90ee90' and shidoka css Shidoka CSS variable: 'var(--kd-color-data-viz-categorical-01-02)'
-            { value: 40, color: '#CC1800' },
-            { value: 60, color: '#CC1800' },
-            { value: 80, color: '#FFD46A' },
-            {
-              value: 100,
-              color: 'var(--kd-color-data-viz-divergent-02-positive-60)',
-            },
-          ],
         },
       },
     },
-    colorPalette: 'categorical',
   },
   render: (args) => {
     return html`
@@ -590,10 +613,8 @@ export const ThresholdBand = {
         .chartTitle=${args.chartTitle}
         .description=${args.description}
         .labels=${args.labels}
-        .datasets=${getConfidenceBandDatasets(args.colorPalette)}
-        .labels=${args.labels}
-        .datasets=${args.datasets}
-        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+        .datasets=${getConfidenceBandDatasets('categorical')}
+        .options=${{ ...args.options }}
       ></kd-chart>
     `;
   },
