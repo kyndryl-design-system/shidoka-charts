@@ -546,7 +546,6 @@ export const FanChart = {
   args: {
     colorPalette: hideUnusedControls,
     chartTitle: 'Forecast Line chart - Confidence Bands',
-    description: '',
     labels: fanChartLabels,
     options: {
       interaction: {
@@ -611,7 +610,6 @@ export const FanChart = {
       <kd-chart
         type="line"
         .chartTitle=${args.chartTitle}
-        .description=${args.description}
         .labels=${args.labels}
         .datasets=${getConfidenceBandDatasets('categorical')}
         .options=${{ ...args.options }}
