@@ -602,6 +602,10 @@ export const FanChart = {
             label: (context) => `Net Income: ${context.parsed.y}M`,
           },
         },
+        pointColumnHighlight: {
+          datasetIndex: 0,
+          backgroundColor: '--kd-color-background-container-subtle',
+        },
       },
     },
   },

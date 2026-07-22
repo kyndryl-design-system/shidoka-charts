@@ -1,0 +1,62 @@
+import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
+
+/**
+ * Draws a vertical shaded column behind the hovered data point.
+ * Opt-in only: register by setting plugins.pointColumnHighlight in chart options.
+ *
+ * Usage:
+ * plugins: {
+ *   pointColumnHighlight: {
+ *     datasetIndex: 0,
+ *     backgroundColor: '--kd-color-background-container-soft',
+ *   }
+ * }
+ */
+
+const resolveColor = (color) =>
+  typeof color === 'string' && color.startsWith('--')
+    ? getTokenThemeVal(color)
+    : color;
+
+export default {
+  id: 'pointColumnHighlight',
+  beforeDatasetsDraw: (chart, args, options) => {
+    if (!options || options.enabled === false) {
+      return;
+    }
+
+    const activeElements = chart.getActiveElements();
+    if (!activeElements.length) {
+      return;
+    }
+
+    const { datasetIndex, index } = activeElements[0];
+    const targetDatasetIndex = options?.datasetIndex ?? 0;
+
+    if (datasetIndex !== targetDatasetIndex) {
+      return;
+    }
+
+    const xScale = chart.scales.x;
+    if (!xScale) {
+      return;
+    }
+
+    const halfStep = options?.columnWidth ?? 0.5;
+    const xMin = xScale.getPixelForValue(index - halfStep);
+    const xMax = xScale.getPixelForValue(index + halfStep);
+    const { ctx, chartArea } = chart;
+
+    ctx.save();
+    ctx.fillStyle = resolveColor(
+      options?.backgroundColor || 'rgba(0, 0, 0, 0.06)'
+    );
+    ctx.fillRect(
+      Math.min(xMin, xMax),
+      chartArea.top,
+      Math.abs(xMax - xMin),
+      chartArea.height
+    );
+    ctx.restore();
+  },
+};

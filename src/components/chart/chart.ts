@@ -57,6 +57,7 @@ import minimizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 import { renderGraphTreeTable } from '../../common/helpers/graphTreeTableRenderer';
+import pointColumnHighlightPlugin from '../../common/plugins/pointColumnHighlight';
 
 Chart.register(
   ChoroplethController,
@@ -980,6 +981,10 @@ export class KDChart extends LitElement {
       ...this.plugins,
       a11yPlugin,
     ];
+
+    if (this.mergedOptions?.plugins?.pointColumnHighlight != null) {
+      chartPlugins.push(pointColumnHighlightPlugin);
+    }
 
     // add htmlLegendPlugin if useHtmlLegend is enabled
     if (this.useHtmlLegend) {
