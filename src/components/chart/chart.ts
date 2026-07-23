@@ -780,6 +780,7 @@ export class KDChart extends LitElement {
   private _resizeChart() {
     if (this.chart) {
       this.chart.resize();
+      this.chart.update('none');
     }
   }
 
