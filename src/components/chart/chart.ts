@@ -780,7 +780,6 @@ export class KDChart extends LitElement {
   private _resizeChart() {
     if (this.chart) {
       this.chart.resize();
-      this.chart.update('none');
     }
   }
 
@@ -1002,7 +1001,10 @@ export class KDChart extends LitElement {
 
     // the first ResizeObserver callback is intentionally ignored; force one
     // layout pass so non-responsive charts (ex: matrix/heatmap) size correctly.
-    requestAnimationFrame(() => this._resizeChart());
+    requestAnimationFrame(() => {
+      this._resizeChart();
+      this.chart.update('none');
+    });
 
     this.generateScrollableLegend();
   }
