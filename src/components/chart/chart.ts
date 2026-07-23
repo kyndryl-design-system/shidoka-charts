@@ -936,6 +936,8 @@ export class KDChart extends LitElement {
       ...dataset,
       data: Array.isArray(dataset.data) ? [...dataset.data] : dataset.data,
     }));
+
+    this.chart.update();
   }
 
   /** Updates chart datasets by matching labels. */
@@ -1000,12 +1002,11 @@ export class KDChart extends LitElement {
     });
 
     // the first ResizeObserver callback is intentionally ignored; force one
-    // layout pass so non-responsive charts (ex: matrix/heatmap) size correctly.
+    // layout pass so non-responsive charts (ex: matrix/heatmap, fanchart) size correctly.
     requestAnimationFrame(() => {
-      this._resizeChart();
       this.chart.update('none');
+      this._resizeChart();
     });
-
     this.generateScrollableLegend();
   }
 
