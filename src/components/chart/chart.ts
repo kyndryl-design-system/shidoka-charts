@@ -940,7 +940,7 @@ export class KDChart extends LitElement {
     this.chart.update();
   }
 
-  /** Updates chart datasets by matching labels. */
+  /** merging datasets with the same label. */
   private mergeChartDatasetsByLabel() {
     this.chart.data.datasets.forEach((dataset: any, index: number) => {
       const NewDataset = this.mergedDatasets.find(
