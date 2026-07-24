@@ -365,6 +365,7 @@ export const ThresholdBand = {
         },
       },
       plugins: {
+        // custom plugin to add background color to the chart area
         thresholdBands: {
           bands: [
             { value: 20, color: '#CC1800' }, // Supported color formats are Hex : '#90ee90' and shidoka css Shidoka CSS variable: 'var(--kd-color-data-viz-categorical-01-02)'
@@ -544,8 +545,6 @@ const getConfidenceBandDatasets = (colorPalette = 'categorical') => {
 export const FanChart = {
   tags: ['new'],
   args: {
-    colorPalette: hideUnusedControls,
-    chartTitle: 'Forecast Line chart - Confidence Bands',
     labels: fanChartLabels,
     options: {
       interaction: {
@@ -604,6 +603,7 @@ export const FanChart = {
             label: (context) => `Net Income: ${context.parsed.y}M`,
           },
         },
+        // custom plugin to highlight the datapoint when hovering over the chart
         pointColumnHighlight: {
           datasetIndex: 0,
           backgroundColor: '--kd-color-background-container-subtle',
@@ -615,7 +615,7 @@ export const FanChart = {
     return html`
       <kd-chart
         type="line"
-        .chartTitle=${args.chartTitle}
+        .chartTitle=${`Forecast Line chart - Confidence Bands`}
         .labels=${args.labels}
         .datasets=${getConfidenceBandDatasets('categorical')}
         .options=${{ ...args.options }}
