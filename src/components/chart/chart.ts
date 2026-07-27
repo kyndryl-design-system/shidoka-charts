@@ -936,8 +936,10 @@ export class KDChart extends LitElement {
       ...dataset,
       data: Array.isArray(dataset.data) ? [...dataset.data] : dataset.data,
     }));
-
-    this.chart.update();
+    if (this.chart.options?.scales?.x?.max) {
+      // edge case handling to update chart correctly on different screen sizes
+      this.chart.update();
+    }
   }
 
   /** merging datasets with the same label. */

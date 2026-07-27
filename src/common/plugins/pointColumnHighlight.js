@@ -6,10 +6,11 @@ import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/comm
  * Usage:
  * plugins: {
  *   pointColumnHighlight: {
- *     datasetIndex: 2, // Optional: specify dataset index to highlight; omit to use the first active element
+ *     datasetIndex: 0, // Optional: specify dataset index to highlight; omit to use the first active element
  *     backgroundColor: '--kd-color-background-container-soft',
  *   }
  * }
+ * Note: This plugin works best with x-axis offset.
  */
 
 const resolveColor = (color) =>

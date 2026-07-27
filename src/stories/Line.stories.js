@@ -604,6 +604,7 @@ export const FanChart = {
           },
         },
         // custom plugin to highlight the datapoint when hovering over the chart
+        // Optional: specify datasetIndex to highlight; omit to use the first active element
         pointColumnHighlight: {
           datasetIndex: 0,
           backgroundColor: '--kd-color-background-container-subtle',
