@@ -614,8 +614,9 @@ export const FanChart = {
     highlightStartIndex: 0,
   },
   argTypes: {
+    colorPalette: hideUnusedControls,
     highlightStartIndex: {
-      name: 'Column highlight start (x index)',
+      name: 'pointColumnHighlightIndex (x index)',
       control: {
         type: 'number',
         min: 0,
