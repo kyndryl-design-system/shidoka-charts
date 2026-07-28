@@ -2,7 +2,6 @@ import { html } from 'lit';
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 import '../components/chart';
 import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
-import { getComputedColorPalette } from '../common/config/colorPalettes';
 
 export default {
   title: 'Charts/Line',
@@ -475,8 +474,11 @@ const colorToRgba = (color, alpha) => {
   return color;
 };
 
-const getConfidenceBandDatasets = (colorPalette = 'categorical') => {
-  const forecastBandToken = () => getComputedColorPalette('divergent01')[14];
+const getConfidenceBandDatasets = () => {
+  const forecastBandToken = () =>
+    getTokenThemeVal('--kd-color-data-viz-divergent-01-positive-40');
+
+  console.log(forecastBandToken());
 
   const createBandDataset = (label, data, order, opacity) => ({
     label,
@@ -495,8 +497,10 @@ const getConfidenceBandDatasets = (colorPalette = 'categorical') => {
       label: 'Net Income',
       data: fanChartMedian,
       fill: false,
-      borderColor: () => getComputedColorPalette(colorPalette)[0],
-      backgroundColor: () => getComputedColorPalette(colorPalette)[0],
+      borderColor: getTokenThemeVal('--kd-color-data-viz-categorical-01-01'),
+      backgroundColor: getTokenThemeVal(
+        '--kd-color-data-viz-categorical-01-01'
+      ),
       borderWidth: 2,
       pointRadius: 0,
       pointHoverRadius: 5,
@@ -578,16 +582,16 @@ const getFanChartOptions = (highlightStartIndex = 0) => ({
           type: 'box',
           xMin: fanChartForecastStartIndex,
           xMax: fanChartLabels.length - 0.5,
-          backgroundColor: () =>
-            getComputedColorPalette('divergent01')[14] + '10',
+          backgroundColor:
+            getTokenThemeVal('--kd-color-data-viz-divergent-01-positive-40') +
+            '10',
           borderWidth: 0,
         },
         forecastDivider: {
           type: 'line',
           xMin: fanChartForecastStartIndex,
           xMax: fanChartForecastStartIndex,
-          borderColor: () =>
-            getTokenThemeVal('--kd-color-border-variants-focus'),
+          borderColor: getTokenThemeVal('--kd-color-border-variants-focus'),
           borderDash: [10, 10],
           borderWidth: 1,
         },
@@ -633,7 +637,7 @@ export const FanChart = {
         type="line"
         .chartTitle=${`Forecast Line chart - Confidence Bands`}
         .labels=${args.labels}
-        .datasets=${getConfidenceBandDatasets('categorical')}
+        .datasets=${getConfidenceBandDatasets()}
         .options=${getFanChartOptions(args.highlightStartIndex)}
       ></kd-chart>
 

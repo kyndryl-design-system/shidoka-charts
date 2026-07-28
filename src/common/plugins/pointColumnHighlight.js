@@ -53,7 +53,8 @@ export default {
 
     ctx.save();
     ctx.fillStyle = resolveColor(
-      options?.backgroundColor || 'rgba(0, 0, 0, 0.06)'
+      options?.backgroundColor ||
+        getTokenThemeVal('--kd-color-background-container-subtle')
     );
     ctx.fillRect(
       Math.min(xMin, xMax),
