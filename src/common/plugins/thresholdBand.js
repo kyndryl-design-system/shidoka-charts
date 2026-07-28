@@ -68,7 +68,6 @@ const colorWithAlpha = (color, alpha) => {
 
 const resolveColor = (colorValue) => {
   if (typeof colorValue !== 'string') {
-    console.log('string color');
     console.warn(
       'thresholdBands: color must be a string in hex or var(--kd-...) format.'
     );
@@ -76,16 +75,11 @@ const resolveColor = (colorValue) => {
   }
 
   if (HEX_COLOR_PATTERN.test(colorValue)) {
-    console.log('hex color', colorValue);
     return colorValue;
   }
 
   const varMatch = colorValue.match(CSS_VAR_COLOR_PATTERN);
   if (varMatch) {
-    console.log(
-      `thresholdBands: resolving ${varMatch[1]}`,
-      getTokenThemeVal(varMatch[1])
-    );
     try {
       return getTokenThemeVal(varMatch[1]);
     } catch (e) {

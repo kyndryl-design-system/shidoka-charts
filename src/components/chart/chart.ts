@@ -57,6 +57,7 @@ import minimizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 import { renderGraphTreeTable } from '../../common/helpers/graphTreeTableRenderer';
+import pointColumnHighlightPlugin from '../../common/plugins/pointColumnHighlight';
 
 Chart.register(
   ChoroplethController,
@@ -851,29 +852,11 @@ export class KDChart extends LitElement {
         this.chart.data.labels = this.labels;
         this.chart.options = this.mergedOptions;
 
-        this.chart.data.datasets.forEach((dataset: any, index: number) => {
-          const NewDataset = this.mergedDatasets.find(
-            (newDataset: any) => newDataset.label === dataset.label
-          );
-
-          if (!NewDataset) {
-            this.chart.data.datasets.splice(index, 1);
-          }
-        });
-
-        this.mergedDatasets.forEach((dataset: any) => {
-          const prevDataset = this.chart.data.datasets.find(
-            (prevDataset: any) => prevDataset.label === dataset.label
-          );
-
-          if (!prevDataset) {
-            this.chart.data.datasets.push(dataset);
-          } else {
-            Object.keys(dataset).forEach((key) => {
-              prevDataset[key] = dataset[key];
-            });
-          }
-        });
+        if (this.hasForecastBandDatasets()) {
+          this.syncChartDatasets();
+        } else {
+          this.mergeChartDatasetsByLabel();
+        }
 
         this.chart.update();
 
@@ -928,6 +911,65 @@ export class KDChart extends LitElement {
   }
 
   /**
+   * Line charts with forecast/confidence bands use numeric fill targets
+   * (e.g. fill: 0) across multiple datasets. These must sync by index because
+   * band datasets can share labels or otherwise collide during label merges.
+   */
+  private hasForecastBandDatasets() {
+    if (this.type !== 'line' || !this.mergedDatasets?.length) {
+      return false;
+    }
+
+    return (
+      this.mergedDatasets.filter(
+        (dataset: any) => typeof dataset.fill === 'number'
+      ).length > 1
+    );
+  }
+
+  /**
+   * Replaces chart datasets by index so duplicate labels (e.g. confidence bands)
+   * stay aligned and fill targets are not corrupted on updates.
+   */
+  private syncChartDatasets() {
+    this.chart.data.datasets = this.mergedDatasets.map((dataset: any) => ({
+      ...dataset,
+      data: Array.isArray(dataset.data) ? [...dataset.data] : dataset.data,
+    }));
+    if (this.chart.options?.scales?.x?.max) {
+      // edge case handling to update chart correctly on different screen sizes
+      this.chart.update();
+    }
+  }
+
+  /** merging datasets with the same label. */
+  private mergeChartDatasetsByLabel() {
+    this.chart.data.datasets.forEach((dataset: any, index: number) => {
+      const NewDataset = this.mergedDatasets.find(
+        (newDataset: any) => newDataset.label === dataset.label
+      );
+
+      if (!NewDataset) {
+        this.chart.data.datasets.splice(index, 1);
+      }
+    });
+
+    this.mergedDatasets.forEach((dataset: any) => {
+      const prevDataset = this.chart.data.datasets.find(
+        (prevDataset: any) => prevDataset.label === dataset.label
+      );
+
+      if (!prevDataset) {
+        this.chart.data.datasets.push(dataset);
+      } else {
+        Object.keys(dataset).forEach((key) => {
+          prevDataset[key] = dataset[key];
+        });
+      }
+    });
+  }
+
+  /**
    * Initializes a bar chart using the Chart.js library with provided labels, datasets,
    * and options.
    */
@@ -944,6 +986,10 @@ export class KDChart extends LitElement {
       a11yPlugin,
     ];
 
+    if (this.mergedOptions?.plugins?.pointColumnHighlight != null) {
+      chartPlugins.push(pointColumnHighlightPlugin);
+    }
+
     // add htmlLegendPlugin if useHtmlLegend is enabled
     if (this.useHtmlLegend) {
       chartPlugins.push(htmlLegendPlugin);
@@ -958,9 +1004,11 @@ export class KDChart extends LitElement {
     });
 
     // the first ResizeObserver callback is intentionally ignored; force one
-    // layout pass so non-responsive charts (ex: matrix/heatmap) size correctly.
-    requestAnimationFrame(() => this._resizeChart());
-
+    // layout pass so non-responsive charts (ex: matrix/heatmap, fanchart) size correctly.
+    requestAnimationFrame(() => {
+      this.chart.update('none');
+      this._resizeChart();
+    });
     this.generateScrollableLegend();
   }
 
