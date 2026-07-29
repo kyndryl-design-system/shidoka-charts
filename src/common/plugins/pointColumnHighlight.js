@@ -10,7 +10,7 @@ import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/comm
  *     backgroundColor: '--kd-color-background-container-soft',
  *   }
  * }
- * Note: This plugin works best with x-axis offset.
+ * Note: This plugin works best with x-axis offset enabled.
  */
 
 const resolveColor = (color) =>
