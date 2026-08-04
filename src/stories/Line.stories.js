@@ -390,6 +390,18 @@ export const ThresholdBand = {
         .datasets=${args.datasets}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
       ></kd-chart>
+      <br />
+      <br />
+      <i
+        >Note: This chart uses custom plugin called
+        <a
+          href="https://github.com/kyndryl-design-system/shidoka-charts/blob/main/src/common/plugins/thresholdBand.js"
+          target="_blank"
+          rel="noopener noreferrer"
+          >thresholdBand</a
+        >
+        to fill the background of the chart area.</i
+      >
     `;
   },
 };
