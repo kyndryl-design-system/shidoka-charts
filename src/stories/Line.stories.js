@@ -2,7 +2,6 @@ import { html } from 'lit';
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 import '../components/chart';
 import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
-import { getComputedColorPalette } from '../common/config/colorPalettes';
 
 export default {
   title: 'Charts/Line',
@@ -475,17 +474,18 @@ const colorToRgba = (color, alpha) => {
   return color;
 };
 
-const getConfidenceBandDatasets = (colorPalette = 'categorical') => {
-  const colors = getComputedColorPalette(colorPalette);
-  const lineColor = colors[0];
-  const forecastBandColor = getComputedColorPalette('divergent01')[14];
+const getConfidenceBandDatasets = () => {
+  const forecastBandToken = () =>
+    getTokenThemeVal('--kd-color-data-viz-divergent-01-positive-40');
+
+  console.log(forecastBandToken());
 
   const createBandDataset = (label, data, order, opacity) => ({
     label,
     data,
     fill: fanChartMedianDatasetIndex,
     borderColor: 'transparent',
-    backgroundColor: colorToRgba(forecastBandColor, opacity),
+    backgroundColor: () => colorToRgba(forecastBandToken(), opacity),
     borderWidth: 0,
     pointRadius: 0,
     pointHoverRadius: 0,
@@ -497,7 +497,10 @@ const getConfidenceBandDatasets = (colorPalette = 'categorical') => {
       label: 'Net Income',
       data: fanChartMedian,
       fill: false,
-      borderColor: lineColor,
+      borderColor: getTokenThemeVal('--kd-color-data-viz-categorical-01-01'),
+      backgroundColor: getTokenThemeVal(
+        '--kd-color-data-viz-categorical-01-01'
+      ),
       borderWidth: 2,
       pointRadius: 0,
       pointHoverRadius: 5,
@@ -542,74 +545,90 @@ const getConfidenceBandDatasets = (colorPalette = 'categorical') => {
   ];
 };
 
+const getFanChartOptions = (highlightStartIndex = 0) => ({
+  interaction: {
+    mode: 'index',
+    intersect: false,
+  },
+  scales: {
+    x: {
+      offset: true,
+      min: 1,
+      max: 12,
+      title: {
+        text: 'Quarter',
+      },
+    },
+    y: {
+      position: 'right',
+      title: {
+        text: 'Count',
+      },
+      min: 0,
+      max: 40,
+      ticks: {
+        stepSize: 10,
+        callback: (value) => `${value}M`,
+      },
+    },
+  },
+  plugins: {
+    legend: {
+      display: false,
+    },
+    annotation: {
+      annotations: {
+        forecastRegion: {
+          type: 'box',
+          xMin: fanChartForecastStartIndex,
+          xMax: fanChartLabels.length - 0.5,
+          backgroundColor:
+            getTokenThemeVal('--kd-color-data-viz-divergent-01-positive-40') +
+            '10',
+          borderWidth: 0,
+        },
+        forecastDivider: {
+          type: 'line',
+          xMin: fanChartForecastStartIndex,
+          xMax: fanChartForecastStartIndex,
+          borderColor: getTokenThemeVal('--kd-color-border-variants-focus'),
+          borderDash: [10, 10],
+          borderWidth: 1,
+        },
+      },
+    },
+    tooltip: {
+      filter: (tooltipItem) => tooltipItem.dataset.label === 'Net Income',
+      callbacks: {
+        label: (context) => `Net Income: ${context.parsed.y}M`,
+      },
+    },
+    pointColumnHighlight: {
+      datasetIndex: highlightStartIndex,
+      backgroundColor: '--kd-color-background-container-subtle',
+    },
+  },
+});
+
 export const FanChart = {
+  // see the config here https://github.com/kyndryl-design-system/shidoka-charts/blob/main/src/stories/Line.stories.js
   tags: ['new'],
   args: {
     labels: fanChartLabels,
-    options: {
-      interaction: {
-        mode: 'index',
-        intersect: false,
+    highlightStartIndex: 0,
+  },
+  argTypes: {
+    colorPalette: hideUnusedControls,
+    highlightStartIndex: {
+      name: 'pointColumnHighlightIndex (x index)',
+      control: {
+        type: 'number',
+        min: 0,
+        max: fanChartLabels.length - 1,
+        step: 1,
       },
-      scales: {
-        x: {
-          offset: true,
-          min: 1,
-          max: 12,
-          title: {
-            text: 'Quarter',
-          },
-        },
-        y: {
-          position: 'right',
-          title: {
-            text: 'Count',
-          },
-          min: 0,
-          max: 40,
-          ticks: {
-            stepSize: 10,
-            callback: (value) => `${value}M`,
-          },
-        },
-      },
-      plugins: {
-        legend: {
-          display: false,
-        },
-        annotation: {
-          annotations: {
-            forecastRegion: {
-              type: 'box',
-              xMin: fanChartForecastStartIndex,
-              xMax: fanChartLabels.length - 0.5,
-              backgroundColor:
-                getComputedColorPalette('divergent01')[14] + '10',
-              borderWidth: 0,
-            },
-            forecastDivider: {
-              type: 'line',
-              xMin: fanChartForecastStartIndex,
-              xMax: fanChartForecastStartIndex,
-              borderColor: getTokenThemeVal('--kd-color-border-variants-focus'),
-              borderDash: [10, 10],
-              borderWidth: 1,
-            },
-          },
-        },
-        tooltip: {
-          filter: (tooltipItem) => tooltipItem.dataset.label === 'Net Income',
-          callbacks: {
-            label: (context) => `Net Income: ${context.parsed.y}M`,
-          },
-        },
-        // custom plugin to highlight the datapoint when hovering over the chart
-        // Optional: specify datasetIndex to highlight; omit to use the first active element
-        pointColumnHighlight: {
-          datasetIndex: 0,
-          backgroundColor: '--kd-color-background-container-subtle',
-        },
-      },
+      description:
+        'First x-axis index where the hover column highlight is shown.',
     },
   },
   render: (args) => {
@@ -618,9 +637,30 @@ export const FanChart = {
         type="line"
         .chartTitle=${`Forecast Line chart - Confidence Bands`}
         .labels=${args.labels}
-        .datasets=${getConfidenceBandDatasets('categorical')}
-        .options=${{ ...args.options }}
+        .datasets=${getConfidenceBandDatasets()}
+        .options=${getFanChartOptions(args.highlightStartIndex)}
       ></kd-chart>
+
+      <br />
+      <br />
+      <i
+        >Note: This chart uses custom plugin called
+        <a
+          href="https://github.com/kyndryl-design-system/shidoka-charts/blob/main/src/common/plugins/pointColumnHighlight.js"
+          target="_blank"
+          rel="noopener noreferrer"
+          >pointColumnHighlight</a
+        >
+        to highlight dataset points on hover.</i
+      >
+      <br />
+      Also, See Fan chart config here:
+      <a
+        href="https://github.com/kyndryl-design-system/shidoka-charts/blob/main/src/stories/Line.stories.js"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Line.stories.js</a
+      >
     `;
   },
 };
