@@ -41,7 +41,7 @@
     "chartjs-plugin-chart2music": "^0.1.2",
     "chartjs-plugin-datalabels": "^2.2.0",
     "date-fns": "^2.30.0",
-    "deepmerge-ts": "^5.1.0",
+    "deepmerge-ts": "^8.0.0",
     "lit": "^3.3.0",
     "mermaid": "^11.13.0",
     "tslib": "^2.8.1"
