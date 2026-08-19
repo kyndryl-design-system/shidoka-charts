@@ -79,6 +79,8 @@ jobs:
 
   Test:
     # needs: [Build_Storybook]
+    permissions:
+      contents: read
     timeout-minutes: 60
     runs-on: ubuntu-latest
     container:
