@@ -30,6 +30,7 @@ npm run format
 1. Commits
    1. Commit messages MUST use [Conventional Commit format](https://semantic-release.gitbook.io/semantic-release#commit-message-format).
       1. [Certain commit prefixes](https://semantic-release.gitbook.io/semantic-release/#commit-message-format) like `fix:` (patch) or `feat:` (minor) will automatically trigger a release to publish a new package and update the semantic version.
+      1. Prefixes like `chore:` (including dependency bumps) do not trigger a release.
       1. `BREAKING CHANGE:` in the commit message footer will trigger a major version update.
       1. [Conventional Commits Cheat Sheet](https://gist.github.com/Zekfad/f51cb06ac76e2457f11c80ed705c95a3)
    1. Commits MUST include a signoff `-s / -signoff` for the above DCO.
