@@ -12,7 +12,7 @@ import graphDataJson from './sampleData/miserables.json';
  */
 
 export default {
-  title: 'Third Party Charts/Graph/Force Directed Graph',
+  title: 'Chart.js/Third Party Charts/Graph/Force Directed Graph',
   component: 'kd-chart',
   argTypes: {
     ...argTypes,
