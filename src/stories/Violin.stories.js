@@ -12,7 +12,7 @@ import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
  */
 
 export default {
-  title: 'Third Party Charts/Boxplot & Violin Plot/Violin Plot',
+  title: 'Chart.js/Third Party Charts/Boxplot & Violin Plot/Violin Plot',
   component: 'kd-chart',
   argTypes: {
     ...argTypes,
