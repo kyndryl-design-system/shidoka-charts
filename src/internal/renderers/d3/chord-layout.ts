@@ -95,7 +95,10 @@ export function buildChordGeometry(
     .padAngle(clampPadAngle(model.padAngle))
     .sortSubgroups((a, b) => b - a)(matrix);
 
-  const arcPath = arcGenerator<unknown, { startAngle: number; endAngle: number }>()
+  const arcPath = arcGenerator<
+    unknown,
+    { startAngle: number; endAngle: number }
+  >()
     .innerRadius(innerRadius)
     .outerRadius(outerRadius);
 

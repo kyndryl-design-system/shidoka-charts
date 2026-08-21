@@ -31,8 +31,7 @@ export function hierarchyDepth(nodes: readonly SunburstNode[]): number {
   return (
     1 +
     nodes.reduce(
-      (deepest, node) =>
-        Math.max(deepest, hierarchyDepth(node.children ?? [])),
+      (deepest, node) => Math.max(deepest, hierarchyDepth(node.children ?? [])),
       0
     )
   );
@@ -79,7 +78,10 @@ export function buildSunburstTable(model: SunburstModel): ChartTableView {
         ];
 
   const rows = leaves.map((leaf) => [
-    ...Array.from({ length: depth }, (_unused, level) => leaf.path[level] ?? ''),
+    ...Array.from(
+      { length: depth },
+      (_unused, level) => leaf.path[level] ?? ''
+    ),
     leaf.value,
   ]);
 

@@ -156,11 +156,20 @@ figure {
   }
 }
 
-.renderer-host {
+// Stacking context shared by the renderer host and any component chrome
+// layered over it. The renderer owns the host; the overlay is never inside it.
+.host-stack {
+  position: relative;
   flex-grow: 1;
   width: 100%;
   min-width: 0;
   min-height: 200px;
+}
+
+.renderer-host {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
   border-radius: 4px;
   outline: 2px solid transparent;
   outline-offset: 2px;
@@ -169,6 +178,14 @@ figure {
   &:focus-visible {
     outline-color: var(--kd-color-border-variants-focus);
   }
+}
+
+.host-overlay {
+  position: absolute;
+  inset: 0;
+  // Only the overlay's own interactive children take pointer events, so the
+  // renderer keeps receiving hover and click.
+  pointer-events: none;
 }
 
 figcaption {

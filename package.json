@@ -27,6 +27,7 @@
     "prepare": "npx husky install"
   },
   "dependencies": {
+    "@kyndryl-design-system/shidoka-applications": "^2.116.0",
     "@kyndryl-design-system/shidoka-foundation": "^2.8.10",
     "@kyndryl-design-system/shidoka-icons": "^2.21.0",
     "@sgratzl/chartjs-chart-boxplot": "^4.4.4",

@@ -64,7 +64,9 @@ describe('buildChordGeometry', () => {
 
     expect(anchors.size).toBeGreaterThan(1);
     for (const arc of geometry.arcs) {
-      expect(arc.labelTransform).toMatch(/^rotate\(-?\d+(\.\d+)?\) translate\(/);
+      expect(arc.labelTransform).toMatch(
+        /^rotate\(-?\d+(\.\d+)?\) translate\(/
+      );
       if (arc.labelAnchor === 'end') {
         expect(arc.labelTransform.endsWith('rotate(180)')).toBe(true);
       }

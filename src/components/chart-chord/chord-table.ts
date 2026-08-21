@@ -21,7 +21,10 @@ export function nodeOutflow(
 
 /** Total flow described by the matrix. */
 export function matrixTotal(matrix: readonly (readonly number[])[]): number {
-  return matrix.reduce((sum, _row, index) => sum + nodeOutflow(matrix, index), 0);
+  return matrix.reduce(
+    (sum, _row, index) => sum + nodeOutflow(matrix, index),
+    0
+  );
 }
 
 /**

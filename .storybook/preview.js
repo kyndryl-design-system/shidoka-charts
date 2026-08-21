@@ -39,7 +39,7 @@ export default {
           'Playground',
           'Chart.js',
           ['Charts', 'Third Party Charts'],
-          'Echarts',
+          'Apache ECharts',
           'D3',
           'Mermaid',
         ],

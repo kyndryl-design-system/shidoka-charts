@@ -10,6 +10,12 @@ import type {
   SunburstNode,
 } from '../../../components/chart-sunburst/sunburst.types';
 import { nodeTotal } from '../../../components/chart-sunburst/sunburst-table';
+import {
+  labelPathKey,
+  OUTER_RADIUS_FRACTION,
+  planSunburstLabels,
+  suppressedLabelKeys,
+} from '../../../components/chart-sunburst/sunburst-labels';
 
 /**
  * Pure ECharts option mapping for the sunburst.
@@ -23,20 +29,32 @@ export type SunburstEChartsOption = ComposeOption<
   SunburstSeriesOption | TooltipComponentOption
 >;
 
+interface HiddenLabel {
+  label: { show: false };
+}
+
 interface SunburstDatum {
   name: string;
   value?: number;
   itemStyle?: { color?: string };
+  label?: { show: false };
+  emphasis?: HiddenLabel;
+  select?: HiddenLabel;
+  blur?: HiddenLabel;
   children?: SunburstDatum[];
 }
 
 const ANIMATION_DURATION = 600;
 const LABEL_MIN_ANGLE = 8;
+/** Sunburst sweeps clockwise from 12 o'clock, matching the label planner. */
+const START_ANGLE = 90;
 
 function mapNodes(
   nodes: readonly SunburstNode[],
   theme: ChartTheme,
   depth: number,
+  parentPath: readonly string[],
+  suppressed: ReadonlySet<string> | null,
   inheritedColor?: string
 ): SunburstDatum[] {
   return nodes.map((node, index) => {
@@ -46,14 +64,33 @@ function mapNodes(
       node.color ??
       (depth === 0 ? paletteColor(theme.palette, index) : inheritedColor);
 
+    const path = [...parentPath, node.label];
     const datum: SunburstDatum = { name: node.label };
 
     if (color) {
       datum.itemStyle = { color };
     }
 
+    // Constrained labels are drawn by the component overlay instead, so the
+    // chart must not paint its own copy underneath. Each interaction state
+    // carries its own label config, so hiding only the normal state lets the
+    // label return the moment the sector is hovered, selected or blurred.
+    if (suppressed?.has(labelPathKey(path))) {
+      datum.label = { show: false };
+      datum.emphasis = { label: { show: false } };
+      datum.select = { label: { show: false } };
+      datum.blur = { label: { show: false } };
+    }
+
     if (node.children?.length) {
-      datum.children = mapNodes(node.children, theme, depth + 1, color);
+      datum.children = mapNodes(
+        node.children,
+        theme,
+        depth + 1,
+        path,
+        suppressed,
+        color
+      );
     } else {
       datum.value = nodeTotal(node);
     }
@@ -74,7 +111,17 @@ export function buildSunburstOption(
   reducedMotion: boolean,
   nativeOptions?: unknown
 ): SunburstEChartsOption {
-  const innerRadius = `${Math.round(clampRatio(model.innerRadiusRatio) * 100)}%`;
+  const innerRadius = `${Math.round(
+    clampRatio(model.innerRadiusRatio) * 100
+  )}%`;
+  const outerRadius = `${Math.round(OUTER_RADIUS_FRACTION * 100)}%`;
+  // Constrained mode hands hover detail to the component's own tooltip
+  // anchors, so the chart's tooltip is switched off rather than competing with
+  // them.
+  const constrained = model.showLabels && model.labelStrategy === 'constrained';
+  const suppressed = constrained
+    ? suppressedLabelKeys(planSunburstLabels(model))
+    : null;
 
   const option: SunburstEChartsOption = {
     backgroundColor: 'transparent',
@@ -86,6 +133,7 @@ export function buildSunburstOption(
       fontFamily: 'Roboto, sans-serif',
     },
     tooltip: {
+      show: !constrained,
       trigger: 'item',
       backgroundColor: theme.tooltipBackgroundColor,
       borderWidth: 0,
@@ -110,14 +158,25 @@ export function buildSunburstOption(
     series: [
       {
         type: 'sunburst',
-        radius: [innerRadius, '92%'],
+        radius: [innerRadius, outerRadius],
         center: ['50%', '50%'],
+        // Order, start angle and direction are pinned so the label planner's
+        // geometry matches what the chart draws.
+        startAngle: START_ANGLE,
+        clockwise: true,
+        sort: (a, b) => a.dataIndex - b.dataIndex,
         nodeClick: false,
-        data: mapNodes(model.nodes, theme, 0) as SunburstSeriesOption['data'],
+        data: mapNodes(
+          model.nodes,
+          theme,
+          0,
+          [],
+          suppressed
+        ) as SunburstSeriesOption['data'],
         label: {
           show: model.showLabels,
           color: theme.textColor,
-          minAngle: LABEL_MIN_ANGLE,
+          minAngle: model.labelStrategy === 'constrained' ? 0 : LABEL_MIN_ANGLE,
           overflow: 'truncate',
           fontSize: 12,
         },

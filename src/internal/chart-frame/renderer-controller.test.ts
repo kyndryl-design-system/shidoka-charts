@@ -119,7 +119,8 @@ beforeEach(() => {
   frames = [];
   nextFrameId = 1;
 
-  globalThis.ResizeObserver = FakeResizeObserver as unknown as typeof ResizeObserver;
+  globalThis.ResizeObserver =
+    FakeResizeObserver as unknown as typeof ResizeObserver;
   globalThis.requestAnimationFrame = ((callback: () => void) => {
     const id = nextFrameId++;
     frames.push({ id, callback });

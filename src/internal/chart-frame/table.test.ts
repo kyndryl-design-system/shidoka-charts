@@ -117,9 +117,9 @@ describe('csv serialization', () => {
   });
 
   it('escapes embedded quotes', () => {
-    expect(
-      tableViewToCsv({ columns: ['a'], rows: [['say "hi"']] })
-    ).toBe('a\n"say ""hi"""\n');
+    expect(tableViewToCsv({ columns: ['a'], rows: [['say "hi"']] })).toBe(
+      'a\n"say ""hi"""\n'
+    );
   });
 
   it('returns nothing for an empty table', () => {

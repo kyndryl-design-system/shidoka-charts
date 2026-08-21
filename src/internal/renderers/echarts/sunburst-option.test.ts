@@ -29,6 +29,7 @@ const model: SunburstModel = {
   categoryLabel: 'Service',
   valueLabel: 'Spend',
   showLabels: true,
+  labelStrategy: 'inline',
   innerRadiusRatio: 0.25,
 };
 
@@ -36,6 +37,10 @@ interface Datum {
   name: string;
   value?: number;
   itemStyle?: { color?: string };
+  label?: { show: boolean };
+  emphasis?: { label: { show: boolean } };
+  select?: { label: { show: boolean } };
+  blur?: { label: { show: boolean } };
   children?: Datum[];
 }
 
@@ -117,8 +122,9 @@ describe('buildSunburstOption', () => {
     expect(light.textStyle?.color).toBe('#111111');
     expect(darkOption.textStyle?.color).toBe('#eeeeee');
     expect(
-      (darkOption.series as unknown as { itemStyle: { borderColor: string } }[])[0]
-        .itemStyle.borderColor
+      (
+        darkOption.series as unknown as { itemStyle: { borderColor: string } }[]
+      )[0].itemStyle.borderColor
     ).toBe('#1d1d1d');
   });
 
@@ -139,6 +145,123 @@ describe('buildSunburstOption', () => {
     expect(series.itemStyle.borderRadius).toBe(4);
     expect(series.itemStyle.borderWidth).toBe(2);
     expect((option.tooltip as { show?: boolean }).show).toBe(false);
+  });
+
+  it('leaves label drawing to the chart with the inline strategy', () => {
+    const data = seriesData(buildSunburstOption(model, theme, false));
+    const series = (
+      option: ReturnType<typeof buildSunburstOption>
+    ): { label: { show: boolean; minAngle: number } } =>
+      (
+        option.series as unknown as {
+          label: { show: boolean; minAngle: number };
+        }[]
+      )[0];
+
+    expect(series(buildSunburstOption(model, theme, false)).label.show).toBe(
+      true
+    );
+    expect(
+      series(buildSunburstOption(model, theme, false)).label.minAngle
+    ).toBeGreaterThan(0);
+    expect(data.every((node) => node.label === undefined)).toBe(true);
+  });
+
+  const constrained: SunburstModel = {
+    ...model,
+    labelStrategy: 'constrained',
+    nodes: [
+      {
+        label: 'Identity and access management',
+        children: [{ label: 'Directory synchronization lag', value: 3 }],
+      },
+      { label: 'Data', value: 200 },
+    ],
+  };
+
+  it('hides chart-drawn labels only where the constrained strategy needs an anchor', () => {
+    const data = seriesData(buildSunburstOption(constrained, theme, false));
+
+    expect(data[0].label?.show).toBe(false);
+    expect(data[0].children?.[0].label?.show).toBe(false);
+    expect(data[1].label).toBeUndefined();
+  });
+
+  it('keeps a suppressed label hidden in every interaction state', () => {
+    const data = seriesData(buildSunburstOption(constrained, theme, false));
+    const suppressed = [data[0], data[0].children![0]];
+
+    for (const datum of suppressed) {
+      expect(datum.label?.show).toBe(false);
+      expect(datum.emphasis?.label.show).toBe(false);
+      expect(datum.select?.label.show).toBe(false);
+      expect(datum.blur?.label.show).toBe(false);
+    }
+  });
+
+  it('leaves interaction states alone for sectors whose label fits', () => {
+    const fitting = seriesData(
+      buildSunburstOption(constrained, theme, false)
+    )[1];
+
+    expect(fitting.label).toBeUndefined();
+    expect(fitting.emphasis).toBeUndefined();
+    expect(fitting.select).toBeUndefined();
+    expect(fitting.blur).toBeUndefined();
+  });
+
+  it('switches off its own tooltip when the overlay anchors own hover detail', () => {
+    const tooltip = (option: ReturnType<typeof buildSunburstOption>) =>
+      option.tooltip as { show?: boolean };
+
+    expect(tooltip(buildSunburstOption(model, theme, false)).show).toBe(true);
+    expect(tooltip(buildSunburstOption(constrained, theme, false)).show).toBe(
+      false
+    );
+  });
+
+  it('keeps its own tooltip when constrained labels are turned off entirely', () => {
+    const option = buildSunburstOption(
+      { ...constrained, showLabels: false },
+      theme,
+      false
+    );
+
+    expect((option.tooltip as { show?: boolean }).show).toBe(true);
+  });
+
+  it('gives each suppressed datum its own state objects', () => {
+    const data = seriesData(buildSunburstOption(constrained, theme, false));
+
+    expect(data[0].emphasis).not.toBe(data[0].children?.[0].emphasis);
+  });
+
+  it('keeps chart-drawn labels when labels are turned off entirely', () => {
+    const data = seriesData(
+      buildSunburstOption(
+        { ...model, labelStrategy: 'constrained', showLabels: false },
+        theme,
+        false
+      )
+    );
+
+    expect(data.every((node) => node.label === undefined)).toBe(true);
+  });
+
+  it('pins geometry so planned anchor positions match what is drawn', () => {
+    const series = (
+      buildSunburstOption(model, theme, false).series as unknown as {
+        startAngle: number;
+        clockwise: boolean;
+        radius: string[];
+        sort: (a: { dataIndex: number }, b: { dataIndex: number }) => number;
+      }[]
+    )[0];
+
+    expect(series.startAngle).toBe(90);
+    expect(series.clockwise).toBe(true);
+    expect(series.radius[1]).toBe('92%');
+    expect(series.sort({ dataIndex: 2 }, { dataIndex: 0 })).toBeGreaterThan(0);
   });
 
   it('does not touch the DOM', () => {

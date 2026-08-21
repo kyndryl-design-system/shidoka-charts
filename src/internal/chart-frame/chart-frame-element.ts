@@ -1,4 +1,11 @@
-import { LitElement, PropertyValues, html, nothing, unsafeCSS } from 'lit';
+import {
+  CSSResultGroup,
+  LitElement,
+  PropertyValues,
+  html,
+  nothing,
+  unsafeCSS,
+} from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
@@ -53,7 +60,8 @@ const DEFAULT_LABELS: ChartFrameLabels = {
  * `ChartRenderer` and `RendererCapabilities`.
  */
 export abstract class ChartFrameElement<TModel> extends LitElement {
-  static override styles = unsafeCSS(ChartFrameScss);
+  // Subclasses append their own sheet, so the type has to allow a list.
+  static override styles: CSSResultGroup = unsafeCSS(ChartFrameScss);
 
   /** Chart title. Also the accessible name of the chart region. */
   @property({ type: String })
@@ -141,6 +149,16 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
   /** Optional short summary rendered beneath the chart. */
   protected get captionText(): string {
     return '';
+  }
+
+  /**
+   * Optional chrome layered over the renderer host, for chart-specific UI that
+   * has to sit outside the renderer's DOM. The frame positions the layer and
+   * keeps it out of the renderer's subtree; what goes in it is up to the
+   * component, and the frame stays engine neutral either way.
+   */
+  protected renderHostOverlay(_model: TModel): unknown {
+    return nothing;
   }
 
   /** Fallback name used for downloaded files. */
@@ -247,19 +265,29 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
         </div>
 
         <figure class=${classMap({ hidden: this._tableView })}>
-          <div
-            class="renderer-host"
-            role="img"
-            tabindex="0"
-            style="height: ${this.height}px"
-            aria-labelledby=${ifDefined(hasName ? 'chartFrameTitle' : undefined)}
-            aria-label=${ifDefined(hasName ? undefined : 'Chart')}
-            aria-describedby=${ifDefined(
-              this.description ? 'chartFrameDescription' : undefined
-            )}
-          ></div>
+          <div class="host-stack" style="height: ${this.height}px">
+            <div
+              class="renderer-host"
+              role="img"
+              tabindex="0"
+              aria-labelledby=${ifDefined(
+                hasName ? 'chartFrameTitle' : undefined
+              )}
+              aria-label=${ifDefined(hasName ? undefined : 'Chart')}
+              aria-describedby=${ifDefined(
+                this.description ? 'chartFrameDescription' : undefined
+              )}
+            ></div>
+            ${model
+              ? html`<div class="host-overlay">
+                  ${this.renderHostOverlay(model)}
+                </div>`
+              : nothing}
+          </div>
           <figcaption>${caption}</figcaption>
-          ${model ? nothing : html`<p class="empty-state">${this.labels.emptyState}</p>`}
+          ${model
+            ? nothing
+            : html`<p class="empty-state">${this.labels.emptyState}</p>`}
         </figure>
 
         ${this._tableView && table ? this.renderTable(table) : nothing}
@@ -315,8 +343,7 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
                     : imageFormats.map(
                         (format) => html`
                           <button @click=${() => this.downloadImage(format)}>
-                            ${labels.downloadImage}
-                            ${imageFormatLabel(format)}
+                            ${labels.downloadImage} ${imageFormatLabel(format)}
                           </button>
                         `
                       )}
@@ -335,7 +362,9 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
         <table>
           <thead>
             <tr>
-              ${table.columns.map((column) => html`<th scope="col">${column}</th>`)}
+              ${table.columns.map(
+                (column) => html`<th scope="col">${column}</th>`
+              )}
             </tr>
           </thead>
           <tbody>
@@ -386,7 +415,8 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
       theme: this._theme ?? resolveChartTheme(this.colorPalette),
       reducedMotion: this._reducedMotion,
       nativeOptions: this.unsafeNativeOptions,
-      emit: (interaction: ChartInteraction) => this.emitInteraction(interaction),
+      emit: (interaction: ChartInteraction) =>
+        this.emitInteraction(interaction),
     };
   }
 

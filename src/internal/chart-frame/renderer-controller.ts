@@ -1,8 +1,4 @@
-import type {
-  ChartImageFormat,
-  ChartRenderer,
-  RendererContext,
-} from './types';
+import type { ChartImageFormat, ChartRenderer, RendererContext } from './types';
 
 /**
  * Owns a renderer instance and everything attached to it. Every observer,
@@ -35,10 +31,7 @@ export class RendererController<TModel> {
     this.renderer?.update(context);
   }
 
-  toDataUrl(
-    format: ChartImageFormat,
-    backgroundColor: string
-  ): string | null {
+  toDataUrl(format: ChartImageFormat, backgroundColor: string): string | null {
     return this.renderer?.toDataUrl(format, backgroundColor) ?? null;
   }
 

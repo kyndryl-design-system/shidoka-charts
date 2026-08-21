@@ -37,7 +37,9 @@ interface ChordNativeOptions {
 }
 
 function nativeOptionsOf(value: unknown): ChordNativeOptions {
-  return value && typeof value === 'object' ? (value as ChordNativeOptions) : {};
+  return value && typeof value === 'object'
+    ? (value as ChordNativeOptions)
+    : {};
 }
 
 function applyAttributes(

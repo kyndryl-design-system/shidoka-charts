@@ -86,7 +86,10 @@ export function resolveChartTheme(paletteKey = 'categorical'): ChartTheme {
       '--kd-color-text-level-secondary',
       defaults.secondaryTextColor
     ),
-    borderColor: token('--kd-color-border-variants-light', defaults.borderColor),
+    borderColor: token(
+      '--kd-color-border-variants-light',
+      defaults.borderColor
+    ),
     tooltipBackgroundColor: token(
       '--kd-color-background-ui-default-dark',
       defaults.tooltipBackgroundColor
