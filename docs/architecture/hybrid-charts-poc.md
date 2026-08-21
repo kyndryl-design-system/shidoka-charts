@@ -85,15 +85,49 @@ src/
       d3/                 # chord mapping and lifecycle
 ```
 
-Each new chart contributes one representative story plus Storybook's automatic
-Docs page, matching the existing Chart.js story structure. The sunburst lives
-under `Echarts/Apache` and the chord under `D3`, two dedicated top-level
-Storybook sections ordered beside the existing chart catalogs. Behaviors such as
-updates, theming and the native escape hatch are exercised through story
-controls and unit tests rather than extra variant stories.
+The chord contributes one representative story and the sunburst contributes a
+default and constrained-label story, in addition to Storybook's automatic Docs
+pages. The top-level engine sections are ordered `Chart.js`, `Apache ECharts`,
+`D3`, and `Mermaid`.
+
+### Unsafe native escape hatch
+
+`unsafeNativeOptions` and `unsafeGetNativeInstance()` are intentionally
+non-portable. They are available for advanced experiments that cannot be
+expressed through a semantic chart API, but native option shapes, instance
+types, and behavior may change with an engine update without following the
+semantic component's compatibility guarantees. Application code should not
+depend on these APIs for ordinary chart configuration.
 
 ## Acceptance evidence
 
 POC verification is reported against AC-001 through AC-011 from the
 architecture handoff. Bundle and performance results are measurements, not
 preselected pass/fail budgets.
+
+### Browser and accessibility
+
+`npm test` passes 324 Storybook tests across Chromium, Firefox, and WebKit,
+including both sunburst stories and the chord story. Storybook runs the
+accessibility addon with violations configured as test failures.
+
+### Representative performance measurements
+
+Measurements were captured in headless Chromium with a 1200 by 900 viewport
+against the production Storybook build. Each result is from 20 warmed runs of
+the representative story data. Mount and update include two animation frames
+for renderer settlement; resize includes three frames for `ResizeObserver` and
+renderer settlement. These are elapsed interaction baselines rather than
+isolated JavaScript execution timings.
+
+| Chart | Operation | Median | p95 |
+| --- | --- | ---: | ---: |
+| Apache ECharts sunburst | mount | 33.1 ms | 33.7 ms |
+| Apache ECharts sunburst | data update | 33.4 ms | 35.2 ms |
+| Apache ECharts sunburst | resize | 50.0 ms | 50.3 ms |
+| D3 chord | mount | 33.1 ms | 33.6 ms |
+| D3 chord | data update | 33.4 ms | 34.1 ms |
+| D3 chord | resize | 50.0 ms | 50.5 ms |
+
+The measurements are frame-bound by the settlement method and establish the
+POC baseline. No pass/fail budget is inferred from them.

@@ -105,6 +105,40 @@ function clampRatio(ratio: number): number {
   return Math.min(Math.max(ratio, 0), 0.8);
 }
 
+interface SunburstTooltipParams {
+  name?: string;
+  value?: number;
+  treePathInfo?: { name?: string }[];
+}
+
+function tooltipPath(params: SunburstTooltipParams): string[] {
+  return (params.treePathInfo ?? [])
+    .slice(1)
+    .map((entry) => entry.name ?? '')
+    .filter(Boolean);
+}
+
+/**
+ * Tooltip text for a sunburst sector. Overlay-owned sectors return nothing so
+ * the chart does not compete with the component's anchors.
+ */
+export function formatSunburstTooltip(
+  model: SunburstModel,
+  params: unknown,
+  suppressed: ReadonlySet<string> | null
+): string | undefined {
+  const detail = params as SunburstTooltipParams;
+  const path = tooltipPath(detail);
+
+  if (suppressed?.has(labelPathKey(path))) {
+    return undefined;
+  }
+
+  const heading = path.length ? path.join(' / ') : detail.name ?? '';
+
+  return `${heading}<br/>${model.valueLabel}: ${formatValue(detail.value)}`;
+}
+
 /** Builds the ECharts option for a sunburst model. */
 export function buildSunburstOption(
   model: SunburstModel,
@@ -116,9 +150,6 @@ export function buildSunburstOption(
     clampRatio(model.innerRadiusRatio) * 100
   )}%`;
   const outerRadius = `${Math.round(OUTER_RADIUS_FRACTION * 100)}%`;
-  // Constrained mode hands hover detail to the component's own tooltip
-  // anchors, so the chart's tooltip is switched off rather than competing with
-  // them.
   const constrained = model.showLabels && model.labelStrategy === 'constrained';
   const suppressed = constrained
     ? suppressedLabelKeys(planSunburstLabels(model))
@@ -134,27 +165,13 @@ export function buildSunburstOption(
       fontFamily: 'Roboto, sans-serif',
     },
     tooltip: {
-      show: !constrained,
+      show: true,
       trigger: 'item',
       backgroundColor: theme.tooltipBackgroundColor,
       borderWidth: 0,
       textStyle: { color: theme.tooltipTextColor, fontSize: 12 },
-      formatter: (params: unknown) => {
-        const detail = params as {
-          name?: string;
-          value?: number;
-          treePathInfo?: { name?: string }[];
-        };
-        const path = (detail.treePathInfo ?? [])
-          .slice(1)
-          .map((entry) => entry.name ?? '')
-          .filter(Boolean);
-        const heading = path.length ? path.join(' / ') : detail.name ?? '';
-
-        return `${heading}<br/>${model.valueLabel}: ${formatValue(
-          detail.value
-        )}`;
-      },
+      formatter: (params: unknown) =>
+        formatSunburstTooltip(model, params, suppressed),
     },
     series: [
       {

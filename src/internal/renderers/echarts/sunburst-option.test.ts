@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { buildSunburstOption } from './sunburst-option';
+import { buildSunburstOption, formatSunburstTooltip } from './sunburst-option';
 import type { ChartTheme } from '../../chart-frame/types';
 import type { SunburstModel } from '../../../components/chart-sunburst/sunburst.types';
+import {
+  planSunburstLabels,
+  suppressedLabelKeys,
+} from '../../../components/chart-sunburst/sunburst-labels';
 
 const theme: ChartTheme = {
   colorScheme: 'light',
@@ -210,14 +214,60 @@ describe('buildSunburstOption', () => {
     expect(fitting.blur).toBeUndefined();
   });
 
-  it('switches off its own tooltip when the overlay anchors own hover detail', () => {
+  it('keeps its tooltip enabled in constrained mode', () => {
     const tooltip = (option: ReturnType<typeof buildSunburstOption>) =>
       option.tooltip as { show?: boolean };
 
     expect(tooltip(buildSunburstOption(model, theme, false)).show).toBe(true);
     expect(tooltip(buildSunburstOption(constrained, theme, false)).show).toBe(
-      false
+      true
     );
+  });
+
+  it('suppresses tooltip output only for sectors that use overlay anchors', () => {
+    const suppressed = suppressedLabelKeys(planSunburstLabels(constrained));
+    const formatter = (params: unknown) =>
+      formatSunburstTooltip(constrained, params, suppressed);
+
+    expect(
+      formatter({
+        name: 'Directory synchronization lag',
+        value: 3,
+        treePathInfo: [
+          {},
+          { name: 'Identity and access management' },
+          { name: 'Directory synchronization lag' },
+        ],
+      })
+    ).toBeUndefined();
+
+    expect(
+      formatter({
+        name: 'Data',
+        value: 200,
+        treePathInfo: [{}, { name: 'Data' }],
+      })
+    ).toBe('Data<br/>Spend: 200');
+  });
+
+  it('routes overlay-owned hover detail through the suppressed tooltip formatter', () => {
+    const formatter = (
+      buildSunburstOption(constrained, theme, false).tooltip as {
+        formatter: (params: unknown) => string | undefined;
+      }
+    ).formatter;
+
+    expect(
+      formatter({
+        name: 'Directory synchronization lag',
+        value: 3,
+        treePathInfo: [
+          {},
+          { name: 'Identity and access management' },
+          { name: 'Directory synchronization lag' },
+        ],
+      })
+    ).toBeUndefined();
   });
 
   it('keeps its own tooltip when constrained labels are turned off entirely', () => {

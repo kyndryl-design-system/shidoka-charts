@@ -141,8 +141,8 @@ export class KDChartSunburst extends ChartFrameElement<SunburstModel> {
    * value through the Shidoka tooltip. The chart never sees this DOM and the
    * anchors disappear with the template, so there is nothing to unbind.
    *
-   * The chart's own tooltip is switched off in this mode, so these anchors are
-   * the single source of hover detail.
+   * The chart tooltip skips overlay-owned sectors in this mode, so these
+   * anchors are the hover detail source for truncated and marker labels.
    *
    * `assistiveText` is deliberately emptied. The tooltip puts it on both the
    * `aria-label` and the native `title` of its anchor button, and it defaults

@@ -406,15 +406,19 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
     `;
   }
 
-  private toggleTableView(): void {
-    this._tableView = !this._tableView;
+  private dispatchViewToggle(tableView: boolean): void {
     this.dispatchEvent(
       new CustomEvent('on-view-toggle', {
-        detail: { tableView: this._tableView },
+        detail: { tableView },
         bubbles: true,
         composed: true,
       })
     );
+  }
+
+  private toggleTableView(): void {
+    this._tableView = !this._tableView;
+    this.dispatchViewToggle(this._tableView);
   }
 
   private downloadCsv(table: ChartTableView): void {
@@ -481,6 +485,7 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
     this.unmountRenderer();
     if (this._tableView) {
       this._tableView = false;
+      this.dispatchViewToggle(false);
     }
   }
 
