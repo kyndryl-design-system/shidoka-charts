@@ -1,12 +1,15 @@
 import { property } from 'lit/decorators.js';
 import { ChartFrameElement } from '../../internal/chart-frame/chart-frame-element';
 import type {
+  ChartInteraction,
   ChartRenderer,
   ChartTableView,
+  TooltipContent,
 } from '../../internal/chart-frame/types';
 import { formatValue } from '../../internal/chart-frame/format';
 import { D3ChordRenderer } from '../../internal/renderers/d3/chord-renderer';
 import { buildChordTable, matrixTotal, normalizeMatrix } from './chord-table';
+import { formatChordInteractionTooltip } from './chord-tooltip';
 import type { ChordModel, ChordNode } from './chord.types';
 
 const DATA_PROPERTIES = [
@@ -78,6 +81,13 @@ export class KDChartChord extends ChartFrameElement<ChordModel> {
 
   protected override createRenderer(): ChartRenderer<ChordModel> {
     return new D3ChordRenderer();
+  }
+
+  protected override formatInteractionTooltip(
+    interaction: ChartInteraction,
+    model: ChordModel
+  ): TooltipContent | null {
+    return formatChordInteractionTooltip(interaction, model);
   }
 
   protected override buildModel(): ChordModel | null {

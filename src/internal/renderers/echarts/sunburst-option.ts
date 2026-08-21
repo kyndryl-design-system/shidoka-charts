@@ -5,6 +5,7 @@ import { formatValue } from '../../chart-frame/format';
 import { mergeNativeOverrides } from '../../chart-frame/merge';
 import { paletteColor } from '../../chart-frame/palette';
 import type { ChartTheme } from '../../chart-frame/types';
+import { echartsTooltipDefaults } from './echarts-tooltip';
 import type {
   SunburstModel,
   SunburstNode,
@@ -164,15 +165,10 @@ export function buildSunburstOption(
       color: theme.textColor,
       fontFamily: 'Roboto, sans-serif',
     },
-    tooltip: {
-      show: true,
-      trigger: 'item',
-      backgroundColor: theme.tooltipBackgroundColor,
-      borderWidth: 0,
-      textStyle: { color: theme.tooltipTextColor, fontSize: 12 },
+    tooltip: echartsTooltipDefaults(theme, {
       formatter: (params: unknown) =>
         formatSunburstTooltip(model, params, suppressed),
-    },
+    }),
     series: [
       {
         type: 'sunburst',

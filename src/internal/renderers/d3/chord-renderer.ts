@@ -1,10 +1,10 @@
 import type {
   ChartImageFormat,
+  ChartInteraction,
   ChartRenderer,
   RendererCapabilities,
   RendererContext,
 } from '../../chart-frame/types';
-import { formatValue } from '../../chart-frame/format';
 import type { ChordModel } from '../../../components/chart-chord/chord.types';
 import { buildChordGeometry } from './chord-layout';
 
@@ -59,12 +59,6 @@ function createElement<K extends keyof SVGElementTagNameMap>(
   return document.createElementNS(SVG_NS, name);
 }
 
-function appendTitle(parent: SVGElement, text: string): void {
-  const title = createElement('title');
-  title.textContent = text;
-  parent.appendChild(title);
-}
-
 export class D3ChordRenderer implements ChartRenderer<ChordModel> {
   readonly capabilities = CAPABILITIES;
 
@@ -89,9 +83,9 @@ export class D3ChordRenderer implements ChartRenderer<ChordModel> {
     svg.style.display = 'block';
 
     this.clickListener = (event: Event) => this.emitFromEvent(event, 'select');
-    this.pointerListener = (event: Event) => this.emitFromEvent(event, 'hover');
+    this.pointerListener = (event: Event) => this.handlePointerMove(event);
     svg.addEventListener('click', this.clickListener);
-    svg.addEventListener('pointerover', this.pointerListener);
+    svg.addEventListener('pointermove', this.pointerListener);
 
     host.appendChild(svg);
     this.svg = svg;
@@ -119,7 +113,7 @@ export class D3ChordRenderer implements ChartRenderer<ChordModel> {
         this.svg.removeEventListener('click', this.clickListener);
       }
       if (this.pointerListener) {
-        this.svg.removeEventListener('pointerover', this.pointerListener);
+        this.svg.removeEventListener('pointermove', this.pointerListener);
       }
       this.svg.remove();
       this.svg = null;
@@ -160,9 +154,36 @@ export class D3ChordRenderer implements ChartRenderer<ChordModel> {
     return this.svg;
   }
 
-  private emitFromEvent(event: Event, kind: 'select' | 'hover'): void {
+  private handlePointerMove(event: Event): void {
     const target = event.target as Element | null;
     const element = target?.closest?.('[data-chord-label]');
+
+    if (element) {
+      this.emitFromEvent(event, 'hover', element);
+      return;
+    }
+
+    if (!this.context || !(event instanceof PointerEvent)) return;
+
+    this.context.emit({
+      kind: 'hover',
+      label: '',
+      value: null,
+      path: [],
+      pointer: {
+        clientX: event.clientX,
+        clientY: event.clientY,
+      },
+    });
+  }
+
+  private emitFromEvent(
+    event: Event,
+    kind: 'select' | 'hover',
+    elementOverride?: Element
+  ): void {
+    const target = event.target as Element | null;
+    const element = elementOverride ?? target?.closest?.('[data-chord-label]');
     if (!element || !this.context) return;
 
     const rawValue = element.getAttribute('data-chord-value');
@@ -176,7 +197,15 @@ export class D3ChordRenderer implements ChartRenderer<ChordModel> {
       label: element.getAttribute('data-chord-label') ?? '',
       value: Number.isFinite(parsed) ? parsed : null,
       path,
-    });
+      ...(kind === 'hover' && event instanceof PointerEvent
+        ? {
+            pointer: {
+              clientX: event.clientX,
+              clientY: event.clientY,
+            },
+          }
+        : {}),
+    } satisfies ChartInteraction);
   }
 
   private draw(): void {
@@ -213,12 +242,6 @@ export class D3ChordRenderer implements ChartRenderer<ChordModel> {
       );
       path.style.cursor = 'pointer';
       applyAttributes(path, native.ribbonAttributes);
-      appendTitle(
-        path,
-        `${ribbon.sourceLabel} → ${ribbon.targetLabel}\n${
-          model.valueLabel
-        }: ${formatValue(ribbon.value)}`
-      );
       ribbonLayer.appendChild(path);
     }
     root.appendChild(ribbonLayer);
@@ -235,10 +258,6 @@ export class D3ChordRenderer implements ChartRenderer<ChordModel> {
       path.setAttribute('data-chord-path', arc.label);
       path.style.cursor = 'pointer';
       applyAttributes(path, native.arcAttributes);
-      appendTitle(
-        path,
-        `${arc.label}\n${model.valueLabel}: ${formatValue(arc.value)}`
-      );
       arcLayer.appendChild(path);
     }
     root.appendChild(arcLayer);

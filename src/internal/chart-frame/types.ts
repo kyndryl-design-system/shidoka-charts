@@ -31,6 +31,17 @@ export interface ChartTableView {
   rows: readonly (readonly (string | number)[])[];
 }
 
+/** Viewport coordinates for a frame-managed hover tooltip. */
+export interface ChartPointer {
+  clientX: number;
+  clientY: number;
+}
+
+/** Plain-text content rendered by the shared frame tooltip. */
+export interface TooltipContent {
+  lines: readonly string[];
+}
+
 /** Normalized interaction emitted by every renderer. */
 export interface ChartInteraction {
   kind: 'select' | 'hover';
@@ -40,6 +51,11 @@ export interface ChartInteraction {
   value: number | null;
   /** Hierarchy or endpoint path, outermost last. */
   path: readonly string[];
+  /**
+   * Present on hover when the frame should show a following tooltip. Engine
+   * renderers that supply their own tooltip UI omit this field.
+   */
+  pointer?: ChartPointer;
 }
 
 /**

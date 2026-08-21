@@ -188,6 +188,38 @@ figure {
   pointer-events: none;
 }
 
+.frame-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms ease-out;
+
+  &.visible {
+    opacity: 1;
+  }
+
+  &.reduced-motion {
+    transition: none;
+  }
+}
+
+.frame-tooltip-inner {
+  border-radius: 4px;
+  padding: 6px 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  font-family: Roboto, sans-serif;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.frame-tooltip-line + .frame-tooltip-line {
+  margin-top: 2px;
+}
+
 figcaption {
   color: var(--kd-color-text-level-secondary);
   margin-top: 8px;

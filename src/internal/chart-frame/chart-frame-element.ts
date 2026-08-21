@@ -9,6 +9,7 @@ import {
 import { property, query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { styleMap } from 'lit/directives/style-map.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import chartIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/analytics.svg';
 import tableIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/table-view.svg';
@@ -17,6 +18,7 @@ import ChartFrameScss from './chart-frame.scss?inline';
 import { RendererController } from './renderer-controller';
 import { resolveChartTheme } from './theme';
 import { tableViewToCsv, toSafeFileName } from './csv';
+import { formatDefaultInteractionTooltip } from './interaction-tooltip';
 import {
   csvToDataUrl,
   downloadDataUrl,
@@ -31,6 +33,7 @@ import type {
   ChartTheme,
   RendererCapabilities,
   RendererContext,
+  TooltipContent,
 } from './types';
 
 /** Text labels a consumer can override. */
@@ -125,11 +128,25 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
   @query('.renderer-host')
   private accessor _host!: HTMLDivElement;
 
+  /** Shared positioning context for the renderer and frame tooltip.
+   * @internal
+   */
+  @query('.host-stack')
+  private accessor _hostStack!: HTMLDivElement;
+
   /** Last observed renderer host size, or null before the first measurement.
    * @internal
    */
   @state()
   private accessor _hostSize: { width: number; height: number } | null = null;
+
+  /** Active frame-managed hover tooltip, or null when hidden. */
+  @state()
+  private accessor _frameTooltip: {
+    lines: readonly string[];
+    left: number;
+    top: number;
+  } | null = null;
 
   private _controller: RendererController<TModel> | null = null;
   private _capabilities: RendererCapabilities | null = null;
@@ -174,6 +191,17 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
    */
   protected renderHostOverlay(_model: TModel): unknown {
     return nothing;
+  }
+
+  /**
+   * Formats hover tooltip content for frame-managed renderers. Return null to
+   * suppress the tooltip for a given interaction.
+   */
+  protected formatInteractionTooltip(
+    interaction: ChartInteraction,
+    _model: TModel
+  ): TooltipContent | null {
+    return formatDefaultInteractionTooltip(interaction);
   }
 
   /** Fallback name used for downloaded files. */
@@ -290,7 +318,11 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
         </div>
 
         <figure class=${classMap({ hidden: this._tableView })}>
-          <div class="host-stack" style="height: ${this.height}px">
+          <div
+            class="host-stack"
+            style="height: ${this.height}px"
+            @pointerleave=${this.hideFrameTooltip}
+          >
             <div
               class="renderer-host"
               role="img"
@@ -308,6 +340,7 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
                   ${this.renderHostOverlay(model)}
                 </div>`
               : nothing}
+            ${this.renderFrameTooltip()}
           </div>
           <figcaption>${caption}</figcaption>
           ${model
@@ -316,6 +349,36 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
         </figure>
 
         ${this._tableView && table ? this.renderTable(table) : nothing}
+      </div>
+    `;
+  }
+
+  private renderFrameTooltip() {
+    if (!this._frameTooltip) return nothing;
+
+    const theme = this._theme ?? resolveChartTheme(this.colorPalette);
+
+    return html`
+      <div
+        class=${classMap({
+          'frame-tooltip': true,
+          visible: true,
+          'reduced-motion': this._reducedMotion,
+        })}
+        style="left: ${this._frameTooltip.left}px; top: ${this._frameTooltip.top}px"
+        aria-hidden="true"
+      >
+        <div
+          class="frame-tooltip-inner"
+          style=${styleMap({
+            background: theme.tooltipBackgroundColor,
+            color: theme.tooltipTextColor,
+          })}
+        >
+          ${this._frameTooltip.lines.map(
+            (line) => html`<div class="frame-tooltip-line">${line}</div>`
+          )}
+        </div>
       </div>
     `;
   }
@@ -418,6 +481,7 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
 
   private toggleTableView(): void {
     this._tableView = !this._tableView;
+    this.hideFrameTooltip();
     this.dispatchViewToggle(this._tableView);
   }
 
@@ -450,12 +514,51 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
   }
 
   protected emitInteraction(interaction: ChartInteraction): void {
+    this.updateFrameTooltip(interaction);
     this.dispatchEvent(
       new CustomEvent('on-chart-interaction', {
         detail: interaction,
         bubbles: true,
         composed: true,
       })
+    );
+  }
+
+  private updateFrameTooltip(interaction: ChartInteraction): void {
+    if (interaction.kind !== 'hover' || !interaction.pointer) return;
+
+    const model = this.buildModel();
+    if (!model) {
+      this._frameTooltip = null;
+      return;
+    }
+
+    const content = this.formatInteractionTooltip(interaction, model);
+    if (!content) {
+      this._frameTooltip = null;
+      return;
+    }
+
+    const stack = this.resolveHostStack();
+    if (!stack) return;
+
+    const rect = stack.getBoundingClientRect();
+    this._frameTooltip = {
+      lines: content.lines,
+      left: interaction.pointer.clientX - rect.left,
+      top: interaction.pointer.clientY - rect.top,
+    };
+  }
+
+  private hideFrameTooltip(): void {
+    this._frameTooltip = null;
+  }
+
+  private resolveHostStack(): HTMLElement | null {
+    return (
+      this._hostStack ??
+      this.renderRoot?.querySelector<HTMLElement>('.host-stack') ??
+      null
     );
   }
 
@@ -483,6 +586,7 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
   /** Clears renderer and table view when the semantic model is empty. */
   private clearEmptyModel(): void {
     this.unmountRenderer();
+    this.hideFrameTooltip();
     if (this._tableView) {
       this._tableView = false;
       this.dispatchViewToggle(false);
@@ -508,6 +612,7 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
   private teardown(): void {
     this._controller?.destroy();
     this._controller = null;
+    this.hideFrameTooltip();
 
     this._themeObserver?.disconnect();
     this._themeObserver = null;
