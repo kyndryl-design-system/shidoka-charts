@@ -162,6 +162,38 @@ describe('RendererController', () => {
     expect(FakeRenderer.instances[0].resizes).toBe(1);
   });
 
+  it('reports the host size once per coalesced resize', () => {
+    const sizes: { width: number; height: number }[] = [];
+    const sizedHost = { clientWidth: 640, clientHeight: 420 } as HTMLElement;
+    const controller = new RendererController(
+      () => new FakeRenderer(),
+      (size) => sizes.push(size)
+    );
+    controller.mount(sizedHost, context('first'));
+
+    observers[0].trigger();
+    observers[0].trigger();
+    flushFrames();
+
+    expect(sizes).toEqual([{ width: 640, height: 420 }]);
+  });
+
+  it('stops reporting host sizes once destroyed', () => {
+    const sizes: { width: number; height: number }[] = [];
+    const sizedHost = { clientWidth: 640, clientHeight: 420 } as HTMLElement;
+    const controller = new RendererController(
+      () => new FakeRenderer(),
+      (size) => sizes.push(size)
+    );
+    controller.mount(sizedHost, context('first'));
+
+    observers[0].trigger();
+    controller.destroy();
+    flushFrames();
+
+    expect(sizes).toEqual([]);
+  });
+
   it('releases the observer, the pending frame and the renderer on destroy', () => {
     const controller = new RendererController(() => new FakeRenderer());
     controller.mount(host, context('first'));

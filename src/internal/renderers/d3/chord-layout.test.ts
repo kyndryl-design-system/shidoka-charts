@@ -39,15 +39,59 @@ describe('buildChordGeometry', () => {
     }
   });
 
-  it('produces one ribbon per non-zero flow pair', () => {
+  it('produces one ribbon per non-zero directed flow', () => {
     const geometry = buildChordGeometry(model, theme, 600);
 
-    // A-B, A-C and B-C are all connected in at least one direction.
-    expect(geometry.ribbons).toHaveLength(3);
+    expect(geometry.ribbons).toHaveLength(5);
     for (const ribbon of geometry.ribbons) {
       expect(ribbon.path.startsWith('M')).toBe(true);
       expect(ribbon.value).toBeGreaterThan(0);
     }
+  });
+
+  it('keeps asymmetric flows as separate ribbons', () => {
+    const geometry = buildChordGeometry(
+      {
+        ...model,
+        nodes: [{ label: 'A' }, { label: 'B' }],
+        matrix: [
+          [0, 10],
+          [3, 0],
+        ],
+      },
+      theme,
+      600
+    );
+
+    expect(geometry.ribbons).toHaveLength(2);
+    expect(geometry.ribbons.map((ribbon) => ribbon.value).sort((a, b) => a - b)).toEqual([
+      3, 10,
+    ]);
+  });
+
+  it('keeps endpoints in caller-supplied order around the circle', () => {
+    const ordered = buildChordGeometry(
+      {
+        ...model,
+        nodes: [{ label: 'First' }, { label: 'Second' }, { label: 'Third' }],
+        matrix: [
+          [0, 1, 10],
+          [2, 0, 1],
+          [3, 4, 0],
+        ],
+      },
+      theme,
+      600
+    );
+
+    const midpoints = ordered.arcs
+      .slice()
+      .sort((left, right) => left.index - right.index)
+      .map((arc) => Number(arc.labelTransform.match(/^rotate\(([-\d.]+)\)/)?.[1]));
+
+    expect(midpoints).toHaveLength(3);
+    expect(midpoints[0]).toBeLessThan(midpoints[1]);
+    expect(midpoints[1]).toBeLessThan(midpoints[2]);
   });
 
   it('colors from the palette unless the node overrides it', () => {

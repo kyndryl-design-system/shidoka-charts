@@ -12,11 +12,16 @@ import { EChartsSunburstRenderer } from '../../internal/renderers/echarts/sunbur
 import { buildSunburstTable, hierarchyTotal } from './sunburst-table';
 import {
   constrainedPlacements,
+  DEFAULT_LABEL_METRICS,
+  LABEL_FONT_SIZE_PX,
   placementPosition,
   planSunburstLabels,
+  selectionFromPlacement,
 } from './sunburst-labels';
 import SunburstScss from './chart-sunburst.scss?inline';
 import type {
+  SunburstLabelMetrics,
+  SunburstLabelPlacement,
   SunburstLabelStrategy,
   SunburstModel,
   SunburstNode,
@@ -103,11 +108,31 @@ export class KDChartSunburst extends ChartFrameElement<SunburstModel> {
       showLabels: this.showLabels,
       labelStrategy: this.labelStrategy,
       innerRadiusRatio: this.innerRadiusRatio,
+      labelMetrics: this.labelMetrics,
+    };
+  }
+
+  /**
+   * The chart fills the largest square its host allows, so its radius is half
+   * the shorter side. Carrying this on the model is what keeps the renderer's
+   * label suppression and the overlay below in agreement.
+   */
+  private get labelMetrics(): SunburstLabelMetrics {
+    const size = this.hostSize;
+    if (!size?.width || !size.height) return DEFAULT_LABEL_METRICS;
+
+    return {
+      radiusPx: Math.min(size.width, size.height) / 2,
+      fontSizePx: LABEL_FONT_SIZE_PX,
     };
   }
 
   protected override buildTableView(model: SunburstModel): ChartTableView {
     return buildSunburstTable(model);
+  }
+
+  private selectFromPlacement(placement: SunburstLabelPlacement): void {
+    this.emitInteraction(selectionFromPlacement(placement));
   }
 
   /**
@@ -138,6 +163,7 @@ export class KDChartSunburst extends ChartFrameElement<SunburstModel> {
         ${placements.map((placement) => {
           const { leftPercent, topPercent } = placementPosition(placement);
           const value = `${model.valueLabel}: ${formatValue(placement.value)}`;
+          const marker = placement.display === 'marker';
 
           return html`
             <div
@@ -146,13 +172,19 @@ export class KDChartSunburst extends ChartFrameElement<SunburstModel> {
                 2
               )}%; top: ${topPercent.toFixed(2)}%"
             >
-              <kyn-tooltip class="label-tooltip" compact>
+              <kyn-tooltip class="label-tooltip" .assistiveText=${''} compact>
                 <span
                   slot="anchor"
                   class=${classMap({
                     'label-chip': true,
-                    'label-chip-marker': placement.display === 'marker',
+                    'label-chip-marker': marker,
                   })}
+                  @click=${() => this.selectFromPlacement(placement)}
+                  @keydown=${(event: KeyboardEvent) => {
+                    if (event.key !== 'Enter' && event.key !== ' ') return;
+                    event.preventDefault();
+                    this.selectFromPlacement(placement);
+                  }}
                 >
                   <span aria-hidden="true">${placement.text}</span>
                   <span class="label-chip-name"

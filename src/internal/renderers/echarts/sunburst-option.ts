@@ -12,6 +12,7 @@ import type {
 import { nodeTotal } from '../../../components/chart-sunburst/sunburst-table';
 import {
   labelPathKey,
+  LABEL_FONT_SIZE_PX,
   OUTER_RADIUS_FRACTION,
   planSunburstLabels,
   suppressedLabelKeys,
@@ -177,8 +178,11 @@ export function buildSunburstOption(
           show: model.showLabels,
           color: theme.textColor,
           minAngle: model.labelStrategy === 'constrained' ? 0 : LABEL_MIN_ANGLE,
+          // Radial text is both the sunburst default and what the label
+          // planner measures against, so it is pinned here too.
+          rotate: 'radial',
           overflow: 'truncate',
-          fontSize: 12,
+          fontSize: LABEL_FONT_SIZE_PX,
         },
         labelLayout: { hideOverlap: true },
         itemStyle: {

@@ -230,6 +230,43 @@ describe('buildSunburstOption', () => {
     expect((option.tooltip as { show?: boolean }).show).toBe(true);
   });
 
+  it('suppresses labels from the measured geometry the model carries', () => {
+    const nodes = [
+      {
+        label: 'Identity and access management',
+        children: [{ label: 'A', value: 1 }],
+      },
+      { label: 'B', value: 1 },
+    ];
+    const withRadius = (radiusPx: number) =>
+      seriesData(
+        buildSunburstOption(
+          {
+            ...constrained,
+            nodes,
+            labelMetrics: { radiusPx, fontSizePx: 12 },
+          },
+          theme,
+          false
+        )
+      );
+
+    // Same wide sector either way: only the room for the text changes.
+    expect(withRadius(210)[0].label?.show).toBe(false);
+    expect(withRadius(900)[0].label).toBeUndefined();
+  });
+
+  it('pins radial label rotation, which is what the planner measures against', () => {
+    const series = (
+      buildSunburstOption(model, theme, false).series as unknown as {
+        label: { rotate: string; fontSize: number };
+      }[]
+    )[0];
+
+    expect(series.label.rotate).toBe('radial');
+    expect(series.label.fontSize).toBe(12);
+  });
+
   it('gives each suppressed datum its own state objects', () => {
     const data = seriesData(buildSunburstOption(constrained, theme, false));
 

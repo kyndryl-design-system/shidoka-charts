@@ -6,7 +6,7 @@ import type {
 } from '../../internal/chart-frame/types';
 import { formatValue } from '../../internal/chart-frame/format';
 import { D3ChordRenderer } from '../../internal/renderers/d3/chord-renderer';
-import { buildChordTable, matrixTotal } from './chord-table';
+import { buildChordTable, matrixTotal, normalizeMatrix } from './chord-table';
 import type { ChordModel, ChordNode } from './chord.types';
 
 const DATA_PROPERTIES = [
@@ -69,9 +69,11 @@ export class KDChartChord extends ChartFrameElement<ChordModel> {
   }
 
   protected override get captionText(): string {
-    if (!this.nodes.length) return '';
+    const model = this.buildModel();
+    if (!model) return '';
 
-    return `${this.valueLabel} total: ${formatValue(matrixTotal(this.matrix))}`;
+    const matrix = normalizeMatrix(model.matrix, model.nodes.length);
+    return `${this.valueLabel} total: ${formatValue(matrixTotal(matrix))}`;
   }
 
   protected override createRenderer(): ChartRenderer<ChordModel> {

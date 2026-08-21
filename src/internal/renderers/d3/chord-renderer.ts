@@ -74,6 +74,7 @@ export class D3ChordRenderer implements ChartRenderer<ChordModel> {
   private pointerListener: ((event: Event) => void) | null = null;
   private clickListener: ((event: Event) => void) | null = null;
   private fadeFrame = 0;
+  private hasDrawn = false;
 
   mount(host: HTMLElement, context: RendererContext<ChordModel>): void {
     this.host = host;
@@ -128,6 +129,7 @@ export class D3ChordRenderer implements ChartRenderer<ChordModel> {
     this.pointerListener = null;
     this.host = null;
     this.context = null;
+    this.hasDrawn = false;
   }
 
   toDataUrl(format: ChartImageFormat, backgroundColor: string): string | null {
@@ -263,14 +265,17 @@ export class D3ChordRenderer implements ChartRenderer<ChordModel> {
       this.fadeFrame = 0;
     }
 
-    if (!reducedMotion) {
+    const animateEntrance = !this.hasDrawn && !reducedMotion;
+
+    if (animateEntrance) {
       root.style.opacity = '0';
       root.style.transition = `opacity ${FADE_DURATION_MS}ms ease-out`;
     }
 
     this.svg.replaceChildren(root);
+    this.hasDrawn = true;
 
-    if (!reducedMotion) {
+    if (animateEntrance) {
       // A single frame, tracked so disconnect cannot leave one pending.
       this.fadeFrame = requestAnimationFrame(() => {
         this.fadeFrame = 0;

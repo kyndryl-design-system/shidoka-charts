@@ -125,6 +125,12 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
   @query('.renderer-host')
   private accessor _host!: HTMLDivElement;
 
+  /** Last observed renderer host size, or null before the first measurement.
+   * @internal
+   */
+  @state()
+  private accessor _hostSize: { width: number; height: number } | null = null;
+
   private _controller: RendererController<TModel> | null = null;
   private _capabilities: RendererCapabilities | null = null;
   private _themeObserver: MutationObserver | null = null;
@@ -145,6 +151,15 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
 
   /** Reactive properties that should trigger a renderer update. */
   protected abstract get dataProperties(): readonly string[];
+
+  /**
+   * Measured renderer host size, or null before the first measurement. Models
+   * that depend on available room read this so the renderer and any component
+   * chrome decide from the same numbers.
+   */
+  protected get hostSize(): { width: number; height: number } | null {
+    return this._hostSize;
+  }
 
   /** Optional short summary rendered beneath the chart. */
   protected get captionText(): string {
@@ -192,10 +207,17 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
   /** Forces a renderer update, e.g. after mutating a model array in place. */
   refresh(): void {
     const model = this.buildModel();
-    if (model && this._controller?.mounted) {
+    if (model) {
       this._theme = resolveChartTheme(this.colorPalette);
-      this._controller.update(this.rendererContext(model));
+      if (this._controller?.mounted) {
+        this._controller.update(this.rendererContext(model));
+      }
+    } else {
+      this.clearEmptyModel();
     }
+
+    // Caption, table fallback, empty state and host overlays come from render().
+    this.requestUpdate();
   }
 
   override connectedCallback(): void {
@@ -229,6 +251,7 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
     const shouldUpdate =
       changed.has('colorPalette') ||
       changed.has('unsafeNativeOptions') ||
+      changed.has('_hostSize') ||
       this.dataProperties.some((name) => changed.has(name));
 
     if (shouldUpdate) {
@@ -236,6 +259,8 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
       if (model) {
         this._theme = resolveChartTheme(this.colorPalette);
         this._controller.update(this.rendererContext(model));
+      } else {
+        this.clearEmptyModel();
       }
     }
   }
@@ -244,7 +269,7 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
     const model = this.buildModel();
     const table = model ? this.buildTableView(model) : null;
     const hasName = Boolean(this.chartTitle || this.description);
-    const caption = this.captionText;
+    const caption = model ? this.captionText : '';
 
     return html`
       <div class=${classMap({ container: true, 'no-border': this.noBorder })}>
@@ -420,7 +445,7 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
     };
   }
 
-  private emitInteraction(interaction: ChartInteraction): void {
+  protected emitInteraction(interaction: ChartInteraction): void {
     this.dispatchEvent(
       new CustomEvent('on-chart-interaction', {
         detail: interaction,
@@ -437,10 +462,42 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
     if (!model || !this._host || !this.isConnected) return;
 
     this._theme = resolveChartTheme(this.colorPalette);
-    this._controller ??= new RendererController<TModel>(() =>
-      this.createRenderer()
+    this._controller ??= new RendererController<TModel>(
+      () => this.createRenderer(),
+      (size) => this.recordHostSize(size)
     );
     this._controller.mount(this._host, this.rendererContext(model));
+  }
+
+  /** Drops the live renderer when there is nothing left to draw. */
+  private unmountRenderer(): void {
+    if (!this._controller?.mounted) return;
+
+    this._controller.destroy();
+  }
+
+  /** Clears renderer and table view when the semantic model is empty. */
+  private clearEmptyModel(): void {
+    this.unmountRenderer();
+    if (this._tableView) {
+      this._tableView = false;
+    }
+  }
+
+  /**
+   * Resize observations arrive outside Lit's update cycle, so recording them as
+   * state schedules a normal re-render. Identical sizes are dropped to keep
+   * engine reflows from turning into a render loop.
+   */
+  private recordHostSize(size: { width: number; height: number }): void {
+    if (
+      this._hostSize?.width === size.width &&
+      this._hostSize?.height === size.height
+    ) {
+      return;
+    }
+
+    this._hostSize = size;
   }
 
   private teardown(): void {
@@ -505,6 +562,9 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
 
     if (model && this._controller?.mounted) {
       this._controller.update(this.rendererContext(model));
+    } else if (!model) {
+      this.clearEmptyModel();
+      this.requestUpdate();
     }
   }
 }

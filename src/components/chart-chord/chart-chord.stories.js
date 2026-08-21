@@ -55,7 +55,7 @@ const args = {
   targetLabel: 'To region',
   showLabels: true,
   padAngle: 0.04,
-  height: 460,
+  height: 680,
   colorPalette: 'categorical',
   hideDescription: false,
   hideControls: false,

@@ -49,13 +49,26 @@
   display: block;
 }
 
+// Chips sit on top of saturated segment colours, so they are mixed down towards
+// the segment rather than painted over it. Mixing the container and border
+// tokens with `transparent` keeps the theme's own light and dark surfaces, which
+// a hardcoded white would not, and leaves the text itself fully opaque: putting
+// `opacity` on the chip would fade the label along with its backing.
 .label-chip {
   display: block;
-  max-width: 112px;
+  // No width cap here: the planner already cut the text to what the sector
+  // holds, so capping it again would hide characters it decided there was room
+  // for.
   padding: 1px 6px;
-  border: 1px solid var(--kd-color-border-variants-light);
+  border: 1px solid
+    color-mix(in srgb, var(--kd-color-border-variants-light) 45%, transparent);
   border-radius: 10px;
-  background: var(--kd-color-background-container-default);
+  background: color-mix(
+    in srgb,
+    var(--kd-color-background-container-default) 72%,
+    transparent
+  );
+  box-shadow: var(--kd-elevation-level-1);
   color: var(--kd-color-text-level-primary);
   // Also keeps the chip's min-content width equal to its text width, which is
   // what sizes the zero width grid box above.
@@ -66,7 +79,6 @@
 }
 
 .label-chip-marker {
-  max-width: none;
   padding: 0 4px;
 }
 

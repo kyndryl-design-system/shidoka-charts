@@ -1,4 +1,4 @@
-import { chord as chordLayout, ribbon as ribbonGenerator } from 'd3-chord';
+import { chordDirected as chordLayout, ribbon as ribbonGenerator } from 'd3-chord';
 import type { Chord, ChordSubgroup } from 'd3-chord';
 import { arc as arcGenerator } from 'd3-shape';
 import { paletteColor } from '../../chart-frame/palette';
@@ -92,8 +92,7 @@ export function buildChordGeometry(
   const matrix = normalizeMatrix(model.matrix, nodeCount);
 
   const chords = chordLayout()
-    .padAngle(clampPadAngle(model.padAngle))
-    .sortSubgroups((a, b) => b - a)(matrix);
+    .padAngle(clampPadAngle(model.padAngle))(matrix);
 
   const arcPath = arcGenerator<
     unknown,
