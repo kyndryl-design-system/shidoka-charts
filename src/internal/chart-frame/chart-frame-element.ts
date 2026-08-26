@@ -14,6 +14,8 @@ import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import chartIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/analytics.svg';
 import tableIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/table-view.svg';
 import downloadIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/download.svg';
+import maximizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/expand.svg';
+import minimizeIcon from '@kyndryl-design-system/shidoka-icons/svg/monochrome/16/shrink.svg';
 import ChartFrameScss from './chart-frame.scss?inline';
 import { RendererController } from './renderer-controller';
 import { resolveChartTheme } from './theme';
@@ -39,6 +41,7 @@ import type {
 /** Text labels a consumer can override. */
 export interface ChartFrameLabels {
   toggleView: string;
+  toggleFullscreen: string;
   downloadMenu: string;
   downloadCsv: string;
   /** Prefix applied to each capability-advertised image format. */
@@ -48,6 +51,7 @@ export interface ChartFrameLabels {
 
 const DEFAULT_LABELS: ChartFrameLabels = {
   toggleView: 'Toggle View Mode',
+  toggleFullscreen: 'Toggle Fullscreen',
   downloadMenu: 'Download Menu',
   downloadCsv: 'Download as CSV',
   downloadImage: 'Download as',
@@ -86,6 +90,10 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
   @property({ type: Boolean })
   accessor hideTableControl = false;
 
+  /** Hides the fullscreen control. */
+  @property({ type: Boolean })
+  accessor hideFullscreenControl = false;
+
   /** Hides the download control. */
   @property({ type: Boolean })
   accessor hideDownloadControl = false;
@@ -121,6 +129,18 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
    */
   @state()
   accessor _tableView = false;
+
+  /** Fullscreen state.
+   * @internal
+   */
+  @state()
+  accessor fullscreen = false;
+
+  /** Chart chrome container used for fullscreen requests.
+   * @internal
+   */
+  @query('.container')
+  private accessor _container!: HTMLDivElement;
 
   /** Stable renderer host. The renderer owns everything inside it.
    * @internal
@@ -300,7 +320,14 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
     const caption = model ? this.captionText : '';
 
     return html`
-      <div class=${classMap({ container: true, 'no-border': this.noBorder })}>
+      <div
+        class=${classMap({
+          container: true,
+          fullscreen: this.fullscreen,
+          'no-border': this.noBorder,
+        })}
+        @fullscreenchange=${() => this.handleFullscreenChange()}
+      >
         <div class="header">
           <div id="titleDesc">
             <div class="title" id="chartFrameTitle">${this.chartTitle}</div>
@@ -320,7 +347,9 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
         <figure class=${classMap({ hidden: this._tableView })}>
           <div
             class="host-stack"
-            style="height: ${this.height}px"
+            style=${styleMap(
+              this.fullscreen ? {} : { height: `${this.height}px` }
+            )}
             @pointerleave=${this.hideFrameTooltip}
           >
             <div
@@ -365,7 +394,8 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
           visible: true,
           'reduced-motion': this._reducedMotion,
         })}
-        style="left: ${this._frameTooltip.left}px; top: ${this._frameTooltip.top}px"
+        style="left: ${this._frameTooltip.left}px; top: ${this._frameTooltip
+          .top}px"
         aria-hidden="true"
       >
         <div
@@ -405,6 +435,22 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
                   >${this._tableView
                     ? unsafeSVG(chartIcon)
                     : unsafeSVG(tableIcon)}</span
+                >
+              </button>
+            `}
+        ${this.hideFullscreenControl
+          ? nothing
+          : html`
+              <button
+                class="control-button"
+                aria-label=${labels.toggleFullscreen}
+                title=${labels.toggleFullscreen}
+                @click=${() => this.toggleFullscreen()}
+              >
+                <span
+                  >${this.fullscreen
+                    ? unsafeSVG(minimizeIcon)
+                    : unsafeSVG(maximizeIcon)}</span
                 >
               </button>
             `}
@@ -483,6 +529,27 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
     this._tableView = !this._tableView;
     this.hideFrameTooltip();
     this.dispatchViewToggle(this._tableView);
+  }
+
+  private toggleFullscreen(): void {
+    if (this.shadowRoot?.fullscreenElement) {
+      document.exitFullscreen();
+      return;
+    }
+
+    this._container?.requestFullscreen();
+  }
+
+  private handleFullscreenChange(): void {
+    this.fullscreen = this.shadowRoot?.fullscreenElement !== null;
+    this.updateComplete.then(() => {
+      if (!this._host) return;
+
+      this.recordHostSize({
+        width: this._host.clientWidth,
+        height: this._host.clientHeight,
+      });
+    });
   }
 
   private downloadCsv(table: ChartTableView): void {
