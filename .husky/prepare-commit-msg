@@ -1,16 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
+. "$(dirname -- "$0")/commit-message-normalize.sh"
 
-COMMIT_MSG_FILE="$1"
-
-# Cursor may inject Co-authored-by trailers; strip them before DCO/commitlint checks.
-if [ -f "$COMMIT_MSG_FILE" ]; then
-  sed -i '' '/cursoragent@cursor\.com/d' "$COMMIT_MSG_FILE"
-  sed -i '' '/^Co-authored-by: Cursor/d' "$COMMIT_MSG_FILE"
-  sed -i '' '/^Made with Cursor/d' "$COMMIT_MSG_FILE"
-fi
-
-# DCO sign-off (repo policy) without requiring -s on every CLI commit.
-if [ -f "$COMMIT_MSG_FILE" ] && ! grep -iq '^Signed-off-by:' "$COMMIT_MSG_FILE"; then
-  printf '\nSigned-off-by: %s <%s>\n' "$(git config user.name)" "$(git config user.email)" >> "$COMMIT_MSG_FILE"
-fi
+normalize_commit_message "$1"
