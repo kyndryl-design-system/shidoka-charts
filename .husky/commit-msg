@@ -2,10 +2,15 @@
 . "$(dirname -- "$0")/_/husky.sh"
 . "$(dirname -- "$0")/commit-message-normalize.sh"
 
-# Normalize again in case Cursor trailers were added after prepare-commit-msg.
+# Authoritative normalization pass: runs after prepare-commit-msg and any editor
+# changes, and immediately before commitlint and the DCO check.
 normalize_commit_message "$1"
 
 npx --no -- commitlint --edit "$1"
+
+# Commitlint should not reintroduce trailers, but normalize once more before the
+# final DCO gate in case the message file changed during validation.
+normalize_commit_message "$1"
 
 if ! grep -iq '^Signed-off-by:' "$1"; then
   echo "Error: Your commit message is missing a DCO sign-off." >&2

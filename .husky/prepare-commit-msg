@@ -2,4 +2,5 @@
 . "$(dirname -- "$0")/_/husky.sh"
 . "$(dirname -- "$0")/commit-message-normalize.sh"
 
+# Early pass for editor flows. commit-msg normalizes again before lint/DCO checks.
 normalize_commit_message "$1"

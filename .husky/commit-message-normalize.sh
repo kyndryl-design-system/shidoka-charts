@@ -11,9 +11,9 @@ normalize_commit_message() {
     return 0
   fi
 
-  sed -i '' '/cursoragent@cursor\.com/d' "$COMMIT_MSG_FILE"
-  sed -i '' '/^Co-authored-by: Cursor/d' "$COMMIT_MSG_FILE"
-  sed -i '' '/^Made with Cursor/d' "$COMMIT_MSG_FILE"
+  sed -i '' '/cursoragent@cursor\.com/Id' "$COMMIT_MSG_FILE"
+  sed -i '' '/^Co-authored-by:.*Cursor/Id' "$COMMIT_MSG_FILE"
+  sed -i '' '/^Made with Cursor/Id' "$COMMIT_MSG_FILE"
 
   if ! grep -iq '^Signed-off-by:' "$COMMIT_MSG_FILE"; then
     printf '\nSigned-off-by: %s <%s>\n' "$(git config user.name)" "$(git config user.email)" >> "$COMMIT_MSG_FILE"
