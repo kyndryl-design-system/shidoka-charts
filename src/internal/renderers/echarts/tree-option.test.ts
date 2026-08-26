@@ -172,6 +172,60 @@ describe('buildTreeOption', () => {
     expect(series.orient).toBe('TB');
   });
 
+  it('anchors orthogonal labels to the growth axis', () => {
+    const tb = seriesOption(
+      buildTreeOption({ ...model, orientation: 'TB' }, theme, false)
+    );
+    expect(tb.label).toMatchObject({
+      position: 'top',
+      align: 'right',
+      verticalAlign: 'middle',
+      rotate: -90,
+    });
+    expect(tb.leaves?.label).toMatchObject({
+      position: 'bottom',
+      align: 'left',
+      verticalAlign: 'middle',
+      rotate: -90,
+    });
+
+    const lr = seriesOption(buildTreeOption(model, theme, false));
+    expect(lr.label).toMatchObject({
+      position: 'left',
+      align: 'right',
+      verticalAlign: 'middle',
+      rotate: 0,
+    });
+    expect(lr.leaves?.label).toMatchObject({
+      position: 'right',
+      align: 'left',
+      verticalAlign: 'middle',
+      rotate: 0,
+    });
+  });
+
+  it('pads TB margins vertically for long rotated labels', () => {
+    const wide = seriesOption(
+      buildTreeOption(
+        {
+          ...model,
+          orientation: 'TB',
+          nodes: [
+            {
+              label: 'Platform engineering and infrastructure operations',
+              children: [{ label: 'Kubernetes', value: 10 }],
+            },
+          ],
+        },
+        theme,
+        false
+      )
+    );
+
+    expect(parseFloat(String(wide.top))).toBeGreaterThan(12);
+    expect(parseFloat(String(wide.bottom))).toBeGreaterThan(18);
+  });
+
   it('disables animation when reduced motion is requested', () => {
     const option = buildTreeOption(model, theme, true);
 

@@ -74,15 +74,165 @@ function longestLabel(nodes: readonly TreeNode[]): number {
 }
 
 /**
- * Extra horizontal margin for long labels. Uses an 800px reference width so
- * Storybook-sized hosts keep branch labels inside the canvas.
+ * Extra margin for long labels along the axis labels extend after rotation.
+ * Uses an 800px reference so Storybook-sized hosts keep labels inside the canvas.
  */
-function horizontalLabelMarginPercent(nodes: readonly TreeNode[]): number {
+function labelMarginPercent(
+  nodes: readonly TreeNode[],
+  axis: 'horizontal' | 'vertical'
+): number {
   const charWidthPx = LABEL_FONT_SIZE * 0.58;
   const labelPx = longestLabel(nodes) * charWidthPx + LABEL_DISTANCE + 8;
-  const percent = (labelPx / 800) * 100;
+  const referencePx = axis === 'horizontal' ? 800 : 600;
+  const percent = (labelPx / referencePx) * 100;
+  const baseline = axis === 'horizontal' ? 14 : 12;
 
-  return Math.min(32, Math.max(0, percent - 14));
+  return Math.min(32, Math.max(0, percent - baseline));
+}
+
+function addMarginPercent(base: string, extra: number): string {
+  return `${parseFloat(base) + extra}%`;
+}
+
+/** Label anchor and rotation that follow ECharts' per-orient defaults. */
+function treeLabelStyles(
+  orientation: TreeModel['orientation'],
+  layout: TreeModel['layout']
+): {
+  label: NonNullable<TreeSeriesOption['label']>;
+  leaves: NonNullable<NonNullable<TreeSeriesOption['leaves']>['label']>;
+} {
+  const shared = {
+    distance: LABEL_DISTANCE,
+  };
+
+  if (layout === 'radial') {
+    return {
+      label: {
+        ...shared,
+        rotate: 0,
+        position: 'top',
+        verticalAlign: 'middle',
+        align: 'center',
+      },
+      leaves: {
+        ...shared,
+        rotate: 0,
+        position: 'top',
+        verticalAlign: 'middle',
+        align: 'center',
+      },
+    };
+  }
+
+  switch (orientation) {
+    case 'RL':
+      return {
+        label: {
+          ...shared,
+          rotate: 0,
+          position: 'right',
+          verticalAlign: 'middle',
+          align: 'left',
+        },
+        leaves: {
+          ...shared,
+          rotate: 0,
+          position: 'left',
+          verticalAlign: 'middle',
+          align: 'right',
+        },
+      };
+    case 'TB':
+      return {
+        label: {
+          ...shared,
+          rotate: -90,
+          position: 'top',
+          verticalAlign: 'middle',
+          align: 'right',
+        },
+        leaves: {
+          ...shared,
+          rotate: -90,
+          position: 'bottom',
+          verticalAlign: 'middle',
+          align: 'left',
+        },
+      };
+    case 'BT':
+      return {
+        label: {
+          ...shared,
+          rotate: 90,
+          position: 'bottom',
+          verticalAlign: 'middle',
+          align: 'right',
+        },
+        leaves: {
+          ...shared,
+          rotate: 90,
+          position: 'top',
+          verticalAlign: 'middle',
+          align: 'left',
+        },
+      };
+    default:
+      return {
+        label: {
+          ...shared,
+          // Keep LR labels horizontal; the orthogonal default rotates along
+          // vertical connectors and often clips at the canvas edge.
+          rotate: 0,
+          position: 'left',
+          verticalAlign: 'middle',
+          align: 'right',
+        },
+        leaves: {
+          ...shared,
+          rotate: 0,
+          position: 'right',
+          verticalAlign: 'middle',
+          align: 'left',
+        },
+      };
+  }
+}
+
+function treeSeriesMargins(
+  orientation: TreeModel['orientation'],
+  layout: TreeModel['layout'],
+  nodes: readonly TreeNode[]
+): { top: string; left: string; bottom: string; right: string } {
+  const bounds = treeSeriesBounds(orientation, layout);
+
+  if (layout === 'radial') {
+    return bounds;
+  }
+
+  const extraHorizontal = labelMarginPercent(nodes, 'horizontal');
+  const extraVertical = labelMarginPercent(nodes, 'vertical');
+
+  switch (orientation) {
+    case 'LR':
+      return { ...bounds, left: addMarginPercent(bounds.left, extraHorizontal) };
+    case 'RL':
+      return { ...bounds, right: addMarginPercent(bounds.right, extraHorizontal) };
+    case 'TB':
+      return {
+        ...bounds,
+        top: addMarginPercent(bounds.top, extraVertical),
+        bottom: addMarginPercent(bounds.bottom, extraVertical),
+      };
+    case 'BT':
+      return {
+        ...bounds,
+        top: addMarginPercent(bounds.top, extraVertical),
+        bottom: addMarginPercent(bounds.bottom, extraVertical),
+      };
+    default:
+      return bounds;
+  }
 }
 
 function collapsedForPath(
@@ -181,19 +331,12 @@ export function buildTreeOption(
   reducedMotion: boolean,
   nativeOptions?: unknown
 ): TreeEChartsOption {
-  const bounds = treeSeriesBounds(model.orientation, model.layout);
-  const extraHorizontal = horizontalLabelMarginPercent(model.nodes);
-
-  const left =
-    model.layout === 'orthogonal' &&
-    (model.orientation === 'LR' || model.orientation === 'TB')
-      ? `${parseFloat(bounds.left) + extraHorizontal}%`
-      : bounds.left;
-  const right =
-    model.layout === 'orthogonal' &&
-    (model.orientation === 'RL' || model.orientation === 'BT')
-      ? `${parseFloat(bounds.right) + extraHorizontal}%`
-      : bounds.right;
+  const margins = treeSeriesMargins(
+    model.orientation,
+    model.layout,
+    model.nodes
+  );
+  const labelStyles = treeLabelStyles(model.orientation, model.layout);
 
   const option: TreeEChartsOption = {
     backgroundColor: 'transparent',
@@ -217,10 +360,10 @@ export function buildTreeOption(
           [],
           model.collapsedByPath
         ) as TreeSeriesOption['data'],
-        top: bounds.top,
-        left,
-        bottom: bounds.bottom,
-        right,
+        top: margins.top,
+        left: margins.left,
+        bottom: margins.bottom,
+        right: margins.right,
         layout: model.layout,
         orient: model.orientation,
         symbol: 'emptyCircle',
@@ -233,24 +376,14 @@ export function buildTreeOption(
           show: model.showLabels,
           color: theme.textColor,
           fontSize: LABEL_FONT_SIZE,
-          distance: LABEL_DISTANCE,
-          // Keep labels horizontal. The orthogonal default rotates branch
-          // labels along vertical connectors, which often clip at the canvas edge.
-          rotate: 0,
-          position: model.layout === 'radial' ? 'top' : 'left',
-          verticalAlign: 'middle',
-          align: model.layout === 'radial' ? 'center' : 'right',
+          ...labelStyles.label,
         },
         leaves: {
           label: {
             show: model.showLabels,
-            position: model.layout === 'radial' ? 'top' : 'right',
-            verticalAlign: 'middle',
-            align: model.layout === 'radial' ? 'center' : 'left',
             color: theme.textColor,
             fontSize: LABEL_FONT_SIZE,
-            distance: LABEL_DISTANCE,
-            rotate: 0,
+            ...labelStyles.leaves,
           },
         },
         lineStyle: {
