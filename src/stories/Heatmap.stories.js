@@ -6,7 +6,7 @@ import heatmapData from './sampleData/heatmap';
 import divergentHeatmapData from './sampleData/divergent-heatmap';
 
 export default {
-  title: 'Third Party Charts/Heatmap',
+  title: 'Chart.js/Third Party Charts/Heatmap',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,

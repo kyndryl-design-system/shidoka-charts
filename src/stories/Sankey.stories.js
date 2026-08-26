@@ -8,7 +8,7 @@ import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
  * For detailed documentation on the availble, configurable options, refer to the [plugin's documentation](https://github.com/kurkle/chartjs-chart-sankey/blob/main/README.md).
  */
 export default {
-  title: 'Third Party Charts/Sankey',
+  title: 'Chart.js/Third Party Charts/Sankey',
   component: 'kd-chart',
   decorators: [
     (story) => html`<div style="max-width: 800px;">${story()}</div>`,
