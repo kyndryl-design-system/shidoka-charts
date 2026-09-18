@@ -1296,6 +1296,7 @@ export class KDChart extends LitElement {
         csv += convertChartDataToCSV({
           data: this.chart.data.datasets[i],
           labels: this.labels,
+          includeLabels: i === 0,
         });
       }
     }
