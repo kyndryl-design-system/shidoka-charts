@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../../charts/sunburst';
+import { chartSource } from '../../../.storybook/chart-source.js';
 
 export default {
   title: 'Apache ECharts/Sunburst',
@@ -110,6 +111,54 @@ const args = {
   unsafeNativeOptions: undefined,
 };
 
+const constrainedLabelsArgs = {
+  ...args,
+  chartTitle: 'Support tickets by product area and root cause',
+  description:
+    'Tickets closed last quarter, grouped by the area that owns the fix.',
+  nodes: [
+    {
+      label: 'Identity and access management',
+      children: [
+        { label: 'Single sign-on session expiry', value: 184 },
+        { label: 'Multi-factor enrollment failure', value: 96 },
+        { label: 'Directory synchronization lag', value: 41 },
+        { label: 'Role assignment propagation', value: 22 },
+      ],
+    },
+    {
+      label: 'Data platform',
+      children: [
+        { label: 'Warehouse query timeout', value: 133 },
+        { label: 'Ingestion schema drift', value: 78 },
+        { label: 'Replication checkpoint reset', value: 27 },
+        { label: 'Retention policy conflict', value: 14 },
+      ],
+    },
+    {
+      label: 'Observability',
+      children: [
+        { label: 'Alert routing misconfiguration', value: 89 },
+        { label: 'Dashboard permission scope', value: 35 },
+        { label: 'Trace sampling gap', value: 18 },
+      ],
+    },
+    {
+      label: 'Networking',
+      children: [
+        { label: 'Egress rate limiting', value: 64 },
+        { label: 'Certificate rotation', value: 31 },
+        { label: 'Private endpoint resolution', value: 12 },
+      ],
+    },
+  ],
+  categoryLabel: 'Root cause',
+  valueLabel: 'Tickets',
+  labelStrategy: 'constrained',
+  innerRadiusRatio: 0.2,
+  height: 460,
+};
+
 const render = (args) => html`
   <kd-chart-sunburst
     .chartTitle=${args.chartTitle}
@@ -132,6 +181,9 @@ const render = (args) => html`
 export const Sunburst = {
   args,
   render,
+  parameters: {
+    docs: { source: { code: chartSource('kd-chart-sunburst', args) } },
+  },
 };
 
 /**
@@ -140,52 +192,13 @@ export const Sunburst = {
  * available from a `kyn-tooltip` anchor that is reachable by keyboard.
  */
 export const ConstrainedLabels = {
-  args: {
-    ...args,
-    chartTitle: 'Support tickets by product area and root cause',
-    description:
-      'Tickets closed last quarter, grouped by the area that owns the fix.',
-    nodes: [
-      {
-        label: 'Identity and access management',
-        children: [
-          { label: 'Single sign-on session expiry', value: 184 },
-          { label: 'Multi-factor enrollment failure', value: 96 },
-          { label: 'Directory synchronization lag', value: 41 },
-          { label: 'Role assignment propagation', value: 22 },
-        ],
-      },
-      {
-        label: 'Data platform',
-        children: [
-          { label: 'Warehouse query timeout', value: 133 },
-          { label: 'Ingestion schema drift', value: 78 },
-          { label: 'Replication checkpoint reset', value: 27 },
-          { label: 'Retention policy conflict', value: 14 },
-        ],
-      },
-      {
-        label: 'Observability',
-        children: [
-          { label: 'Alert routing misconfiguration', value: 89 },
-          { label: 'Dashboard permission scope', value: 35 },
-          { label: 'Trace sampling gap', value: 18 },
-        ],
-      },
-      {
-        label: 'Networking',
-        children: [
-          { label: 'Egress rate limiting', value: 64 },
-          { label: 'Certificate rotation', value: 31 },
-          { label: 'Private endpoint resolution', value: 12 },
-        ],
-      },
-    ],
-    categoryLabel: 'Root cause',
-    valueLabel: 'Tickets',
-    labelStrategy: 'constrained',
-    innerRadiusRatio: 0.2,
-    height: 460,
-  },
+  args: constrainedLabelsArgs,
   render,
+  parameters: {
+    docs: {
+      source: {
+        code: chartSource('kd-chart-sunburst', constrainedLabelsArgs),
+      },
+    },
+  },
 };

@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../../charts/tree';
+import { chartSource } from '../../../.storybook/chart-source.js';
 
 export default {
   title: 'Apache ECharts/Tree',
@@ -187,6 +188,14 @@ const organizationArgs = {
   unsafeNativeOptions: undefined,
 };
 
+const radialCollapsedArgs = {
+  ...taxonomyArgs,
+  description: 'The chart starts collapsed; click nodes to explore.',
+  layout: 'radial',
+  initialTreeDepth: 1,
+  height: 520,
+};
+
 const render = (args) => html`
   <kd-chart-tree
     .chartTitle=${args.chartTitle}
@@ -212,12 +221,18 @@ const render = (args) => html`
 export const Taxonomy = {
   args: taxonomyArgs,
   render,
+  parameters: {
+    docs: { source: { code: chartSource('kd-chart-tree', taxonomyArgs) } },
+  },
 };
 
 /** Org-style hierarchy using the same orthogonal tree layout. */
 export const Organization = {
   args: organizationArgs,
   render,
+  parameters: {
+    docs: { source: { code: chartSource('kd-chart-tree', organizationArgs) } },
+  },
 };
 
 /**
@@ -225,12 +240,11 @@ export const Organization = {
  * be opened or closed by clicking its node.
  */
 export const RadialCollapsed = {
-  args: {
-    ...taxonomyArgs,
-    description: 'The chart starts collapsed; click nodes to explore.',
-    layout: 'radial',
-    initialTreeDepth: 1,
-    height: 520,
-  },
+  args: radialCollapsedArgs,
   render,
+  parameters: {
+    docs: {
+      source: { code: chartSource('kd-chart-tree', radialCollapsedArgs) },
+    },
+  },
 };

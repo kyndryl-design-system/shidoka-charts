@@ -47,14 +47,14 @@ const ANIMATION_DURATION = 600;
  * strings with no bounded width, so no fixed gap could make the same
  * guarantee.
  */
-const VALUE_AXIS_NAME_GAP = 32;
+const VALUE_AXIS_NAME_GAP = 44;
 /**
  * Extra grid margin reserved for the value axis's name, on top of whatever
  * `containLabel` reserves for tick labels. `containLabel` measures tick
  * labels only, not the axis `name`, so without this the name can run past
  * the canvas edge.
  */
-const AXIS_NAME_RESERVE_PX = 40;
+const AXIS_NAME_RESERVE_PX = 64;
 
 /** Builds the ECharts option for an area model. */
 export function buildAreaOption(

@@ -35,6 +35,7 @@ const DATA_PROPERTIES = [
  * @slot controls - Slot for custom controls beside the built in controls.
  * @fires on-chart-interaction - Normalized selection, detail: `{ kind, label, value, path }`.
  * @fires on-view-toggle - Table view toggled, detail: `{ tableView }`.
+ * @tagname kd-chart-tree
  */
 export class KDChartTree extends ChartFrameElement<TreeModel> {
   /** Top level nodes of the hierarchy. */

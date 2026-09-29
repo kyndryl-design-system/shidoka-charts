@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../../charts/pie';
+import { chartSource } from '../../../.storybook/chart-source.js';
 
 export default {
   title: 'Apache ECharts/Pie & Doughnut',
@@ -72,6 +73,22 @@ const args = {
   unsafeNativeOptions: undefined,
 };
 
+const doughnutArgs = {
+  ...args,
+  chartTitle: 'Cloud spend by service',
+  description: 'Monthly committed spend in thousands of USD, current quarter.',
+  slices: [
+    { label: 'Compute', value: 774 },
+    { label: 'Data', value: 412 },
+    { label: 'Storage', value: 345 },
+    { label: 'Network', value: 210 },
+    { label: 'Security', value: 133 },
+  ],
+  categoryLabel: 'Service',
+  valueLabel: 'Spend (k USD)',
+  innerRadiusRatio: 0.55,
+};
+
 const render = (args) => html`
   <kd-chart-pie
     .chartTitle=${args.chartTitle}
@@ -94,24 +111,16 @@ const render = (args) => html`
 export const Pie = {
   args,
   render,
+  parameters: {
+    docs: { source: { code: chartSource('kd-chart-pie', args) } },
+  },
 };
 
 /** Doughnut variant, using a nonzero inner radius. */
 export const Doughnut = {
-  args: {
-    ...args,
-    chartTitle: 'Cloud spend by service',
-    description: 'Monthly committed spend in thousands of USD, current quarter.',
-    slices: [
-      { label: 'Compute', value: 774 },
-      { label: 'Data', value: 412 },
-      { label: 'Storage', value: 345 },
-      { label: 'Network', value: 210 },
-      { label: 'Security', value: 133 },
-    ],
-    categoryLabel: 'Service',
-    valueLabel: 'Spend (k USD)',
-    innerRadiusRatio: 0.55,
-  },
+  args: doughnutArgs,
   render,
+  parameters: {
+    docs: { source: { code: chartSource('kd-chart-pie', doughnutArgs) } },
+  },
 };

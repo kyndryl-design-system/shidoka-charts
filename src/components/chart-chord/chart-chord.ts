@@ -33,6 +33,7 @@ const DATA_PROPERTIES = [
  * @slot controls - Slot for custom controls beside the built in controls.
  * @fires on-chart-interaction - Normalized selection, detail: `{ kind, label, value, path }`.
  * @fires on-view-toggle - Table view toggled, detail: `{ tableView }`.
+ * @tagname kd-chart-chord
  */
 export class KDChartChord extends ChartFrameElement<ChordModel> {
   /** Endpoints, in the order they appear around the circle. */

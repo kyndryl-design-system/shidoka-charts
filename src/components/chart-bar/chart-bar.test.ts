@@ -16,6 +16,22 @@ const baseModel: BarModel = {
 };
 
 describe('buildBarTable', () => {
+  it('formats a floating [min, max] tuple as a single range cell', () => {
+    const model: BarModel = {
+      ...baseModel,
+      series: [{ name: 'Range', values: [[2, 10], [13, 7], null] }],
+    };
+
+    const table = buildBarTable(model);
+
+    expect(table.columns).toEqual(['Month', 'Range']);
+    expect(table.rows).toEqual([
+      ['Jan', '2 – 10'],
+      ['Feb', '13 – 7'],
+      ['Mar', ''],
+    ]);
+  });
+
   it('maps categories and series into columns and rows', () => {
     const table = buildBarTable(baseModel);
 

@@ -6,7 +6,7 @@ import type {
 } from '../../internal/chart-frame/types';
 import { EChartsLineRenderer } from '../../internal/renderers/echarts/line-renderer';
 import { buildLineTable } from './chart-line-table';
-import type { CartesianSeries, LineModel } from './line.types';
+import type { CartesianSeries, LineModel, ReferenceBand } from './line.types';
 
 const DATA_PROPERTIES = [
   'categories',
@@ -17,6 +17,10 @@ const DATA_PROPERTIES = [
   'stacked',
   'smooth',
   'showPoints',
+  'timeAxis',
+  'hideAxes',
+  'referenceBands',
+  'forecastFrom',
 ] as const;
 
 /**
@@ -30,6 +34,7 @@ const DATA_PROPERTIES = [
  * @slot controls - Slot for custom controls beside the built in controls.
  * @fires on-chart-interaction - Normalized selection, detail: `{ kind, label, value, path }`.
  * @fires on-view-toggle - Table view toggled, detail: `{ tableView }`.
+ * @tagname kd-chart-line
  */
 export class KDChartLine extends ChartFrameElement<LineModel> {
   /** Category labels along the shared axis. */
@@ -64,6 +69,29 @@ export class KDChartLine extends ChartFrameElement<LineModel> {
   @property({ type: Boolean })
   accessor showPoints = true;
 
+  /**
+   * Treats `categories` as ISO date strings plotted on a real time axis,
+   * so points are spaced by elapsed time instead of evenly by index.
+   */
+  @property({ type: Boolean })
+  accessor timeAxis = false;
+
+  /** Hides both axes entirely, including their lines, ticks and labels. */
+  @property({ type: Boolean })
+  accessor hideAxes = false;
+
+  /** Horizontal threshold bands drawn across the full plot width. */
+  @property({ type: Array })
+  accessor referenceBands: ReferenceBand[] | undefined = undefined;
+
+  /**
+   * Category label, or index into `categories`, where a forecast region
+   * begins. Renders a divider and a faint tint from that point to the end
+   * of the plot. A string that does not match any category is a no-op.
+   */
+  @property({ type: String })
+  accessor forecastFrom: string | number | undefined = undefined;
+
   protected override get dataProperties(): readonly string[] {
     return DATA_PROPERTIES;
   }
@@ -88,6 +116,10 @@ export class KDChartLine extends ChartFrameElement<LineModel> {
       stacked: this.stacked,
       smooth: this.smooth,
       showPoints: this.showPoints,
+      timeAxis: this.timeAxis,
+      hideAxes: this.hideAxes,
+      referenceBands: this.referenceBands,
+      forecastFrom: this.forecastFrom,
     };
   }
 

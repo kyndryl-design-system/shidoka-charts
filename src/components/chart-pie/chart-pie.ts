@@ -29,6 +29,7 @@ const DATA_PROPERTIES = [
  * @slot controls - Slot for custom controls beside the built in controls.
  * @fires on-chart-interaction - Normalized selection, detail: `{ kind, label, value, path }`.
  * @fires on-view-toggle - Table view toggled, detail: `{ tableView }`.
+ * @tagname kd-chart-pie
  */
 export class KDChartPie extends ChartFrameElement<PieModel> {
   /** Slices of the pie. */

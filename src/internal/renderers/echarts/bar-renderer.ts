@@ -1,5 +1,7 @@
 import * as echarts from 'echarts/core';
-import { BarChart } from 'echarts/charts';
+// `CustomChart` backs the floating-bar variant: a plain bar series cannot
+// render a `[min, max]` range (see `buildFloatingSeries`).
+import { BarChart, CustomChart } from 'echarts/charts';
 import {
   GridComponent,
   LegendComponent,
@@ -31,6 +33,7 @@ function registerEcharts(): void {
 
   echarts.use([
     BarChart,
+    CustomChart,
     GridComponent,
     TooltipComponent,
     LegendComponent,
@@ -149,8 +152,8 @@ export class EChartsBarRenderer implements ChartRenderer<BarModel> {
         kind: 'select',
         label: detail.seriesName ?? '',
         value: typeof detail.value === 'number' ? detail.value : null,
-        path: [detail.name, detail.seriesName].filter(
-          (part): part is string => Boolean(part)
+        path: [detail.name, detail.seriesName].filter((part): part is string =>
+          Boolean(part)
         ),
       });
     });

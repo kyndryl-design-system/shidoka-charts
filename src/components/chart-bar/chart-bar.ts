@@ -16,6 +16,12 @@ const DATA_PROPERTIES = [
   'showLegend',
   'stacked',
   'horizontal',
+  'barThickness',
+  'valueMax',
+  'hideAxes',
+  'hideTooltip',
+  'showSeriesLabels',
+  'indicator',
 ] as const;
 
 /**
@@ -29,6 +35,7 @@ const DATA_PROPERTIES = [
  * @slot controls - Slot for custom controls beside the built in controls.
  * @fires on-chart-interaction - Normalized selection, detail: `{ kind, label, value, path }`.
  * @fires on-view-toggle - Table view toggled, detail: `{ tableView }`.
+ * @tagname kd-chart-bar
  */
 export class KDChartBar extends ChartFrameElement<BarModel> {
   /** Category labels along the shared axis. */
@@ -59,6 +66,30 @@ export class KDChartBar extends ChartFrameElement<BarModel> {
   @property({ type: Boolean })
   accessor horizontal = false;
 
+  /** Fixed bar thickness in px. Overrides the responsive `barMaxWidth` cap. */
+  @property({ type: Number })
+  accessor barThickness: number | undefined = undefined;
+
+  /** Upper bound for the value axis. Defaults to data-driven auto scaling. */
+  @property({ type: Number })
+  accessor valueMax: number | undefined = undefined;
+
+  /** Hides both axes entirely, including their lines, ticks and labels. */
+  @property({ type: Boolean })
+  accessor hideAxes = false;
+
+  /** Suppresses the chart tooltip. */
+  @property({ type: Boolean })
+  accessor hideTooltip = false;
+
+  /** Draws each series name inside its own bar segment. */
+  @property({ type: Boolean })
+  accessor showSeriesLabels = false;
+
+  /** Marker drawn at a fixed value on the value axis, e.g. a threshold or target. */
+  @property({ type: Object })
+  accessor indicator: { value: number; label?: string } | undefined = undefined;
+
   protected override get dataProperties(): readonly string[] {
     return DATA_PROPERTIES;
   }
@@ -82,6 +113,12 @@ export class KDChartBar extends ChartFrameElement<BarModel> {
       showLegend: this.showLegend,
       stacked: this.stacked,
       horizontal: this.horizontal,
+      barThickness: this.barThickness,
+      valueMax: this.valueMax,
+      hideAxes: this.hideAxes,
+      hideTooltip: this.hideTooltip,
+      showSeriesLabels: this.showSeriesLabels,
+      indicator: this.indicator,
     };
   }
 

@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../../charts/area';
+import { chartSource } from '../../../.storybook/chart-source.js';
 
 export default {
   title: 'Apache ECharts/Area',
@@ -75,6 +76,33 @@ const args = {
   unsafeNativeOptions: undefined,
 };
 
+const stackedArgs = {
+  ...args,
+  chartTitle: 'Revenue by product line',
+  description: 'Quarterly revenue in millions of USD, stacked by product.',
+  categories: ['Q1', 'Q2', 'Q3', 'Q4'],
+  series: [
+    { name: 'Platform', values: [12.4, 13.1, 14.0, 15.2] },
+    { name: 'Services', values: [6.2, 6.8, 7.1, 7.9] },
+    { name: 'Add-ons', values: [2.1, 2.4, 2.6, 3.0] },
+  ],
+  categoryLabel: 'Quarter',
+  valueLabel: 'Revenue ($M)',
+  stacked: true,
+};
+
+const smoothWithPointsArgs = {
+  ...args,
+  chartTitle: 'Daily active sessions',
+  description: 'Sessions per day, with a missing data point.',
+  categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+  series: [{ name: 'App', values: [1200, 1340, null, 1420, 1510, 980, 890] }],
+  categoryLabel: 'Day',
+  valueLabel: 'Sessions',
+  smooth: true,
+  showPoints: true,
+};
+
 const render = (args) => html`
   <kd-chart-area
     .chartTitle=${args.chartTitle}
@@ -99,41 +127,27 @@ const render = (args) => html`
 export const Area = {
   args,
   render,
+  parameters: {
+    docs: { source: { code: chartSource('kd-chart-area', args) } },
+  },
 };
 
 /** Stacked areas so the total is readable at every category. */
 export const Stacked = {
-  args: {
-    ...args,
-    chartTitle: 'Revenue by product line',
-    description: 'Quarterly revenue in millions of USD, stacked by product.',
-    categories: ['Q1', 'Q2', 'Q3', 'Q4'],
-    series: [
-      { name: 'Platform', values: [12.4, 13.1, 14.0, 15.2] },
-      { name: 'Services', values: [6.2, 6.8, 7.1, 7.9] },
-      { name: 'Add-ons', values: [2.1, 2.4, 2.6, 3.0] },
-    ],
-    categoryLabel: 'Quarter',
-    valueLabel: 'Revenue ($M)',
-    stacked: true,
-  },
+  args: stackedArgs,
   render,
+  parameters: {
+    docs: { source: { code: chartSource('kd-chart-area', stackedArgs) } },
+  },
 };
 
 /** Smoothed curve with markers and a data gap. */
 export const SmoothWithPoints = {
-  args: {
-    ...args,
-    chartTitle: 'Daily active sessions',
-    description: 'Sessions per day, with a missing data point.',
-    categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    series: [
-      { name: 'App', values: [1200, 1340, null, 1420, 1510, 980, 890] },
-    ],
-    categoryLabel: 'Day',
-    valueLabel: 'Sessions',
-    smooth: true,
-    showPoints: true,
-  },
+  args: smoothWithPointsArgs,
   render,
+  parameters: {
+    docs: {
+      source: { code: chartSource('kd-chart-area', smoothWithPointsArgs) },
+    },
+  },
 };
