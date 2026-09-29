@@ -1,12 +1,19 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
+. "$(dirname -- "$0")/commit-message-normalize.sh"
 
-npx --no -- commitlint --edit ${1}
+# Authoritative normalization pass: runs after prepare-commit-msg and any editor
+# changes, and immediately before commitlint and the DCO check.
+normalize_commit_message "$1"
 
-# DCO signoff check
-if ! grep -iq "Signed-off-by:" "$1"; then
+npx --no -- commitlint --edit "$1"
+
+# Commitlint should not reintroduce trailers, but normalize once more before the
+# final DCO gate in case the message file changed during validation.
+normalize_commit_message "$1"
+
+if ! grep -iq '^Signed-off-by:' "$1"; then
   echo "Error: Your commit message is missing a DCO sign-off." >&2
   echo "Please add 'Signed-off-by: Your Name <your@email.com>' to your commit message." >&2
-  echo "You can also enable git.alwaysSignOff in your VS Code settings to automate this." >&2
   exit 1
 fi

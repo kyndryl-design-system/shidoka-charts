@@ -3,7 +3,7 @@ import '../components/chart';
 import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
 
 export default {
-  title: 'Charts/Pie & Doughnut',
+  title: 'Chart.js/Charts/Pie & Doughnut',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 600px;">${story()}</div> `,
