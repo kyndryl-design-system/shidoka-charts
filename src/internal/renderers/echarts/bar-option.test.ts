@@ -378,3 +378,293 @@ describe('buildBarOption', () => {
     expect(typeof globalThis.document).toBe('undefined');
   });
 });
+
+/** Rect produced by a floating series' `renderItem`. */
+interface RenderedRect {
+  type: string;
+  shape?: { x: number; y: number; width: number; height: number };
+}
+
+type RenderItemFn = (params: unknown, api: unknown) => RenderedRect;
+
+const CATEGORY_SLOT = 100;
+
+/**
+ * Minimal stand-in for the `renderItem` API. The category axis maps index
+ * `i` to pixel `50 + i * CATEGORY_SLOT`, and the value axis maps value `v`
+ * to pixel `300 - v * 10`, so a rect's geometry is exactly predictable.
+ */
+function fakeApi(datum: (number | null)[], horizontal: boolean) {
+  return {
+    value: (dimension: number) => datum[dimension],
+    coord: ([first, second]: number[]) =>
+      horizontal
+        ? [300 - first * 10, 50 + second * CATEGORY_SLOT]
+        : [50 + first * CATEGORY_SLOT, 300 - second * 10],
+    size: () => (horizontal ? [30, CATEGORY_SLOT] : [CATEGORY_SLOT, 30]),
+  };
+}
+
+/** Renders the first datum of series `index` and returns its rect. */
+function renderFirstRect(
+  option: ReturnType<typeof buildBarOption>,
+  index: number,
+  horizontal = false
+): RenderedRect {
+  const entry = (
+    option.series as unknown as {
+      data: (number | null)[][];
+      renderItem: RenderItemFn;
+    }[]
+  )[index];
+
+  return entry.renderItem({}, fakeApi(entry.data[0], horizontal));
+}
+
+const twoFloating: BarModel = {
+  ...model,
+  series: [
+    {
+      name: 'Sensor 1',
+      values: [
+        [2, 10],
+        [3, 5],
+        [4, 9],
+      ],
+    },
+    {
+      name: 'Sensor 2',
+      values: [
+        [6, 14],
+        [4, 9],
+        [7, 13],
+      ],
+    },
+  ],
+};
+
+describe('buildBarOption floating bar layout', () => {
+  it('dodges two floating series into non-overlapping, gapped sub-slots', () => {
+    const option = buildBarOption(twoFloating, theme, false);
+
+    const first = renderFirstRect(option, 0).shape!;
+    const second = renderFirstRect(option, 1).shape!;
+
+    // Category 0 is centered on pixel 50.
+    expect(first.width).toBe(second.width);
+    expect(first.x).toBeLessThan(second.x);
+    // Non-overlapping, separated by the 2px surface gap.
+    expect(second.x - (first.x + first.width)).toBeCloseTo(2, 6);
+    // The pair stays centered on the category.
+    expect((first.x + second.x + second.width) / 2).toBeCloseTo(50, 6);
+    // Both still span their own value range: 2..10 and 6..14.
+    expect(first.y).toBeCloseTo(300 - 10 * 10, 6);
+    expect(first.height).toBeCloseTo(80, 6);
+    expect(second.y).toBeCloseTo(300 - 14 * 10, 6);
+    expect(second.height).toBeCloseTo(80, 6);
+  });
+
+  it('dodges two floating series in the horizontal orientation too', () => {
+    const option = buildBarOption(
+      { ...twoFloating, horizontal: true },
+      theme,
+      false
+    );
+
+    const first = renderFirstRect(option, 0, true).shape!;
+    const second = renderFirstRect(option, 1, true).shape!;
+
+    expect(first.height).toBe(second.height);
+    expect(second.y - (first.y + first.height)).toBeCloseTo(2, 6);
+    expect((first.y + second.y + second.height) / 2).toBeCloseTo(50, 6);
+  });
+
+  it('leaves a single floating series centered at the original thickness', () => {
+    const option = buildBarOption(
+      { ...model, series: [twoFloating.series[0]] },
+      theme,
+      false
+    );
+
+    const rect = renderFirstRect(option, 0).shape!;
+
+    // min(slot * 0.6, BAR_MAX_WIDTH) === min(60, 48) === 48, centered on 50.
+    expect(rect.width).toBeCloseTo(48, 6);
+    expect(rect.x).toBeCloseTo(50 - 24, 6);
+  });
+
+  it('honors an explicit barThickness for a single floating series', () => {
+    const option = buildBarOption(
+      { ...model, series: [twoFloating.series[0]], barThickness: 12 },
+      theme,
+      false
+    );
+
+    const rect = renderFirstRect(option, 0).shape!;
+
+    expect(rect.width).toBeCloseTo(12, 6);
+    expect(rect.x).toBeCloseTo(50 - 6, 6);
+  });
+
+  it('clamps an overflowing explicit barThickness so dodged bars cannot overlap', () => {
+    const option = buildBarOption(
+      { ...twoFloating, barThickness: 96 },
+      theme,
+      false
+    );
+
+    const first = renderFirstRect(option, 0).shape!;
+    const second = renderFirstRect(option, 1).shape!;
+
+    expect(first.x + first.width).toBeLessThanOrEqual(second.x);
+    expect(second.x - (first.x + first.width)).toBeCloseTo(2, 6);
+  });
+
+  it('draws nothing for a null gap in a floating series', () => {
+    const option = buildBarOption(
+      { ...model, series: [{ name: 'Range', values: [null, [1, 2], [3, 4]] }] },
+      theme,
+      false
+    );
+
+    const entry = (
+      option.series as unknown as {
+        data: (number | null)[][];
+        renderItem: RenderItemFn;
+      }[]
+    )[0];
+
+    expect(entry.renderItem({}, fakeApi(entry.data[0], false)).type).toBe(
+      'group'
+    );
+  });
+});
+
+describe('buildBarOption floating tooltip', () => {
+  type TooltipFormatter = (params: unknown) => string;
+
+  function formatterFor(candidate: BarModel): TooltipFormatter | undefined {
+    return (
+      buildBarOption(candidate, theme, false).tooltip as unknown as {
+        formatter?: TooltipFormatter;
+      }
+    ).formatter;
+  }
+
+  it('renders a floating series row as a min to max range', () => {
+    const text = formatterFor(twoFloating)!([
+      {
+        axisValueLabel: 'Jan',
+        seriesIndex: 0,
+        seriesName: 'Sensor 1',
+        value: [0, 2, 10],
+        marker: '',
+      },
+      {
+        axisValueLabel: 'Jan',
+        seriesIndex: 1,
+        seriesName: 'Sensor 2',
+        value: [0, 6, 14],
+        marker: '',
+      },
+    ]);
+
+    expect(text).toBe(
+      'Jan<br/>Sensor 1: 2 \u2013 10<br/>Sensor 2: 6 \u2013 14'
+    );
+  });
+
+  it('keeps a single value for a scalar series sharing the tooltip', () => {
+    const mixed: BarModel = {
+      ...model,
+      series: [twoFloating.series[0], { name: 'Mobile', values: [5, 15, 25] }],
+    };
+
+    const text = formatterFor(mixed)!([
+      {
+        axisValueLabel: 'Jan',
+        seriesIndex: 0,
+        seriesName: 'Sensor 1',
+        value: [0, 2, 10],
+      },
+      { axisValueLabel: 'Jan', seriesIndex: 1, seriesName: 'Mobile', value: 5 },
+    ]);
+
+    expect(text).toBe('Jan<br/>Sensor 1: 2 \u2013 10<br/>Mobile: 5');
+  });
+
+  it('omits the row for a floating gap', () => {
+    const text = formatterFor(twoFloating)!([
+      {
+        axisValueLabel: 'Feb',
+        seriesIndex: 0,
+        seriesName: 'Sensor 1',
+        value: [1, null, null],
+      },
+      {
+        axisValueLabel: 'Feb',
+        seriesIndex: 1,
+        seriesName: 'Sensor 2',
+        value: [1, 4, 9],
+      },
+    ]);
+
+    expect(text).toBe('Feb<br/>Sensor 2: 4 \u2013 9');
+  });
+
+  it('includes the series marker when ECharts supplies one', () => {
+    const text = formatterFor(twoFloating)!([
+      {
+        axisValueLabel: 'Jan',
+        seriesIndex: 0,
+        seriesName: 'Sensor 1',
+        value: [0, 2, 10],
+        marker: '<i></i>',
+      },
+    ]);
+
+    expect(text).toBe('Jan<br/><i></i>Sensor 1: 2 \u2013 10');
+  });
+
+  it('adds no formatter when no series is floating', () => {
+    expect(formatterFor(model)).toBeUndefined();
+  });
+
+  it('still suppresses the tooltip for a floating model when hideTooltip is set', () => {
+    const tooltip = buildBarOption(
+      { ...twoFloating, hideTooltip: true },
+      theme,
+      false
+    ).tooltip as unknown as { show: boolean; backgroundColor: string };
+
+    expect(tooltip.show).toBe(false);
+    // Theming from echartsTooltipDefaults survives the formatter override.
+    expect(tooltip.backgroundColor).toBe('#222222');
+  });
+});
+
+describe('buildBarOption category axis placement', () => {
+  it('pins the category axis to the grid edge, not to value zero', () => {
+    const vertical = buildBarOption(model, theme, false);
+    const horizontal = buildBarOption(
+      { ...model, horizontal: true },
+      theme,
+      false
+    );
+
+    expect(
+      (
+        categoryAxis(vertical, false) as unknown as {
+          axisLine: { onZero: boolean };
+        }
+      ).axisLine.onZero
+    ).toBe(false);
+    expect(
+      (
+        categoryAxis(horizontal, true) as unknown as {
+          axisLine: { onZero: boolean };
+        }
+      ).axisLine.onZero
+    ).toBe(false);
+  });
+});

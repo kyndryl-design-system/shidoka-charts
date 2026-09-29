@@ -9,6 +9,7 @@ import type {
 // package's type entry is the only place that carries them. This import is
 // type-only, so it does not pull the full bundle into the build.
 import type { XAXisComponentOption, YAXisComponentOption } from 'echarts';
+import { formatValue } from '../../chart-frame/format';
 import { mergeNativeOverrides } from '../../chart-frame/merge';
 import { paletteColor } from '../../chart-frame/palette';
 import type { ChartTheme } from '../../chart-frame/types';
@@ -45,6 +46,13 @@ export type BarEChartsOption = ComposeOption<
  * not apply and the width has to be derived from the category slot.
  */
 const FLOATING_BAR_WIDTH_RATIO = 0.6;
+
+/**
+ * Surface gap in px kept between adjacent floating bars in the same category
+ * slot, matching the separation the design guidance calls for between
+ * adjacent fills.
+ */
+const FLOATING_BAR_SURFACE_GAP = 2;
 
 /**
  * The `renderItem` signature carried by a custom series. Derived from
@@ -154,11 +162,27 @@ function hasFloatingValues(series: CartesianSeries): boolean {
  * positive and negative stacks separately and so mis-renders any range that
  * crosses zero. A `custom` series with an explicit `renderItem` is the only
  * mechanism that positions both edges directly.
+ *
+ * Because `custom` series are laid out by `renderItem` and not by the bar
+ * layout engine, ECharts does not dodge them within the category slot the way
+ * it dodges grouped `bar` series. `floatingIndex` and `floatingCount` supply
+ * that layout: each floating series takes an equal sub-slot of the category
+ * band, separated by `FLOATING_BAR_SURFACE_GAP`.
+ *
+ * Known limitation: the index and count are taken over the floating series
+ * only. A model that mixes floating and scalar series therefore dodges its
+ * floating bars among themselves, while ECharts independently dodges the
+ * scalar bars among themselves, so the two groups can overlap each other.
+ * There is no shared layout channel between a `custom` series and the bar
+ * layout engine, so reconciling them would mean reimplementing the scalar
+ * path as `custom` too.
  */
 function buildFloatingSeries(
   model: BarModel,
   series: CartesianSeries,
-  color: string
+  color: string,
+  floatingIndex: number,
+  floatingCount: number
 ): CustomSeriesOption {
   const horizontal = model.horizontal;
 
@@ -202,21 +226,44 @@ function buildFloatingSeries(
           ? size[1]
           : size[0]
         : size;
+      // The band the whole floating group occupies inside the category slot.
+      // With a single series this collapses to the original
+      // `min(slot * ratio, BAR_MAX_WIDTH)` thickness, so single-series
+      // floating charts are laid out exactly as before.
+      const gapTotal = FLOATING_BAR_SURFACE_GAP * (floatingCount - 1);
+      const band = Math.min(
+        slot * FLOATING_BAR_WIDTH_RATIO,
+        BAR_MAX_WIDTH * floatingCount + gapTotal
+      );
+      const autoThickness = Math.max((band - gapTotal) / floatingCount, 1);
       // Matches the scalar bar path: an explicit `barThickness` is used
-      // verbatim, and only the responsive fallback is capped.
+      // verbatim for a single series. When several floating series share the
+      // slot it is clamped to the sub-slot, because honoring it verbatim
+      // would let adjacent series overlap.
       const thickness =
-        model.barThickness ??
-        Math.min(slot * FLOATING_BAR_WIDTH_RATIO, BAR_MAX_WIDTH);
+        model.barThickness === undefined
+          ? autoThickness
+          : floatingCount === 1
+          ? model.barThickness
+          : Math.min(model.barThickness, autoThickness);
+
+      // Offset of this series' center from the category center. Zero when
+      // there is exactly one floating series.
+      const groupWidth = thickness * floatingCount + gapTotal;
+      const offset =
+        -groupWidth / 2 +
+        floatingIndex * (thickness + FLOATING_BAR_SURFACE_GAP) +
+        thickness / 2;
 
       const shape = horizontal
         ? {
             x: Math.min(lowPoint[0], highPoint[0]),
-            y: lowPoint[1] - thickness / 2,
+            y: lowPoint[1] + offset - thickness / 2,
             width: Math.abs(highPoint[0] - lowPoint[0]),
             height: thickness,
           }
         : {
-            x: lowPoint[0] - thickness / 2,
+            x: lowPoint[0] + offset - thickness / 2,
             y: Math.min(lowPoint[1], highPoint[1]),
             width: thickness,
             height: Math.abs(highPoint[1] - lowPoint[1]),
@@ -225,6 +272,63 @@ function buildFloatingSeries(
       return { type: 'rect', shape, style: { fill: color } };
     }) as CustomRenderItem,
   };
+}
+
+/** One entry of the array an axis-triggered tooltip passes its formatter. */
+interface BarTooltipParam {
+  /** Category label for the hovered slot. */
+  axisValueLabel?: string;
+  axisValue?: string | number;
+  seriesName?: string;
+  seriesIndex?: number;
+  /** Colored bullet ECharts builds from the series color. */
+  marker?: string;
+  /** A scalar for a `bar` series, `[categoryIndex, min, max]` for a floating one. */
+  value?: unknown;
+}
+
+/**
+ * Tooltip text for a bar chart that contains at least one floating series.
+ *
+ * The default axis tooltip reads a single value dimension, so a floating
+ * datum of `[categoryIndex, min, max]` prints only the category index. This
+ * renders floating rows as a `min – max` range and leaves scalar rows as a
+ * single formatted value.
+ */
+export function formatBarTooltip(model: BarModel, params: unknown): string {
+  const items = (
+    Array.isArray(params) ? params : [params]
+  ) as BarTooltipParam[];
+  if (items.length === 0) return '';
+
+  const header = String(items[0]?.axisValueLabel ?? items[0]?.axisValue ?? '');
+
+  const rows = items.flatMap((item) => {
+    const marker = item.marker ?? '';
+    const name = item.seriesName ?? '';
+    const source =
+      typeof item.seriesIndex === 'number'
+        ? model.series[item.seriesIndex]
+        : undefined;
+    const floating = source ? hasFloatingValues(source) : false;
+
+    if (floating && Array.isArray(item.value)) {
+      const [, low, high] = item.value as (number | null | undefined)[];
+      // A gap carries null bounds and draws no bar, so it gets no row.
+      if (low === null || low === undefined) return [];
+      if (high === null || high === undefined) return [];
+
+      return [
+        `${marker}${name}: ${formatValue(low)} \u2013 ${formatValue(high)}`,
+      ];
+    }
+
+    const scalar = typeof item.value === 'number' ? item.value : null;
+
+    return [`${marker}${name}: ${formatValue(scalar)}`];
+  });
+
+  return [header, ...rows].filter(Boolean).join('<br/>');
 }
 
 /** Builds the ECharts option for a bar model. */
@@ -236,12 +340,26 @@ export function buildBarOption(
 ): BarEChartsOption {
   const axisNameReserve = model.hideAxes ? 0 : AXIS_NAME_RESERVE_PX;
 
+  // Position of each floating series among the floating series only, used to
+  // dodge them side by side within the category slot.
+  const floatingIndexBySeries = new Map<number, number>();
+  model.series.forEach((series, index) => {
+    if (hasFloatingValues(series)) {
+      floatingIndexBySeries.set(index, floatingIndexBySeries.size);
+    }
+  });
+  const floatingCount = floatingIndexBySeries.size;
+
   const categoryAxis = {
     type: 'category' as const,
     data: model.categories as string[],
     show: !model.hideAxes,
     axisLabel: { color: theme.secondaryTextColor },
-    axisLine: { lineStyle: { color: theme.borderColor } },
+    // Without this ECharts pins the category axis (and its labels) to value
+    // 0, so bars that cross zero paint over the category labels. Pinning it
+    // to the edge of the grid instead is a no-op when no value is negative,
+    // because zero is already the edge then.
+    axisLine: { onZero: false, lineStyle: { color: theme.borderColor } },
   };
 
   const valueAxis = {
@@ -286,12 +404,24 @@ export function buildBarOption(
       trigger: 'axis',
       axisPointer: { type: 'shadow' },
       show: !model.hideTooltip,
+      // Only overridden when a floating series is present: the default axis
+      // tooltip cannot read the second value dimension of a `custom` series.
+      ...(floatingCount > 0
+        ? { formatter: (params: unknown) => formatBarTooltip(model, params) }
+        : {}),
     }),
     series: model.series.map((series, index) => {
       const color = series.color ?? paletteColor(theme.palette, index);
 
-      if (hasFloatingValues(series)) {
-        return buildFloatingSeries(model, series, color);
+      const floatingIndex = floatingIndexBySeries.get(index);
+      if (floatingIndex !== undefined) {
+        return buildFloatingSeries(
+          model,
+          series,
+          color,
+          floatingIndex,
+          floatingCount
+        );
       }
 
       return {
