@@ -59,6 +59,7 @@ interface CsvArgs {
   options?: SankeyOptions;
   columnDelimiter?: string;
   lineDelimiter?: string;
+  includeLabels?: boolean;
 }
 
 function csvEscape(value: unknown, columnDelimiter: string): string {
@@ -142,7 +143,10 @@ export function convertChartDataToCSV(args: CsvArgs): string | null {
     const labels = args.labels;
     if (!labels || !labels.length) return null;
 
-    let result = columnDelimiter + labels.join(columnDelimiter) + lineDelimiter;
+    let result = '';
+    if (args.includeLabels !== false) {
+      result += columnDelimiter + labels.join(columnDelimiter) + lineDelimiter;
+    }
 
     if (args.data?.label != null) {
       result += String(args.data.label);
@@ -162,7 +166,10 @@ export function convertChartDataToCSV(args: CsvArgs): string | null {
   const labels = args.labels;
   if (!labels || !labels.length) return null;
 
-  let result = columnDelimiter + labels.join(columnDelimiter) + lineDelimiter;
+  let result = '';
+  if (args.includeLabels !== false) {
+    result += columnDelimiter + labels.join(columnDelimiter) + lineDelimiter;
+  }
 
   if (args.data?.label != null) {
     result += String(args.data.label);

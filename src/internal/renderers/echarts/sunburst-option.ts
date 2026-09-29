@@ -16,6 +16,7 @@ import {
   LABEL_FONT_SIZE_PX,
   OUTER_RADIUS_FRACTION,
   planSunburstLabels,
+  ringThicknessPx,
   suppressedLabelKeys,
 } from '../../../components/chart-sunburst/sunburst-labels';
 
@@ -155,6 +156,15 @@ export function buildSunburstOption(
   const suppressed = constrained
     ? suppressedLabelKeys(planSunburstLabels(model))
     : null;
+  // Constrained labels promise to stay inside their sector, so the labels the
+  // chart still paints are capped at the ring the planner sized them against.
+  // The planner budgets from an average glyph advance, so a wide-glyph label
+  // can come out a little over; this is what makes that an ellipsis rather than
+  // text across the ring boundary. `inline` keeps ECharts' own behaviour, where
+  // a label either clears `minAngle` and is drawn as it is or is dropped.
+  const labelWidthPx = constrained
+    ? Math.max(Math.floor(ringThicknessPx(model)), 1)
+    : undefined;
 
   const option: SunburstEChartsOption = {
     backgroundColor: 'transparent',
@@ -195,6 +205,7 @@ export function buildSunburstOption(
           // planner measures against, so it is pinned here too.
           rotate: 'radial',
           overflow: 'truncate',
+          width: labelWidthPx,
           fontSize: LABEL_FONT_SIZE_PX,
         },
         labelLayout: { hideOverlap: true },

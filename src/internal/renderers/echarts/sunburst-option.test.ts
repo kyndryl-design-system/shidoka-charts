@@ -4,6 +4,7 @@ import type { ChartTheme } from '../../chart-frame/types';
 import type { SunburstModel } from '../../../components/chart-sunburst/sunburst.types';
 import {
   planSunburstLabels,
+  ringThicknessPx,
   suppressedLabelKeys,
 } from '../../../components/chart-sunburst/sunburst-labels';
 
@@ -182,6 +183,34 @@ describe('buildSunburstOption', () => {
       { label: 'Data', value: 200 },
     ],
   };
+
+  it('caps constrained labels at the ring the planner sized them against', () => {
+    const seriesLabel = (
+      candidate: SunburstModel
+    ): { width?: number; overflow?: string } =>
+      (
+        buildSunburstOption(candidate, theme, false).series as unknown as {
+          label: { width?: number; overflow?: string };
+        }[]
+      )[0].label;
+
+    const measured: SunburstModel = {
+      ...constrained,
+      labelMetrics: { radiusPx: 230, fontSizePx: 12 },
+    };
+    const label = seriesLabel(measured);
+
+    // Without a width, ECharts' `truncate` has nothing to truncate against, so
+    // a label the planner let through would be drawn at its full length.
+    expect(label.overflow).toBe('truncate');
+    expect(label.width).toBe(Math.floor(ringThicknessPx(measured)));
+
+    // `inline` keeps ECharts' own behaviour, where a label that clears
+    // `minAngle` is drawn as it is.
+    expect(seriesLabel({ ...measured, labelStrategy: 'inline' }).width).toBe(
+      undefined
+    );
+  });
 
   it('hides chart-drawn labels only where the constrained strategy needs an anchor', () => {
     const data = seriesData(buildSunburstOption(constrained, theme, false));

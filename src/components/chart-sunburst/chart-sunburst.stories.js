@@ -1,13 +1,40 @@
 import { html } from 'lit';
 import '../../charts/sunburst';
+import { chartSourceTransform } from '../../../.storybook/chart-source-transform.js';
 
 export default {
   title: 'Apache ECharts/Sunburst',
   component: 'kd-chart-sunburst',
+  parameters: {
+    docs: {
+      source: {
+        type: 'dynamic',
+        transform: chartSourceTransform('kd-chart-sunburst'),
+      },
+    },
+  },
   decorators: [
     (story) => html` <div style="max-width: 720px;">${story()}</div> `,
   ],
   argTypes: {
+    colorPalette: {
+      control: 'select',
+      description: 'Shidoka data visualization palette key.',
+      options: [
+        'categorical',
+        'sequential01',
+        'sequential02',
+        'sequential03',
+        'sequential04',
+        'sequential05',
+        'divergent01',
+        'divergent02',
+        'statusLight',
+        'statusDark',
+        'rag03',
+        'rag08',
+      ],
+    },
     nodes: {
       control: 'object',
       description: 'Semantic hierarchy of segments.',
@@ -25,10 +52,6 @@ export default {
       control: { type: 'range', min: 0, max: 0.8, step: 0.05 },
     },
     height: { control: { type: 'range', min: 240, max: 720, step: 20 } },
-    colorPalette: {
-      control: 'select',
-      options: ['categorical', 'sequential01', 'sequential02', 'divergent01'],
-    },
     hideDescription: { control: 'boolean' },
     hideControls: { control: 'boolean' },
     noBorder: { control: 'boolean' },
@@ -96,6 +119,54 @@ const args = {
   unsafeNativeOptions: undefined,
 };
 
+const constrainedLabelsArgs = {
+  ...args,
+  chartTitle: 'Support tickets by product area and root cause',
+  description:
+    'Tickets closed last quarter, grouped by the area that owns the fix.',
+  nodes: [
+    {
+      label: 'Identity and access management',
+      children: [
+        { label: 'Single sign-on session expiry', value: 184 },
+        { label: 'Multi-factor enrollment failure', value: 96 },
+        { label: 'Directory synchronization lag', value: 41 },
+        { label: 'Role assignment propagation', value: 22 },
+      ],
+    },
+    {
+      label: 'Data platform',
+      children: [
+        { label: 'Warehouse query timeout', value: 133 },
+        { label: 'Ingestion schema drift', value: 78 },
+        { label: 'Replication checkpoint reset', value: 27 },
+        { label: 'Retention policy conflict', value: 14 },
+      ],
+    },
+    {
+      label: 'Observability',
+      children: [
+        { label: 'Alert routing misconfiguration', value: 89 },
+        { label: 'Dashboard permission scope', value: 35 },
+        { label: 'Trace sampling gap', value: 18 },
+      ],
+    },
+    {
+      label: 'Networking',
+      children: [
+        { label: 'Egress rate limiting', value: 64 },
+        { label: 'Certificate rotation', value: 31 },
+        { label: 'Private endpoint resolution', value: 12 },
+      ],
+    },
+  ],
+  categoryLabel: 'Root cause',
+  valueLabel: 'Tickets',
+  labelStrategy: 'constrained',
+  innerRadiusRatio: 0.2,
+  height: 460,
+};
+
 const render = (args) => html`
   <kd-chart-sunburst
     .chartTitle=${args.chartTitle}
@@ -126,52 +197,6 @@ export const Sunburst = {
  * available from a `kyn-tooltip` anchor that is reachable by keyboard.
  */
 export const ConstrainedLabels = {
-  args: {
-    ...args,
-    chartTitle: 'Support tickets by product area and root cause',
-    description:
-      'Tickets closed last quarter, grouped by the area that owns the fix.',
-    nodes: [
-      {
-        label: 'Identity and access management',
-        children: [
-          { label: 'Single sign-on session expiry', value: 184 },
-          { label: 'Multi-factor enrollment failure', value: 96 },
-          { label: 'Directory synchronization lag', value: 41 },
-          { label: 'Role assignment propagation', value: 22 },
-        ],
-      },
-      {
-        label: 'Data platform',
-        children: [
-          { label: 'Warehouse query timeout', value: 133 },
-          { label: 'Ingestion schema drift', value: 78 },
-          { label: 'Replication checkpoint reset', value: 27 },
-          { label: 'Retention policy conflict', value: 14 },
-        ],
-      },
-      {
-        label: 'Observability',
-        children: [
-          { label: 'Alert routing misconfiguration', value: 89 },
-          { label: 'Dashboard permission scope', value: 35 },
-          { label: 'Trace sampling gap', value: 18 },
-        ],
-      },
-      {
-        label: 'Networking',
-        children: [
-          { label: 'Egress rate limiting', value: 64 },
-          { label: 'Certificate rotation', value: 31 },
-          { label: 'Private endpoint resolution', value: 12 },
-        ],
-      },
-    ],
-    categoryLabel: 'Root cause',
-    valueLabel: 'Tickets',
-    labelStrategy: 'constrained',
-    innerRadiusRatio: 0.2,
-    height: 460,
-  },
+  args: constrainedLabelsArgs,
   render,
 };

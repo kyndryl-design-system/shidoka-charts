@@ -1,13 +1,40 @@
 import { html } from 'lit';
 import '../../charts/chord';
+import { chartSourceTransform } from '../../../.storybook/chart-source-transform.js';
 
 export default {
   title: 'D3/Chord',
   component: 'kd-chart-chord',
+  parameters: {
+    docs: {
+      source: {
+        type: 'dynamic',
+        transform: chartSourceTransform('kd-chart-chord'),
+      },
+    },
+  },
   decorators: [
     (story) => html` <div style="max-width: 720px;">${story()}</div> `,
   ],
   argTypes: {
+    colorPalette: {
+      control: 'select',
+      description: 'Shidoka data visualization palette key.',
+      options: [
+        'categorical',
+        'sequential01',
+        'sequential02',
+        'sequential03',
+        'sequential04',
+        'sequential05',
+        'divergent01',
+        'divergent02',
+        'statusLight',
+        'statusDark',
+        'rag03',
+        'rag08',
+      ],
+    },
     nodes: { control: 'object', description: 'Endpoints around the circle.' },
     matrix: { control: 'object', description: 'Square flow matrix.' },
     valueLabel: { control: 'text' },
@@ -16,10 +43,6 @@ export default {
     showLabels: { control: 'boolean' },
     padAngle: { control: { type: 'range', min: 0, max: 0.2, step: 0.01 } },
     height: { control: { type: 'range', min: 240, max: 720, step: 20 } },
-    colorPalette: {
-      control: 'select',
-      options: ['categorical', 'sequential01', 'sequential02', 'divergent01'],
-    },
     hideDescription: { control: 'boolean' },
     hideControls: { control: 'boolean' },
     noBorder: { control: 'boolean' },

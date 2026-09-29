@@ -1,13 +1,40 @@
 import { html } from 'lit';
 import '../../charts/tree';
+import { chartSourceTransform } from '../../../.storybook/chart-source-transform.js';
 
 export default {
   title: 'Apache ECharts/Tree',
   component: 'kd-chart-tree',
+  parameters: {
+    docs: {
+      source: {
+        type: 'dynamic',
+        transform: chartSourceTransform('kd-chart-tree'),
+      },
+    },
+  },
   decorators: [
     (story) => html` <div style="max-width: 960px;">${story()}</div> `,
   ],
   argTypes: {
+    colorPalette: {
+      control: 'select',
+      description: 'Shidoka data visualization palette key.',
+      options: [
+        'categorical',
+        'sequential01',
+        'sequential02',
+        'sequential03',
+        'sequential04',
+        'sequential05',
+        'divergent01',
+        'divergent02',
+        'statusLight',
+        'statusDark',
+        'rag03',
+        'rag08',
+      ],
+    },
     nodes: {
       control: 'object',
       description: 'Semantic hierarchy of nodes.',
@@ -33,10 +60,6 @@ export default {
       description: 'Click nodes to expand and collapse branches.',
     },
     height: { control: { type: 'range', min: 240, max: 720, step: 20 } },
-    colorPalette: {
-      control: 'select',
-      options: ['categorical', 'sequential01', 'sequential02', 'divergent01'],
-    },
     hideDescription: { control: 'boolean' },
     hideControls: { control: 'boolean' },
     noBorder: { control: 'boolean' },
@@ -173,6 +196,14 @@ const organizationArgs = {
   unsafeNativeOptions: undefined,
 };
 
+const radialCollapsedArgs = {
+  ...taxonomyArgs,
+  description: 'The chart starts collapsed; click nodes to explore.',
+  layout: 'radial',
+  initialTreeDepth: 1,
+  height: 520,
+};
+
 const render = (args) => html`
   <kd-chart-tree
     .chartTitle=${args.chartTitle}
@@ -211,12 +242,6 @@ export const Organization = {
  * be opened or closed by clicking its node.
  */
 export const RadialCollapsed = {
-  args: {
-    ...taxonomyArgs,
-    description: 'The chart starts collapsed; click nodes to explore.',
-    layout: 'radial',
-    initialTreeDepth: 1,
-    height: 520,
-  },
+  args: radialCollapsedArgs,
   render,
 };

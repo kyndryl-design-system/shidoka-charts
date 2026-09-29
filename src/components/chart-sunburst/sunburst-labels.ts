@@ -17,15 +17,14 @@ import { hierarchyDepth, nodeTotal } from './sunburst-table';
  * angular span alone lets a long label in a wide but shallow sector claim to
  * fit and then spill over the ring boundary.
  *
- * Two questions come out of that, and they are deliberately not judged to the
- * same standard. Whether the chart may draw a label itself is a generous test:
- * a drawn label is bare text centred along its ring, so overhanging the ring a
- * little reads fine, and a strict rule there would replace labels that read
- * perfectly well. Whether an overlay pill can show a label is a strict one: a
- * pill lies flat across its sector with visible edges and its own padding, so a
- * pill that overruns its sector is plainly wrong. The generous budget therefore
- * only ever decides `display`, and the strict one alone sizes the text a pill
- * shows.
+ * Two questions come out of that. Whether the chart may draw a label itself is
+ * asked of the ring: a drawn label is bare text centred along its ring, so it
+ * fits when one line of it is no longer than the ring is thick. Whether an
+ * overlay pill can show a label is asked of the whole sector: a pill lies flat
+ * across it with visible edges and its own padding, so it is bounded by the
+ * chord as well as the ring. Neither is allowed to leave its sector, which is
+ * the whole promise of the constrained strategy: the first decides `display`,
+ * and the second alone sizes the text a pill shows.
  *
  * Both are pixel questions, so the caller supplies measured geometry.
  * Everything here is arithmetic on that geometry and the model, with no DOM
@@ -54,19 +53,6 @@ export const DEFAULT_LABEL_METRICS: SunburstLabelMetrics = {
 const CHAR_WIDTH_RATIO = 0.5;
 /** A label needs this much of the arc to have room for one line of text. */
 const LINE_HEIGHT_RATIO = 1.25;
-/**
- * How far a label the chart draws itself may run past its ring before it counts
- * as not fitting.
- *
- * Drawn labels are bare text centred in their ring, so a little overhang reads
- * fine and demanding a strict fit turns almost every ordinary label into an
- * anchor. The measured labels in the sunburst story sit between 0.74 and 1.45
- * ring widths, while the ones that visibly spilled across the middle of the
- * chart start at 1.65, so the line is drawn at one and a half ring widths.
- *
- * This tolerance applies to that decision only. Overlay pills get no overhang.
- */
-const RADIAL_OVERHANG = 1.5;
 /** The pill's padding and border along its text, both ends together. */
 const CHIP_CHROME_PX = 14;
 /** The pill's padding and border across its text, both edges together. */
@@ -173,15 +159,25 @@ function chipChars(lengthPx: number, charWidthPx: number): number {
 }
 
 /**
- * Rendered width of an overlay pill, estimated the way the planner budgets for
- * it. Exposed so callers and tests can check a planned pill against the room
+ * Rendered width of a run of text, estimated the way the planner budgets for
+ * it. Exposed so callers and tests can check a planned label against the room
  * its sector reported.
+ */
+export function estimateTextWidthPx(
+  text: string,
+  fontSizePx: number = LABEL_FONT_SIZE_PX
+): number {
+  return text.length * fontSizePx * CHAR_WIDTH_RATIO;
+}
+
+/**
+ * Rendered width of an overlay pill, which is its text plus its own chrome.
  */
 export function estimateChipWidthPx(
   text: string,
   fontSizePx: number = LABEL_FONT_SIZE_PX
 ): number {
-  return text.length * fontSizePx * CHAR_WIDTH_RATIO + CHIP_CHROME_PX;
+  return estimateTextWidthPx(text, fontSizePx) + CHIP_CHROME_PX;
 }
 
 function truncateTo(label: string, budget: number): string {
@@ -328,17 +324,63 @@ function resolveRingCollisions(
 }
 
 /**
+ * Where the rings fall for a model: where the innermost one starts and how
+ * thick each one is, both as fractions of the radius box.
+ *
+ * The planner and the renderer's label cap both depend on this and have to
+ * agree, so it is derived once here rather than from the same inputs twice.
+ */
+function ringGeometry(model: SunburstModel): {
+  innerFraction: number;
+  ringWidth: number;
+} {
+  const levels = Math.max(hierarchyDepth(model.nodes), 1);
+  // Matches the renderer's own clamp of the ratio it turns into a radius, so a
+  // caller passing something out of range gets one chart, not a disagreeing
+  // plan and drawing.
+  const ratio = Number.isFinite(model.innerRadiusRatio)
+    ? model.innerRadiusRatio
+    : 0;
+  const innerFraction = Math.min(Math.max(ratio, 0), 0.8);
+
+  return {
+    innerFraction,
+    ringWidth: (OUTER_RADIUS_FRACTION - innerFraction) / levels,
+  };
+}
+
+/**
+ * Thickness of one ring in pixels, which is all the room a label the chart
+ * draws itself has along its own radius. Every ring is equally thick, so this
+ * is one number for the whole chart.
+ *
+ * Exported so the renderer can cap the labels it paints at the same figure the
+ * planner budgeted them against. The planner works from an average glyph
+ * advance, so a label of unusually wide glyphs could still measure a little
+ * over its budget once the browser lays it out; the renderer's cap is what
+ * turns that into an ellipsis instead of a label crossing its ring boundary.
+ */
+export function ringThicknessPx(
+  model: SunburstModel,
+  metrics: SunburstLabelMetrics = model.labelMetrics ?? DEFAULT_LABEL_METRICS
+): number {
+  return ringGeometry(model).ringWidth * Math.max(metrics.radiusPx, 0);
+}
+
+/**
  * Plans one placement per node.
  *
  * `display` answers whether the chart can draw the label itself, which it only
- * does along the ring and with the overhang drawn text tolerates: `inline` when
- * the full label fits that way, `truncated` when the overlay has to take over,
- * and `marker` when not even a level pill has room for readable text.
+ * does along the ring and only within it: `inline` when one line of the full
+ * label is no longer than the ring is thick, `truncated` when the overlay has
+ * to take over, and `marker` when not even a level pill has room for readable
+ * text.
  *
  * For the placements the overlay takes over, `text` and `chipCapacityPx` come
- * from the strict pill measurement instead, so the text is cut to room the pill
- * really has. A pill is sometimes roomy enough to show a label in full even
- * though the chart could not draw it.
+ * from the pill measurement instead, so the text is cut to the room the pill
+ * really has. A pill is often roomy enough to show a label in full even though
+ * the chart could not draw it, because a pill lying along a broad arc has the
+ * whole chord to spend where a drawn label only ever has its ring.
  *
  * A label sized against its own sector can still land on top of its neighbour,
  * so a second pass walks each ring and reduces the smaller of any two colliding
@@ -355,9 +397,7 @@ export function planSunburstLabels(
   const walked: Walked[] = [];
   walk(model.nodes, 0, 0, 1, [], walked);
 
-  const levels = Math.max(hierarchyDepth(model.nodes), 1);
-  const innerFraction = Math.min(Math.max(model.innerRadiusRatio, 0), 0.8);
-  const ringWidth = (OUTER_RADIUS_FRACTION - innerFraction) / levels;
+  const { innerFraction, ringWidth } = ringGeometry(model);
 
   const radiusPx = Math.max(metrics.radiusPx, 0);
   const fontSizePx = Math.max(metrics.fontSizePx, 1);
@@ -366,10 +406,11 @@ export function planSunburstLabels(
 
   const chipHeightPx = minLineThicknessPx + CHIP_EDGE_CHROME_PX;
 
-  const ringPx = ringWidth * radiusPx;
   // Rings are all equally thick, so the room a drawn label has is one number
-  // for the whole chart: its ring, plus the overhang that ring tolerates.
-  const drawnLengthPx = ringPx * RADIAL_OVERHANG;
+  // for the whole chart, and a drawn label gets no more than its own ring: text
+  // that runs past the boundary sits over the neighbouring ring or, on the
+  // outermost one, over nothing at all.
+  const ringPx = ringWidth * radiusPx;
 
   const candidates = walked.map((entry): Candidate => {
     const label = entry.node.label;
@@ -386,10 +427,11 @@ export function planSunburstLabels(
     const arcThicknessPx = spanRadians * midRadiusPx;
 
     // What the chart may draw itself. It writes along the ring, so the arc has
-    // to be deep enough for one line of text.
+    // to be deep enough for one line of text and the ring long enough for all
+    // of it.
     const drawnBudget =
       arcThicknessPx >= minLineThicknessPx
-        ? Math.floor(drawnLengthPx / charWidthPx)
+        ? Math.floor(ringPx / charWidthPx)
         : 0;
 
     // What a level pill can hold, measured strictly against the sector at

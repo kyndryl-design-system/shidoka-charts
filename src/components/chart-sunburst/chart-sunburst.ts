@@ -46,6 +46,7 @@ const DATA_PROPERTIES = [
  * @slot controls - Slot for custom controls beside the built in controls.
  * @fires on-chart-interaction - Normalized selection, detail: `{ kind, label, value, path }`.
  * @fires on-view-toggle - Table view toggled, detail: `{ tableView }`.
+ * @tagname kd-chart-sunburst
  */
 export class KDChartSunburst extends ChartFrameElement<SunburstModel> {
   static override styles = [ChartFrameElement.styles, unsafeCSS(SunburstScss)];
