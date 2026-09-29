@@ -70,6 +70,10 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
   // Subclasses append their own sheet, so the type has to allow a list.
   static override styles: CSSResultGroup = unsafeCSS(ChartFrameScss);
 
+  /** Shidoka data visualization palette key. */
+  @property({ type: String })
+  accessor colorPalette = 'categorical';
+
   /** Chart title. Also the accessible name of the chart region. */
   @property({ type: String })
   accessor chartTitle = '';
@@ -105,10 +109,6 @@ export abstract class ChartFrameElement<TModel> extends LitElement {
   /** Chart region height in px. */
   @property({ type: Number })
   accessor height = 400;
-
-  /** Shidoka data visualization palette key. */
-  @property({ type: String })
-  accessor colorPalette = 'categorical';
 
   /** Customizable text labels. */
   @property({ type: Object })
