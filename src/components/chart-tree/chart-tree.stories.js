@@ -5,6 +5,14 @@ import { chartSource } from '../../../.storybook/chart-source.js';
 export default {
   title: 'Apache ECharts/Tree',
   component: 'kd-chart-tree',
+  parameters: {
+    docs: {
+      source: {
+        type: 'dynamic',
+        transform: (_source, ctx) => chartSource('kd-chart-tree', ctx.args),
+      },
+    },
+  },
   decorators: [
     (story) => html` <div style="max-width: 960px;">${story()}</div> `,
   ],
@@ -221,18 +229,12 @@ const render = (args) => html`
 export const Taxonomy = {
   args: taxonomyArgs,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-tree', taxonomyArgs) } },
-  },
 };
 
 /** Org-style hierarchy using the same orthogonal tree layout. */
 export const Organization = {
   args: organizationArgs,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-tree', organizationArgs) } },
-  },
 };
 
 /**
@@ -242,9 +244,4 @@ export const Organization = {
 export const RadialCollapsed = {
   args: radialCollapsedArgs,
   render,
-  parameters: {
-    docs: {
-      source: { code: chartSource('kd-chart-tree', radialCollapsedArgs) },
-    },
-  },
 };

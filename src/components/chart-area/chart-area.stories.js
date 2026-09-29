@@ -5,6 +5,14 @@ import { chartSource } from '../../../.storybook/chart-source.js';
 export default {
   title: 'Apache ECharts/Area',
   component: 'kd-chart-area',
+  parameters: {
+    docs: {
+      source: {
+        type: 'dynamic',
+        transform: (_source, ctx) => chartSource('kd-chart-area', ctx.args),
+      },
+    },
+  },
   decorators: [
     (story) => html` <div style="max-width: 720px;">${story()}</div> `,
   ],
@@ -127,27 +135,16 @@ const render = (args) => html`
 export const Area = {
   args,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-area', args) } },
-  },
 };
 
 /** Stacked areas so the total is readable at every category. */
 export const Stacked = {
   args: stackedArgs,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-area', stackedArgs) } },
-  },
 };
 
 /** Smoothed curve with markers and a data gap. */
 export const SmoothWithPoints = {
   args: smoothWithPointsArgs,
   render,
-  parameters: {
-    docs: {
-      source: { code: chartSource('kd-chart-area', smoothWithPointsArgs) },
-    },
-  },
 };

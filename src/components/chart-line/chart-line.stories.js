@@ -5,6 +5,14 @@ import { chartSource } from '../../../.storybook/chart-source.js';
 export default {
   title: 'Apache ECharts/Line',
   component: 'kd-chart-line',
+  parameters: {
+    docs: {
+      source: {
+        type: 'dynamic',
+        transform: (_source, ctx) => chartSource('kd-chart-line', ctx.args),
+      },
+    },
+  },
   decorators: [
     (story) => html` <div style="max-width: 720px;">${story()}</div> `,
   ],
@@ -297,79 +305,52 @@ const render = (args) => html`
 export const Line = {
   args,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-line', args) } },
-  },
 };
 
 /** Stacked totals across series instead of overlaid lines. */
 export const Stacked = {
   args: stackedArgs,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-line', stackedArgs) } },
-  },
 };
 
 /** Smoothed curves with a gap where a value is missing. */
 export const SmoothWithGap = {
   args: smoothWithGapArgs,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-line', smoothWithGapArgs) } },
-  },
 };
 
 /** Line without point markers, for dense series. */
 export const WithoutPoints = {
   args: withoutPointsArgs,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-line', withoutPointsArgs) } },
-  },
 };
 
 /** Smoothed curve through the same points. */
 export const Curved = {
   args: curvedArgs,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-line', curvedArgs) } },
-  },
 };
 
 /** Real time axis: points are spaced by elapsed time, not evenly by index. */
 export const TimeScale = {
   args: timeScaleArgs,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-line', timeScaleArgs) } },
-  },
 };
 
 /** Compact spark line with all chrome suppressed. */
 export const Spark = {
   args: sparkArgs,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-line', sparkArgs) } },
-  },
 };
 
 /** Horizontal threshold bands drawn behind the series. */
 export const ThresholdBand = {
   args: thresholdBandArgs,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-line', thresholdBandArgs) } },
-  },
 };
 
 /** Median projection with nested confidence bands and a forecast divider. */
 export const FanChart = {
   args: fanChartArgs,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-line', fanChartArgs) } },
-  },
 };

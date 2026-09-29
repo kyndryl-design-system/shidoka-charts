@@ -5,6 +5,14 @@ import { chartSource } from '../../../.storybook/chart-source.js';
 export default {
   title: 'D3/Chord',
   component: 'kd-chart-chord',
+  parameters: {
+    docs: {
+      source: {
+        type: 'dynamic',
+        transform: (_source, ctx) => chartSource('kd-chart-chord', ctx.args),
+      },
+    },
+  },
   decorators: [
     (story) => html` <div style="max-width: 720px;">${story()}</div> `,
   ],
@@ -80,9 +88,6 @@ const args = {
 
 export const Chord = {
   args,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-chord', args) } },
-  },
   render: (args) => {
     return html`
       <kd-chart-chord

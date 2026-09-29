@@ -5,6 +5,14 @@ import { chartSource } from '../../../.storybook/chart-source.js';
 export default {
   title: 'Apache ECharts/Pie & Doughnut',
   component: 'kd-chart-pie',
+  parameters: {
+    docs: {
+      source: {
+        type: 'dynamic',
+        transform: (_source, ctx) => chartSource('kd-chart-pie', ctx.args),
+      },
+    },
+  },
   decorators: [
     (story) => html` <div style="max-width: 720px;">${story()}</div> `,
   ],
@@ -111,16 +119,10 @@ const render = (args) => html`
 export const Pie = {
   args,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-pie', args) } },
-  },
 };
 
 /** Doughnut variant, using a nonzero inner radius. */
 export const Doughnut = {
   args: doughnutArgs,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-pie', doughnutArgs) } },
-  },
 };

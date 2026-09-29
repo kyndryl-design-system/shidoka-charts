@@ -5,6 +5,14 @@ import { chartSource } from '../../../.storybook/chart-source.js';
 export default {
   title: 'Apache ECharts/Sunburst',
   component: 'kd-chart-sunburst',
+  parameters: {
+    docs: {
+      source: {
+        type: 'dynamic',
+        transform: (_source, ctx) => chartSource('kd-chart-sunburst', ctx.args),
+      },
+    },
+  },
   decorators: [
     (story) => html` <div style="max-width: 720px;">${story()}</div> `,
   ],
@@ -181,9 +189,6 @@ const render = (args) => html`
 export const Sunburst = {
   args,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-sunburst', args) } },
-  },
 };
 
 /**
@@ -194,11 +199,4 @@ export const Sunburst = {
 export const ConstrainedLabels = {
   args: constrainedLabelsArgs,
   render,
-  parameters: {
-    docs: {
-      source: {
-        code: chartSource('kd-chart-sunburst', constrainedLabelsArgs),
-      },
-    },
-  },
 };

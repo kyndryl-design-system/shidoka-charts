@@ -5,6 +5,14 @@ import { chartSource } from '../../../.storybook/chart-source.js';
 export default {
   title: 'Apache ECharts/Bar',
   component: 'kd-chart-bar',
+  parameters: {
+    docs: {
+      source: {
+        type: 'dynamic',
+        transform: (_source, ctx) => chartSource('kd-chart-bar', ctx.args),
+      },
+    },
+  },
   decorators: [
     (story) => html` <div style="max-width: 720px;">${story()}</div> `,
   ],
@@ -234,63 +242,40 @@ const render = (args) => html`
 export const Bar = {
   args,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-bar', args) } },
-  },
 };
 
 /** Horizontal bars, useful for long category labels. */
 export const Horizontal = {
   args: horizontalArgs,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-bar', horizontalArgs) } },
-  },
 };
 
 /** Stacked totals across series instead of grouped bars. */
 export const Stacked = {
   args: stackedArgs,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-bar', stackedArgs) } },
-  },
 };
 
 /** Stacked totals drawn as horizontal bars. */
 export const HorizontalStacked = {
   args: horizontalStackedArgs,
   render,
-  parameters: {
-    docs: {
-      source: { code: chartSource('kd-chart-bar', horizontalStackedArgs) },
-    },
-  },
 };
 
 /** Floating bars: each value is a `[min, max]` range instead of a bar from zero. */
 export const Floating = {
   args: floatingArgs,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-bar', floatingArgs) } },
-  },
 };
 
 /** A single category with one bar per series. */
 export const SingleLabel = {
   args: singleLabelArgs,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-bar', singleLabelArgs) } },
-  },
 };
 
 /** Stacked horizontal meter with in-bar segment labels and a value indicator. */
 export const MeterBar = {
   args: meterBarArgs,
   render,
-  parameters: {
-    docs: { source: { code: chartSource('kd-chart-bar', meterBarArgs) } },
-  },
 };
