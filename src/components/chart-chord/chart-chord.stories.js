@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import '../../charts/chord';
-import { chartSource } from '../../../.storybook/chart-source.js';
+import { chartSourceTransform } from '../../../.storybook/chart-source-transform.js';
 
 export default {
   title: 'D3/Chord',
@@ -9,7 +9,7 @@ export default {
     docs: {
       source: {
         type: 'dynamic',
-        transform: (_source, ctx) => chartSource('kd-chart-chord', ctx.args),
+        transform: chartSourceTransform('kd-chart-chord'),
       },
     },
   },
