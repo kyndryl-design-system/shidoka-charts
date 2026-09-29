@@ -8,6 +8,24 @@ export default {
     (story) => html` <div style="max-width: 960px;">${story()}</div> `,
   ],
   argTypes: {
+    colorPalette: {
+      control: 'select',
+      description: 'Shidoka data visualization palette key.',
+      options: [
+        'categorical',
+        'sequential01',
+        'sequential02',
+        'sequential03',
+        'sequential04',
+        'sequential05',
+        'divergent01',
+        'divergent02',
+        'statusLight',
+        'statusDark',
+        'rag03',
+        'rag08',
+      ],
+    },
     nodes: {
       control: 'object',
       description: 'Semantic hierarchy of nodes.',
@@ -33,10 +51,6 @@ export default {
       description: 'Click nodes to expand and collapse branches.',
     },
     height: { control: { type: 'range', min: 240, max: 720, step: 20 } },
-    colorPalette: {
-      control: 'select',
-      options: ['categorical', 'sequential01', 'sequential02', 'divergent01'],
-    },
     hideDescription: { control: 'boolean' },
     hideControls: { control: 'boolean' },
     noBorder: { control: 'boolean' },

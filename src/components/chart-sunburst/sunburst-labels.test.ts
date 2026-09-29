@@ -3,10 +3,12 @@ import {
   constrainedPlacements,
   DEFAULT_LABEL_METRICS,
   estimateChipWidthPx,
+  estimateTextWidthPx,
   labelPathKey,
   placementClearancePx,
   placementPosition,
   planSunburstLabels,
+  ringThicknessPx,
   suppressedLabelKeys,
 } from './sunburst-labels';
 import type {
@@ -211,9 +213,9 @@ describe('label fitting geometry', () => {
     expect(budgets[1].text.length).toBeGreaterThan(budgets[2].text.length);
   });
 
-  it('allows a label to overhang its ring by up to half a ring width', () => {
+  it('gives a drawn label its own ring and no more', () => {
     // One ring across a 210px radius is 193.2px thick, which is 32 characters
-    // at half of a 12px font. The overhang allowance stretches that to 48.
+    // at half of a 12px font, and a drawn label gets exactly that.
     const single = (label: string) =>
       planSunburstLabels(
         model({ nodes: [{ label, value: 1 }] }),
@@ -221,13 +223,14 @@ describe('label fitting geometry', () => {
       )[0].display;
 
     expect(single('x'.repeat(32))).toBe('inline');
-    expect(single('x'.repeat(48))).toBe('inline');
-    expect(single('x'.repeat(49))).toBe('truncated');
+    expect(single('x'.repeat(33))).toBe('truncated');
   });
 
-  it('keeps ordinary labels inline while constraining the ones that spill', () => {
+  it('constrains a label that runs past its ring however wide the sector', () => {
     // Widths measured in Roboto at 12px, as ring width multiples: these sit at
-    // 0.83, 1.23 and 2.14.
+    // 0.83, 1.23 and 2.14. Only the first is drawn; the 1.23 label has a whole
+    // quarter of the circle of angle and is constrained anyway, because angle
+    // is not the direction a radial label runs.
     const displays = planSunburstLabels(
       model({
         nodes: [
@@ -242,7 +245,7 @@ describe('label fitting geometry', () => {
       metrics(230)
     ).map((placement) => placement.display);
 
-    expect(displays).toEqual(['inline', 'inline', 'truncated']);
+    expect(displays).toEqual(['inline', 'truncated', 'truncated']);
   });
 
   it('keeps every planned pill inside the sector it labels', () => {
@@ -260,38 +263,87 @@ describe('label fitting geometry', () => {
     }
   });
 
+  it('keeps every drawn label inside its own ring at any size', () => {
+    // The story's sectors are the crowded case, and the failure this guards
+    // against is a radial label crossing its ring boundary: on the outer ring
+    // it leaves the chart entirely, and on an inner one it lies over the ring
+    // beyond it.
+    for (const radiusPx of [150, 190, 230, 350, 900]) {
+      const ringPx = ringThicknessPx(constrainedStory, metrics(radiusPx));
+      const drawn = planSunburstLabels(
+        constrainedStory,
+        metrics(radiusPx)
+      ).filter((placement) => placement.display === 'inline');
+
+      for (const placement of drawn) {
+        expect(
+          estimateTextWidthPx(placement.text),
+          `${placement.label} at radius ${radiusPx}`
+        ).toBeLessThanOrEqual(ringPx);
+      }
+    }
+  });
+
+  it('constrains the story labels that used to spill past their ring', () => {
+    // Regression: at the story's measured radius these two are 20 characters
+    // against a 13 character ring, and an overhang allowance let the chart
+    // draw them across the outer boundary.
+    const placements = planSunburstLabels(constrainedStory, metrics(230));
+    const display = (label: string) =>
+      placements.find((placement) => placement.label === label)?.display;
+
+    expect(display('Egress rate limiting')).toBe('truncated');
+    expect(display('Certificate rotation')).toBe('marker');
+    expect(display('Data platform')).toBe('inline');
+    expect(display('Observability')).toBe('inline');
+    expect(display('Networking')).toBe('inline');
+  });
+
   it('cuts pills well short of what a drawn label is allowed to overhang', () => {
     const placements = planSunburstLabels(constrainedStory, metrics(230));
     const shown = (label: string) =>
       placements.find((placement) => placement.label === label)?.text ?? '';
 
-    // A ring is 82.8px here, so a drawn label may run to 20 characters. Pills
-    // get no such allowance, and the broad outer band with the most room of any
-    // of them still stops well inside it.
+    // A ring is 82.8px here, so a drawn label may run to 13 characters. A pill
+    // is measured against the whole sector instead, so a broad outer band can
+    // hold far more than that and a narrow one far less.
     expect(shown('Single sign-on session expiry')).toBe('Single sign-on…');
     expect(shown('Identity and access management')).toBe('Identity a…');
     expect(shown('Multi-factor enrollment failure')).toBe('Multi-fact…');
   });
 
-  it('holds a label to the drawn allowance but its pill to the strict fit', () => {
+  it('holds a drawn label to its ring and a pill to the whole sector', () => {
     // One ring across a 210px radius is 193.2px, which is 32 characters at half
-    // of a 12px font. The drawn allowance stretches that to 48; a pill lying
-    // across the same ring, paying for its own chrome, gets 29.
+    // of a 12px font. The pill on this sector lies along a 193.2px chord and
+    // pays for its own chrome out of it, so it gets 29.
     const single = (label: string) =>
       planSunburstLabels(
         model({ nodes: [{ label, value: 1 }] }),
         metrics(210)
       )[0];
 
-    expect(single('x'.repeat(48)).display).toBe('inline');
-    expect(single('x'.repeat(48)).text.length).toBe(48);
+    expect(single('x'.repeat(32)).display).toBe('inline');
+    expect(single('x'.repeat(32)).text.length).toBe(32);
 
-    const overrun = single('x'.repeat(49));
+    const overrun = single('x'.repeat(33));
 
     expect(overrun.display).toBe('truncated');
     expect(overrun.text.length).toBe(29);
     expect(estimateChipWidthPx(overrun.text)).toBeLessThanOrEqual(
       overrun.chipCapacityPx
+    );
+  });
+
+  it('reports the ring thickness the renderer must cap its labels at', () => {
+    // Two levels between a 0.2 inner radius and the 0.92 outer one, so each
+    // ring is 0.36 of a 230px radius box.
+    expect(ringThicknessPx(constrainedStory, metrics(230))).toBeCloseTo(
+      82.8,
+      6
+    );
+    expect(ringThicknessPx(constrainedStory)).toBeCloseTo(
+      ringThicknessPx(constrainedStory, DEFAULT_LABEL_METRICS),
+      6
     );
   });
 
