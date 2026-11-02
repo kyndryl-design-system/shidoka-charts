@@ -207,6 +207,59 @@ export const Area = {
   },
 };
 
+/** Dual-axis with explicit min: 0 — markers at zero must stay fully visible. */
+export const MultiAxisZeroMin = {
+  args: {
+    ...args,
+    chartTitle: 'Multi-Axis Line (zero min)',
+    datasets: [
+      {
+        label: 'Incidents',
+        data: [12, 0, 0, 0, 18, 9],
+        yAxisID: 'y',
+        fill: true,
+      },
+      {
+        label: 'MTTRR',
+        data: [0.4, 0, 0, 0, 0.8, 0],
+        yAxisID: 'y1',
+      },
+    ],
+    options: {
+      scales: {
+        x: {
+          title: {
+            text: 'Day',
+          },
+        },
+        y: {
+          min: 0,
+          title: {
+            text: 'Incidents',
+          },
+        },
+        y1: {
+          min: 0,
+          title: {
+            text: 'MTTRR (hrs)',
+          },
+        },
+      },
+    },
+  },
+  render: (args) => {
+    return html`
+      <kd-chart
+        type="line"
+        .chartTitle=${args.chartTitle}
+        .labels=${args.labels}
+        .datasets=${args.datasets}
+        .options=${{ colorPalette: args.colorPalette, ...args.options }}
+      ></kd-chart>
+    `;
+  },
+};
+
 export const TimeScale = {
   args: {
     ...args,
