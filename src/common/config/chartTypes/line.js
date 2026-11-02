@@ -84,13 +84,9 @@ export const datasetOptions = (ctx, index) => {
       return gradient;
     },
     borderWidth: 2,
-    // Chart.js zeroes bottom clip overflow when scale.min is explicit (e.g.
-    // dual-axis min: 0). Keep enough room for pointRadius(6) + border + hover.
-    clip: {
-      left: 0,
-      top: 0,
-      right: 0,
-      bottom: 8,
-    },
+    // Chart.js zeroes clip overflow on any side whose scale min/max is
+    // explicit (e.g. dual-axis min: 0). A numeric clip restores room for
+    // pointRadius(6) + border + hover at both the baseline and the peaks.
+    clip: 8,
   };
 };
