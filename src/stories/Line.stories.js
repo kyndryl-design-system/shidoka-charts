@@ -207,21 +207,66 @@ export const Area = {
   },
 };
 
-/** Dual-axis with explicit min: 0 — markers at zero must stay fully visible. */
+/**
+ * Consumer-style dual-axis repro: both axes pin min to 0, and the y1 series
+ * sits on the baseline for a long stretch. Zero markers on y1 (and y) should
+ * render as full circles sitting on the axis — not clipped semicircles.
+ */
 export const MultiAxisZeroMin = {
   args: {
     ...args,
-    chartTitle: 'Multi-Axis Line (zero min)',
+    chartTitle: 'MTTRR Ticket Trends',
+    description:
+      'y + y1 with min: 0. Check the green y1 markers across days 04–11 and 18–26: each zero point should be a full circle centered on the baseline, not cut off at the bottom.',
+    labels: [
+      '28',
+      '29',
+      '30',
+      '01',
+      '02',
+      '03',
+      '04',
+      '05',
+      '06',
+      '07',
+      '08',
+      '09',
+      '10',
+      '11',
+      '12',
+      '13',
+      '14',
+      '15',
+      '16',
+      '17',
+      '18',
+      '19',
+      '20',
+      '21',
+      '22',
+      '23',
+      '24',
+      '25',
+      '26',
+      '27',
+      '28',
+    ],
     datasets: [
       {
         label: 'Incidents',
-        data: [12, 0, 0, 0, 18, 9],
+        data: [
+          8, 14, 22, 18, 11, 9, 0, 0, 0, 0, 0, 0, 0, 0, 16, 28, 41, 55, 38, 24,
+          19, 12, 7, 5, 3, 2, 1, 0, 4, 9, 15,
+        ],
         yAxisID: 'y',
         fill: true,
       },
       {
         label: 'MTTRR',
-        data: [0.4, 0, 0, 0, 0.8, 0],
+        data: [
+          0.6, 0.4, 0.5, 0.3, 0.7, 0.2, 0, 0, 0, 0, 0, 0, 0, 0, 0.4, 0.8, 0.9,
+          0.7, 0.5, 0.3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.2, 0.4,
+        ],
         yAxisID: 'y1',
       },
     ],
@@ -252,6 +297,7 @@ export const MultiAxisZeroMin = {
       <kd-chart
         type="line"
         .chartTitle=${args.chartTitle}
+        .description=${args.description}
         .labels=${args.labels}
         .datasets=${args.datasets}
         .options=${{ colorPalette: args.colorPalette, ...args.options }}
