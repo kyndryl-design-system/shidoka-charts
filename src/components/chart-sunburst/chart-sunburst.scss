@@ -1,0 +1,89 @@
+@use '../../common/scss/mixins.scss';
+@use '@kyndryl-design-system/shidoka-foundation/scss/mixins/typography.scss';
+
+// Square that matches the chart's radius box: a centred square whose side is
+// the smaller of the host's width and height, which is the same reference the
+// renderer uses for its radius. Polar positions can then be plain percentages.
+.label-box {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  aspect-ratio: 1;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+// Centres the anchor on its polar point without a transform. A transformed
+// ancestor would become the containing block for the tooltip's fixed position
+// content, which computes its own viewport coordinates and would then be drawn
+// at double the offset. A zero size grid box centres the overflowing anchor
+// instead, and leaves the tooltip host untouched.
+.label-anchor {
+  position: absolute;
+  width: 0;
+  height: 0;
+  display: grid;
+  place-content: center;
+  pointer-events: auto;
+}
+
+// The tooltip resolves its type from the responsive body-2 tokens, so pinning
+// those on the host keeps it at the same 12px/16px the chart uses for its own
+// text at every breakpoint. Overriding the tokens avoids reaching into the
+// tooltip's shadow DOM, which is not ours to select into.
+.label-tooltip {
+  --kd-font-size-body-2-sm: 12px;
+  --kd-font-size-body-2-md: 12px;
+  --kd-font-size-body-2-lg: 12px;
+  --kd-font-size-body-2-xlg: 12px;
+  --kd-font-size-body-2-max: 12px;
+  --kd-line-height-body-2-sm: 16px;
+  --kd-line-height-body-2-md: 16px;
+  --kd-line-height-body-2-lg: 16px;
+  --kd-line-height-body-2-xlg: 16px;
+  --kd-line-height-body-2-max: 16px;
+}
+
+.label-tip-name,
+.label-tip-value {
+  display: block;
+}
+
+// Chips sit on top of saturated segment colours, so they are mixed down towards
+// the segment rather than painted over it. Mixing the container and border
+// tokens with `transparent` keeps the theme's own light and dark surfaces, which
+// a hardcoded white would not, and leaves the text itself fully opaque: putting
+// `opacity` on the chip would fade the label along with its backing.
+.label-chip {
+  display: block;
+  // No width cap here: the planner already cut the text to what the sector
+  // holds, so capping it again would hide characters it decided there was room
+  // for.
+  padding: 1px 6px;
+  border: 1px solid
+    color-mix(in srgb, var(--kd-color-border-variants-light) 45%, transparent);
+  border-radius: 10px;
+  background: color-mix(
+    in srgb,
+    var(--kd-color-background-container-default) 72%,
+    transparent
+  );
+  box-shadow: var(--kd-elevation-level-1);
+  color: var(--kd-color-text-level-primary);
+  // Also keeps the chip's min-content width equal to its text width, which is
+  // what sizes the zero width grid box above.
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  @include typography.type-ui-03;
+}
+
+.label-chip-marker {
+  padding: 0 4px;
+}
+
+// Carries the anchor button's accessible name, since the visible text is
+// truncated or reduced to a marker.
+.label-chip-name {
+  @include mixins.visually-hidden;
+}
