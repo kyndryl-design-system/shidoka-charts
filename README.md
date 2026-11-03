@@ -44,7 +44,9 @@ More info on color schemes in the [Foundation Storybook](https://shidoka-foundat
 
 See [Storybook](https://shidoka-charts.netlify.app) for the full components documentation.
 
-### Example
+### Chart.js charts (existing)
+
+Existing Chart.js-based charts continue to work as before. No application updates are required for current `kd-chart` usage.
 
 ```js
 import '@kyndryl-design-system/shidoka-charts/components/chart';
@@ -53,6 +55,32 @@ import '@kyndryl-design-system/shidoka-charts/components/chart';
 ```html
 <kd-chart></kd-chart>
 ```
+
+### ECharts and D3 charts (new)
+
+New chart types are opt-in semantic components. Import the registration entry for only the chart(s) you need; each entry registers one custom element and keeps engine bundles isolated.
+
+```js
+import '@kyndryl-design-system/shidoka-charts/charts/bar';
+import '@kyndryl-design-system/shidoka-charts/charts/line';
+import '@kyndryl-design-system/shidoka-charts/charts/pie';
+import '@kyndryl-design-system/shidoka-charts/charts/area';
+import '@kyndryl-design-system/shidoka-charts/charts/sunburst';
+import '@kyndryl-design-system/shidoka-charts/charts/tree';
+import '@kyndryl-design-system/shidoka-charts/charts/chord';
+```
+
+```html
+<kd-chart-bar></kd-chart-bar>
+<kd-chart-line></kd-chart-line>
+<kd-chart-pie></kd-chart-pie>
+<kd-chart-area></kd-chart-area>
+<kd-chart-sunburst></kd-chart-sunburst>
+<kd-chart-tree></kd-chart-tree>
+<kd-chart-chord></kd-chart-chord>
+```
+
+More chart types will continue to land on these ECharts/D3 foundations. Existing Chart.js charts remain supported; new chart types will not be added to Chart.js going forward.
 
 ### React usage
 

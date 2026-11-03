@@ -424,6 +424,20 @@ describe('buildLineOption forecastFrom', () => {
 
     expect(data[0].markLine?.data[0].xAxis).toBe(2);
   });
+
+  it('uses category timestamps for forecast markers when timeAxis is set', () => {
+    const timeModel = {
+      ...model,
+      categories: ['2024-01-01', '2024-02-01', '2024-03-01'],
+      timeAxis: true,
+      forecastFrom: '2024-02-01',
+    };
+    const data = series(buildLineOption(timeModel, theme, false));
+
+    expect(data[0].markLine?.data[0].xAxis).toBe('2024-02-01');
+    expect(data[0].markArea?.data[0][0].xAxis).toBe('2024-02-01');
+    expect(data[0].markArea?.data[0][1].xAxis).toBe('2024-03-01');
+  });
 });
 
 describe('buildLineOption regression: new optional fields absent', () => {

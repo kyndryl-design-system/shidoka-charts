@@ -165,30 +165,36 @@ function resolveForecastIndex(model: LineModel): number | undefined {
   return index === -1 ? undefined : index;
 }
 
-/** Builds the dashed divider and faint tint that mark a forecast region from `index` to the end of the plot. */
+/**
+ * Builds the dashed divider and faint tint that mark a forecast region from
+ * `index` to the end of the plot. When `timeAxis` is on, mark coordinates must
+ * use category timestamps (same values as the time axis), not slot indices.
+ */
 function buildForecastMarkers(
   model: LineModel,
   theme: ChartTheme,
   index: number
 ): { areaData: LineMarkAreaData; lineData: LineMarkLineData } {
   const lastIndex = model.categories.length - 1;
+  const start = model.timeAxis ? model.categories[index] : index;
+  const end = model.timeAxis ? model.categories[lastIndex] : lastIndex;
 
   return {
     areaData: [
       [
         {
-          xAxis: index,
+          xAxis: start,
           itemStyle: {
             color: theme.borderColor,
             opacity: FORECAST_FILL_OPACITY,
           },
         },
-        { xAxis: lastIndex },
+        { xAxis: end },
       ],
     ],
     lineData: [
       {
-        xAxis: index,
+        xAxis: start,
         symbol: 'none',
         lineStyle: { color: theme.borderColor, type: 'dashed' },
       },
