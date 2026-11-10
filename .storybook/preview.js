@@ -38,7 +38,6 @@ export default {
           'Guidelines',
           'Playground',
           'Chart.js',
-          ['Charts', 'Third Party Charts'],
           'Apache ECharts',
           'D3',
           'Mermaid',

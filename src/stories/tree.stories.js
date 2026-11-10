@@ -12,7 +12,7 @@ import treeDataJson from './sampleData/graphTree.json';
  */
 
 export default {
-  title: 'Chart.js/Third Party Charts/Graph/Tree',
+  title: 'Chart.js/Graph/Tree',
   component: 'kd-chart',
   argTypes: {
     ...argTypes,

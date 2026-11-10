@@ -12,7 +12,7 @@ import '../components/chart';
  */
 
 export default {
-  title: 'Chart.js/Third Party Charts/Boxplot & Violin Plot/Boxplot',
+  title: 'Chart.js/Boxplot & Violin Plot/Boxplot',
   component: 'kd-chart',
   argTypes: {
     ...argTypes,
