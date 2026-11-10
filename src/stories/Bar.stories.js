@@ -4,7 +4,7 @@ import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
 import { getTokenThemeVal } from '@kyndryl-design-system/shidoka-foundation/common/helpers/color';
 
 export default {
-  title: 'Chart.js/Charts/Bar',
+  title: 'Chart.js/Bar',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,

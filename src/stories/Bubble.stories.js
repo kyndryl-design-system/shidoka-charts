@@ -3,7 +3,7 @@ import '../components/chart';
 import argTypes, { hideUnusedControls } from '../common/config/chartArgTypes';
 
 export default {
-  title: 'Chart.js/Charts/Bubble',
+  title: 'Chart.js/Bubble',
   component: 'kd-chart',
   decorators: [
     (story) => html` <div style="max-width: 800px;">${story()}</div> `,

@@ -8,7 +8,7 @@ import usData from './sampleData/states-10m.json';
 import worldData from './sampleData/countries-50m.json';
 
 export default {
-  title: 'Chart.js/Third Party Charts/Geo',
+  title: 'Chart.js/Geo',
   component: 'kd-chart',
   argTypes: {
     ...argTypes,
