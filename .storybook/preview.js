@@ -44,7 +44,7 @@ export default {
         ],
       },
     },
-    backgrounds: { disabled: true },
+    backgrounds: { disable: true },
     viewport: {
       options: {
         ...BREAKPOINT_VIEWPORTS,
