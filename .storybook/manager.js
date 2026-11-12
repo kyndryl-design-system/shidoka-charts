@@ -8,6 +8,8 @@ import {
 } from 'storybook-addon-tag-badges/manager-helpers';
 import theme from './theme';
 
+// Prefix a badge tag with `section:` to display it on the story's root section.
+// Example: `tags: ['section:new']`.
 const sectionTagPrefix = 'section:';
 const tagBadges = [
   {
