@@ -5,6 +5,7 @@ import { chartSourceTransform } from '../../../.storybook/chart-source-transform
 export default {
   title: 'Apache ECharts/Area',
   component: 'kd-chart-area',
+  tags: ['section:new'],
   parameters: {
     docs: {
       source: {
