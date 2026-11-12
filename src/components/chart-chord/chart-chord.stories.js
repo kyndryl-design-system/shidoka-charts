@@ -5,6 +5,7 @@ import { chartSourceTransform } from '../../../.storybook/chart-source-transform
 export default {
   title: 'D3/Chord',
   component: 'kd-chart-chord',
+  tags: ['section:new'],
   parameters: {
     docs: {
       source: {
