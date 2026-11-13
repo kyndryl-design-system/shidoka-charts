@@ -4,7 +4,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # Shidoka Charts
 
-A data visualization library of framework-agnostic web components built with Chart.js.
+A data visualization library of framework-agnostic web components built with Chart.js, Apache ECharts, and D3.
 
 ## Getting Started
 
@@ -16,7 +16,7 @@ View the [Readme here](https://github.com/kyndryl-design-system/shidoka-charts).
 
 ## Chart.js
 
-These charts are driven by [Chart.js](https://www.chartjs.org) and wrapped as a Web Component. Default configurations are included so each chart has the Shidoka look and feel out of the box. Charts can still be fully customized using the Chart.js API, and additional plugins can also be added via the chart component's "plugins" property. Please see the [Chart.js documentation](https://www.chartjs.org/docs/latest/) for more fine-grained control and [examples](https://www.chartjs.org/docs/latest/samples/information.html) beyond what you see here.
+These charts are driven by [Chart.js](https://www.chartjs.org) and wrapped as a Web Component. Default configurations are included so each chart has the Shidoka look and feel out of the box. Charts can still be fully customized using the Chart.js API, and additional plugins can also be added via the chart component's "plugins" property. Please see the [Chart.js documentation](https://www.chartjs.org/docs/latest/) for more fine-grained control and [examples](https://www.chartjs.org/docs/latest/samples/information.html) beyond what you see here. Existing applications can continue using Chart.js without changing their code.
 
 ### Included Plugins Documentation
 
@@ -34,6 +34,24 @@ These charts are driven by [Chart.js](https://www.chartjs.org) and wrapped as a 
 - [chartjs-chart-boxplot](https://github.com/sgratzl/chartjs-chart-boxplot)
 - [chartjs-chart-sankey](https://github.com/kurkle/chartjs-chart-sankey)
 - [chartjs-chart-graph](https://github.com/sgratzl/chartjs-chart-graph)
+
+## Apache ECharts
+
+Shidoka Charts builds on [Apache ECharts](https://echarts.apache.org) to deliver most of its new chart types. Each chart is wrapped as a Web Component and configured with Shidoka data visualization palettes, tooltips, and light and dark themes, so it has the Shidoka look and feel out of the box. Charts also include Shidoka controls, such as a table view, fullscreen mode, and data and image downloads, and are designed with accessibility in mind. Charts accept simple, chart-specific data, while native ECharts options can still be applied for advanced customization. Please see the Apache ECharts documentation for more fine-grained control over those options.
+
+### Apache ECharts Documentation
+
+- [Configuration options](https://echarts.apache.org/en/option.html)
+- [Handbook](https://apache.github.io/echarts-handbook/en/get-started/)
+
+## D3
+
+Shidoka Charts uses [D3](https://d3js.org) to build bespoke charts when a chart type is not supported by Chart.js or Apache ECharts. D3 provides the layout and shape generation behind these charts, such as the chord diagram that shows flows between groups, while Shidoka provides the component around it. Each chart is wrapped as a Web Component with the Shidoka palettes and light and dark themes applied, so it has the Shidoka look and feel out of the box. Charts also include the same Shidoka controls such as a table view, fullscreen mode, and data and image downloads. Please see the D3 documentation for more fine-grained control over the layouts and shapes used.
+
+### D3 Documentation
+
+- [Chord layouts](https://d3js.org/d3-chord)
+- [Shape generators](https://d3js.org/d3-shape)
 
 ## Foundation
 
